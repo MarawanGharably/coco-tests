@@ -1,5 +1,5 @@
 import React from 'react';
-import reactDOM from 'react-dom';
+import ReactDOM from 'react-dom';
 import App from './components/App';
 
-window.onload = () => { reactDOM.render(<App />, document.getElementById('obsessvr-webstore-react-embed-root')) }
+ReactDOM.render(<App />, document.getElementById('obsessvr-webstore-react-embed-root'));

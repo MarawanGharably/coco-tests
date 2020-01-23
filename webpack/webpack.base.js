@@ -9,6 +9,8 @@ const DIR_PATH = {
   SRC: path.resolve(__dirname, '../src')
 };
 
+console.log(env, DIR_PATH);
+
 const config = {
   entry: [
     path.join(DIR_PATH.SRC, 'index.js')
@@ -28,6 +30,11 @@ const config = {
       filename: '[name].[hash].css'
     }),
     new webpack.DefinePlugin(envKeys),
+    new HtmlWebpackPlugin({
+      template: DIR_PATH.SRC + `/index.${env}.html`,
+      filename: DIR_PATH.BUILD + `/index.${env}.html`,
+      inject: 'defer'
+    })
   ],
   module: {
     rules: [

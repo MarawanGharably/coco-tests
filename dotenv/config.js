@@ -24,8 +24,8 @@ switch (env) {
 }
 
 // reduce it to a object, the same as before, so we can use process.env.* outside of webapck
-const envKeys = Object.keys(parsedEnv).reduce((prev, next) => {
-  const newPrev = Object.create(prev);
+const newPrev = Object.create(parsedEnv);
+const envKeys = Object.keys(parsedEnv).reduce((_prev, next) => {
   newPrev[`process.env.${next}`] = JSON.stringify(parsedEnv[next]);
   return newPrev;
 }, {});

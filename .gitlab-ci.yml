@@ -59,15 +59,15 @@ build:feature:
     - mkdir -p ./var/secrets && echo "$SSH_PRIVATE_KEY_GITLAB" > ./var/secrets/SSH_PRIVATE_KEY_GITLAB
     # build the test-env test image
     - docker build
+      -f Dockerfile
       --build-arg BUILD_STAGE=${NPM_BUILD_STAGE}
       -t $FEATURE_TEST_IMAGE
-      -f Dockerfile
       --target build-env .
     - docker push $FEATURE_TEST_IMAGE
     # build the deploy feature image
     - docker build
-      --build-arg STAGE=${NPM_BUILD_STAGE}
       -f Dockerfile
+      --build-arg STAGE=${NPM_BUILD_STAGE}
       -t $FEATURE_SERVICE_IMAGE .
     - docker push $FEATURE_SERVICE_IMAGE
   only:
@@ -122,15 +122,15 @@ build:beta:
   script:
     - mkdir -p ./var/secrets && echo "$SSH_PRIVATE_KEY_GITLAB" > ./var/secrets/SSH_PRIVATE_KEY_GITLAB
     - docker build
+      -f Dockerfile
       --build-arg BUILD_STAGE=$NPM_BUILD_STAGE
       -t $BETA_TEST_IMAGE
-      -f Dockerfile
       --target build-env .
     - docker push $BETA_TEST_IMAGE
     # build the deploy beta image
     - docker build
-      --build-arg STAGE=$NPM_BUILD_STAGE
       -f Dockerfile
+      --build-arg STAGE=$NPM_BUILD_STAGE
       -t $BETA_SERVICE_IMAGE .
     - docker push $BETA_SERVICE_IMAGE
   only:
@@ -193,15 +193,15 @@ build:prod:
   script:
     - mkdir -p ./var/secrets && echo "$SSH_PRIVATE_KEY_GITLAB" > ./var/secrets/SSH_PRIVATE_KEY_GITLAB
     - docker build
+      -f Dockerfile
       --build-arg BUILD_STAGE=$NPM_BUILD_STAGE
       -t $PROD_TEST_IMAGE
-      -f Dockerfile
       --target build-env .
     - docker push $PROD_TEST_IMAGE
     # build the deploy prod image
     - docker build
-      --build-arg STAGE=$NPM_BUILD_STAGE
       -f Dockerfile
+      --build-arg STAGE=$NPM_BUILD_STAGE
       -t $PROD_SERVICE_IMAGE .
     - docker push $PROD_SERVICE_IMAGE
   only:

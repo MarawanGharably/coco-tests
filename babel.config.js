@@ -1,27 +1,27 @@
 module.exports = {
-  "presets": [
-    "@babel/preset-env",
-    "@babel/preset-react"
+  presets: [
+    '@babel/preset-env',
+    '@babel/preset-react',
   ],
-  "plugins": [
+  plugins: [
     '@babel/plugin-transform-modules-commonjs',
-    "@babel/plugin-syntax-dynamic-import",
+    '@babel/plugin-syntax-dynamic-import',
     [
-      "transform-react-remove-prop-types",
+      'transform-react-remove-prop-types',
       {
-        "mode": "remove",
-        "removeImport": "true",
-        "ignoreFilenames": [
-          "node_modules"
-        ]
-      }
+        mode: 'remove',
+        removeImport: 'true',
+        ignoreFilenames: [
+          'node_modules',
+        ],
+      },
     ],
     [
-      "@babel/plugin-proposal-class-properties",
+      '@babel/plugin-proposal-class-properties',
       {
-        "loose": true
-      }
+        loose: true,
+      },
     ],
-    "@babel/plugin-transform-runtime"
-  ]
+    '@babel/plugin-transform-runtime',
+  ],
 };

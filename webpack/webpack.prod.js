@@ -1,6 +1,6 @@
 const merge = require('webpack-merge');
-const baseConfig = require('./webpack.base.js');
 const TerserPlugin = require('terser-webpack-plugin');
+const baseConfig = require('./webpack.base.js');
 
 module.exports = () => {
   const prodConfig = merge(baseConfig, {
@@ -19,15 +19,15 @@ module.exports = () => {
               conditionals: true,
               evaluate: true,
               sequences: true,
-              booleans: true
+              booleans: true,
             },
             output: {
               comments: false,
-            }
-          }
-        })
-      ]
-    }
+            },
+          },
+        }),
+      ],
+    },
   });
 
   return prodConfig;

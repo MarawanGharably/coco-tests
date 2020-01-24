@@ -3,7 +3,7 @@ const baseConfig = require('./webpack.base.js');
 
 module.exports = merge(baseConfig, {
   entry: [
-    'react-hot-loader/patch'
+    'react-hot-loader/patch',
   ],
   devServer: {
     contentBase: './build',
@@ -11,7 +11,7 @@ module.exports = merge(baseConfig, {
     hot: true,
     host: '0.0.0.0',
     port: 3000,
-    open: true
+    open: true,
   },
-  devtool: 'source-map'
+  devtool: 'source-map',
 });

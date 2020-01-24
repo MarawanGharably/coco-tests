@@ -5,7 +5,7 @@ const getEnv = () => {
   let env = JSON.stringify(process.env.npm_lifecycle_script.substr(process.env.npm_lifecycle_script.indexOf('--env ') + '--env '.length, process.env.npm_lifecycle_script.substr(process.env.npm_lifecycle_script.indexOf('--env ') + '--env '.length).search(/($|\s)/)));
   env = env.replace(/\"/g, '');
   return env;
-}
+};
 
 const env = getEnv() === 'analyze' ? 'prod' : getEnv();
 let parsedEnv = null;
@@ -25,11 +25,12 @@ switch (env) {
 
 // reduce it to a object, the same as before, so we can use process.env.* outside of webapck
 const envKeys = Object.keys(parsedEnv).reduce((prev, next) => {
-  prev[`process.env.${next}`] = JSON.stringify(parsedEnv[next]);
-  return prev;
+  const newPrev = Object.create(prev);
+  newPrev[`process.env.${next}`] = JSON.stringify(parsedEnv[next]);
+  return newPrev;
 }, {});
 
 module.exports = {
   env,
-  envKeys
-}
+  envKeys,
+};

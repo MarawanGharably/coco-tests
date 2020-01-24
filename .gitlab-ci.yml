@@ -47,7 +47,7 @@ before_script:
 build:feature:
   stage: build
   before_script:
-    - npm eslint .
+    - npx eslint .
     - echo "$CI_JOB_TOKEN $CI_REGISTRY"
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   variables:
@@ -116,7 +116,7 @@ deploy:feature:
 build:beta:
   stage: build
   before_script:
-    - npm eslint .
+    - npx eslint .
     - echo "$CI_JOB_TOKEN $CI_REGISTRY"
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   variables:
@@ -188,7 +188,7 @@ deploy:beta:
 build:prod:
   stage: build
   before_script:
-    - npm eslint .
+    - npx eslint .
     - echo "$CI_JOB_TOKEN $CI_REGISTRY"
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   variables:

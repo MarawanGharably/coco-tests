@@ -1,13 +1,16 @@
 {
   "name": "coco-cms-frontend",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "coco-cms-frontend",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "webpack-dev-server --config ./webpack/webpack.config.js --env dev --mode development",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "build-feature": "webpack -p --config ./webpack/webpack.config.js --env dev --progress --display-error-details --mode development",
+    "build-beta": "webpack -p --config ./webpack/webpack.config.js --env beta --progress --display-error-details --mode development",
+    "build-prod": "webpack -p --config ./webpack/webpack.config.js --env prod --progress --display-error-details --mode production"
   },
   "repository": {
     "type": "git",

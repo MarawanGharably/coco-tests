@@ -1,0 +1,256 @@
+image: docker:latest
+
+variables:
+  VERSION: 0.1.0
+  FEATURE_STAGE: feature
+  BETA_STAGE: beta
+  PROD_STAGE: prod
+
+  SERVICE_DOMAIN_BETA: create.beta.shopobsess.co
+  SERVICE_DOMAIN_PROD: create.shopobsess.co
+
+  # Jest test images
+  FEATURE_TEST_IMAGE: $CI_REGISTRY_IMAGE/test/feature_test/$CI_COMMIT_REF_SLUG:$VERSION
+  BETA_TEST_IMAGE: $CI_REGISTRY_IMAGE/test/beta_test_${VERSION}:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA
+  PROD_TEST_IMAGE: $CI_REGISTRY_IMAGE/test/prod_test_${VERSION}:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA
+
+  # Service images
+  FEATURE_SERVICE_IMAGE: $CI_REGISTRY_IMAGE/feature_service/$CI_COMMIT_REF_SLUG:$VERSION
+  BETA_SERVICE_IMAGE: $CI_REGISTRY_IMAGE/beta_service_${VERSION}:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHA
+  PROD_SERVICE_IMAGE: $CI_REGISTRY_IMAGE/prod_service_${VERSION}:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHA
+
+
+services:
+  - docker:dind
+
+stages:
+  - build
+  - test
+  - deploy
+  - deploy-beta
+  - deploy-prod
+
+before_script:
+  - echo "$CI_JOB_TOKEN $CI_REGISTRY"
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  - 'which ssh-agent || ( apk update && apk add openssh-client )'
+  - eval $(ssh-agent -s)
+  - echo "$SSH_PRIVATE_KEY_BETA" > pkbbeta.pem
+  - echo "$SSH_PRIVATE_KEY_PROD" > pkbprod.pem
+  - chmod 400 pkbbeta.pem
+  - chmod 400 pkbprod.pem
+  - ssh-add pkbbeta.pem
+  - ssh-add pkbprod.pem
+  - mkdir -p ~/.ssh
+  - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+
+build:feature:
+  stage: build
+  before_script:
+    - echo "$CI_JOB_TOKEN $CI_REGISTRY"
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  variables:
+    NPM_BUILD_STAGE: ${FEATURE_STAGE}
+  script:
+    # build the feature test image
+    # Echo the gitlab secret variables containing our gitlab ssh key into some local files.
+    # This is should be a "Docker build secret", which currently doesn't exist, we have a multi-stage
+    # build which make sure the private key do not exist in the final deploy image.
+    - mkdir -p ./var/secrets && echo "$SSH_PRIVATE_KEY_GITLAB" > ./var/secrets/SSH_PRIVATE_KEY_GITLAB
+    # build the test-env test image
+    - docker build
+      --build-arg BUILD_STAGE=${NPM_BUILD_STAGE}
+      -t $FEATURE_TEST_IMAGE
+      -f Dockerfile
+      --target build-env .
+    - docker push $FEATURE_TEST_IMAGE
+    # build the deploy feature image
+    - docker build
+      --build-arg STAGE=${NPM_BUILD_STAGE}
+      -f Dockerfile
+      -t $FEATURE_SERVICE_IMAGE .
+    - docker push $FEATURE_SERVICE_IMAGE
+  only:
+    - \/*feature\/.*$/
+
+test:feature:
+  stage: test
+  script:
+    - >
+      docker run $FEATURE_TEST_IMAGE
+      /bin/bash -c
+      "
+      npm test
+      "
+  only:
+    - \/*feature\/.*$/
+
+deploy:feature:
+  stage: deploy
+  variables:
+    S3_BUCKET: "feature-branch-qa"
+    S3_PATH: "s3://$S3_BUCKET/$CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG"
+  script:
+    # Run the feature image as a detached container
+    - docker run -d $FEATURE_IMAGE
+    # copy the /www folder which contains the index.html, bundle.*.js and main.*.css files to a local folder
+    - docker cp $(docker ps -alq):/www/ /www
+    # install dependencies
+    - apk add --upgrade curl python
+    # install aws cli
+    - curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+    - unzip awscli-bundle.zip
+    - ./awscli-bundle/install -b ~/bin/aws
+    # echo aws credentails into the .aws folder for uploading the .js and .css files to S3
+    - mkdir -p ~/.aws && echo "$AWS_CONFIG" > ~/.aws/config
+    - mkdir -p ~/.aws && echo "$AWS_CREDENTIALS" > ~/.aws/credentials
+    # upload to s3, ignore all the subfolders and only upload the needed .html, .js, .css files in the root folder
+    - /root/bin/aws s3 sync --acl public-read /www $S3_PATH --exclude '*/index.html'
+  environment:
+    name: $CI_COMMIT_REF_SLUG
+    url: https://${S3_BUCKET}.s3.us-east-2.amazonaws.com/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/index.html
+  only:
+    - \/^feature\/.*$/
+
+build:beta:
+  stage: build
+  before_script:
+    - echo "$CI_JOB_TOKEN $CI_REGISTRY"
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  variables:
+    NPM_BUILD_STAGE: ${BETA_STAGE}
+  script:
+    - mkdir -p ./var/secrets && echo "$SSH_PRIVATE_KEY_GITLAB" > ./var/secrets/SSH_PRIVATE_KEY_GITLAB
+    - docker build
+      --build-arg BUILD_STAGE=${NPM_BUILD_STAGE}
+      -t $BETA_TEST_IMAGE
+      -f Dockerfile
+      --target build-env .
+    - docker push $BETA_TEST_IMAGE
+    # build the deploy beta image
+    - docker build
+      --build-arg STAGE=${NPM_BUILD_STAGE}
+      -f Dockerfile
+      -t $BETA_SERVICE_IMAGE .
+    - docker push $BETA_SERVICE_IMAGE
+  only:
+    - master
+
+test:beta:
+  stage: test
+  script:
+    - >
+      docker run $BETA_TEST_IMAGE
+      /bin/bash -c
+      "
+      npm test
+      "
+  only:
+    - master
+
+deploy:beta:
+  stage: deploy-beta
+  variables:
+    SSH_USER: "ubuntu"
+    SSH_HOST: $SSH_HOST_BETA
+    NAMESPACE: "coco-cms-beta"
+    REPLICACOUNT: 2
+  image: docker:latest
+  script:
+    - ssh $SSH_USER@$SSH_HOST "rm -r ~/charts/$NAMESPACE || true && mkdir -p charts/$NAMESPACE"
+    - scp -r helm $SSH_USER@$SSH_HOST:~/charts/$NAMESPACE
+      # Perform all commands in login shell to ensure that $PATH is initialized correctly
+      # If helm upgrading with a --set array, no whitespace allowed
+    - ssh $SSH_USER@$SSH_HOST "bash --login -c '
+        kubectl create namespace $NAMESPACE || true &&
+        kubectl delete secret regcred --namespace=$NAMESPACE --ignore-not-found &&
+        kubectl create secret docker-registry --namespace=$NAMESPACE regcred
+          --docker-server=$CI_REGISTRY
+          --docker-username=$CI_DEPLOY_USER
+          --docker-password=$CI_DEPLOY_PASSWORD &&
+        helm upgrade
+          --install
+          --namespace=$NAMESPACE
+          --set pods.app.images.app=$BETA_SERVICE_IMAGE
+          --set pods.app.replicaCount=$REPLICACOUNT
+          --set ingress.hosts.app.host=$DOMAIN
+          $NAMESPACE
+          ~/charts/$NAMESPACE/helm'"
+    - exit
+  environment:
+    name: ${BETA_STAGE}
+    url: "https://${SERVICE_DOMAIN_BETA}"
+  only:
+    - master
+
+build:prod:
+  stage: build
+  before_script:
+    - echo "$CI_JOB_TOKEN $CI_REGISTRY"
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  variables:
+    NPM_BUILD_STAGE: ${PROD_STAGE}
+  script:
+    - mkdir -p ./var/secrets && echo "$SSH_PRIVATE_KEY_GITLAB" > ./var/secrets/SSH_PRIVATE_KEY_GITLAB
+    - docker build
+      --build-arg BUILD_STAGE=${NPM_BUILD_STAGE}
+      -t $PROD_TEST_IMAGE
+      -f Dockerfile
+      --target build-env .
+    - docker push $PROD_TEST_IMAGE
+    # build the deploy prod image
+    - docker build
+      --build-arg STAGE=${NPM_BUILD_STAGE}
+      -f Dockerfile
+      -t $PROD_SERVICE_IMAGE .
+    - docker push $PROD_SERVICE_IMAGE
+  only:
+    - master
+
+test:prod:
+  stage: test
+  script:
+    - >
+      docker run $PROD_TEST_IMAGE
+      /bin/bash -c
+      "
+      npm test
+      "
+  only:
+    - master
+
+deploy:prod:
+  stage: deploy-prod
+  variables:
+    SSH_USER: "ubuntu"
+    SSH_HOST: $SSH_HOST_PROD
+    NAMESPACE: "coco-cms"
+    REPLICACOUNT: 10
+  image: docker:latest
+  script:
+    - ssh $SSH_USER@$SSH_HOST "rm -r ~/charts/$NAMESPACE || true && mkdir -p charts/$NAMESPACE"
+    - scp -r helm $SSH_USER@$SSH_HOST:~/charts/$NAMESPACE
+      # Perform all commands in login shell to ensure that $PATH is initialized correctly
+      # If helm upgrading with a --set array, no whitespace allowed
+    - ssh $SSH_USER@$SSH_HOST "bash --login -c '
+        kubectl create namespace $NAMESPACE || true &&
+        kubectl delete secret regcred --namespace=$NAMESPACE --ignore-not-found &&
+        kubectl create secret docker-registry --namespace=$NAMESPACE regcred
+          --docker-server=$CI_REGISTRY
+          --docker-username=$CI_DEPLOY_USER
+          --docker-password=$CI_DEPLOY_PASSWORD &&
+        helm upgrade
+          --install
+          --namespace=$NAMESPACE
+          --set pods.app.images.app=$PROD_SERVICE_IMAGE
+          --set pods.app.replicaCount=$REPLICACOUNT
+          --set ingress.hosts.app.host=$DOMAIN
+          $NAMESPACE
+          ~/charts/$NAMESPACE/helm'"
+    - exit
+  environment:
+    name: ${PROD_STAGE}
+    url: "https://${SERVICE_DOMAIN_PROD}"
+  only:
+    - master
+  when: manual

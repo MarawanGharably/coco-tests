@@ -43,8 +43,6 @@ RUN npm install --production --prefix node_modules/web-store-modules
 RUN cd node_modules/web-store-modules && \
     node_modules/.bin/lerna bootstrap --hoist -- --production
 
-# Run linter
-RUN npx eslint .
 # copy test to WORKDIR
 COPY test/ test/
 
@@ -59,6 +57,9 @@ COPY dotenv dotenv
 
 # copy over the application source
 COPY src src
+
+# Run linter
+RUN npm run lint
 
 # build the application and copy it into the webroot
 RUN if [ ${BUILD_STAGE} = "prod" ] ; then npm run build-prod ; elif [ ${BUILD_STAGE} = "beta" ] ; then npm run build-beta ; else npm run build-feature ; fi

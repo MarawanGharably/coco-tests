@@ -4,6 +4,7 @@
   "description": "coco-cms-frontend",
   "main": "index.js",
   "scripts": {
+    "lint": "npx eslint .",
     "test": "jest",
     "start": "webpack-dev-server --config ./webpack/webpack.config.js --env dev --mode development",
     "storybook": "start-storybook -p 6006",

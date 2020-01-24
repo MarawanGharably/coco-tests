@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --config ./webpack/webpack.config.js --env dev --mode development"
+    "start": "webpack-dev-server --config ./webpack/webpack.config.js --env dev --mode development",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "repository": {
     "type": "git",
@@ -22,6 +24,11 @@
     "@babel/preset-env": "^7.7.6",
     "@babel/preset-react": "^7.7.4",
     "@babel/runtime": "^7.7.6",
+    "@storybook/addon-actions": "^5.3.9",
+    "@storybook/addon-knobs": "^5.3.9",
+    "@storybook/addon-links": "^5.3.9",
+    "@storybook/addons": "^5.3.9",
+    "@storybook/react": "^5.3.9",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.3",
     "babel-core": "7.0.0-bridge.0",
@@ -45,9 +52,9 @@
     "uglifyjs-webpack-plugin": "^1.3.0",
     "url-loader": "^1.1.2",
     "webpack": "^4.41.2",
-    "webpack-merge": "^4.2.2",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.9.0"
+    "webpack-dev-server": "^3.9.0",
+    "webpack-merge": "^4.2.2"
   },
   "dependencies": {
     "canvg": "^3.0.4",

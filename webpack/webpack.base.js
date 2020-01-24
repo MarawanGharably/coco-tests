@@ -19,7 +19,7 @@ const config = {
     path: DIR_PATH.BUILD,
     // '/' breaks s3 serving in feature branches, so we omit it when building for feature branches
     // * IMPORTANT: need the "" inside the single quotes here.
-    publicPath: (envKeys['process.env.HASH_HISTORY'] === '"true"') ? '' : '/',
+    publicPath: '',
     filename: 'bundle.[hash].js'
   },
   plugins: [
@@ -31,8 +31,8 @@ const config = {
     }),
     new webpack.DefinePlugin(envKeys),
     new HtmlWebpackPlugin({
-      template: DIR_PATH.SRC + `/index.${env}.html`,
-      filename: DIR_PATH.BUILD + `/index.${env}.html`,
+      template: DIR_PATH.SRC + `/index.html`,
+      filename: DIR_PATH.BUILD + `/index.html`,
       inject: 'defer'
     })
   ],

@@ -43,6 +43,8 @@ RUN npm install --production --prefix node_modules/web-store-modules
 RUN cd node_modules/web-store-modules && \
     node_modules/.bin/lerna bootstrap --hoist -- --production
 
+# Run linter
+RUN npx eslint .
 # copy test to WORKDIR
 COPY test/ test/
 

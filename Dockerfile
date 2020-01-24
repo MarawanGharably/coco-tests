@@ -58,6 +58,9 @@ COPY dotenv dotenv
 # copy over the application source
 COPY src src
 
+# copy eslint configuration
+COPY .eslintrc.json .eslintrc.json
+
 # Run linter
 RUN npm run lint
 

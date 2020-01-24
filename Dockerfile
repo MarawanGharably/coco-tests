@@ -59,7 +59,7 @@ COPY dotenv dotenv
 COPY src src
 
 # build the application and copy it into the webroot
-RUN if [ ${BUILD_STAGE} = "prod" ] && then npm run build-prod && elif [ ${BUILD_STAGE} = "beta" ] && then npm run build-beta && else npm run build-feature && fi
+RUN if [ ${BUILD_STAGE} = "prod" ] ; then npm run build-prod ; elif [ ${BUILD_STAGE} = "beta" ] ; then npm run build-beta ; else npm run build-feature ; fi
 # copy built application into the webroot
 RUN mkdir /www && \
     chmod -R 755 /www &&\

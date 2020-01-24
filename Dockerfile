@@ -1,7 +1,7 @@
-LABEL version="0.1.0"
-
 # intermediate image for building the web app
 FROM node AS build-env
+
+LABEL version="0.1.0"
 
 # variable passed in with build command
 ARG BUILD_STAGE=prod

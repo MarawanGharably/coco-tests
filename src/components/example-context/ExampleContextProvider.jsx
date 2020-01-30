@@ -2,13 +2,17 @@ import React, { useReducer } from 'react';
 import ExampleStateContext from './ExampleStateContext.jsx';
 import ExampleDispatchContext from './ExampleDispatchContext.jsx';
 
+const initialState = {
+    example: false
+}
+
 const simpleExampleReducer = (state, action) => {
     switch (action.type) {
-        case SET_EXAMPLE_STATE_TRUE: {
-            return {example: state.example};
+        case 'SET_EXAMPLE_STATE_TRUE': {
+            return {example: true};
         }
-        case SET_EXAMPLE_STATE_FALSE: {
-            return {example: state.example};
+        case 'SET_EXAMPLE_STATE_FALSE': {
+            return {example: false};
         }
         default: {
             throw new Error(`Unhandled action type: ${action.type}`)
@@ -18,7 +22,7 @@ const simpleExampleReducer = (state, action) => {
 
 const slightlyMoreComplicatedReducer = (state, action) => {
     switch (action.type) {
-        case UPDATE_ID: {
+        case 'UPDATE_ID': {
             return Object.assign({}, state, {
                 id: state.id
             })
@@ -46,12 +50,12 @@ const useExampleDispatch = () => {
 }
 
 const ExampleContextProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(simpleExampleReducer, {example: false});
+    const [state, dispatch] = useReducer(simpleExampleReducer, initialState);
 
     return (
         <ExampleStateContext.Provider value={state}>
             <ExampleDispatchContext.Provider value={dispatch}>
-                {chidlren}
+                {children}
             </ExampleDispatchContext.Provider>
         </ExampleStateContext.Provider>
     )

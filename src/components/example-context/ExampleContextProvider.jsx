@@ -23,15 +23,11 @@ const simpleExampleReducer = (state, action) => {
 const slightlyMoreComplicatedReducer = (state, action) => {
     switch (action.type) {
         case 'UPDATE_ID': {
-<<<<<<< HEAD
             // can also destructure here
             // return {...state, state.id}
             return Object.assign({}, state, {
                 id: state.id
             })
-=======
-            return { ...state, id: state.id };
->>>>>>> 0cb38accf6bdea899842af27c46b4c6d4d87b09a
         }
         default: {
             throw new Error(`Unhandled action type: ${action.type}`);

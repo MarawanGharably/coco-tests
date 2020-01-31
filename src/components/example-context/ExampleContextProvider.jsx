@@ -23,6 +23,8 @@ const simpleExampleReducer = (state, action) => {
 const slightlyMoreComplicatedReducer = (state, action) => {
     switch (action.type) {
         case 'UPDATE_ID': {
+            // can also destructure here
+            // return {...state, state.id}
             return Object.assign({}, state, {
                 id: state.id
             })

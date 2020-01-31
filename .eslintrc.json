@@ -32,6 +32,33 @@
             {
                 "devDependencies": true
             }
-        ]
+        ],
+        "indent": [
+            "error",
+            4,
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "react/jsx-indent": [
+            "error",
+            4
+        ],
+        "react/jsx-indent-props": [
+            "error",
+            4
+        ],
+        "import/extensions": "off",
+        "comma-dangle": "off",
+        "react/prop-types": [
+            2,
+            {
+                "ignore": [
+                    "children",
+                    "className"
+                ]
+            }
+        ],
+        "max-len": "off"
     }
 }

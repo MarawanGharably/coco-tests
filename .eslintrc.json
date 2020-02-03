@@ -59,6 +59,10 @@
                 ]
             }
         ],
-        "max-len": "off"
+        "max-len": "off",
+        "quotes": [
+            "error",
+            "double"
+        ]
     }
 }

@@ -11,7 +11,7 @@ const DIR_PATH = {
 
 const config = {
     entry: [
-        path.join(DIR_PATH.SRC, "index.js"),
+        path.join(DIR_PATH.SRC, "index.jsx"),
     ],
     output: {
         path: DIR_PATH.BUILD,
@@ -51,19 +51,20 @@ const config = {
                 },
             },
             {
-                test: /\.css$/,
+                test: /\.(sa|sc|c)ss$/,
                 use: [
                     MiniCssExtractPlugin.loader,
                     "css-loader",
+                    "sass-loader"
                 ],
             },
-            {
-                test: /\.s(a|c)ss$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    "sass-loader",
-                ],
-            },
+            // {
+            //     test: /\.s(a|c)ss$/,
+            //     use: [
+            //         MiniCssExtractPlugin.loader,
+            //         "sass-loader",
+            //     ],
+            // },
             {
                 test: /\.(vert|frag)$/,
                 use: "raw-loader",

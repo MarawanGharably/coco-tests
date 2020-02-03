@@ -6,4 +6,5 @@ import App from "./components/App";
 ReactDOM.render(
     <BrowserRouter>
         <App />
-    </BrowserRouter>, document.getElementById("obsessvr-webstore-react-embed-root"));
+    </BrowserRouter>, document.getElementById("obsessvr-webstore-react-embed-root")
+);

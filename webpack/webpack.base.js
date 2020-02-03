@@ -58,13 +58,6 @@ const config = {
                     "sass-loader"
                 ],
             },
-            // {
-            //     test: /\.s(a|c)ss$/,
-            //     use: [
-            //         MiniCssExtractPlugin.loader,
-            //         "sass-loader",
-            //     ],
-            // },
             {
                 test: /\.(vert|frag)$/,
                 use: "raw-loader",

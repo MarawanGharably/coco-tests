@@ -1,0 +1,10 @@
+.example-button {
+    width: 3em;
+    height: 3em;
+    &-true {
+        background-color: green;
+    }
+    &-false {
+        background-color: red;
+    }
+}

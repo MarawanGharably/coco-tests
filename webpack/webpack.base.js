@@ -15,9 +15,7 @@ const config = {
     ],
     output: {
         path: DIR_PATH.BUILD,
-        // '/' breaks s3 serving in feature branches, so we omit it when building for feature branches
-        // * IMPORTANT: need the "" inside the single quotes here.
-        publicPath: "",
+        publicPath: "/",
         filename: "bundle.[hash].js",
     },
     plugins: [
@@ -39,7 +37,7 @@ const config = {
             {
                 test: /\.(js|jsx)$/,
                 use: "babel-loader",
-                exclude: /node_modules\/(?!(web-store-modules|auth0-password-policies)\/).*/,
+                exclude: /node_modules\/.*/,
             },
             {
                 test: /\.(png|jpg|gif|svg|eot|otf|ttf|woff|woff2)$/,

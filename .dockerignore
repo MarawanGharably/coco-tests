@@ -1,0 +1,12 @@
+.git
+.DS_Store
+.vscode/
+*.md
+Makefile
+.gitlab-ci.yml
+.pre-commit-config.yaml
+helm/
+node_modules
+build/
+run/
+certs/

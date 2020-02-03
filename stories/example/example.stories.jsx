@@ -1,6 +1,6 @@
 // this comment tells babel to convert jsx to calls to a function called jsx instead of React.createElement
 /** @jsx jsx */
-import {useState} from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import { css, jsx } from "@emotion/react";
 import { action } from "@storybook/addon-actions";

@@ -1,10 +1,18 @@
 // COCO CMS Frontend scss
 // ******************************************************************************* //
 // Import Modules here
-@import 'example-context/example';
+// @import "example-context/example";
+@import "library";
+@import "header/header";
+@import "body-wrapper/bodyWrapper";
+@import "footer/footer";
 // ******************************************************************************* //
 
 body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100%;
     touch-action: none;
     position: fixed;
     margin: 0;
@@ -16,18 +24,4 @@ body {
     font-size: 10px; // Allows us to use EM in units of 10 e.g 1em = 10px
     font-smoothing: antialiased;
     -webkit-font-smoothing: antialiased;
-}
-
-.flex {
-    display: flex;
-    &-center {
-        align-items: center;
-        justify-content: center;
-    }
-    &-column {
-        flex-direction: column;
-    }
-    &-1 {
-        flex: 1 1 0; // flex-grow: 1, flex-shrink: 1, flex-basis: 0
-    }
 }

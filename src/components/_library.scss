@@ -1,0 +1,29 @@
+// Collection of shared variables and styles
+
+$footer-color: #D4D8DF;
+
+.flex {
+    display: flex;
+    &-center {
+        align-items: center;
+        justify-content: center;
+    }
+    &-column {
+        flex-direction: column;
+    }
+    &-1 {
+        flex: 1 1 0; // flex-grow: 1, flex-shrink: 1, flex-basis: 0
+    }
+    &-grow {
+        flex-grow: 1;
+    }
+}
+
+.full {
+    &-width {
+        width: 100%;
+    }
+    &-height {
+        height: 100%;
+    }
+}

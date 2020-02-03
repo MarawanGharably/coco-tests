@@ -1,0 +1,16 @@
+#user-icon {
+    &-button {
+        background: white;
+        border: none;
+    }
+    &-image-container {
+        width: 3em;
+        height: 3em;
+        border-radius: 100%;
+        border: 1px solid $obsess-grey;
+    }
+    &-dropdown-container {
+        margin-left: 0.5em;
+        width: 1em;
+    }
+}

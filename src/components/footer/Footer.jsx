@@ -1,9 +1,9 @@
 import React from "react";
 
 const Footer = () => (
-    <div className="footer-container full-width">
+    <footer className="footer-container full-width">
         <div>PLACEHOLDER</div>
-    </div>
+    </footer>
 );
 
 export default Footer;

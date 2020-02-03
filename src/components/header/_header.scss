@@ -2,6 +2,7 @@
 // Import Modules here
 // @import "example-context/example";
 @import "obsess-logo/obsessLogo";
+@import "user-icon/userIcon";
 // ******************************************************************************* //
 
 .header {
@@ -16,6 +17,6 @@
         margin: 0 auto 0 2.6em;
     }
     &-right-side {
-        margin: 0 1em 0 auto;
+        margin: 0 2em 0 auto;
     }
 }

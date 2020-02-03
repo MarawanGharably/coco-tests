@@ -6,13 +6,13 @@
 @import "header/header";
 @import "body-wrapper/bodyWrapper";
 @import "footer/footer";
+
+@import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
 // ******************************************************************************* //
 
 body {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
     min-height: 100%;
+    box-sizing: border-box;
     touch-action: none;
     position: fixed;
     margin: 0;
@@ -20,7 +20,7 @@ body {
     overflow-x: hidden;
     min-width: 320px;
     background: #fff;
-    font-family: "";
+    font-family: Raleway;
     font-size: 10px; // Allows us to use EM in units of 10 e.g 1em = 10px
     font-smoothing: antialiased;
     -webkit-font-smoothing: antialiased;

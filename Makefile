@@ -12,6 +12,6 @@ local:
 		--namespace=${NAMESPACE} \
 		--set image.app=$(APP_IMAGE) \
 		--set ingress.annotations."nginx\.ingress\.kubernetes\.io/force-ssl-redirect"="\"false\"" \
-		--set ingress.hosts.api.host=localhost \
+		--set ingress.hosts.app.host=localhost \
 		${NAMESPACE} \
 		./helm

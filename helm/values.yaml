@@ -8,7 +8,6 @@ image:
   app: ""
   pullPolicy: IfNotPresent
 
-
 imagePullSecrets: ["regcred"]
 
 service:

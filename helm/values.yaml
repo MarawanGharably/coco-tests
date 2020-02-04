@@ -19,6 +19,6 @@ ingress:
   enabled: true
   annotations: {nginx.ingress.kubernetes.io/rewrite-target: "/$1", nginx.ingress.kubernetes.io/force-ssl-redirect: "true"}
   hosts:
-    api:
+    app:
       host: create.shopobsess.co
       paths: [/(.*)]

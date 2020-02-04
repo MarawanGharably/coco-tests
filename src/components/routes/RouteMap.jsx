@@ -1,7 +1,8 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch } from "react-router-dom";
+import RouteWithSubRoutes from "./RouteWithSubRoutes";
 
-const routes = [
+const routesLayout = [
     {
         path: "/register",
         component: RegisterPage,
@@ -25,24 +26,15 @@ const routes = [
 ];
 
 const RouteMap = () => {
-    const routeMap = () => routes.map((route, i) => (
+    const routeMap = () => routesLayout.map((route, i) => (
         <RouteWithSubRoutes key={i} {...route} />
     ));
 
     return (
         <Switch>
-            {routeMap}
+            {routeMap()}
         </Switch>
     );
 };
-
-const RouteWithSubRoutes = (route) => (
-    <Route
-        path={route.path}
-        render={(props) => (
-            <route.component {...props} routes={route.routes} />
-        )}
-    />
-);
 
 export default RouteMap;

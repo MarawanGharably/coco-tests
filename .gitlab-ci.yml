@@ -153,7 +153,7 @@ deploy:beta:
   variables:
     SSH_USER: "ubuntu"
     SSH_HOST: $SSH_HOST_BETA
-    NAMESPACE: "coco-cms-beta"
+    NAMESPACE: "coco-cms"
     REPLICACOUNT: 2
   image: docker:latest
   script:
@@ -173,7 +173,7 @@ deploy:beta:
           --namespace=$NAMESPACE
           --set pods.app.images.app=$BETA_SERVICE_IMAGE
           --set pods.app.replicaCount=$REPLICACOUNT
-          --set ingress.hosts.app.host=$DOMAIN
+          --set ingress.hosts.app.host=$SERVICE_DOMAIN_BETA
           $NAMESPACE
           ~/charts/$NAMESPACE/helm'"
     - exit
@@ -244,7 +244,7 @@ deploy:prod:
           --namespace=$NAMESPACE
           --set pods.app.images.app=$PROD_SERVICE_IMAGE
           --set pods.app.replicaCount=$REPLICACOUNT
-          --set ingress.hosts.app.host=$DOMAIN
+          --set ingress.hosts.app.host=$SERVICE_DOMAIN_PROD
           $NAMESPACE
           ~/charts/$NAMESPACE/helm'"
     - exit

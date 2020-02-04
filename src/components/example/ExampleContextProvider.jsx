@@ -1,37 +1,15 @@
 import React, { useReducer } from "react";
-import ExampleStateContext from "./ExampleStateContext.jsx";
-import ExampleDispatchContext from "./ExampleDispatchContext.jsx";
+import { simpleExampleReducer } from "./ExampleReducer";
 
 const initialState = {
     example: false
 };
 
-const simpleExampleReducer = (state, action) => {
-    switch (action.type) {
-        case "SET_EXAMPLE_STATE_TRUE": {
-            return { example: true };
-        }
-        case "SET_EXAMPLE_STATE_FALSE": {
-            return { example: false };
-        }
-        default: {
-            throw new Error(`Unhandled action type: ${action.type}`);
-        }
-    }
-};
+const ExampleDispatchContext = React.createContext({
+    dispatch: null
+});
 
-const slightlyMoreComplicatedReducer = (state, action) => {
-    switch (action.type) {
-        case "UPDATE_ID": {
-            // can also destructure here
-            // return {...state, state.id}
-            return { ...state, id: state.id };
-        }
-        default: {
-            throw new Error(`Unhandled action type: ${action.type}`);
-        }
-    }
-};
+const ExampleStateContext = React.createContext(initialState);
 
 const useExampleState = () => {
     const context = React.useContext(ExampleStateContext);

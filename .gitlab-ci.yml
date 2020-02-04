@@ -155,6 +155,7 @@ deploy:beta:
     SSH_HOST: $SSH_HOST_BETA
     NAMESPACE: "coco-cms"
     REPLICACOUNT: 2
+    DOMAIN: $SERVICE_DOMAIN_BETA
   image: docker:latest
   script:
     - ssh $SSH_USER@$SSH_HOST "rm -r ~/charts/$NAMESPACE || true && mkdir -p charts/$NAMESPACE"
@@ -173,13 +174,13 @@ deploy:beta:
           --namespace=$NAMESPACE
           --set pods.app.images.app=$BETA_SERVICE_IMAGE
           --set pods.app.replicaCount=$REPLICACOUNT
-          --set ingress.hosts.app.host=$SERVICE_DOMAIN_BETA
+          --set ingress.hosts.app.host=$DOMAIN
           $NAMESPACE
           ~/charts/$NAMESPACE/helm'"
     - exit
   environment:
     name: ${BETA_STAGE}
-    url: "https://${SERVICE_DOMAIN_BETA}"
+    url: "https://$DOMAIN"
   only:
     - master
 
@@ -226,6 +227,7 @@ deploy:prod:
     SSH_HOST: $SSH_HOST_PROD
     NAMESPACE: "coco-cms"
     REPLICACOUNT: 10
+    DOMAIN: $SERVICE_DOMAIN_PROD
   image: docker:latest
   script:
     - ssh $SSH_USER@$SSH_HOST "rm -r ~/charts/$NAMESPACE || true && mkdir -p charts/$NAMESPACE"
@@ -244,13 +246,13 @@ deploy:prod:
           --namespace=$NAMESPACE
           --set pods.app.images.app=$PROD_SERVICE_IMAGE
           --set pods.app.replicaCount=$REPLICACOUNT
-          --set ingress.hosts.app.host=$SERVICE_DOMAIN_PROD
+          --set ingress.hosts.app.host=$DOMAIN
           $NAMESPACE
           ~/charts/$NAMESPACE/helm'"
     - exit
   environment:
     name: ${PROD_STAGE}
-    url: "https://${SERVICE_DOMAIN_PROD}"
+    url: "https://$DOMAIN"
   only:
     - master
   when: manual

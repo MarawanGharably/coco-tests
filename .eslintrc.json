@@ -24,20 +24,26 @@
         "jest"
     ],
     "rules": {
-        "import/no-dynamic-require": "off",
+        "comma-dangle": "off",
         "global-require": "off",
         "no-useless-escape": "off",
-        "import/no-extraneous-dependencies": [
+        "quotes": [
             "error",
-            {
-                "devDependencies": true
-            }
+            "double"
         ],
         "indent": [
             "error",
             4,
             {
                 "SwitchCase": 1
+            }
+        ],
+        "import/extensions": "off",
+        "import/no-dynamic-require": "off",
+        "import/no-extraneous-dependencies": [
+            "error",
+            {
+                "devDependencies": true
             }
         ],
         "react/jsx-indent": [
@@ -48,8 +54,7 @@
             "error",
             4
         ],
-        "import/extensions": "off",
-        "comma-dangle": "off",
+        "react/jsx-props-no-spreading": "off",
         "react/prop-types": [
             2,
             {
@@ -59,10 +64,6 @@
                 ]
             }
         ],
-        "max-len": "off",
-        "quotes": [
-            "error",
-            "double"
-        ]
+        "max-len": "off"
     }
 }

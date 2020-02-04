@@ -20,8 +20,8 @@ spec:
         {{- end }}
       containers:
         - name: {{ .Chart.Name }}
-          image: {{ .Values.image.app }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: {{ .Values.pods.image.app }}
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: {{ .Values.service.containerPort }}

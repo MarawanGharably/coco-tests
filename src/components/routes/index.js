@@ -1,2 +1,2 @@
-export { default as RouteMap } from "./RouteMap";
-export { default as RouteWithSubRoutes } from "./RouteWithSubRoutes";
+export { default as useRouteMap } from "./route-mapper/useRouteMap";
+export { default as RouteWithSubRoutes } from "./route-with-subroute/RouteWithSubRoutes";

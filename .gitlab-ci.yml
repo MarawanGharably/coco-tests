@@ -172,7 +172,7 @@ deploy:beta:
         helm upgrade
           --install
           --namespace=$NAMESPACE
-          --set pods.app.images.app=$BETA_SERVICE_IMAGE
+          --set pods.app.image.app=$BETA_SERVICE_IMAGE
           --set pods.app.replicaCount=$REPLICACOUNT
           --set ingress.hosts.app.host=$DOMAIN
           $NAMESPACE
@@ -244,7 +244,7 @@ deploy:prod:
         helm upgrade
           --install
           --namespace=$NAMESPACE
-          --set pods.app.images.app=$PROD_SERVICE_IMAGE
+          --set pods.app.image.app=$PROD_SERVICE_IMAGE
           --set pods.app.replicaCount=$REPLICACOUNT
           --set ingress.hosts.app.host=$DOMAIN
           $NAMESPACE

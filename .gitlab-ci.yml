@@ -172,8 +172,8 @@ deploy:beta:
         helm upgrade
           --install
           --namespace=$NAMESPACE
-          --set pods.app.image.app=$BETA_SERVICE_IMAGE
-          --set pods.app.replicaCount=$REPLICACOUNT
+          --set image.app=$BETA_SERVICE_IMAGE
+          --set replicaCount=$REPLICACOUNT
           --set ingress.hosts.app.host=$DOMAIN
           $NAMESPACE
           ~/charts/$NAMESPACE/helm'"
@@ -226,7 +226,7 @@ deploy:prod:
     SSH_USER: "ubuntu"
     SSH_HOST: $SSH_HOST_PROD
     NAMESPACE: "coco-cms"
-    REPLICACOUNT: 10
+    REPLICACOUNT: 4
     DOMAIN: $SERVICE_DOMAIN_PROD
   image: docker:latest
   script:
@@ -244,8 +244,8 @@ deploy:prod:
         helm upgrade
           --install
           --namespace=$NAMESPACE
-          --set pods.app.image.app=$PROD_SERVICE_IMAGE
-          --set pods.app.replicaCount=$REPLICACOUNT
+          --set image.app=$PROD_SERVICE_IMAGE
+          --set replicaCount=$REPLICACOUNT
           --set ingress.hosts.app.host=$DOMAIN
           $NAMESPACE
           ~/charts/$NAMESPACE/helm'"

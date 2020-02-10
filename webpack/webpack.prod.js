@@ -1,6 +1,6 @@
-const merge = require("webpack-merge");
-const TerserPlugin = require("terser-webpack-plugin");
-const baseConfig = require("./webpack.base.js");
+const merge = require('webpack-merge');
+const TerserPlugin = require('terser-webpack-plugin');
+const baseConfig = require('./webpack.base.js');
 
 module.exports = merge(baseConfig, {
     optimization: {

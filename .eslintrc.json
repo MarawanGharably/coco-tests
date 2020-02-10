@@ -21,16 +21,10 @@
     },
     "plugins": [
         "react",
-        "jest"
+        "jest",
+        "emotion"
     ],
     "rules": {
-        "comma-dangle": "off",
-        "global-require": "off",
-        "no-useless-escape": "off",
-        "quotes": [
-            "error",
-            "double"
-        ],
         "indent": [
             "error",
             4,
@@ -38,17 +32,6 @@
                 "SwitchCase": 1
             }
         ],
-        "import/extensions": "off",
-        "import/prefer-default-export": "off",
-        "import/no-dynamic-require": "off",
-        "import/no-extraneous-dependencies": [
-            "error",
-            {
-                "devDependencies": true
-            }
-        ],
-        "react/jsx-props-no-spreading": "off",
-        "react/forbid-prop-types": "off",
         "react/jsx-indent": [
             "error",
             4
@@ -66,6 +49,6 @@
                 ]
             }
         ],
-        "max-len": "off"
+        "import/prefer-default-export": "off"
     }
 }

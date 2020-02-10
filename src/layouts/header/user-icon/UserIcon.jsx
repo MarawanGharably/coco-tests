@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
-const DROPDOWN_ICON_URL = "https://cdn.obsessvr.com/dropdown-bar-icon.svg";
+const DROPDOWN_ICON_URL = 'https://cdn.obsessvr.com/dropdown-bar-icon.svg';
 
 const UserIcon = ({ imgUrl }) => {
     const [displayDropdown, setDisplayDropdown] = useState(false);
@@ -9,7 +9,6 @@ const UserIcon = ({ imgUrl }) => {
         setDisplayDropdown(!displayDropdown);
     };
 
-    // TODO: Will probably need a way for companies to set user profile icons in CMS and retrieve said data.
     return (
         <button id="user-icon-button" className="flex flex-center" type="button" onClick={toggleDropdown}>
             <div id="user-icon-image-container">
@@ -23,11 +22,11 @@ const UserIcon = ({ imgUrl }) => {
 };
 
 UserIcon.propTypes = {
-    imgUrl: PropTypes.string
+    imgUrl: PropTypes.string,
 };
 
 UserIcon.defaultProps = {
-    imgUrl: "https://placedog.net/150/150"
+    imgUrl: 'https://placedog.net/150/150',
 };
 
 export default UserIcon;

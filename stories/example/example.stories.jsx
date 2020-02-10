@@ -1,9 +1,9 @@
 // this comment tells babel to convert jsx to calls to a function called jsx instead of React.createElement
 /** @jsx jsx */
-import { useState } from "react";
-import PropTypes from "prop-types";
-import { css, jsx } from "@emotion/react";
-import { action } from "@storybook/addon-actions";
+import { useState } from 'react';
+import PropTypes from 'prop-types';
+import { css, jsx } from '@emotion/react';
+import { action } from '@storybook/addon-actions';
 
 const colorButton = (color) => (
     css`
@@ -30,7 +30,7 @@ const FancyButton = ({ setBackgroundColor, color }) => {
 };
 
 export const ExampleHeader = () => {
-    const [backgroundColor, setBackgroundColor] = useState("#fed2db");
+    const [backgroundColor, setBackgroundColor] = useState('#fed2db');
 
     const exampleEmotionHeader = css`
         width: 100%;
@@ -56,14 +56,14 @@ export const ExampleHeader = () => {
 
 FancyButton.propTypes = {
     setBackgroundColor: PropTypes.func.isRequired,
-    color: PropTypes.string.isRequired
+    color: PropTypes.string.isRequired,
 };
 
 export default {
-    title: "Example",
-    component: ExampleHeader
+    title: 'Example',
+    component: ExampleHeader,
 };
 
 ExampleHeader.story = {
-    name: "ExampleHeader"
+    name: 'ExampleHeader',
 };

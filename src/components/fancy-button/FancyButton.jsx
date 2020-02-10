@@ -1,6 +1,6 @@
-/** @jsx jsx */
-import PropTypes from "prop-types";
-import { css, jsx } from "@emotion/react";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { css } from '@emotion/react';
 
 const baseButtonCss = css`
     display: flex;
@@ -19,7 +19,7 @@ const baseTextCss = css`
 
 // Fancy button uses emotion's style composition to receieve styles from props
 const FancyButton = ({
-    buttonStyle, textStyle, onClick, text
+    buttonStyle, textStyle, onClick, text,
 }) => (
     <button css={[baseButtonCss, buttonStyle]} type="button" aria-label="fancy button" onClick={onClick}>
         <span css={[baseTextCss, textStyle]}>{text}</span>
@@ -30,14 +30,14 @@ FancyButton.propTypes = {
     buttonStyle: PropTypes.func,
     onClick: PropTypes.func,
     textStyle: PropTypes.func,
-    text: PropTypes.string
+    text: PropTypes.string,
 };
 
 FancyButton.defaultProps = {
     buttonStyle: null,
     onClick: null,
     textStyle: null,
-    text: ""
+    text: '',
 };
 
 export default FancyButton;

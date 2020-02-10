@@ -1,12 +1,12 @@
-import React, { useReducer } from "react";
-import { simpleExampleReducer } from "./ExampleReducer";
+import React, { useReducer } from 'react';
+import { simpleExampleReducer } from './ExampleReducer';
 
 const initialState = {
-    example: false
+    example: false,
 };
 
 const ExampleDispatchContext = React.createContext({
-    dispatch: null
+    dispatch: null,
 });
 
 const ExampleStateContext = React.createContext(initialState);
@@ -14,7 +14,7 @@ const ExampleStateContext = React.createContext(initialState);
 const useExampleState = () => {
     const context = React.useContext(ExampleStateContext);
     if (context === undefined) {
-        throw new Error("useExampleState must be used within an ExampleContextProvider");
+        throw new Error('useExampleState must be used within an ExampleContextProvider');
     }
     return context;
 };
@@ -22,7 +22,7 @@ const useExampleState = () => {
 const useExampleDispatch = () => {
     const context = React.useContext(ExampleDispatchContext);
     if (context === undefined) {
-        throw new Error("useExampleDispatch must be used within an ExampleContextProvider");
+        throw new Error('useExampleDispatch must be used within an ExampleContextProvider');
     }
     return context;
 };

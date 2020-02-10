@@ -1,5 +1,5 @@
-import React from "react";
-import useStepButton from "./useStepButton";
+import React from 'react';
+import useStepButton from './useStepButton';
 
 const StepButton = (props) => {
     const { currentStep } = useStepButton(props);

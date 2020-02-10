@@ -6,3 +6,6 @@ run/
 .idea/
 certs/
 var/
+webpack
+dotenv
+stories

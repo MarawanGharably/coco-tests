@@ -1,4 +1,4 @@
-import { exampleActions } from "./ExampleActions";
+import { exampleActions } from './ExampleActions';
 
 const { SET_EXAMPLE_STATE_TRUE, SET_EXAMPLE_STATE_FALSE, UPDATE_ID } = exampleActions;
 

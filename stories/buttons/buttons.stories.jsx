@@ -1,10 +1,10 @@
 // this comment tells babel to convert jsx to calls to a function called jsx instead of React.createElement
 /** @jsx jsx */
-import { useState } from "react";
-import PropTypes from "prop-types";
-import { css, jsx } from "@emotion/react";
-import { action } from "@storybook/addon-actions";
-import { withKnobs, text } from "@storybook/addon-knobs";
+import { useState } from 'react';
+import PropTypes from 'prop-types';
+import { css, jsx } from '@emotion/react';
+import { action } from '@storybook/addon-actions';
+import { withKnobs, text } from '@storybook/addon-knobs';
 
 const buttonStyle = css`
     display: flex;
@@ -40,19 +40,19 @@ Button.propTypes = {
 
 Button.defaultProps = {
     buttonStyle: null,
-    textStyle: null
+    textStyle: null,
 };
 
 export default {
-    title: "Buttons",
+    title: 'Buttons',
     component: Button,
-    decorators: [withKnobs]
+    decorators: [withKnobs],
 };
 
 
 // stories: each function is a state (aka 'story') - export when you want to render to storybook and to pass props or styles
 export const SubmitButton = () => {
-    const textProp = text("label", "test");
+    const textProp = text('label', 'test');
 
     return (
         <Button textProp={textProp} buttonStyle={buttonStyle} textStyle={textStyle} />

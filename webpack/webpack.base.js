@@ -1,48 +1,48 @@
-const webpack = require("webpack");
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const { envKeys } = require("../dotenv/config");
+const webpack = require('webpack');
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { envKeys } = require('../dotenv/config');
 
 const DIR_PATH = {
-    BUILD: path.resolve(__dirname, "../build"),
-    SRC: path.resolve(__dirname, "../src"),
+    BUILD: path.resolve(__dirname, '../build'),
+    SRC: path.resolve(__dirname, '../src'),
 };
 
 const config = {
     entry: [
-        path.join(DIR_PATH.SRC, "index.jsx"),
+        path.join(DIR_PATH.SRC, 'index.jsx'),
     ],
     output: {
         path: DIR_PATH.BUILD,
-        publicPath: "/",
-        filename: "bundle.[hash].js",
+        publicPath: '/',
+        filename: 'bundle.[hash].js',
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // both options are optional
-            filename: "[name].[hash].css",
+            filename: '[name].[hash].css',
         }),
         new webpack.DefinePlugin(envKeys),
         new HtmlWebpackPlugin({
             template: `${DIR_PATH.SRC}/index.html`,
             filename: `${DIR_PATH.BUILD}/index.html`,
-            inject: "defer",
+            inject: 'defer',
         }),
     ],
     module: {
         rules: [
             {
                 test: /\.(js|jsx)$/,
-                use: "babel-loader",
+                loader: 'babel-loader',
                 exclude: /node_modules\/.*/,
             },
             {
                 test: /\.(png|jpg|gif|svg|eot|otf|ttf|woff|woff2)$/,
                 use: {
-                    loader: "url-loader",
+                    loader: 'url-loader',
                     options: {
                         limit: 100000,
                     },
@@ -52,18 +52,18 @@ const config = {
                 test: /\.(sa|sc|c)ss$/,
                 use: [
                     MiniCssExtractPlugin.loader,
-                    "css-loader",
-                    "sass-loader"
+                    'css-loader',
+                    'sass-loader',
                 ],
             },
             {
                 test: /\.(vert|frag)$/,
-                use: "raw-loader",
+                use: 'raw-loader',
             },
         ],
     },
     resolve: {
-        extensions: ["*", ".js", ".jsx", ".scss"],
+        extensions: ['*', '.js', '.jsx', '.scss'],
     },
 };
 

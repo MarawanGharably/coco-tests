@@ -1,61 +1,44 @@
 # COCO CMS
-* Maybe some flavor text here about what COCO CMS is
-## Dependencies
-* Explain our current tech stack for frontend ( React, Storybook, Jest, etc... )
-* How to install dependencies that aren't part of Javascript (pre-commit and jq, these are tightly coupled dependencies btw)
-* Explain how to install deployment/devOps stack (docker, kubernetes, and helm) and deploy to local kubernetes instance (Use the makefile)
+COCO Content Management System ("COCO CMS") is a platform that allows users to create virtual store experiences.
+
+## Table of Contents
+* [Getting Started](#Getting-Started)
+* [Versioning](#Versioning)
+* [CSS & CSS-in-JS](#CSS-&-CSS-in-JS)
+* [Jest](#Jest)
+
 ## Getting Started
-* What command to start the app
-* How to run tests
-* How to run linter
-## Versioning
-We version according based on [Semantic Versioning Standards](https://semver.org/)
+### Available Scripts
+* `npm start` to start a local environment for development
+* `npm test` to run jest
+* `lint` to run linter on all files
+* `npm run storybook` to start Storybook
+* `make local` to deploy to local Kubernetes
 
-General structure is as follows:
-```
-Example:
-v1.0.4 = v<MAJOR VERSION>.<MINOR VERSION>.<PATCH VERSION>
+### Installation
+* `npm install` to install all dependencies
+* Pre-Commit
+  * `pip install pre-commit` to install via pip, `brew install pre-commit` via homebrew, or `conda install -c conda-forge pre-commit` via conda
+  * run `pre-commit install` to set up git hooks in .pre-commit-config.yaml. This now runs automatically on git commit
+* jq
+  * `brew install jq` to install JSON CLI (required for the check-gitlab-ci pre-commmit hook)
+* `make local` to make a local deployment of COCO CMS in Kubernetes. This deploys a local instance of COCO CMS within a Kubernetes namespace
+  * Kubernetes
+  * Docker
+  * Helm
 
-MAJOR version when you make significant change that is backwards incompatible
-MINOR version when you add functionality
-PATCH version when you make hot fixes or patches for bugs/styling
-```
-## File Structure
-First and foremost, the objective of our file structure is to prevent nesting components deeply
-```
-App folder structure
-/src
-.
-../components - component folder - mainly used for pure components that render purely on props
-..../fancy-button
-.....FancyButton.jsx - Pure Component that relies on props for render logic
-.
-../layouts - layout components that remain static, used for organizing page structure
-..../header
-....../user-icon - tightly coupled component that isn't reused anywhere else ( for now, may change )
-....._header.scss - Base scss module for file
-.....Header.jsx
-.
-../pages - contains content that is unique per page - e.g. Landing Page vs Registration Page
-..../registration-page
-....._registrationPage.scss
-.....RegistrationPage.jsx
-.
-../utils
-.
-.App.jsx - Home of the components, should be the source for global contexts
-.index.html
-.index.jsx
-.main.scss - Main SCSS file. Any new SCSS files should be imported here rather than loaded at component level
-```
+## Versioning - [Semantic Versioning Standards](https://semver.org/)
+Update versions within:
+  * Chart.yaml
+  * package.json
+  * gitlab-ci.yml
+
 ## CSS & CSS-in-JS
-* Explain rationale for combining the two
-* Explain use case for SCSS and CSS-in-JS
-* Explain how to style components that use emotion's composition API
-## ESLint
-* Explain what ESLint does & what style convention we are adhering to
-* Walk through custom  eslint configuration and how to add new rules (but make sure it's obvious we don't want to change it often)
+COCO CMS adopts Emotion for CSS-in-JS as a solution and alternative to inline styles for use cases that require receiving external resources or receiving data. It also works well in cases where animation is procedurally generated from data or changes in state. Aside from dynamic renders in styling, SCSS should be used as a base for styling the frontend because of it's scalability and stability.
+* Emotion - [API](https://emotion.sh/docs/emotion#api)
+  * The css function provided by Emotion accepts styles as a template literal, object, or array of objects and returns an object containing the computed name and flattened styles
+  * In order to use the css function, babel will need to compile jsx code that works with Emotion's jsx function
+  * Additional features are referenced in Emotion's API documentation
+
 ## Jest
 I'll write this part once I make a few more tests
-## Helm
-Maybe make a guide on reading charts and setting values

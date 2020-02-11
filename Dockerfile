@@ -38,6 +38,9 @@ COPY src src
 # copy eslint configuration
 COPY .eslintrc.json .eslintrc.json
 
+# copy eslint ignore
+COPY .eslintignore .eslintignore
+
 # Run linter
 RUN npm run lint
 

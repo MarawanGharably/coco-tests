@@ -36,8 +36,10 @@ const config = {
         rules: [
             {
                 test: /\.(js|jsx)$/,
-                loader: 'babel-loader',
-                exclude: /node_modules\/.*/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader'
+                }
             },
             {
                 test: /\.(png|jpg|gif|svg|eot|otf|ttf|woff|woff2)$/,

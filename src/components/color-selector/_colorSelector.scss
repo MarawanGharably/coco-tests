@@ -1,0 +1,20 @@
+.color {
+    &-selector {
+        &-container {
+            display: flex;
+            flex-direction: column;
+            width: 65%;
+            margin: 0 0 0 6px;
+        }
+        &-preview{
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            margin: 0 0 0 10px;
+        }
+    }
+    &-picker-container {
+        position: fixed;
+        transform: translateX(20px);
+    }
+}

@@ -10,6 +10,7 @@ const baseButtonCss = css`
     height: 3.7em;
     background: white;
     border: 1px solid black;
+    border-radius: 3px;
 `;
 
 const baseTextCss = css`

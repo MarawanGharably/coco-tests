@@ -1,11 +1,5 @@
 .color {
     &-selector {
-        &-container {
-            display: flex;
-            flex-direction: column;
-            width: 65%;
-            margin: 0 0 0 6px;
-        }
         &-preview{
             width: 30px;
             height: 30px;

@@ -21,7 +21,7 @@ variables:
 
 
 services:
-  - docker:dind
+  - docker:19.03.5-dind
 
 stages:
   - build

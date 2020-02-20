@@ -1,0 +1,62 @@
+%nav-bar-parent {
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.6em;
+    margin: 1em 0;
+    text-transform: uppercase;
+}
+
+%nav-bar-child {
+    text-decoration: none;
+    font-size: 1.6em;
+    color: black;
+    text-transform: capitalize;
+}
+
+.nav-bar {
+    border-right: 1px solid $obsess-grey;
+    padding: 0 2.8em;
+    &-container {
+        letter-spacing: 0.8px;
+        padding: 0;
+        margin: 0;
+        & ul {
+            padding: 0;
+            margin: 0 1.5em 0;
+            width: 28.5em;
+        }
+    }
+    &-item{
+        &-container {
+            list-style: none;
+            margin: 2em 0;
+        }
+        &-child-container {
+            list-style: none;
+        }
+    }
+    &-link {
+        color: black;
+        @extend %nav-bar-parent;
+        &-container {
+            margin: 0.5em 0;
+        }
+        &-selected {
+            @extend %nav-bar-parent;
+            color: $obsess-pink;
+        }
+        &-child {
+            @extend %nav-bar-child;
+            &-selected {
+                @extend %nav-bar-child;
+                font-weight: 600;
+            }
+        }
+    }
+    &-section-break {
+        width: 100%;
+        border-width: 0.5px;
+        border-color: #B9B9B9;
+        border-style: solid;
+    }
+}

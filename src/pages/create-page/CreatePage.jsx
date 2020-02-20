@@ -1,17 +1,17 @@
 import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import NavBar from '../../components/nav-bar/NavBar';
 import NavBarItem from '../../components/nav-bar/NavBarItem';
 
-const PlaceHolderPage = () => (
+const PlaceHolderPage = ({ name }) => (
     <div className="flex flex-center full-width full-height">
-        <h3>O Hai Mark</h3>
+        <h3>{`O Hai Mark: ${name}`}</h3>
     </div>
 );
 
-const CreatePage = ({ match }) => {
-    const pathPrefix = match.path && `${match.path}/`;
+const CreatePage = () => {
+    const pathPrefix = '/create/';
     const designPath = `${pathPrefix}design`;
     const elementsPath = `${pathPrefix}elements`;
     const productsPath = `${pathPrefix}products`;
@@ -68,56 +68,61 @@ const CreatePage = ({ match }) => {
                     pathName={submitPath}
                 />
             </NavBar>
-            <Route exact path={designPath}>
-                <Redirect to={`${designPath}/number`} />
-            </Route>
-            <Route
-                exact
-                path={`${designPath}/number`}
-                component={PlaceHolderPage}
-            />
-            <Route
-                exact
-                path={`${designPath}/layout`}
-                component={PlaceHolderPage}
-            />
-            <Route
-                exact
-                path={`${designPath}/style`}
-                component={PlaceHolderPage}
-            />
-            <Route
-                exact
-                path={`${designPath}/materials`}
-                component={PlaceHolderPage}
-            />
-            <Route
-                exact
-                path={elementsPath}
-                component={PlaceHolderPage}
-            />
-            <Route
-                exact
-                path={productsPath}
-                component={PlaceHolderPage}
-            />
-            <Route
-                exact
-                path={placementPath}
-                component={PlaceHolderPage}
-            />
-            <Route
-                exact
-                path={interactionPath}
-                component={PlaceHolderPage}
-            />
-            <Route
-                exact
-                path={submitPath}
-                component={PlaceHolderPage}
-            />
+            <Switch>
+                <Route exact path={designPath}>
+                    <Redirect to={`${designPath}/number`} />
+                </Route>
+                <Route
+                    path={`${designPath}/number`}
+                    render={() => <PlaceHolderPage name="1" />}
+                />
+                <Route
+                    path={`${designPath}/layout`}
+                    render={() => <PlaceHolderPage name="2" />}
+                />
+                <Route
+                    path={`${designPath}/style`}
+                    render={() => <PlaceHolderPage name="3" />}
+                />
+                <Route
+                    path={`${designPath}/materials`}
+                    render={() => <PlaceHolderPage name="4" />}
+                />
+                <Route
+
+                    path={elementsPath}
+                    render={() => <PlaceHolderPage name="5" />}
+                />
+                <Route
+
+                    path={productsPath}
+                    render={() => <PlaceHolderPage name="6" />}
+                />
+                <Route
+
+                    path={placementPath}
+                    render={() => <PlaceHolderPage name="7" />}
+                />
+                <Route
+
+                    path={interactionPath}
+                    render={() => <PlaceHolderPage name="8" />}
+                />
+                <Route
+                    path={submitPath}
+                    render={() => <PlaceHolderPage name="9" />}
+                />
+            </Switch>
         </div>
     );
+};
+
+PlaceHolderPage.propTypes = {
+    name: PropTypes.string,
+};
+
+PlaceHolderPage.defaultProps = {
+    name: '',
 };
 
 CreatePage.propTypes = {

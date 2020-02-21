@@ -6,16 +6,21 @@ const baseButtonCss = css`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 8em;
-    height: 3.7em;
-    background: white;
-    border: 1px solid black;
-    border-radius: 3px;
+    width: inherit;
+    height: inherit;
+    background: #FF74A6;
+    border: 1px solid #FF74A6;
+    border-radius: 5px;
+    &:hover {
+        cursor: pointer;
+    }
 `;
 
 const baseTextCss = css`
     font-size: 14px;
     font-weight: 600;
+    color: #FFF;
+    letter-spacing: 0.8px;
 `;
 
 // Fancy button uses emotion's style composition to receieve styles from props

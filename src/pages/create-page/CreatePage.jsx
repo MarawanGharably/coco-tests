@@ -3,7 +3,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import NavBar from '../../components/nav-bar/NavBar';
 import NavBarItem from '../../components/nav-bar/NavBarItem';
-import Page from '../page-template/Page';
+import Page from '../../layouts/page-template/Page';
 
 const PlaceHolderPage = ({ name }) => (
     <Page pageTitle="Placeholder" pageSubTitle="Placeholder">

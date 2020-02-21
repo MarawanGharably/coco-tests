@@ -20,6 +20,7 @@ Object {
   height: 3.7em;
   background: white;
   border: 1px solid black;
+  border-radius: 3px;
   background-color: green;
 }
 
@@ -60,6 +61,7 @@ Object {
   height: 3.7em;
   background: white;
   border: 1px solid black;
+  border-radius: 3px;
   background-color: green;
 }
 

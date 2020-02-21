@@ -1,0 +1,17 @@
+.example {
+    &-page {
+        &-form {
+            margin: 0 auto;
+            width: 50%;
+        }
+        &-row-one {
+            margin: 1em 0;
+        }
+        &-row-two {
+            margin: 1em 0;
+        }
+    }
+    &-input-container {
+        margin: 0 1em;
+    }
+}

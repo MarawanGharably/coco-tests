@@ -11,6 +11,12 @@ $text-color: #505050;
         align-items: center;
         justify-content: center;
     }
+    &-horizontal-center {
+        justify-content: center;
+    }
+    &-vertical-center {
+        align-items: center;
+    }
     &-column {
         flex-direction: column;
     }

@@ -1,10 +1,12 @@
 // COCO CMS Frontend scss
 // ******************************************************************************* //
 // Import Modules here
-@import 'library';
-@import 'layouts/layouts';
+// @import "example-context/example";
+@import "library";
 @import 'normalize';
-@import 'components/components';
+@import "layouts/layouts";
+@import "components/components";
+@import "pages/pages";
 
 @import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
 // ******************************************************************************* //

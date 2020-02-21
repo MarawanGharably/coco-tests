@@ -1,12 +1,11 @@
 import React from 'react';
 import { css } from '@emotion/react';
-import PropTypes from 'prop-types';
 
 import Input from '../input/Input';
 import useValidate from './ValidationHooks';
 import { validatePassword } from './utils/validate';
 
-const PasswordInput = ({ width }) => {
+const PasswordInput = () => {
     const {
         text, handleUserInput, isValid, renderErrors,
     } = useValidate(validatePassword);
@@ -21,7 +20,6 @@ const PasswordInput = ({ width }) => {
     return (
         <div className="validation-input-container">
             <Input
-                width={width}
                 type="password"
                 labelTitle="Password"
                 placeholder="password"
@@ -37,14 +35,6 @@ const PasswordInput = ({ width }) => {
             )}
         </div>
     );
-};
-
-PasswordInput.propTypes = {
-    width: PropTypes.string,
-};
-
-PasswordInput.defaultProps = {
-    width: '',
 };
 
 export default PasswordInput;

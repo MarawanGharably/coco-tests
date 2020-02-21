@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import debounce from 'lodash.debounce';
+
 import ErrorMessage from './ErrorMessage';
 
 const useValidate = (validate) => {
@@ -6,12 +8,16 @@ const useValidate = (validate) => {
     const [isValid, setIsValid] = useState(false);
     const [errors, setErrors] = useState([]);
 
+    const debouncedSetErrors = debounce((value) => {
+        const errorList = validate(value);
+        setErrors(errorList);
+    }, 250);
+
     const handleUserInput = (e) => {
         e.persist();
         const { value } = e.target;
-        const errorList = validate(value);
-        setErrors(errorList);
         setText(value);
+        debouncedSetErrors(value);
     };
 
     useEffect(() => {

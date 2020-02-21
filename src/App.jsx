@@ -12,6 +12,7 @@ import CreatePage from './pages/create-page/CreatePage';
 // Only needs to import CSS once at <App /> level.
 // All imports for styling should happen in main.scss level from here on
 import './main.scss';
+import ExamplePage from './pages/example-form-page/ExamplePage';
 
 const App = () => (
     <div className="app-container flex flex-column flex-1">
@@ -21,15 +22,20 @@ const App = () => (
                 <Route
                     path="/"
                     exact
-                    component={HomePage}
+                    render={() => <HomePage />}
                 />
                 <Route
                     path="/register"
-                    component={RegisterPage}
+                    render={() => <RegisterPage />}
                 />
                 <Route
                     path="/create"
-                    component={CreatePage}
+                    render={() => <CreatePage />}
+                />
+                <Route
+                    path="/example"
+                    exact
+                    render={() => <ExamplePage />}
                 />
             </Switch>
         </BodyWrapper>

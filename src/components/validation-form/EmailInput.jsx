@@ -1,12 +1,11 @@
 import React from 'react';
 import { css } from '@emotion/react';
-import PropTypes from 'prop-types';
 
 import Input from '../input/Input';
 import useValidate from './ValidationHooks';
 import { validateEmail } from './utils/validate';
 
-const EmailInput = ({ width }) => {
+const EmailInput = () => {
     const {
         text, handleUserInput, isValid, renderErrors,
     } = useValidate(validateEmail);
@@ -21,7 +20,6 @@ const EmailInput = ({ width }) => {
     return (
         <div className="validation-input-container">
             <Input
-                width={width}
                 type="email"
                 labelTitle="Email"
                 placeholder="email"
@@ -37,14 +35,6 @@ const EmailInput = ({ width }) => {
             )}
         </div>
     );
-};
-
-EmailInput.propTypes = {
-    width: PropTypes.string,
-};
-
-EmailInput.defaultProps = {
-    width: '',
 };
 
 export default EmailInput;

@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { css } from '@emotion/react';
 import PropTypes from 'prop-types';
 
 const Input = ({
@@ -10,14 +9,8 @@ const Input = ({
     handleChange,
     placeholder,
     decoratorComponent,
-    width,
-    height,
     containerStyle,
 }) => {
-    const containerWidth = css`
-        width: ${width};
-        height: ${height};
-    `;
     const inputElement = useRef(null);
     const focusInput = () => { inputElement.current.focus(); };
 
@@ -26,7 +19,7 @@ const Input = ({
             role="textbox"
             tabIndex={0}
             className="input-border-container"
-            css={[containerWidth, containerStyle]}
+            css={[containerStyle]}
             onFocus={focusInput}
             onClick={focusInput}
             onKeyDown={(e) => { if (e.keyCode === 13) { focusInput(); } }}
@@ -49,16 +42,14 @@ const Input = ({
 };
 
 Input.propTypes = {
-    type: PropTypes.string,
     labelTitle: PropTypes.string.isRequired,
     labelId: PropTypes.string.isRequired,
+    type: PropTypes.string,
     value: PropTypes.string,
     handleChange: PropTypes.func,
-    decoratorComponent: PropTypes.element,
-    width: PropTypes.string,
-    height: PropTypes.string,
     placeholder: PropTypes.string,
     containerStyle: PropTypes.func,
+    decoratorComponent: PropTypes.element,
 };
 
 Input.defaultProps = {
@@ -66,10 +57,8 @@ Input.defaultProps = {
     value: '',
     handleChange: null,
     placeholder: '',
-    decoratorComponent: null,
-    width: '25em',
-    height: '7.5em',
     containerStyle: null,
+    decoratorComponent: null,
 };
 
 export default Input;

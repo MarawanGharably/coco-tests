@@ -1,0 +1,54 @@
+.radio {
+  width: 32.3em;
+  height: 7.3em;
+  border: 0.1em solid $border-color;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 100%;
+  border-radius: 0.5em;
+
+  label, input, .custom-radio-button-selector {
+    cursor: inherit;
+  }
+
+  input {
+    position: relative;
+    top: 2.2em;
+    right: 4.6em;
+    grid-column: 2/3;
+    grid-row: 1/2;
+    opacity: 0;
+  }
+
+  input:checked ~ .radio-custom-button-selector:after {
+    display: block;
+  }
+
+  &-custom-button-selector {
+    position: relative;
+    top: 2.2em;
+    right: 4.6em;
+    grid-column: 2/3;
+    grid-row: 1/2;
+    background-color: white;
+    box-shadow: inset 0 0.1em 0.3em rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    width: 3em;
+    height: 3em;
+  }
+
+  &-custom-button-selector:after {
+    content: "";
+    position: absolute;
+    display: none;
+    top: 0.7em;
+    left: 0.7em;
+    border: 0.1em #FF74A6 solid;
+    background-color: #FF74A6;
+    box-shadow: inset 0 0.1em 0.3em #FF74A6;
+    color:#FF74A6;
+    width: 1.4em;
+    height: 1.4em;
+    border-radius: 50%;
+  }
+}

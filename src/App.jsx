@@ -14,9 +14,12 @@ import CreatePage from './pages/create-page/CreatePage';
 import './main.scss';
 import ExamplePage from './pages/example-form-page/ExamplePage';
 
+import RadioWrapperExample from './components/radio/RadioWrapperExample';
+
 const App = () => (
     <div className="app-container flex flex-column flex-1">
         <Header />
+        <RadioWrapperExample />
         <BodyWrapper>
             <Switch>
                 <Route

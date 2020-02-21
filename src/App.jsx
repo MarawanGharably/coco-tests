@@ -8,18 +8,16 @@ import Footer from './layouts/footer/Footer';
 import HomePage from './pages/home-page/HomePage';
 import RegisterPage from './pages/register-page/RegisterPage';
 import CreatePage from './pages/create-page/CreatePage';
+import ExamplePage from './pages/example-form-page/ExamplePage';
 
 // Only needs to import CSS once at <App /> level.
 // All imports for styling should happen in main.scss level from here on
 import './main.scss';
-import ExamplePage from './pages/example-form-page/ExamplePage';
 
-import RadioWrapperExample from './components/radio/RadioWrapperExample';
 
 const App = () => (
     <div className="app-container flex flex-column flex-1">
         <Header />
-        <RadioWrapperExample />
         <BodyWrapper>
             <Switch>
                 <Route

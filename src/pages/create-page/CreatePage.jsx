@@ -3,11 +3,12 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import NavBar from '../../components/nav-bar/NavBar';
 import NavBarItem from '../../components/nav-bar/NavBarItem';
+import Page from '../page-template/Page';
 
 const PlaceHolderPage = ({ name }) => (
-    <div className="flex flex-center full-width full-height">
+    <Page pageTitle="Placeholder" pageSubTitle="Placeholder">
         <h3>{`O Hai Mark: ${name}`}</h3>
-    </div>
+    </Page>
 );
 
 const CreatePage = () => {
@@ -20,7 +21,7 @@ const CreatePage = () => {
     const submitPath = `${pathPrefix}submit`;
 
     return (
-        <div className="create-store-page flex full-width">
+        <div id="create-store-page" className="flex full-width">
             <NavBar>
                 <NavBarItem
                     name="DESIGN"

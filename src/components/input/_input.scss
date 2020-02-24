@@ -2,8 +2,8 @@
     &-container {
         display: flex;
         flex-direction: column;
-        width: 90%;
-        margin: 0 0 0 10px;
+        width: 100%;
+        margin: 0 10px;
     }
     &-border-container {
         display: flex;
@@ -21,6 +21,8 @@
     }
     &-field {
         background-color: transparent;
+        width: 100%;
+        padding: 0;
         border: 0px;
         font-size: 2em;
         margin: 5px 0;

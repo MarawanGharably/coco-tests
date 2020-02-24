@@ -1,9 +1,11 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
+
 import NavBar from '../../components/nav-bar/NavBar';
 import NavBarItem from '../../components/nav-bar/NavBarItem';
 import Page from '../../layouts/page-template/Page';
+import BrandElementsPage from './brand-elements-page/BrandElementsPage';
 
 const PlaceHolderPage = ({ name }) => (
     <Page pageTitle="Placeholder" pageSubTitle="Placeholder">
@@ -92,7 +94,7 @@ const CreatePage = () => {
                 <Route
 
                     path={elementsPath}
-                    render={() => <PlaceHolderPage name="5" />}
+                    render={() => <BrandElementsPage />}
                 />
                 <Route
 

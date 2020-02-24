@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {
+    useState, useEffect, useRef, useCallback,
+} from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import { SketchPicker } from 'react-color';
@@ -17,16 +19,18 @@ const ColorSelector = ({ labelTitle, labelId }) => {
         setSelectedColor(e.target.value);
     };
 
-    const handleClickOutside = (e) => {
+    const handleClickOutside = useCallback((e) => {
         if (!colorSelectorRef.current.contains(e.target)) {
             setShowingSelector(false);
             document.removeEventListener('click', handleClickOutside);
         }
-    };
+    }, [colorSelectorRef]);
 
     const togglePicker = () => {
         if (!showingSelector) {
             document.addEventListener('click', handleClickOutside);
+        } else {
+            document.removeEventListener('click', handleClickOutside);
         }
         setShowingSelector(!showingSelector);
     };
@@ -37,12 +41,12 @@ const ColorSelector = ({ labelTitle, labelId }) => {
     `;
 
     // Immediately returns cleanUp function to remove event listener on unmount
-    useEffect(() => () => { document.removeEventListener('click', handleClickOutside); }, []);
+    useEffect(() => () => { document.removeEventListener('click', handleClickOutside); }, [handleClickOutside]);
 
     const decorator = <button type="button" aria-label="Toggle color picker" onClick={togglePicker} css={previewColor} className="color-selector-preview" />;
 
     return (
-        <div>
+        <>
             <Input
                 labelTitle={labelTitle}
                 labelId={labelId}
@@ -60,7 +64,7 @@ const ColorSelector = ({ labelTitle, labelId }) => {
                     />
                 </div>
             )}
-        </div>
+        </>
     );
 };
 

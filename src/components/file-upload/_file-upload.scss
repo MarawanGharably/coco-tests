@@ -1,0 +1,50 @@
+.file-upload {
+    &-wrapper,
+    &-button,
+    &-text,
+    &-inner-wrapper,
+    &-button-text {
+        cursor: pointer;
+    }
+
+    &-wrapper {
+        border: 0.1em solid $border-color;
+        border-radius: 0.5em;
+        width: 50em;
+        height: 7em;
+    }
+
+    &-inner-wrapper {
+        display: flex;
+    }
+
+    &-button-text {
+        width: 8em;
+        padding: 0.5em 0;
+        border: 1px solid $border-color;
+        background: #e6e6e6;
+        margin-left: 1em;
+        font-size: 1.5em;
+        text-align: center;
+    }
+
+    &-button-text:hover {
+        background: #dadada;
+    }
+
+    &-text {
+        font-size: 1.5em;
+        margin-left: 0.5em;
+        align-self: center;
+        width: 22em;
+        text-align: left;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+}
+
+#file-upload {
+    display: none;
+}

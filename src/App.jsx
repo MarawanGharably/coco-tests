@@ -14,7 +14,6 @@ import ExamplePage from './pages/example-form-page/ExamplePage';
 // All imports for styling should happen in main.scss level from here on
 import './main.scss';
 
-
 const App = () => (
     <div className="app-container flex flex-column flex-1">
         <Header />

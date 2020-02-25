@@ -16,17 +16,26 @@ Object {
   -webkit-justify-content: center;
   -ms-flex-pack: center;
   justify-content: center;
-  width: 8em;
-  height: 3.7em;
-  background: white;
-  border: 1px solid black;
-  border-radius: 3px;
+  width: inherit;
+  height: inherit;
+  background: #FF74A6;
+  border: 1px solid #FF74A6;
+  border-radius: 5px;
   background-color: green;
+}
+
+.emotion-1:hover {
+  cursor: pointer;
 }
 
 .emotion-0 {
   font-size: 14px;
   font-weight: 600;
+  color: #FFF;
+  -webkit-letter-spacing: 0.8px;
+  -moz-letter-spacing: 0.8px;
+  -ms-letter-spacing: 0.8px;
+  letter-spacing: 0.8px;
 }
 
 <body>
@@ -57,17 +66,26 @@ Object {
   -webkit-justify-content: center;
   -ms-flex-pack: center;
   justify-content: center;
-  width: 8em;
-  height: 3.7em;
-  background: white;
-  border: 1px solid black;
-  border-radius: 3px;
+  width: inherit;
+  height: inherit;
+  background: #FF74A6;
+  border: 1px solid #FF74A6;
+  border-radius: 5px;
   background-color: green;
+}
+
+.emotion-1:hover {
+  cursor: pointer;
 }
 
 .emotion-0 {
   font-size: 14px;
   font-weight: 600;
+  color: #FFF;
+  -webkit-letter-spacing: 0.8px;
+  -moz-letter-spacing: 0.8px;
+  -ms-letter-spacing: 0.8px;
+  letter-spacing: 0.8px;
 }
 
 <div>

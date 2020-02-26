@@ -7,8 +7,9 @@ import BodyWrapper from './layouts/body-wrapper/BodyWrapper';
 import HomePage from './pages/home-page/HomePage';
 import CreatePage from './pages/create-page/CreatePage';
 import ExamplePage from './pages/example-form-page/ExamplePage';
-import Footer from './layouts/footer/Footer';
 import RegisterPage from './pages/register-page/RegisterPage';
+import ProfilePage from './pages/profile-page/ProfilePage';
+import Footer from './layouts/footer/Footer';
 
 // Only needs to import CSS once at <App /> level.
 // All imports for styling should happen in main.scss level from here on
@@ -32,6 +33,10 @@ const App = () => (
                 <Route
                     path="/create"
                     render={() => <CreatePage />}
+                />
+                <Route
+                    path="/profile"
+                    render={() => <ProfilePage />}
                 />
                 <Route
                     path="/example"

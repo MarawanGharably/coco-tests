@@ -1,8 +1,8 @@
 import React from 'react';
 import { css } from '@emotion/react';
 import { Link } from 'react-router-dom';
-import EmailInput from '../../components/validation-form/EmailInput';
-import PasswordInput from '../../components/validation-form/PasswordInput';
+import EmailInput from '../../components/validation-input/EmailInput';
+import PasswordInput from '../../components/validation-input/PasswordInput';
 
 const RegisterPage = () => (
     <div className="flex flex-column flex-center full-width">

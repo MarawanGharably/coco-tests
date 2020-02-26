@@ -1,24 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Input from '../input/Input';
-import { useTextHandler } from './TextInputHook';
 
 const TextInput = ({
     id, title, placeholder,
-}) => {
-    const [text, handleUserInput] = useTextHandler();
-
-    return (
-        <Input
-            type="text"
-            labelTitle={title}
-            placeholder={placeholder}
-            labelId={id}
-            value={text}
-            handleChange={handleUserInput}
-        />
-    );
-};
+}) => (
+    <Input
+        type="text"
+        labelTitle={title}
+        placeholder={placeholder}
+        labelId={id}
+    />
+);
 
 TextInput.propTypes = {
     id: PropTypes.string.isRequired,

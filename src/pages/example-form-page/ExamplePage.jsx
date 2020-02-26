@@ -1,7 +1,7 @@
 import React from 'react';
 import TextInput from '../../components/text-input/TextInput';
-import PasswordInput from '../../components/validation-form/PasswordInput';
-import EmailInput from '../../components/validation-form/EmailInput';
+import PasswordInput from '../../components/validation-input/PasswordInput';
+import EmailInput from '../../components/validation-input/EmailInput';
 import Page from '../../layouts/page-template/Page';
 
 // Example on how to handle a page with multiple forms.

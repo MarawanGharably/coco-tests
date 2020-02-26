@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { css } from '@emotion/react';
-import useValidation from '../../src/components/validation-form/useValidation';
+import useValidation from '../../src/components/validation-input/useInput';
 
 const textFloat = css`
     margin: 3px 8px;

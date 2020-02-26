@@ -12,7 +12,7 @@ const BrandElementsPage = () => (
         pageTitle="Brand Elements"
         pageSubTitle="Your brand elements will be used throughout the virtual store"
     >
-        <section className="flex flex-center flex-column">
+        <div className="flex flex-center flex-column">
             <PageRow width="85%" header="Set Store Colors">
                 <PageItem
                     render={<ColorSelector labelTitle="Primary Color" labelId="primary-color-selector" />}
@@ -36,7 +36,7 @@ const BrandElementsPage = () => (
                     render={<TextInput title="Brand Blurb" />}
                 />
             </PageRow>
-        </section>
+        </div>
     </Page>
 );
 

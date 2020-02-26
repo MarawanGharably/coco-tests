@@ -3,7 +3,7 @@ import debounce from 'lodash.debounce';
 
 import ErrorMessage from './ErrorMessage';
 
-const useValidate = (validate) => {
+const useInput = (validate) => {
     const [text, setText] = useState('');
     const [isValid, setIsValid] = useState(false);
     const [errors, setErrors] = useState([]);
@@ -17,7 +17,9 @@ const useValidate = (validate) => {
         e.persist();
         const { value } = e.target;
         setText(value);
-        debouncedSetErrors(value);
+        if (validate) {
+            debouncedSetErrors(value);
+        }
     };
 
     useEffect(() => {
@@ -40,4 +42,4 @@ const useValidate = (validate) => {
     };
 };
 
-export default useValidate;
+export default useInput;

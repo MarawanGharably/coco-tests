@@ -8,12 +8,10 @@ const FileUpload = ({ isMultipleFiles }) => {
 
     const fileHandler = (e) => {
         const fileList = Array.from(e.target.files);
-        if (fileList.length === 0) {
-            return;
-        }
-
         let name;
-        if (fileList.length === 1) {
+        if (fileList.length === 0) {
+            name = 'no files selected';
+        } else if (fileList.length === 1) {
             name = fileList[0].name;
         } else {
             name = `${fileList.length} files`;
@@ -35,7 +33,7 @@ const FileUpload = ({ isMultipleFiles }) => {
             >
                 <section className="file-upload-inner-wrapper">
                     <div className="file-upload-button-text">Choose File</div>
-                    <div className="file-upload-text">{fileName || null}</div>
+                    <div className="file-upload-text">{fileName}</div>
                 </section>
                 <input
                     id="file-upload"

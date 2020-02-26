@@ -3,8 +3,8 @@ import Page from '../../layouts/page-template/Page';
 import PageRow from '../../components/page-row/PageRow';
 import PageItem from '../../components/page-item/PageItem';
 import FancyButton from '../../components/fancy-button/FancyButton';
-import EmailInput from '../../components/validation-form/EmailInput';
-import PasswordInput from '../../components/validation-form/PasswordInput';
+import EmailInput from '../../components/validation-input/EmailInput';
+import PasswordInput from '../../components/validation-input/PasswordInput';
 
 const LoginPage = () => {
     const [email, setEmail] = useState(''); // eslint-disable-line

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Page from '../../layouts/page-template/Page';
 import PageRow from '../../components/page-row/PageRow';
 import PageItem from '../../components/page-item/PageItem';
-import PasswordInput from '../../components/validation-form/PasswordInput';
+import PasswordInput from '../../components/validation-input/PasswordInput';
 import FancyButton from '../../components/fancy-button/FancyButton';
 
 const CreatePasswordPage = () => {
@@ -15,7 +15,7 @@ const CreatePasswordPage = () => {
         setEmail(paramEmail);
     }, []);
 
-    const width = '40%';
+    const width = '50em';
 
     return (
         <Page

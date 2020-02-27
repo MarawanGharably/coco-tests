@@ -4,10 +4,11 @@
 @import "obsess-logo/obsessLogo";
 @import "user-icon/userIcon";
 // ******************************************************************************* //
+$header-height: 5.5vh;
 
 .header {
     &-container {
-        height: 5em;
+        height: $header-height;
         border-style: solid;
         border-color: $footer-color;
         border-width: 0 0 0.2em 0;

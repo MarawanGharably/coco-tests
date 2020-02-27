@@ -1,6 +1,8 @@
+$footer-height: 8vh;
+
 .footer {
     &-container {
-        height: 8em;
+        height: $footer-height;
         border-style: solid;
         border-color: $footer-color;
         border-width: 0.2em 0 0;

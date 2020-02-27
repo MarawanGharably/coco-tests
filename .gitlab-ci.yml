@@ -10,7 +10,7 @@ variables:
   SERVICE_DOMAIN_PROD: create.shopobsess.co
 
   # Jest test images
-  FEATURE_TEST_IMAGE: $CI_REGISTRY_IMAGE/test/feature_test/$CI_COMMIT_REF_SLUG:$VERSION
+  FEATURE_TEST_IMAGE: $CI_REGISTRY_IMAGE/test/$CI_COMMIT_REF_SLUG:${VERSION}
   BETA_TEST_IMAGE: $CI_REGISTRY_IMAGE/test/beta_test_${VERSION}:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA
   PROD_TEST_IMAGE: $CI_REGISTRY_IMAGE/test/prod_test_${VERSION}:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA
 
@@ -21,7 +21,7 @@ variables:
 
 
 services:
-  - docker:19.03.5-dind
+  - docker:stable-dind
 
 stages:
   - build
@@ -31,8 +31,8 @@ stages:
   - deploy-prod
 
 before_script:
-  - echo "$CI_JOB_TOKEN $CI_REGISTRY"
-  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  - echo "$CI_DEPLOY_PASSWORD $CI_REGISTRY"
+  - docker login -u $CI_DEPLOY_USER -p $CI_DEPLOY_PASSWORD $CI_REGISTRY
   - 'which ssh-agent || ( apk update && apk add openssh-client )'
   - eval $(ssh-agent -s)
   - echo "$SSH_PRIVATE_KEY_BETA" > pkbbeta.pem
@@ -71,7 +71,7 @@ build:feature:
       -t $FEATURE_SERVICE_IMAGE .
     - docker push $FEATURE_SERVICE_IMAGE
   only:
-    - \/*feature\/.*$/
+    - /^feature\/.*$/
 
 test:feature:
   stage: test
@@ -83,7 +83,7 @@ test:feature:
       npm test
       "
   only:
-    - \/*feature\/.*$/
+    - /^feature\/.*$/
 
 deploy:feature:
   stage: deploy
@@ -92,7 +92,7 @@ deploy:feature:
     S3_PATH: "s3://$S3_BUCKET/$CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG"
   script:
     # Run the feature image as a detached container
-    - docker run -d $FEATURE_IMAGE
+    - docker run -d $FEATURE_SERVICE_IMAGE
     # copy the /www folder which contains the index.html, bundle.*.js and main.*.css files to a local folder
     - docker cp $(docker ps -alq):/www/ /www
     # install dependencies
@@ -110,7 +110,7 @@ deploy:feature:
     name: $CI_COMMIT_REF_SLUG
     url: https://${S3_BUCKET}.s3.us-east-2.amazonaws.com/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/index.html
   only:
-    - \/^feature\/.*$/
+    - /^feature\/.*$/
 
 build:beta:
   stage: build

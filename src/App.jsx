@@ -27,7 +27,7 @@ const App = () => (
                     render={() => <HomePage />}
                 />
                 <Route
-                    path="/register"
+                    path="/signup"
                     render={() => <RegisterPage />}
                 />
                 <Route

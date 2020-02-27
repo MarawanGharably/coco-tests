@@ -17,10 +17,10 @@ const PlaceHolderPage = ({ name }) => (
 const CreatePage = () => {
     const pathPrefix = '/create/';
     const designPath = `${pathPrefix}design`;
-    const elementsPath = `${pathPrefix}elements`;
-    const productsPath = `${pathPrefix}products`;
-    const placementPath = `${pathPrefix}placement`;
-    const interactionPath = `${pathPrefix}interaction`;
+    const elementsPath = `${pathPrefix}brand-elements`;
+    const productsPath = `${pathPrefix}product-data`;
+    const placementPath = `${pathPrefix}product-placement`;
+    const interactionPath = `${pathPrefix}content-interaction`;
     const submitPath = `${pathPrefix}submit`;
 
     return (
@@ -32,7 +32,7 @@ const CreatePage = () => {
                 >
                     <NavBarItem
                         name="Number of products"
-                        pathName={`${designPath}/number`}
+                        pathName={`${designPath}/products`}
                         child
                     />
                     <NavBarItem
@@ -74,10 +74,10 @@ const CreatePage = () => {
             </NavBar>
             <Switch>
                 <Route exact path={designPath}>
-                    <Redirect to={`${designPath}/number`} />
+                    <Redirect to={`${designPath}/products`} />
                 </Route>
                 <Route
-                    path={`${designPath}/number`}
+                    path={`${designPath}/products`}
                     render={() => <PlaceHolderPage name="1" />}
                 />
                 <Route

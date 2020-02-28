@@ -43,8 +43,7 @@
         text-overflow: ellipsis;
     }
 
-}
-
-#file-upload {
-    display: none;
+    &-input {
+        display: none;
+    }
 }

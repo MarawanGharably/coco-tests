@@ -2,6 +2,9 @@ import React from 'react';
 import { css } from '@emotion/react';
 import PropTypes from 'prop-types';
 
+// PageRow semantically styles a row of components on a page.
+// It takes in PageItem(s) as children and distributes them evenly.
+// Passing a column prop will vertically assign it's children.
 // eslint-disable-next-line
 const PageRow = ({ header, column, width, hasInfo, infoText, children }) => {
     const rowDimsCss = css`

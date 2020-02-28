@@ -7,6 +7,7 @@ import NavBarItem from '../../components/nav-bar/NavBarItem';
 import Page from '../../layouts/page-template/Page';
 import BrandElementsPage from './brand-elements-page/BrandElementsPage';
 import ProductPlacementPage from './product-placement-page/ProductPlacementPage';
+import ProductDataPage from './product-data-page/ProductDataPage';
 
 const PlaceHolderPage = ({ name }) => (
     <Page pageTitle="Placeholder" pageSubTitle="Placeholder">
@@ -100,7 +101,7 @@ const CreatePage = () => {
                 <Route
 
                     path={productsPath}
-                    render={() => <PlaceHolderPage name="6" />}
+                    render={() => <ProductDataPage />}
                 />
                 <Route
 

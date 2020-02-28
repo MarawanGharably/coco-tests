@@ -1,21 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
+// PageItem is a wrapper for a component:
+
+// <PageRow>
+//     <PageItem>
+//         <Component />
+//     </PageItem>
+//     <PageItem>
+//         <Component />
+//     </PageItem>
+// </PageRow>
+
 
 // eslint-disable-next-line
-const PageItem = ({ column, render }) => (
+const PageItem = ({ children }) => (
     <div className="page-item flex-1">
-        {render}
+        {children}
     </div>
 );
-
-PageItem.propTypes = {
-    column: PropTypes.bool,
-    render: PropTypes.element,
-};
-
-PageItem.defaultProps = {
-    column: false,
-    render: null,
-};
 
 export default PageItem;

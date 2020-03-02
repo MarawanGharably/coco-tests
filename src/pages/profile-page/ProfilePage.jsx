@@ -7,12 +7,24 @@ import TextInput from '../../components/text-input/TextInput';
 const ProfilePage = () => (
     <Page pageTitle="Create Your Profile" pageSubTitle="Let's get to know each other">
         <PageRow width="25%" column>
-            <PageItem render={<TextInput title="Brand Name" />} />
-            <PageItem render={<TextInput title="Brand Website" />} />
-            <PageItem render={<TextInput title="Brand Product Category" />} />
-            <PageItem render={<TextInput title="Brand Instagram" />} />
-            <PageItem render={<TextInput title="Your Name" />} />
-            <PageItem render={<TextInput title="Your Position" />} />
+            <PageItem>
+                <TextInput title="Brand Name" />
+            </PageItem>
+            <PageItem>
+                <TextInput title="Brand Website" />
+            </PageItem>
+            <PageItem>
+                <TextInput title="Brand Product Category" />
+            </PageItem>
+            <PageItem>
+                <TextInput title="Brand Instagram" />
+            </PageItem>
+            <PageItem>
+                <TextInput title="Your Name" />
+            </PageItem>
+            <PageItem>
+                <TextInput title="Your Position" />
+            </PageItem>
         </PageRow>
     </Page>
 );

@@ -23,20 +23,18 @@ const CreatePasswordPage = () => {
             pageSubTitle="Let's make it official"
         >
             <PageRow width={width}>
-                <PageItem
-                    render={<PasswordInput />}
-                />
+                <PageItem>
+                    <PasswordInput />
+                </PageItem>
             </PageRow>
             <PageRow width={width}>
                 <div>
-                    <PageItem
-                        render={(
-                            <FancyButton
-                                text="SUBMIT"
-                                buttonStyle={{ width: '10em', height: '4em' }}
-                            />
-                        )}
-                    />
+                    <PageItem>
+                        <FancyButton
+                            text="SUBMIT"
+                            buttonStyle={{ width: '10em', height: '4em' }}
+                        />
+                    </PageItem>
                 </div>
             </PageRow>
         </Page>

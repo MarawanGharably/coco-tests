@@ -1,7 +1,6 @@
 import React from 'react';
 
 // PageItem is a wrapper for a component:
-
 // <PageRow>
 //     <PageItem>
 //         <Component />
@@ -10,8 +9,6 @@ import React from 'react';
 //         <Component />
 //     </PageItem>
 // </PageRow>
-
-
 // eslint-disable-next-line
 const PageItem = ({ children }) => (
     <div className="page-item flex-1">

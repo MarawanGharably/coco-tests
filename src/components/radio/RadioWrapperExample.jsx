@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-// import PropTypes from 'prop-types';
-// import { css } from '@emotion/react';
 import Radio from './Radio';
 
 const MY_OPTIONS = Object.freeze({

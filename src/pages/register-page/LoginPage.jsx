@@ -22,8 +22,12 @@ const LoginPage = () => {
             pageSubTitle="Welcome back"
         >
             <PageRow column width={width}>
-                <PageItem render={<EmailInput />} />
-                <PageItem render={<PasswordInput />} />
+                <PageItem>
+                    <EmailInput />
+                </PageItem>
+                <PageItem>
+                    <PasswordInput />
+                </PageItem>
             </PageRow>
             <section className="login-page-helper-section flex">
                 <div>
@@ -32,7 +36,9 @@ const LoginPage = () => {
                 </div>
                 <div className="forget-password">Don&apos;t have a password?</div>
             </section>
-            <PageItem render={<FancyButton text="SUBMIT" buttonStyle={{ width: '10em', height: '4em' }} />} />
+            <PageItem>
+                <FancyButton text="SUBMIT" buttonStyle={{ width: '10em', height: '4em' }} />
+            </PageItem>
         </Page>
     );
 };

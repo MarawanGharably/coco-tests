@@ -9,6 +9,11 @@ import BrandElementsPage from './brand-elements-page/BrandElementsPage';
 import ProductPlacementPage from './product-placement-page/ProductPlacementPage';
 import ProductDataPage from './product-data-page/ProductDataPage';
 
+import DesignProductsPage from './store-design-page/DesignProductsPage';
+import DesignLayoutPage from './store-design-page/DesignLayoutPage';
+import DesignStylePage from './store-design-page/DesignStylePage';
+import DesignMaterialsPage from './store-design-page/DesignMaterialsPage';
+
 const PlaceHolderPage = ({ name }) => (
     <Page pageTitle="Placeholder" pageSubTitle="Placeholder">
         <h3>{`O Hai Mark: ${name}`}</h3>
@@ -79,19 +84,19 @@ const CreatePage = () => {
                 </Route>
                 <Route
                     path={`${designPath}/products`}
-                    render={() => <PlaceHolderPage name="1" />}
+                    render={() => <DesignProductsPage />}
                 />
                 <Route
                     path={`${designPath}/layout`}
-                    render={() => <PlaceHolderPage name="2" />}
+                    render={() => <DesignLayoutPage />}
                 />
                 <Route
                     path={`${designPath}/style`}
-                    render={() => <PlaceHolderPage name="3" />}
+                    render={() => <DesignStylePage />}
                 />
                 <Route
                     path={`${designPath}/materials`}
-                    render={() => <PlaceHolderPage name="4" />}
+                    render={() => <DesignMaterialsPage />}
                 />
                 <Route
 

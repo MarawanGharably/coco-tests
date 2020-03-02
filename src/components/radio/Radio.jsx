@@ -1,10 +1,21 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
+import { RadioSelectionContext } from './RadioGroup';
 
 const Radio = ({
-    radioHandler, radioKeyboardHandler, value, isSelected, isImage, imageUrl, isLabelShowing,
+    value, isImage, imageUrl, isLabelShowing, isDefaultSelected,
 }) => {
+    const {
+        optionSelected, setOptionSelected, radioHandler, radioKeyboardHandler,
+    } = useContext(RadioSelectionContext);
+
+    useEffect(() => {
+        if (isDefaultSelected) {
+            setOptionSelected(value);
+        }
+    }, [isDefaultSelected, setOptionSelected, value]);
+
     const imageRadioStyle = css({
         height: '32.5em',
         backgroundImage: `url(${imageUrl})`,
@@ -33,31 +44,30 @@ const Radio = ({
             css={isImage && imageRadioStyle}
             onClick={(e) => radioHandler(e, value)}
             onKeyDown={(e) => radioKeyboardHandler(e, value)}
-            aria-checked={isSelected}
+            aria-checked={value === optionSelected}
         >
             <label css={radioTextWrapperStyle} htmlFor={value}>
                 <span css={radioTextStyle}>{isLabelShowing ? value : null}</span>
             </label>
-            <input tabIndex="-1" type="radio" id={value} checked={isSelected} />
+            <input tabIndex="-1" type="radio" id={value} checked={value === optionSelected} />
             <span className="radio-custom-button-selector" />
         </div>
     );
 };
 
 Radio.propTypes = {
-    radioHandler: PropTypes.func.isRequired,
-    radioKeyboardHandler: PropTypes.func.isRequired,
     value: PropTypes.string.isRequired,
-    isSelected: PropTypes.bool,
-    isImage: PropTypes.bool.isRequired,
+    isImage: PropTypes.bool,
     imageUrl: PropTypes.string,
-    isLabelShowing: PropTypes.bool.isRequired,
-
+    isLabelShowing: PropTypes.bool,
+    isDefaultSelected: PropTypes.bool,
 };
 
 Radio.defaultProps = {
-    isSelected: false,
+    isImage: false,
+    isLabelShowing: false,
     imageUrl: 'https://placedog.net/325/325',
+    isDefaultSelected: false,
 };
 
 export default Radio;

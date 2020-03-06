@@ -10,7 +10,6 @@ import RegisterPage from './pages/register-page/RegisterPage';
 import ProfilePage from './pages/profile-page/ProfilePage';
 import LoginPage from './pages/register-page/LoginPage';
 import Footer from './layouts/footer/Footer';
-import FooterNavigation from './pages/create-page/FooterNavigation';
 
 // Only needs to import CSS once at <App /> level.
 // All imports for styling should happen in main.scss level from here on
@@ -49,9 +48,7 @@ const App = () => (
                 />
             </Switch>
         </BodyWrapper>
-        <FooterNavigation>
-            <Footer />
-        </FooterNavigation>
+        <Footer />
     </div>
 );
 

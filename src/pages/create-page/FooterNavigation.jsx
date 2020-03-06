@@ -3,9 +3,7 @@ import { useLocation } from 'react-router-dom';
 import {
     buttonTextByPathname,
     // routesInOrder,
-    // findNextPagePath,
-    // findPrevPagePath,
-} from './buttonNavUtil';
+} from './createStoreNavUtil';
 
 const initialContext = {};
 
@@ -18,23 +16,11 @@ const FooterNavigation = ({ children }) => {
     const [text, setText] = useState(''); // eslint-disable-line
 
     const location = useLocation();
-    // const nextPagePath = findNextPagePath(location.pathname, routesInOrder);
-    // const prevPagePath = findPrevPagePath(location.pathname, routesInOrder);
 
     useEffect(() => {
-        // setCurrentPath(location.pathname);
-        // setNextPath(nextPagePath);
-        // setPrevPath(prevPagePath);
         setText(buttonTextByPathname[location.pathname]);
     }, [location]);
 
-    // console.log(location);
-    // console.log(location.pathname);
-    // console.log(nextPagePath);
-    // console.log(location);
-    // console.log(currentPath);
-    // console.log(nextPath);
-    // console.log(prevPath);
 
     return (
         <FooterNavContext.Provider value={{

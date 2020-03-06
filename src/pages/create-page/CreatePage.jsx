@@ -21,13 +21,13 @@ const PlaceHolderPage = ({ name }) => (
 );
 
 const CreatePage = () => {
-    const pathPrefix = '/create';
-    const designPath = `${pathPrefix}/design`;
-    const elementsPath = `${pathPrefix}/brand-elements`;
-    const productsPath = `${pathPrefix}/product-data`;
-    const placementPath = `${pathPrefix}/product-placement`;
-    const interactionPath = `${pathPrefix}/content-interactions`;
-    const submitPath = `${pathPrefix}/submit`;
+    const pathPrefix = '/create/';
+    const designPath = `${pathPrefix}design`;
+    const elementsPath = `${pathPrefix}brand-elements`;
+    const productsPath = `${pathPrefix}product-data`;
+    const placementPath = `${pathPrefix}product-placement`;
+    const interactionPath = `${pathPrefix}content-interactions`;
+    const submitPath = `${pathPrefix}submit`;
 
     return (
         <div id="create-store-page" className="flex full-width">

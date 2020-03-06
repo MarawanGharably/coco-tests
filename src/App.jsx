@@ -1,5 +1,4 @@
 import React from 'react';
-// import { jsx } from "@emotion/react";
 import { Route, Switch } from 'react-router-dom';
 
 import Header from './layouts/header/Header';
@@ -11,6 +10,7 @@ import RegisterPage from './pages/register-page/RegisterPage';
 import ProfilePage from './pages/profile-page/ProfilePage';
 import LoginPage from './pages/register-page/LoginPage';
 import Footer from './layouts/footer/Footer';
+import FooterNavigation from './pages/create-page/FooterNavigation';
 
 // Only needs to import CSS once at <App /> level.
 // All imports for styling should happen in main.scss level from here on
@@ -49,7 +49,9 @@ const App = () => (
                 />
             </Switch>
         </BodyWrapper>
-        <Footer />
+        <FooterNavigation>
+            <Footer />
+        </FooterNavigation>
     </div>
 );
 

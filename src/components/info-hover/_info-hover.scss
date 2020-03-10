@@ -1,0 +1,63 @@
+$button-diameter: 1em;
+$message-width: 15em;
+$message-center: calc(-#{$message-width - $button-diameter/2}/2);
+$arrow-width: 1em;
+$arrow-center: calc(#{$message-width - $button-diameter}/2 + 0.5em);
+
+.info-hover {
+    &-container {
+        margin: 0 0 0 1em;
+    }
+    &-button{
+        &-container {
+            width: $button-diameter;
+            height: $button-diameter;
+            background: $footer-color;
+            border: 1px solid $obsess-grey;
+            color: $obsess-grey;
+            border-radius: 100%;
+            cursor: pointer;
+            &:hover {
+                background: #edf7fa;
+                border: 1px solid #5f6caf;
+                color: #5f6caf;
+            }
+        }
+        &-icon {
+            font-size: 0.8em;
+        }
+    }
+    &-message {
+        &-container {
+            position: fixed;
+            width: $message-width;
+            background: white;
+            margin: 1em 0 0;
+            transform: translateX($message-center);
+            border: 1px solid black;
+            font-size: 10px;
+            &:before {
+                content: '';
+                background: white;
+                width: $arrow-width;
+                height: $arrow-width;
+                position: fixed;
+                left: $arrow-center;
+                top: -0.6em;
+                transform: rotate(45deg);
+                z-index: -1;
+                border: 1px solid black;
+                border-width: 1px 0 0 1px;
+            }
+        }
+        &-title {
+            margin: 0.5em 0 0;
+            font-weight: bold;
+            font-size: 1.4em;
+        }
+        text-align: center;
+        margin: 0.5em;
+
+    }
+
+}

@@ -1,19 +1,23 @@
-.product {
+.right {
     $border: 1px solid $footer-color;
-    $selected-border: 8px solid $obsess-pink;
     $side-bar-height: calc(100vh - #{$header-height + $footer-height});
+
     &-side-bar {
         width: 28em;
         height: $side-bar-height;
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: 18em;
-        overflow-y: scroll;
+        overflow-y: auto;
         border-left: $border;
         &:hover {
             cursor: pointer;
         }
     }
+}
+
+.product {
+    $border: 1px solid $footer-color;
+    $selected-border: 8px solid $obsess-pink;
+
     &-item {
         width: 100%;
         height: 100%;
@@ -45,4 +49,10 @@
             margin: 0.5em 0 0.5em;
         }
     }
+}
+
+.content-url-remover {
+    width: 100%;
+    text-align: right;
+    margin: 0.5em 0.5em 0.5em 0;
 }

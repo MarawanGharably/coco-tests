@@ -2,8 +2,8 @@ import React from 'react';
 
 import Page from '../../../layouts/page-template/Page';
 import PageRow from '../../../components/page-row/PageRow';
-import ProductSideBar from '../../../components/product-side-bar/ProductSideBar';
-import ProductSideBarItem from '../../../components/product-side-bar/ProductSideBarItem';
+import RightSideBar from '../../../components/right-side-bar/RightSideBar';
+import ProductSideBarItem from '../../../components/right-side-bar/ProductSideBarItem';
 
 import mockData from './mock.json';
 import SceneNavigator from '../../../components/scene-navigator/SceneNavigator';
@@ -30,9 +30,9 @@ const ProductPlacementPage = () => {
                         <SceneNavigator />
                     </PageRow>
                 </Page>
-                <ProductSideBar>
+                <RightSideBar cols="2" rowHeight="18em">
                     {renderItems()}
-                </ProductSideBar>
+                </RightSideBar>
             </div>
         </EditorDataStore>
     );

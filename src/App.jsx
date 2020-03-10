@@ -1,14 +1,15 @@
 import React from 'react';
-// import { jsx } from "@emotion/react";
 import { Route, Switch } from 'react-router-dom';
 
 import Header from './layouts/header/Header';
 import BodyWrapper from './layouts/body-wrapper/BodyWrapper';
+import { HomePageDataStore } from './data-store/home-page-data-store/HomePageDataStore';
 import HomePage from './pages/home-page/HomePage';
 import CreatePage from './pages/create-page/CreatePage';
 import ExamplePage from './pages/example-form-page/ExamplePage';
 import RegisterPage from './pages/register-page/RegisterPage';
 import ProfilePage from './pages/profile-page/ProfilePage';
+import ErrorPage from './pages/error-page/ErrorPage';
 import LoginPage from './pages/register-page/LoginPage';
 import Footer from './layouts/footer/Footer';
 
@@ -24,7 +25,11 @@ const App = () => (
                 <Route
                     path="/"
                     exact
-                    render={() => <HomePage />}
+                    render={() => (
+                        <HomePageDataStore>
+                            <HomePage />
+                        </HomePageDataStore>
+                    )}
                 />
                 <Route
                     path="/signup"
@@ -46,6 +51,11 @@ const App = () => (
                     path="/example"
                     exact
                     render={() => <ExamplePage />}
+                />
+                <Route
+                    path="/404"
+                    exact
+                    render={() => <ErrorPage statusCode="404" />}
                 />
             </Switch>
         </BodyWrapper>

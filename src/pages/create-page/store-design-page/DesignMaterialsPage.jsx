@@ -4,6 +4,8 @@ import PageRow from '../../../components/page-row/PageRow';
 import PageItem from '../../../components/page-item/PageItem';
 import RadioGroup from '../../../components/radio/RadioGroup';
 import Radio from '../../../components/radio/Radio';
+import { FormDataStore } from '../../../data-store/form-data-store/FormDataStore';
+import formField from '../../../utils/formField';
 import './_store-design.scss';
 
 const VELVET_GOLD_STONE_IMAGE = 'https://cdn.obsessvr.com/Material_VelvetGoldStone.jpg';
@@ -15,34 +17,38 @@ const MATERIAL_OPTIONS = Object.freeze({
 });
 
 const DesignMaterialsPage = () => (
-    <Page
-        pageTitle="Store Design"
-        pageSubTitle="These materials will be used on the product fixtures, decor, walls, and floors"
-    >
-        <section className="store-design">
-            <RadioGroup>
-                <PageRow header="Choose Number of Products">
-                    <PageItem>
-                        <Radio
-                            value={MATERIAL_OPTIONS.OPTION1}
-                            isImage
-                            imageUrl={VELVET_GOLD_STONE_IMAGE}
-                            isLabelShowing
-                            isDefaultSelected
-                        />
-                    </PageItem>
-                    <PageItem>
-                        <Radio
-                            value={MATERIAL_OPTIONS.OPTION2}
-                            isImage
-                            imageUrl={LINEN_CHROME_WOOD_IMAGE}
-                            isLabelShowing
-                        />
-                    </PageItem>
-                </PageRow>
-            </RadioGroup>
-        </section>
-    </Page>
+    <FormDataStore>
+        <Page
+            pageTitle="Store Design"
+            pageSubTitle="These materials will be used on the product fixtures, decor, walls, and floors"
+        >
+            <section className="store-design">
+                <RadioGroup>
+                    <PageRow header="Choose Number of Products">
+                        <PageItem>
+                            <Radio
+                                formField={formField.designMaterials}
+                                value={MATERIAL_OPTIONS.OPTION1}
+                                isImage
+                                imageUrl={VELVET_GOLD_STONE_IMAGE}
+                                isLabelShowing
+                                isDefaultSelected
+                            />
+                        </PageItem>
+                        <PageItem>
+                            <Radio
+                                formField={formField.designMaterials}
+                                value={MATERIAL_OPTIONS.OPTION2}
+                                isImage
+                                imageUrl={LINEN_CHROME_WOOD_IMAGE}
+                                isLabelShowing
+                            />
+                        </PageItem>
+                    </PageRow>
+                </RadioGroup>
+            </section>
+        </Page>
+    </FormDataStore>
 );
 
 export default DesignMaterialsPage;

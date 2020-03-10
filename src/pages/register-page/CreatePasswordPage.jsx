@@ -6,13 +6,14 @@ import PasswordInput from '../../components/validation-input/PasswordInput';
 import FancyButton from '../../components/fancy-button/FancyButton';
 
 const CreatePasswordPage = () => {
-    const [email, setEmail] = useState(''); // eslint-disable-line
-
     useEffect(() => {
         // path is create.shopobsess.co/?setpassword={email}
+        // path is /password?a={email}&b={password}
         const urlParams = new URLSearchParams(window.location.search);
-        const paramEmail = urlParams.get('setpassword');
-        setEmail(paramEmail);
+        const email = urlParams.get('a');
+        const password = urlParams.get('b');
+        console.log(email, password);
+        // const paramEmail = urlParams.get('setpassword');
     }, []);
 
     const width = '50em';

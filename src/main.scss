@@ -8,7 +8,6 @@
 @import "components/components";
 @import "pages/pages";
 
-@import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
 // ******************************************************************************* //
 
 body {
@@ -20,7 +19,7 @@ body {
     overflow-x: hidden;
     min-width: 320px;
     background: #fff;
-    font-family: Raleway;
+    font-family: 'Raleway', sans-serif;
     font-size: 10px; // Allows us to use EM in units of 10 e.g 1em = 10px
     font-smoothing: antialiased;
     -webkit-font-smoothing: antialiased;

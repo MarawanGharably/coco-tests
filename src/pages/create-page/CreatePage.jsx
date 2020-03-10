@@ -8,11 +8,11 @@ import Page from '../../layouts/page-template/Page';
 import BrandElementsPage from './brand-elements-page/BrandElementsPage';
 import ProductPlacementPage from './product-placement-page/ProductPlacementPage';
 import ProductDataPage from './product-data-page/ProductDataPage';
-
 import DesignProductsPage from './store-design-page/DesignProductsPage';
 import DesignLayoutPage from './store-design-page/DesignLayoutPage';
 import DesignStylePage from './store-design-page/DesignStylePage';
 import DesignMaterialsPage from './store-design-page/DesignMaterialsPage';
+import ContentInteractionPage from './content-interaction-page/ContentInteractionPage';
 
 const PlaceHolderPage = ({ name }) => (
     <Page pageTitle="Placeholder" pageSubTitle="Placeholder">
@@ -116,7 +116,7 @@ const CreatePage = () => {
                 <Route
 
                     path={interactionPath}
-                    render={() => <PlaceHolderPage name="8" />}
+                    render={() => <ContentInteractionPage />}
                 />
                 <Route
                     path={submitPath}

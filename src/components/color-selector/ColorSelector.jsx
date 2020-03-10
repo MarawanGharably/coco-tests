@@ -5,11 +5,22 @@ import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import { SketchPicker } from 'react-color';
 import Input from '../input/Input';
+import { useFormDataStore, SET_FORM_DATA } from '../../data-store/form-data-store/FormDataStore';
 
-const ColorSelector = ({ labelTitle, labelId }) => {
+// formField is required and should match API shape
+const ColorSelector = ({ labelTitle, formField }) => {
     const [selectedColor, setSelectedColor] = useState('#000');
     const [showingSelector, setShowingSelector] = useState(false);
     const colorSelectorRef = useRef(null);
+    const [, formDataDispatch] = useFormDataStore();
+
+    useEffect(() => {
+        const action = {
+            type: SET_FORM_DATA,
+            payload: { [formField]: selectedColor },
+        };
+        formDataDispatch(action);
+    }, [formDataDispatch, formField, selectedColor]);
 
     const handlePicker = (color) => {
         setSelectedColor(color.hex);
@@ -49,7 +60,7 @@ const ColorSelector = ({ labelTitle, labelId }) => {
         <>
             <Input
                 labelTitle={labelTitle}
-                labelId={labelId}
+                formField={formField}
                 value={selectedColor}
                 handleChange={handleChange}
                 decoratorComponent={decorator}
@@ -70,7 +81,7 @@ const ColorSelector = ({ labelTitle, labelId }) => {
 
 ColorSelector.propTypes = {
     labelTitle: PropTypes.string.isRequired,
-    labelId: PropTypes.string.isRequired,
+    formField: PropTypes.string.isRequired,
 };
 
 export default ColorSelector;

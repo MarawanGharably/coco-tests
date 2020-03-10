@@ -8,7 +8,6 @@ import Page from '../../layouts/page-template/Page';
 import BrandElementsPage from './brand-elements-page/BrandElementsPage';
 import ProductPlacementPage from './product-placement-page/ProductPlacementPage';
 import ProductDataPage from './product-data-page/ProductDataPage';
-
 import DesignProductsPage from './store-design-page/DesignProductsPage';
 import DesignLayoutPage from './store-design-page/DesignLayoutPage';
 import DesignStylePage from './store-design-page/DesignStylePage';

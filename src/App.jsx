@@ -12,6 +12,8 @@ import ProfilePage from './pages/profile-page/ProfilePage';
 import ErrorPage from './pages/error-page/ErrorPage';
 import LoginPage from './pages/register-page/LoginPage';
 import Footer from './layouts/footer/Footer';
+import CreatePasswordPage from './pages/register-page/CreatePasswordPage';
+import { FormDataStore } from './data-store/form-data-store/FormDataStore';
 
 // Only needs to import CSS once at <App /> level.
 // All imports for styling should happen in main.scss level from here on
@@ -29,6 +31,14 @@ const App = () => (
                         <HomePageDataStore>
                             <HomePage />
                         </HomePageDataStore>
+                    )}
+                />
+                <Route
+                    path="/password"
+                    render={() => (
+                        <FormDataStore>
+                            <CreatePasswordPage />
+                        </FormDataStore>
                     )}
                 />
                 <Route

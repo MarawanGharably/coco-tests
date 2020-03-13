@@ -1,1 +1,1 @@
-export const API_URL = 'https://api.beta.obsessvr.com/store';
+export const API_URL = 'https://api.obsessvr.com/store';

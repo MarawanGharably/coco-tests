@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Page from '../../layouts/page-template/Page';
 import PageRow from '../../components/page-row/PageRow';
 import PageItem from '../../components/page-item/PageItem';
@@ -6,7 +7,6 @@ import PasswordInput from '../../components/validation-input/PasswordInput';
 import FancyButton from '../../components/fancy-button/FancyButton';
 import { useFormDataStore } from '../../data-store/form-data-store/FormDataStore';
 import SpinLoader from '../../components/spin-loader/SpinLoader';
-import { useHistory } from 'react-router-dom';
 
 const SET_PASSWORD_URL = 'http://localhost/store/auth/password';
 
@@ -22,10 +22,10 @@ const CreatePasswordPage = () => {
     useEffect(() => {
         // path is /password?a={email}&b={password}
         const urlParams = new URLSearchParams(window.location.search);
-        const email = urlParams.get('a');
-        const password = urlParams.get('b');
-        setEmail(email);
-        setPassword(password);
+        const urlEmail = urlParams.get('a');
+        const oldPassword = urlParams.get('b');
+        setEmail(urlEmail);
+        setPassword(oldPassword);
     }, []);
 
     const submitPassword = async () => {
@@ -36,37 +36,37 @@ const CreatePasswordPage = () => {
             const response = await fetch(SET_PASSWORD_URL, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 credentials: 'include', // need this for cookie to set
                 body: JSON.stringify({
                     username: email,
                     oldPassword: password,
-                    newPassword: newPassword
-                })
+                    newPassword,
+                }),
             });
 
             const statusCode = response.status;
             if (statusCode === 200) {
                 history.push('/profile');
             } else if (statusCode === 400) {
-                console.error('Bad request');
+                console.error('Bad request'); // eslint-disable-line
                 setErrorMessage('Invalid password, please input a valid password.');
                 setSubmitting(false);
             } else if (statusCode === 403) {
-                console.log('Already set password');
+                console.log('Already set password'); // eslint-disable-line
                 history.push('/login');
             } else {
-                console.error(response.statusText);
-                setErrorMessage('Server error, please try again later.')
+                console.error(response.statusText); // eslint-disable-line
+                setErrorMessage('Server error, please try again later.');
                 setSubmitting(false);
             }
         } catch (error) {
-            console.error(error);
+            console.error(error); // eslint-disable-line
             setSubmitting(false);
             setErrorMessage('Server error, please try again later.');
         }
-    }
+    };
 
     const width = '50em';
 
@@ -90,7 +90,7 @@ const CreatePasswordPage = () => {
                                         width: '50px',
                                         height: '50px',
                                         borderWidth: '5px',
-                                        borderTopWidth: '5px'
+                                        borderTopWidth: '5px',
                                     }}
                                 />
                             ) : (

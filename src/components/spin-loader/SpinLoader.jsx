@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { css, keyframes } from '@emotion/react';
 
 const spin = keyframes({
     '0%': { transform: 'rotate(0deg)' },
-    '100%': { transform: 'rotate(360deg)' }
-})
+    '100%': { transform: 'rotate(360deg)' },
+});
 
 const baseCss = css`
     border-style: solid;
@@ -21,7 +22,7 @@ const baseCss = css`
 
 const SpinLoader = ({ style }) => (
     <div className="full-width flex flex-center">
-        <div css={[baseCss, style]}></div>
+        <div css={[baseCss, style]} />
     </div>
 );
 

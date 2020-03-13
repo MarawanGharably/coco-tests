@@ -7,8 +7,10 @@ import PasswordInput from '../../components/validation-input/PasswordInput';
 import FancyButton from '../../components/fancy-button/FancyButton';
 import { useFormDataStore } from '../../data-store/form-data-store/FormDataStore';
 import SpinLoader from '../../components/spin-loader/SpinLoader';
+import { API_URL } from '../../utils/envVariables';
 
-const SET_PASSWORD_URL = 'http://localhost/store/auth/password';
+const SET_PASSWORD_URL = `${API_URL}/store/auth/password`;
+console.log(SET_PASSWORD_URL);
 
 const CreatePasswordPage = () => {
     const [email, setEmail] = useState('');

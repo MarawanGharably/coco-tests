@@ -4,7 +4,7 @@ import { Link, useHistory } from 'react-router-dom';
 import Page from '../../layouts/page-template/Page';
 import FancyButton from '../../components/fancy-button/FancyButton';
 import { useHomePageData, HomePageActionEnums } from '../../data-store/home-page-data-store/HomePageDataStore';
-import { API_URL } from '../../utils/apiFetch';
+import { DUMMY_API_URL } from '../../utils/envVariables';
 import Loader from '../../components/loader/Loader';
 
 const BUILD_STAGE_ENUMS = Object.freeze({
@@ -37,7 +37,7 @@ const HomePage = () => {
         // fetching function that dispatches actions
         const fetchHomepageData = async () => {
             try {
-                const response = await fetch(`${API_URL}/client/stores`);
+                const response = await fetch(`${DUMMY_API_URL}/client/stores`);
                 if (response.status === 200) {
                     const body = await response.json();
                     // DATA IS JUST THE FIRST STORE RECEIVED FOR NOW

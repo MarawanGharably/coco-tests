@@ -10,7 +10,6 @@ import SpinLoader from '../../components/spin-loader/SpinLoader';
 import { API_URL } from '../../utils/envVariables';
 
 const SET_PASSWORD_URL = `${API_URL}/store/auth/password`;
-console.log(SET_PASSWORD_URL);
 
 const CreatePasswordPage = () => {
     const [email, setEmail] = useState('');

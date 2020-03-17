@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useFormDataStore, SET_FORM_DATA } from '../../data-store/form-data-store/FormDataStore';
 
 // formField is required to accurately assign file uploads to its respective input id
 // without formField, files will be uploaded only to the first input on the page.
 // formField should match API shape
 const FileUpload = ({ formField, isMultipleFiles }) => {
     const [fileName, setFileName] = useState('');
-    const [, formDataDispatch] = useFormDataStore();
+    const [fileUrls, setFileUrls] = useState();
 
     const parseFileListIntoUrls = (fileList) => {
         const nameList = [];
@@ -32,11 +31,9 @@ const FileUpload = ({ formField, isMultipleFiles }) => {
         }
 
         setFileName(name);
-        const action = {
-            type: SET_FORM_DATA,
-            payload: { [formField]: parsedFileUrls },
-        };
-        formDataDispatch(action);
+
+        setFileUrls(parsedFileUrls);
+        console.log(fileUrls); // eslint-disable-line
     };
 
     return (

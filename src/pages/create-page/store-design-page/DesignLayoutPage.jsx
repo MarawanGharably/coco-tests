@@ -4,7 +4,6 @@ import PageRow from '../../../components/page-row/PageRow';
 import PageItem from '../../../components/page-item/PageItem';
 import RadioGroup from '../../../components/radio/RadioGroup';
 import Radio from '../../../components/radio/Radio';
-import { FormDataStore } from '../../../data-store/form-data-store/FormDataStore';
 import formField from '../../../utils/formField';
 import './_store-design.scss';
 
@@ -17,36 +16,34 @@ const LAYOUT_OPTIONS = Object.freeze({
 });
 
 const DesignLayoutPage = () => (
-    <FormDataStore>
-        <Page
-            pageTitle="Store Design"
-            pageSubTitle="This will be the overall shape of your virtual store"
-        >
-            <section className="store-design">
-                <RadioGroup>
-                    <PageRow header="Choose Layout">
-                        <PageItem>
-                            <Radio
-                                formField={formField.designLayout}
-                                value={LAYOUT_OPTIONS.OPTION1}
-                                isImage
-                                imageUrl={LAYOUT_IMAGE_1}
-                                isDefaultSelected
-                            />
-                        </PageItem>
-                        <PageItem>
-                            <Radio
-                                formField={formField.designLayout}
-                                value={LAYOUT_OPTIONS.OPTION2}
-                                imageUrl={LAYOUT_IMAGE_2}
-                                isImage
-                            />
-                        </PageItem>
-                    </PageRow>
-                </RadioGroup>
-            </section>
-        </Page>
-    </FormDataStore>
+    <Page
+        pageTitle="Store Design"
+        pageSubTitle="This will be the overall shape of your virtual store"
+    >
+        <section className="store-design">
+            <RadioGroup>
+                <PageRow header="Choose Layout">
+                    <PageItem>
+                        <Radio
+                            formField={formField.designLayout}
+                            value={LAYOUT_OPTIONS.OPTION1}
+                            isImage
+                            imageUrl={LAYOUT_IMAGE_1}
+                            isDefaultSelected
+                        />
+                    </PageItem>
+                    <PageItem>
+                        <Radio
+                            formField={formField.designLayout}
+                            value={LAYOUT_OPTIONS.OPTION2}
+                            imageUrl={LAYOUT_IMAGE_2}
+                            isImage
+                        />
+                    </PageItem>
+                </PageRow>
+            </RadioGroup>
+        </section>
+    </Page>
 );
 
 export default DesignLayoutPage;

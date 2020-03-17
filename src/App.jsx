@@ -10,7 +10,7 @@ import HomePage from './pages/home-page/HomePage';
 import CreatePage from './pages/create-page/CreatePage';
 import ExamplePage from './pages/example-form-page/ExamplePage';
 import RegisterPage from './pages/register-page/RegisterPage';
-import ProfilePage from './pages/profile-page/ProfilePage';
+import { ProfilePage, ContextProvider as ProfileContextProvider } from './pages/profile-page/ProfilePage';
 import ErrorPage from './pages/error-page/ErrorPage';
 import LoginPage from './pages/register-page/LoginPage';
 import Footer from './layouts/footer/Footer';
@@ -62,7 +62,11 @@ const App = () => (
                     />
                     <PrivateRoute
                         path="/profile"
-                        render={() => <ProfilePage />}
+                        render={() => (
+                            <ProfileContextProvider>
+                                <ProfilePage />
+                            </ProfileContextProvider>
+                        )}
                     />
                     <PrivateRoute
                         path="/example"

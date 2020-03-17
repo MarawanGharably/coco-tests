@@ -3,10 +3,19 @@ import Page from '../../layouts/page-template/Page';
 import PageRow from '../../components/page-row/PageRow';
 import PageItem from '../../components/page-item/PageItem';
 import TextInput from '../../components/text-input/TextInput';
-import { FormDataStore } from '../../data-store/form-data-store/FormDataStore';
+import { getKeyValueDataStore } from '../../data-store/KeyValueDataStoreFactory';
 
-const ProfilePage = () => (
-    <FormDataStore>
+const { Action, ContextProvider, useDataStore } = getKeyValueDataStore({
+    brandName: '',
+    brandWebsite: '',
+    brandProductCategory: '',
+    brandInstagram: '',
+    name: '',
+    position: '',
+});
+
+const ProfilePage = () => {
+    return (
         <Page pageTitle="Create Your Profile" pageSubTitle="Let's get to know each other">
             <PageRow width="25%" column>
                 <PageItem>
@@ -29,7 +38,8 @@ const ProfilePage = () => (
                 </PageItem>
             </PageRow>
         </Page>
-    </FormDataStore>
-);
+    );
+};
 
-export default ProfilePage;
+
+export { ProfilePage, ContextProvider };

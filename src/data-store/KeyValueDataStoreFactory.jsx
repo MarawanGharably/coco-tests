@@ -38,6 +38,6 @@ export const getKeyValueDataStore = (initialState) => {
     return {
         Action,
         ContextProvider,
-        useDataStore
-    }
-}
+        useDataStore,
+    };
+};

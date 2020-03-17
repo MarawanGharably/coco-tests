@@ -4,9 +4,8 @@ import Page from '../../layouts/page-template/Page';
 import PageRow from '../../components/page-row/PageRow';
 import PageItem from '../../components/page-item/PageItem';
 import PasswordInput from '../../components/validation-input/PasswordInput';
-import FancyButton from '../../components/fancy-button/FancyButton';
 import { useFormDataStore } from '../../data-store/form-data-store/FormDataStore';
-import SpinLoader from '../../components/spin-loader/SpinLoader';
+import SubmitButton from '../../components/submit-button/SubmitButton';
 import { API_URL } from '../../utils/envVariables';
 
 const SET_PASSWORD_URL = `${API_URL}/auth/password`;
@@ -84,24 +83,10 @@ const CreatePasswordPage = () => {
             <PageRow width={width}>
                 <div>
                     <PageItem>
-                        {
-                            submitting ? (
-                                <SpinLoader
-                                    style={{
-                                        width: '50px',
-                                        height: '50px',
-                                        borderWidth: '5px',
-                                        borderTopWidth: '5px',
-                                    }}
-                                />
-                            ) : (
-                                <FancyButton
-                                    text="SUBMIT"
-                                    buttonStyle={{ width: '10em', height: '4em' }}
-                                    onClick={submitPassword}
-                                />
-                            )
-                        }
+                        <SubmitButton
+                            submitting={submitting}
+                            onClick={submitPassword}
+                        />
                     </PageItem>
                 </div>
             </PageRow>

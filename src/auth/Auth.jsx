@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useReducer } from 'react';
 
 const initialState = {
     isAuthenticated: false,
@@ -15,7 +15,7 @@ const { LOGGED_IN } = AuthAction;
 
 const authReducer = (_, action) => {
     const { type } = action;
-    console.log(action);
+
     switch (type) {
         case LOGGED_IN:
             return ({

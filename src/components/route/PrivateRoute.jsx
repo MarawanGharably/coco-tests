@@ -3,9 +3,9 @@ import { Route, Redirect } from 'react-router-dom';
 import { useAuth } from '../../auth/Auth';
 
 function PrivateRoute(props) {
-    const [state,] = useAuth();
+    const [state] = useAuth();
     return (
-        state.isAuthenticated ? <Route {...props} /> : <Redirect to='/login' />
+        state.isAuthenticated ? <Route {...props} /> : <Redirect to="/login" /> // eslint-disable-line
     );
 }
 

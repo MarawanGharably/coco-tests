@@ -13,9 +13,9 @@ import { AuthAction, useAuth } from '../../auth/Auth';
 const LOGIN_URL = `${API_URL}/auth/login`;
 
 const LoginPage = () => {
-    const [state,] = useFormDataStore();
+    const [state] = useFormDataStore();
     const history = useHistory();
-    const [_, dispatch] = useAuth();
+    const [, dispatch] = useAuth();
 
     const [submitting, setSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -24,19 +24,18 @@ const LoginPage = () => {
         setSubmitting(true);
         setErrorMessage('');
         try {
-            const email = state.email;
-            const password = state.password;
+            const { email, password } = state;
 
             const response = await fetch(LOGIN_URL, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 credentials: 'include', // need this for cookie to set
                 body: JSON.stringify({
                     username: email,
-                    password: password,
-                })
+                    password,
+                }),
             });
 
             const statusCode = response.status;
@@ -51,8 +50,7 @@ const LoginPage = () => {
                 console.error('Invalid credentials'); // eslint-disable-line
                 setSubmitting(false);
                 setErrorMessage('Invalid credentials, please try again.');
-            }
-            else {
+            } else {
                 throw new Error(response.statusText);
             }
         } catch (error) {

@@ -9,7 +9,7 @@ import { useFormDataStore } from '../../data-store/form-data-store/FormDataStore
 import SpinLoader from '../../components/spin-loader/SpinLoader';
 import { API_URL } from '../../utils/envVariables';
 
-const SET_PASSWORD_URL = `${API_URL}/store/auth/password`;
+const SET_PASSWORD_URL = `${API_URL}/auth/password`;
 
 const CreatePasswordPage = () => {
     const [email, setEmail] = useState('');

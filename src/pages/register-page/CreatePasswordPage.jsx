@@ -7,6 +7,7 @@ import PasswordInput from '../../components/validation-input/PasswordInput';
 import { useFormDataStore } from '../../data-store/form-data-store/FormDataStore';
 import SubmitButton from '../../components/submit-button/SubmitButton';
 import { API_URL } from '../../utils/envVariables';
+import { AuthAction, useAuth } from '../../auth/Auth';
 
 const SET_PASSWORD_URL = `${API_URL}/auth/password`;
 
@@ -18,6 +19,7 @@ const CreatePasswordPage = () => {
 
     const [state] = useFormDataStore();
     const history = useHistory();
+    const [, dispatch] = useAuth();
 
     useEffect(() => {
         // path is /password?a={email}&b={password}
@@ -48,6 +50,7 @@ const CreatePasswordPage = () => {
 
             const statusCode = response.status;
             if (statusCode === 200) {
+                dispatch({ type: AuthAction.LOGGED_IN });
                 history.push('/profile');
             } else if (statusCode === 400) {
                 console.error('Bad request'); // eslint-disable-line

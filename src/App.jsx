@@ -1,6 +1,8 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
+import { AuthContextProvider } from './auth/Auth';
+import PrivateRoute from './components/route/PrivateRoute';
 import Header from './layouts/header/Header';
 import BodyWrapper from './layouts/body-wrapper/BodyWrapper';
 import { HomePageDataStore } from './data-store/home-page-data-store/HomePageDataStore';
@@ -21,55 +23,61 @@ import './main.scss';
 
 const App = () => (
     <div className="app-container flex flex-column flex-1">
-        <Header />
-        <BodyWrapper>
-            <Switch>
-                <Route
-                    path="/"
-                    exact
-                    render={() => (
-                        <HomePageDataStore>
-                            <HomePage />
-                        </HomePageDataStore>
-                    )}
-                />
-                <Route
-                    path="/password"
-                    render={() => (
-                        <FormDataStore>
-                            <CreatePasswordPage />
-                        </FormDataStore>
-                    )}
-                />
-                <Route
-                    path="/signup"
-                    render={() => <RegisterPage />}
-                />
-                <Route
-                    path="/login"
-                    render={() => <LoginPage />}
-                />
-                <Route
-                    path="/create"
-                    render={() => <CreatePage />}
-                />
-                <Route
-                    path="/profile"
-                    render={() => <ProfilePage />}
-                />
-                <Route
-                    path="/example"
-                    exact
-                    render={() => <ExamplePage />}
-                />
-                <Route
-                    path="/404"
-                    exact
-                    render={() => <ErrorPage statusCode="404" />}
-                />
-            </Switch>
-        </BodyWrapper>
-        <Footer />
+        <AuthContextProvider>
+            <Header />
+            <BodyWrapper>
+                <Switch>
+                    <Route
+                        path="/password"
+                        render={() => (
+                            <FormDataStore>
+                                <CreatePasswordPage />
+                            </FormDataStore>
+                        )}
+                    />
+                    <Route
+                        path="/login"
+                        render={() => (
+                            <FormDataStore>
+                                <LoginPage />
+                            </FormDataStore>
+                        )}
+                    />
+                    <Route
+                        path="/signup"
+                        render={() => <RegisterPage />}
+                    />
+                    <PrivateRoute
+                        path="/"
+                        exact
+                        render={() => (
+                            <HomePageDataStore>
+                                <HomePage />
+                            </HomePageDataStore>
+                        )}
+                    />
+                    <PrivateRoute
+                        path="/create"
+                        render={() => <CreatePage />}
+                    />
+                    <PrivateRoute
+                        path="/profile"
+                        render={() => <ProfilePage />}
+                    />
+                    <PrivateRoute
+                        path="/example"
+                        exact
+                        render={() => <ExamplePage />}
+                    />
+                    <PrivateRoute
+                        path="/404"
+                        exact
+                        render={() => <ErrorPage statusCode="404" />}
+                    />
+                </Switch>
+            </BodyWrapper>
+            <Footer />
+        </AuthContextProvider>
     </div>
 );
 

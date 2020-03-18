@@ -8,7 +8,6 @@ import BodyWrapper from './layouts/body-wrapper/BodyWrapper';
 import { HomePageDataStore } from './data-store/home-page-data-store/HomePageDataStore';
 import HomePage from './pages/home-page/HomePage';
 import CreatePage from './pages/create-page/CreatePage';
-import ExamplePage from './pages/example-form-page/ExamplePage';
 import RegisterPage from './pages/register-page/RegisterPage';
 import { ProfilePage, ContextProvider as ProfileContextProvider } from './pages/profile-page/ProfilePage';
 import ErrorPage from './pages/error-page/ErrorPage';
@@ -58,11 +57,6 @@ const App = () => (
                                 <ProfilePage />
                             </ProfileContextProvider>
                         )}
-                    />
-                    <PrivateRoute
-                        path="/example"
-                        exact
-                        render={() => <ExamplePage />}
                     />
                     <PrivateRoute
                         path="/404"

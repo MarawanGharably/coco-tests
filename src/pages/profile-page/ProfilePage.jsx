@@ -6,7 +6,7 @@ import PageItem from '../../components/page-item/PageItem';
 import TextInput from '../../components/text-input/TextInput';
 import { getKeyValueDataStore } from '../../data-store/KeyValueDataStoreFactory';
 import Footer from '../../layouts/footer/Footer';
-import BodyWrapper from '../../layouts/body-wrapper/BodyWrapper'
+import BodyWrapper from '../../layouts/body-wrapper/BodyWrapper';
 import { API_URL } from '../../utils/envVariables';
 
 const PROFILE_URL = `${API_URL}/client/profile`;
@@ -29,28 +29,41 @@ const ProfilePage = () => {
 
     useEffect(() => {
         (async () => {
-            const response = await fetch(PROFILE_URL, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
-            });
+            try {
+                const response = await fetch(PROFILE_URL, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                });
 
-            const responseJSON = await response.json();
-            dispatch({
-                type: Action.SET_KEY_VALUE,
-                payload: {
-                    brandName: responseJSON['brand_name'],
-                    brandWebsite: responseJSON['brand_website'],
-                    brandProductCategory: responseJSON['brand_product_category'],
-                    brandInstagram: responseJSON['brand_instagram'],
-                    name: responseJSON['account_owner'],
-                    position: responseJSON['owner_position'],
-                },
-            });
+                const statusCode = response.status;
+                if (statusCode === 200) {
+                    const responseJSON = await response.json();
+                    dispatch({
+                        type: Action.SET_KEY_VALUE,
+                        payload: {
+                            brandName: responseJSON.brand_name,
+                            brandWebsite: responseJSON.brand_website,
+                            brandProductCategory: responseJSON.brand_product_category,
+                            brandInstagram: responseJSON.brand_instagram,
+                            name: responseJSON.account_owner,
+                            position: responseJSON.owner_position,
+                        },
+                    });
+                } else if (statusCode === 401) {
+                    console.error('Unauthorized'); // eslint-disable-line
+                    history.push('/login');
+                } else {
+                    throw new Error(response.statusText);
+                }
+            } catch (error) {
+                console.error(error); // eslint-disable-line
+                setStatusMessage('Server error, please try again later.');
+            }
         })();
-    }, []);
+    }, [dispatch, history]);
 
     const submit = async () => {
         setSubmitting(true);
@@ -58,16 +71,16 @@ const ProfilePage = () => {
 
         try {
             const {
-                brandName, brandWebsite, brandProductCategory, brandInstagram, name, position
+                brandName, brandWebsite, brandProductCategory, brandInstagram, name, position,
             } = state;
             const payload = {
-                'brand_name': brandName,
-                'brand_website': brandWebsite,
-                'brand_product_category': brandProductCategory,
-                'brand_instagram': brandInstagram,
-                'account_owner': name,
-                'owner_position': position,
-            }
+                brand_name: brandName,
+                brand_website: brandWebsite,
+                brand_product_category: brandProductCategory,
+                brand_instagram: brandInstagram,
+                account_owner: name,
+                owner_position: position,
+            };
             const response = await fetch(PROFILE_URL, {
                 method: 'POST',
                 headers: {
@@ -94,7 +107,7 @@ const ProfilePage = () => {
             setStatusMessage('Server error, please try again later.');
         }
         setSubmitting(false);
-    }
+    };
 
     const onTextInputChange = (e) => {
         e.persist();
@@ -106,7 +119,7 @@ const ProfilePage = () => {
     };
 
     return (
-        <React.Fragment>
+        <>
             <BodyWrapper>
                 <Page pageTitle="Create Your Profile" pageSubTitle="Let's get to know each other">
                     <PageRow width="25%" column>
@@ -138,7 +151,7 @@ const ProfilePage = () => {
                 submitting={submitting}
                 onSubmitClicked={submit}
             />
-        </React.Fragment>
+        </>
     );
 };
 

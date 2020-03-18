@@ -7,8 +7,8 @@ const SubmitButton = ({ submitting, onClick }) => (
     submitting ? (
         <SpinLoader
             style={{
-                width: '50px',
-                height: '50px',
+                width: '45px',
+                height: '45px',
                 borderWidth: '5px',
                 borderTopWidth: '5px',
             }}

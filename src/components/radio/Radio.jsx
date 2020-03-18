@@ -2,7 +2,6 @@ import React, { useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import { RadioSelectionContext } from './RadioGroup';
-import { useFormDataStore, SET_FORM_DATA } from '../../data-store/form-data-store/FormDataStore';
 
 // formField is required and should match API shape
 const Radio = ({
@@ -12,18 +11,11 @@ const Radio = ({
         optionSelected, setOptionSelected, radioHandler, radioKeyboardHandler,
     } = useContext(RadioSelectionContext);
 
-    const [, formDataDispatch] = useFormDataStore();
-
     useEffect(() => {
         if (isDefaultSelected) {
             setOptionSelected(value);
-            const option = {
-                type: SET_FORM_DATA,
-                payload: { [formField]: value },
-            };
-            formDataDispatch(option);
         }
-    }, [formDataDispatch, formField, isDefaultSelected, setOptionSelected, value]);
+    }, [isDefaultSelected, setOptionSelected, value]);
 
     const imageRadioStyle = css({
         height: '32.5em',

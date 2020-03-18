@@ -15,7 +15,7 @@ const Input = ({
 }) => {
     const {
         text, handleUserInput, isValid, renderErrors,
-    } = useInput(validationFunc, formField);
+    } = useInput(validationFunc);
 
     const inputElement = useRef(null);
     const focusInput = () => { inputElement.current.focus(); };
@@ -79,7 +79,7 @@ Input.defaultProps = {
     type: 'text',
     value: '',
     placeholder: '',
-    handleChange: '',
+    handleChange: null,
     validationFunc: null,
     decoratorComponent: null,
 };

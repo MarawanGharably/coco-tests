@@ -4,7 +4,6 @@ import Page from '../../layouts/page-template/Page';
 import PageRow from '../../components/page-row/PageRow';
 import PageItem from '../../components/page-item/PageItem';
 import PasswordInput from '../../components/validation-input/PasswordInput';
-import { useFormDataStore } from '../../data-store/form-data-store/FormDataStore';
 import SubmitButton from '../../components/submit-button/SubmitButton';
 import { API_URL } from '../../utils/envVariables';
 import { AuthAction, useAuth } from '../../auth/Auth';
@@ -14,10 +13,10 @@ const SET_PASSWORD_URL = `${API_URL}/auth/password`;
 const CreatePasswordPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
     const [submitting, setSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
-    const [state] = useFormDataStore();
     const history = useHistory();
     const [, dispatch] = useAuth();
 
@@ -30,11 +29,16 @@ const CreatePasswordPage = () => {
         setPassword(oldPassword);
     }, []);
 
+    const onNewPasswordInputChange = (e) => {
+        e.persist();
+        const { value } = e.target;
+        setNewPassword(value);
+    };
+
     const submitPassword = async () => {
         setSubmitting(true);
         setErrorMessage('');
         try {
-            const newPassword = state.password;
             const response = await fetch(SET_PASSWORD_URL, {
                 method: 'POST',
                 headers: {
@@ -80,7 +84,7 @@ const CreatePasswordPage = () => {
         >
             <PageRow width={width}>
                 <PageItem>
-                    <PasswordInput />
+                    <PasswordInput value={newPassword} handleChange={onNewPasswordInputChange} />
                 </PageItem>
             </PageRow>
             <PageRow width={width}>

@@ -6,6 +6,7 @@ import { validateEmail } from './utils/validate';
 const EmailInput = () => (
     <Input
         type="email"
+        formField="email"
         labelTitle="Email"
         placeholder="email"
         labelId="email-input"

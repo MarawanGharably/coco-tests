@@ -7,7 +7,7 @@ import BodyWrapper from '../../layouts/body-wrapper/BodyWrapper';
 import Footer from '../../layouts/footer/Footer';
 import Loader from '../../components/loader/Loader';
 import SubmitButton from '../../components/submit-button/SubmitButton';
-import { useHomePageData, HomePageActionEnums } from '../../data-store/home-page-data-store/HomePageDataStore';
+// import { useHomePageData, HomePageActionEnums } from '../../data-store/home-page-data-store/HomePageDataStore';
 
 const GET_ALL_STORES_URL = `${API_URL}/client/stores`;
 const CREATE_STORE_URL = `${API_URL}/store`;
@@ -20,7 +20,6 @@ const HomePage = () => {
     const history = useHistory();
 
     const createStore = async () => {
-        console.log('creating store');
         setCreatingStore(true);
         try {
             const response = await fetch(CREATE_STORE_URL, {

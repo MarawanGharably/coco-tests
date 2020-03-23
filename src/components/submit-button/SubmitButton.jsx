@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import FancyButton from '../fancy-button/FancyButton';
 import SpinLoader from '../spin-loader/SpinLoader';
 
-const SubmitButton = ({ submitting, onClick }) => (
+const SubmitButton = ({ buttonText, buttonStyle, submitting, onClick }) => (
     submitting ? (
         <SpinLoader
             style={{
@@ -15,19 +15,23 @@ const SubmitButton = ({ submitting, onClick }) => (
         />
     ) : (
         <FancyButton
-            text="SUBMIT"
-            buttonStyle={{ width: '10em', height: '4em' }}
+            text={buttonText}
+            buttonStyle={buttonStyle}
             onClick={onClick}
         />
     )
 );
 
 SubmitButton.propTypes = {
+    buttonText: PropTypes.string,
+    buttonStyle: PropTypes.object,
     submitting: PropTypes.bool,
     onClick: PropTypes.func,
 };
 
 SubmitButton.defaultProps = {
+    buttonText: 'SUBMIT',
+    buttonStyle: { width: '10em', height: '4em' },
     submitting: false,
     onClick: null,
 };

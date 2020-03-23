@@ -1,94 +1,137 @@
-import React, { useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import Page from '../../layouts/page-template/Page';
-import FancyButton from '../../components/fancy-button/FancyButton';
-import { useHomePageData, HomePageActionEnums } from '../../data-store/home-page-data-store/HomePageDataStore';
-import { DUMMY_API_URL } from '../../utils/envVariables';
+import { API_URL } from '../../utils/envVariables';
+import BodyWrapper from '../../layouts/body-wrapper/BodyWrapper';
+import Footer from '../../layouts/footer/Footer';
 import Loader from '../../components/loader/Loader';
+import SubmitButton from '../../components/submit-button/SubmitButton';
+import { useHomePageData, HomePageActionEnums } from '../../data-store/home-page-data-store/HomePageDataStore';
 
-const BUILD_STAGE_ENUMS = Object.freeze({
-    START: 'Start',
-    IN_PROGRESS: 'In progress',
-    IN_REVIEW: 'In review',
-    COMPLETE: 'Complete',
-});
-
-const {
-    START, IN_PROGRESS, IN_REVIEW, COMPLETE,
-} = BUILD_STAGE_ENUMS;
-
-// Map of button copy according to what stage of the store creation process a client is in
-const CURRENT_BUILD_STAGE_COPY = {
-    [START]: 'START CREATING',
-    [IN_PROGRESS]: 'RESUME CREATING',
-    [IN_REVIEW]: 'IN REVIEW',
-    [COMPLETE]: 'COMPELTE',
-};
+const GET_ALL_STORES_URL = `${API_URL}/client/stores`;
+const CREATE_STORE_URL = `${API_URL}/store`;
 
 const HomePage = () => {
-    const [state, dispatch] = useHomePageData();
+    const [loading, setLoading] = useState(true);
+    const [storeData, setStoreData] = useState(null);
+    const [creatingStore, setCreatingStore] = useState(false);
+
     const history = useHistory();
-    const {
-        storeId, buildStage, thumbnailUrl, statusCode,
-    } = state;
+
+    const createStore = async () => {
+        console.log('creating store');
+        setCreatingStore(true);
+        try {
+            const response = await fetch(CREATE_STORE_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            });
+            const statusCode = response.status;
+            if (statusCode === 200) {
+                const responseJSON = await response.json();
+                const storeId = responseJSON.id;
+                // TODO: pass storeId to create page
+                history.push('/create');
+            }
+        } catch (error) {
+
+        }
+        setCreatingStore(false);
+    }
+
+    const resumeCreateStore = () => {
+        // TODO: pass storeData.id to create page
+        history.push('/create');
+    }
 
     useEffect(() => {
-        // fetching function that dispatches actions
-        const fetchHomepageData = async () => {
+        const getAllStores = async () => {
             try {
-                const response = await fetch(`${DUMMY_API_URL}/client/stores`);
-                if (response.status === 200) {
-                    const body = await response.json();
-                    // DATA IS JUST THE FIRST STORE RECEIVED FOR NOW
-                    const data = body[0];
-
-                    dispatch({
-                        type: HomePageActionEnums.RECEIVE_HOMEPAGE_DATA,
-                        payload: {
-                            storeId: data._id, //eslint-disable-line
-                            buildStage: data.build_stage,
-                            thumbnailUrl: data.thumbnail,
-                            statusCode: response.status,
-                        },
-                    });
+                setLoading(true);
+                const response = await fetch(GET_ALL_STORES_URL, {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+                const statusCode = response.status;
+                if (statusCode === 200) {
+                    const responseJSON = await response.json();
+                    // * IMPORTANT: COCO v1 only have 1 store per client
+                    if (responseJSON.length > 0) {
+                        // No store created yet
+                        const jsonStoreInfo = responseJSON[0];
+                        setStoreData({
+                            id: jsonStoreInfo['_id'],
+                            buildStage: jsonStoreInfo['build_stage'],
+                            thumbnail: jsonStoreInfo['thumbnail'],
+                        });
+                    }
+                    // TODO: get store data needs to be implemented after create store
+                    // TODO: create store needs default thumbnail and stuff
+                } else if (statusCode === 401 || statusCode === 404) {
+                    history.push('/login');
                 } else {
-                    const errorBody = await response.json();
-                    const error = {
-                        status: response.status,
-                        body: errorBody,
-                    };
-
-                    throw error;
+                    throw new Error(response.statusText);
                 }
             } catch (error) {
-                console.error(`ERROR ${error.status}:`, error.body.title); //eslint-disable-line
-                history.push('/404');
+                console.error(error);
+                // setErrorMessage('Server error, please try again later.');
             }
-        };
+            setLoading(false);
+        }
 
-        fetchHomepageData();
-    }, [dispatch, history]);
+        getAllStores();
+    }, []);
 
-    if (!statusCode) {
-        return <Loader />;
+    if (loading) {
+        return <Loader />
     }
 
     return (
-        <Page pageTitle="Store Status" pageSubTitle={buildStage === START ? 'No stores created yet!' : ''}>
-            <div className="home-page-image-container" data-id={storeId}>
-                <img alt="store preview" src={thumbnailUrl} />
-            </div>
-            <div className="home-page-button-container">
-                <FancyButton text={CURRENT_BUILD_STAGE_COPY[buildStage]} />
-            </div>
-            <div className="stick-to-bottom flex flex-column">
-                <Link to="/register">Register Here</Link>
-                <Link to="/create/design">Create a store</Link>
-                <Link to="/profile">Profile</Link>
-            </div>
-        </Page>
-    );
+        <>
+            <BodyWrapper>
+                <Page pageTitle="Store Status">
+                    <div className="flex flex-column flex-vertical-center full-width full-height">
+                        {
+                            storeData === null ? (
+                                <>
+                                    <header className="page-sub-title home-page-subtitle">
+                                        No stores created yet!
+                                    </header>
+                                    <div className="home-page-button-container">
+                                        <SubmitButton
+                                            buttonText='START CREATING'
+                                            buttonStyle={null}
+                                            submitting={creatingStore}
+                                            onClick={createStore}
+                                        />
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="home-page-image-container">
+                                        <img alt="store preview" src={storeData.thumbnail} />
+                                    </div>
+                                    <div className="home-page-button-container">
+                                        <SubmitButton
+                                            buttonText='RESUME CREATING'
+                                            buttonStyle={null}
+                                            submitting={creatingStore}
+                                            onClick={resumeCreateStore}
+                                            />
+                                    </div>
+                                </>
+                            )
+                        }
+                    </div>
+                </Page>
+            </BodyWrapper>
+            <Footer hasSubmitButton={false} />
+        </>
+    )
 };
 
 export default HomePage;

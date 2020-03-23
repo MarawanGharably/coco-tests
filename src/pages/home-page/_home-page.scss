@@ -1,15 +1,17 @@
 .home-page{
+    &-subtitle {
+        margin: 5em 0;
+    }
     &-image-container {
         margin: 2em 0;
         width: 60em;
-        height: 35em;
         & img {
             height: 100%;
             width: 100%;
         }
     }
     &-button-container {
-        width: 15em;
+        width: 20em;
         height: 4em;
     }
 }

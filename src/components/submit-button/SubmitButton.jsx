@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import FancyButton from '../fancy-button/FancyButton';
 import SpinLoader from '../spin-loader/SpinLoader';
 
-const SubmitButton = ({ buttonText, buttonStyle, submitting, onClick }) => (
+const SubmitButton = ({
+    buttonText, buttonStyle, submitting, onClick,
+}) => (
     submitting ? (
         <SpinLoader
             style={{
@@ -24,7 +26,10 @@ const SubmitButton = ({ buttonText, buttonStyle, submitting, onClick }) => (
 
 SubmitButton.propTypes = {
     buttonText: PropTypes.string,
-    buttonStyle: PropTypes.object,
+    buttonStyle: PropTypes.shape({
+        width: PropTypes.string,
+        height: PropTypes.string,
+    }),
     submitting: PropTypes.bool,
     onClick: PropTypes.func,
 };

@@ -7,6 +7,7 @@ import BodyWrapper from '../../layouts/body-wrapper/BodyWrapper';
 import Footer from '../../layouts/footer/Footer';
 import Loader from '../../components/loader/Loader';
 import SubmitButton from '../../components/submit-button/SubmitButton';
+// eslint-disable-next-line
 // import { useHomePageData, HomePageActionEnums } from '../../data-store/home-page-data-store/HomePageDataStore';
 
 const GET_ALL_STORES_URL = `${API_URL}/client/stores`;
@@ -31,21 +32,21 @@ const HomePage = () => {
             });
             const statusCode = response.status;
             if (statusCode === 200) {
-                const responseJSON = await response.json();
-                const storeId = responseJSON.id;
+                // const responseJSON = await response.json();
+                // const storeId = responseJSON.id;
                 // TODO: pass storeId to create page
                 history.push('/create');
             }
         } catch (error) {
-
+            console.error(error); // eslint-disable-line
         }
         setCreatingStore(false);
-    }
+    };
 
     const resumeCreateStore = () => {
         // TODO: pass storeData.id to create page
         history.push('/create');
-    }
+    };
 
     useEffect(() => {
         const getAllStores = async () => {
@@ -63,9 +64,9 @@ const HomePage = () => {
                         // No store created yet
                         const jsonStoreInfo = responseJSON[0];
                         setStoreData({
-                            id: jsonStoreInfo['_id'],
-                            buildStage: jsonStoreInfo['build_stage'],
-                            thumbnail: jsonStoreInfo['thumbnail'],
+                            id: jsonStoreInfo._id, // eslint-disable-line
+                            buildStage: jsonStoreInfo.build_stage,
+                            thumbnail: jsonStoreInfo.thumbnail,
                         });
                     }
                     // TODO: get store data needs to be implemented after create store
@@ -76,17 +77,17 @@ const HomePage = () => {
                     throw new Error(response.statusText);
                 }
             } catch (error) {
-                console.error(error);
+                console.error(error); // eslint-disable-line
                 // setErrorMessage('Server error, please try again later.');
             }
             setLoading(false);
-        }
+        };
 
         getAllStores();
-    }, []);
+    }, [history]);
 
     if (loading) {
-        return <Loader />
+        return <Loader />;
     }
 
     return (
@@ -102,7 +103,7 @@ const HomePage = () => {
                                     </header>
                                     <div className="home-page-button-container">
                                         <SubmitButton
-                                            buttonText='START CREATING'
+                                            buttonText="START CREATING"
                                             buttonStyle={null}
                                             submitting={creatingStore}
                                             onClick={createStore}
@@ -116,11 +117,11 @@ const HomePage = () => {
                                     </div>
                                     <div className="home-page-button-container">
                                         <SubmitButton
-                                            buttonText='RESUME CREATING'
+                                            buttonText="RESUME CREATING"
                                             buttonStyle={null}
                                             submitting={creatingStore}
                                             onClick={resumeCreateStore}
-                                            />
+                                        />
                                     </div>
                                 </>
                             )
@@ -130,7 +131,7 @@ const HomePage = () => {
             </BodyWrapper>
             <Footer hasSubmitButton={false} />
         </>
-    )
+    );
 };
 
 export default HomePage;

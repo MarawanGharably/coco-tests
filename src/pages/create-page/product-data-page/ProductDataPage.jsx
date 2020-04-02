@@ -3,6 +3,7 @@ import Page from '../../../layouts/page-template/Page';
 import PageRow from '../../../components/page-row/PageRow';
 import PageItem from '../../../components/page-item/PageItem';
 import FileUpload from '../../../components/file-upload/FileUpload';
+import formField from '../../../utils/formField';
 
 const ProductDataPage = () => {
     const width = '60em';
@@ -20,7 +21,7 @@ const ProductDataPage = () => {
                 width={width}
             >
                 <PageItem>
-                    <FileUpload id="product-data" />
+                    <FileUpload formField={formField.productData} />
                 </PageItem>
             </PageRow>
             <PageRow
@@ -28,7 +29,7 @@ const ProductDataPage = () => {
                 width={width}
             >
                 <PageItem>
-                    <FileUpload id="product-thumbnails" isMultipleFiles />
+                    <FileUpload formField={formField.productThumbnails} isMultipleFiles />
                 </PageItem>
             </PageRow>
         </Page>

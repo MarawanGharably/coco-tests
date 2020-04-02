@@ -4,6 +4,7 @@ import PageRow from '../../../components/page-row/PageRow';
 import PageItem from '../../../components/page-item/PageItem';
 import RadioGroup from '../../../components/radio/RadioGroup';
 import Radio from '../../../components/radio/Radio';
+import formField from '../../../utils/formField';
 import './_store-design.scss';
 
 const PRODUCT_AMOUNT_OPTIONS = Object.freeze({
@@ -21,6 +22,7 @@ const DesignProductsPage = () => (
                 <PageRow header="Choose Number of Products">
                     <PageItem>
                         <Radio
+                            formField={formField.designNumberOfProducts}
                             value={PRODUCT_AMOUNT_OPTIONS.OPTION1}
                             isLabelShowing
                             isDefaultSelected
@@ -28,6 +30,7 @@ const DesignProductsPage = () => (
                     </PageItem>
                     <PageItem>
                         <Radio
+                            formField={formField.designNumberOfProducts}
                             value={PRODUCT_AMOUNT_OPTIONS.OPTION2}
                             isLabelShowing
                         />

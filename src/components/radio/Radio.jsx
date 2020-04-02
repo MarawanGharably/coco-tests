@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import { RadioSelectionContext } from './RadioGroup';
 
+// formField is required and should match API shape
 const Radio = ({
-    value, isImage, imageUrl, isLabelShowing, isDefaultSelected,
+    formField, value, isImage, imageUrl, isLabelShowing, isDefaultSelected,
 }) => {
     const {
         optionSelected, setOptionSelected, radioHandler, radioKeyboardHandler,
@@ -42,20 +43,21 @@ const Radio = ({
             tabIndex="0"
             className="radio"
             css={isImage && imageRadioStyle}
-            onClick={(e) => radioHandler(e, value)}
-            onKeyDown={(e) => radioKeyboardHandler(e, value)}
+            onClick={(e) => radioHandler(e, value, formField)}
+            onKeyDown={(e) => radioKeyboardHandler(e, value, formField)}
             aria-checked={value === optionSelected}
         >
             <label css={radioTextWrapperStyle} htmlFor={value}>
                 <span css={radioTextStyle}>{isLabelShowing ? value : null}</span>
             </label>
-            <input tabIndex="-1" type="radio" id={value} checked={value === optionSelected} />
+            <input tabIndex="-1" type="radio" id={value} checked={value === optionSelected} readOnly />
             <span className="radio-custom-button-selector" />
         </div>
     );
 };
 
 Radio.propTypes = {
+    formField: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
     isImage: PropTypes.bool,
     imageUrl: PropTypes.string,

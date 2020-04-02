@@ -4,6 +4,7 @@ import PageRow from '../../../components/page-row/PageRow';
 import PageItem from '../../../components/page-item/PageItem';
 import RadioGroup from '../../../components/radio/RadioGroup';
 import Radio from '../../../components/radio/Radio';
+import formField from '../../../utils/formField';
 import './_store-design.scss';
 
 const LUXURY_SLEEK_IMAGE = 'https://cdn.obsessvr.com/Style_LuxurySleek.jpg';
@@ -26,6 +27,7 @@ const DesignStylePage = () => (
                 <PageRow header="Choose Number of Products">
                     <PageItem>
                         <Radio
+                            formField={formField.designStyle}
                             value={STYLE_OPTIONS.OPTION1}
                             isImage
                             imageUrl={LUXURY_SLEEK_IMAGE}
@@ -35,6 +37,7 @@ const DesignStylePage = () => (
                     </PageItem>
                     <PageItem>
                         <Radio
+                            formField={formField.designStyle}
                             value={STYLE_OPTIONS.OPTION2}
                             isImage
                             imageUrl={NATURAL_MODERN_IMAGE}
@@ -43,6 +46,7 @@ const DesignStylePage = () => (
                     </PageItem>
                     <PageItem>
                         <Radio
+                            formField={formField.designStyle}
                             value={STYLE_OPTIONS.OPTION3}
                             isImage
                             imageUrl={COLORFUL_NEW_AGE_IMAGE}

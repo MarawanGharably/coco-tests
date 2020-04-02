@@ -2,25 +2,32 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Input from '../input/Input';
 
+// formField is required and should match API shape
 const TextInput = ({
-    id, title, placeholder,
+    formField, title, placeholder, value, handleChange,
 }) => (
     <Input
         type="text"
+        formField={formField}
         labelTitle={title}
         placeholder={placeholder}
-        labelId={id}
+        value={value}
+        handleChange={handleChange}
     />
 );
 
 TextInput.propTypes = {
-    id: PropTypes.string.isRequired,
+    formField: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     placeholder: PropTypes.string,
+    value: PropTypes.string,
+    handleChange: PropTypes.func,
 };
 
 TextInput.defaultProps = {
     placeholder: '',
+    value: '',
+    handleChange: null,
 };
 
 export default TextInput;

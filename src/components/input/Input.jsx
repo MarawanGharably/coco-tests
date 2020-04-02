@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import useInput from './InputHook';
 
 const Input = ({
+    formField,
     type,
     value,
-    labelId,
     labelTitle,
     placeholder,
     handleChange,
@@ -42,9 +42,9 @@ const Input = ({
                 onKeyDown={(e) => { if (e.keyCode === 13) { focusInput(); } }}
             >
                 <div className="input-container">
-                    <label htmlFor={labelId} className="input-label">{labelTitle}</label>
+                    <label htmlFor={formField} className="input-label">{labelTitle}</label>
                     <input
-                        id={labelId}
+                        id={formField}
                         placeholder={placeholder}
                         className="input-field"
                         type={type}
@@ -66,7 +66,7 @@ const Input = ({
 
 Input.propTypes = {
     labelTitle: PropTypes.string.isRequired,
-    labelId: PropTypes.string.isRequired,
+    formField: PropTypes.string.isRequired,
     type: PropTypes.string,
     value: PropTypes.string,
     placeholder: PropTypes.string,
@@ -79,7 +79,7 @@ Input.defaultProps = {
     type: 'text',
     value: '',
     placeholder: '',
-    handleChange: '',
+    handleChange: null,
     validationFunc: null,
     decoratorComponent: null,
 };

@@ -4,6 +4,7 @@ import PageRow from '../../../components/page-row/PageRow';
 import PageItem from '../../../components/page-item/PageItem';
 import RadioGroup from '../../../components/radio/RadioGroup';
 import Radio from '../../../components/radio/Radio';
+import formField from '../../../utils/formField';
 import './_store-design.scss';
 
 const LAYOUT_IMAGE_1 = 'https://cdn.obsessvr.com/Layout_default_1.jpg';
@@ -24,6 +25,7 @@ const DesignLayoutPage = () => (
                 <PageRow header="Choose Layout">
                     <PageItem>
                         <Radio
+                            formField={formField.designLayout}
                             value={LAYOUT_OPTIONS.OPTION1}
                             isImage
                             imageUrl={LAYOUT_IMAGE_1}
@@ -32,6 +34,7 @@ const DesignLayoutPage = () => (
                     </PageItem>
                     <PageItem>
                         <Radio
+                            formField={formField.designLayout}
                             value={LAYOUT_OPTIONS.OPTION2}
                             imageUrl={LAYOUT_IMAGE_2}
                             isImage

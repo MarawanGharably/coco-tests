@@ -1,33 +1,33 @@
 import React from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
-import FancyButton from '../../components/fancy-button/FancyButton';
-import { buttonTextByPathname, routesInOrder } from '../../pages/create-page/createStoreNavUtil';
+import PropTypes from 'prop-types';
 
-const Footer = () => {
-    const location = useLocation();
-    const history = useHistory();
-    const text = buttonTextByPathname[location.pathname];
+import SubmitButton from '../../components/submit-button/SubmitButton';
 
-    const goToNextPage = () => {
-        const currentPageIndex = routesInOrder.indexOf(location.pathname);
-        // if it's not yet mapped, the button has no functionality
-        if (currentPageIndex === -1) { return; }
-        const nextPagePath = routesInOrder[currentPageIndex + 1];
-
-        history.push(nextPagePath);
-    };
-
-    return (
-        <footer className="footer-container full-width flex flex-center">
-            <div className="footer-button-container">
-                {text && (
-                    <FancyButton
-                        onClick={goToNextPage}
-                        text={text}
+const Footer = ({ hasSubmitButton, submitting, onSubmitClicked }) => (
+    <footer className="footer-container full-width flex flex-center">
+        {
+            hasSubmitButton && (
+                <div className="footer-button-container">
+                    <SubmitButton
+                        submitting={submitting}
+                        onClick={onSubmitClicked}
                     />
-                )}
-            </div>
-        </footer>
-    );
+                </div>
+            )
+        }
+    </footer>
+);
+
+Footer.propTypes = {
+    hasSubmitButton: PropTypes.bool,
+    submitting: PropTypes.bool,
+    onSubmitClicked: PropTypes.func,
 };
+
+Footer.defaultProps = {
+    hasSubmitButton: true,
+    submitting: false,
+    onSubmitClicked: null,
+};
+
 export default Footer;

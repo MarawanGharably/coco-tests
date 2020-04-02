@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import debounce from 'lodash.debounce';
-
 import ErrorMessage from './ErrorMessage';
 
-const useInput = (validate) => {
+const useInput = (validate = null) => {
     const [text, setText] = useState('');
     const [isValid, setIsValid] = useState(false);
     const [errors, setErrors] = useState([]);

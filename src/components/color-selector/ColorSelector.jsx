@@ -6,7 +6,8 @@ import { css } from '@emotion/react';
 import { SketchPicker } from 'react-color';
 import Input from '../input/Input';
 
-const ColorSelector = ({ labelTitle, labelId }) => {
+// formField is required and should match API shape
+const ColorSelector = ({ labelTitle, formField }) => {
     const [selectedColor, setSelectedColor] = useState('#000');
     const [showingSelector, setShowingSelector] = useState(false);
     const colorSelectorRef = useRef(null);
@@ -49,7 +50,7 @@ const ColorSelector = ({ labelTitle, labelId }) => {
         <>
             <Input
                 labelTitle={labelTitle}
-                labelId={labelId}
+                formField={formField}
                 value={selectedColor}
                 handleChange={handleChange}
                 decoratorComponent={decorator}
@@ -70,7 +71,7 @@ const ColorSelector = ({ labelTitle, labelId }) => {
 
 ColorSelector.propTypes = {
     labelTitle: PropTypes.string.isRequired,
-    labelId: PropTypes.string.isRequired,
+    formField: PropTypes.string.isRequired,
 };
 
 export default ColorSelector;

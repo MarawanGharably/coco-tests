@@ -1,26 +1,39 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-// id is required to accurately assign file uploads to its respective input
-// without id, files will be uploaded only to the first input on the page.
-
-const FileUpload = ({ id, isMultipleFiles }) => {
+// formField is required to accurately assign file uploads to its respective input id
+// without formField, files will be uploaded only to the first input on the page.
+// formField should match API shape
+const FileUpload = ({ formField, isMultipleFiles }) => {
     const [fileName, setFileName] = useState('');
-    const [stagedFiles, setStagedFiles] = useState([]); // eslint-disable-line no-unused-vars
+    const [fileUrls, setFileUrls] = useState();
+
+    const parseFileListIntoUrls = (fileList) => {
+        const nameList = [];
+        fileList.forEach((file) => {
+            nameList.push(file.name);
+        });
+
+        return nameList;
+    };
 
     const fileHandler = (e) => {
         const fileList = Array.from(e.target.files);
+        const parsedFileUrls = parseFileListIntoUrls(fileList);
+
         let name;
-        if (fileList.length === 0) {
+        if (parsedFileUrls.length === 0) {
             name = 'no files selected';
-        } else if (fileList.length === 1) {
-            name = fileList[0].name;
+        } else if (parsedFileUrls.length === 1) {
+            [name] = parsedFileUrls;
         } else {
-            name = `${fileList.length} files`;
+            name = `${parsedFileUrls.length} files`;
         }
 
         setFileName(name);
-        setStagedFiles(fileList);
+
+        setFileUrls(parsedFileUrls);
+        console.log(fileUrls); // eslint-disable-line
     };
 
     return (
@@ -31,11 +44,11 @@ const FileUpload = ({ id, isMultipleFiles }) => {
         >
             <label
                 className="file-upload-button flex-1"
-                htmlFor={`file-upload-${id}`}
+                htmlFor={`file-upload-${formField}`}
             >
                 {/* Input is functional and has display:none. The inner wrapper contains styles */}
                 <input
-                    id={`file-upload-${id}`}
+                    id={`file-upload-${formField}`}
                     className="file-upload-input"
                     type="file"
                     onChange={fileHandler}
@@ -51,7 +64,7 @@ const FileUpload = ({ id, isMultipleFiles }) => {
 };
 
 FileUpload.propTypes = {
-    id: PropTypes.string.isRequired,
+    formField: PropTypes.string.isRequired,
     isMultipleFiles: PropTypes.bool,
 };
 

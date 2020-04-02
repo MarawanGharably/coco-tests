@@ -4,6 +4,7 @@ import PageRow from '../../../components/page-row/PageRow';
 import PageItem from '../../../components/page-item/PageItem';
 import RadioGroup from '../../../components/radio/RadioGroup';
 import Radio from '../../../components/radio/Radio';
+import formField from '../../../utils/formField';
 import './_store-design.scss';
 
 const VELVET_GOLD_STONE_IMAGE = 'https://cdn.obsessvr.com/Material_VelvetGoldStone.jpg';
@@ -24,6 +25,7 @@ const DesignMaterialsPage = () => (
                 <PageRow header="Choose Number of Products">
                     <PageItem>
                         <Radio
+                            formField={formField.designMaterials}
                             value={MATERIAL_OPTIONS.OPTION1}
                             isImage
                             imageUrl={VELVET_GOLD_STONE_IMAGE}
@@ -33,6 +35,7 @@ const DesignMaterialsPage = () => (
                     </PageItem>
                     <PageItem>
                         <Radio
+                            formField={formField.designMaterials}
                             value={MATERIAL_OPTIONS.OPTION2}
                             isImage
                             imageUrl={LINEN_CHROME_WOOD_IMAGE}

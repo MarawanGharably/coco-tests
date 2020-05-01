@@ -68,7 +68,7 @@ Radio.propTypes = {
 Radio.defaultProps = {
     isImage: false,
     isLabelShowing: false,
-    imageUrl: 'https://placedog.net/325/325',
+    imageUrl: '',
     isDefaultSelected: false,
 };
 

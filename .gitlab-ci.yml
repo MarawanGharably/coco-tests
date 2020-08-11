@@ -96,7 +96,9 @@ deploy:feature:
     # copy the /www folder which contains the index.html, bundle.*.js and main.*.css files to a local folder
     - docker cp $(docker ps -alq):/www/ /www
     # install dependencies
-    - apk add --upgrade curl python
+    - apk add --upgrade --no-cache curl py-pip
+    # symlink python
+    - ln -s /usr/bin/python3 /usr/bin/python
     # install aws cli
     - curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
     - unzip awscli-bundle.zip

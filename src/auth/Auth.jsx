@@ -24,6 +24,7 @@ export const AuthAction = Object.freeze({
 const { LOGGED_IN } = AuthAction;
 
 const authReducer = (_, action) => {
+    console.log(action);
     const { type } = action;
 
     switch (type) {

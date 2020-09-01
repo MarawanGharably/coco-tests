@@ -8,6 +8,7 @@ import { getKeyValueDataStore } from '../../data-store/KeyValueDataStoreFactory'
 import Footer from '../../layouts/footer/Footer';
 import BodyWrapper from '../../layouts/body-wrapper/BodyWrapper';
 import { API_URL } from '../../utils/envVariables';
+import { apiSubmitProfile } from '../../utils/apiUtils';
 
 const PROFILE_URL = `${API_URL}/client/profile`;
 
@@ -65,6 +66,7 @@ const ProfilePage = () => {
         })();
     }, [dispatch, history]);
 
+
     const submit = async () => {
         setSubmitting(true);
         setStatusMessage('');
@@ -81,27 +83,22 @@ const ProfilePage = () => {
                 account_owner: name,
                 owner_position: position,
             };
-            const response = await fetch(PROFILE_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
-                body: JSON.stringify(payload),
-            });
-
-            const statusCode = response.status;
-            if (statusCode === 200) {
-                setStatusMessage('Data Updated');
-            } else if (statusCode === 400) {
-                console.error('Bad request'); // eslint-disable-line
-                setStatusMessage('Invalid data');
-            } else if (statusCode === 401) {
-                console.error('Unauthorized'); // eslint-disable-line
-                history.push('/login');
-            } else {
-                throw new Error(response.statusText);
-            }
+            apiSubmitProfile(payload)
+                .then((response) => response.json())
+                .then((response) => {
+                    const statusCode = response.status;
+                    if (statusCode === 200) {
+                        setStatusMessage('Data Updated');
+                    } else if (statusCode === 400) {
+                        console.error('Bad request'); // eslint-disable-line
+                        setStatusMessage('Invalid data');
+                    } else if (statusCode === 401) {
+                        console.error('Unauthorized'); // eslint-disable-line
+                        history.push('/login');
+                    } else {
+                        throw new Error(response.statusText);
+                    }
+                });
         } catch (error) {
             console.error(error); // eslint-disable-line
             setStatusMessage('Server error, please try again later.');

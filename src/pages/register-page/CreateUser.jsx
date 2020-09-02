@@ -3,8 +3,6 @@ import { css } from '@emotion/react';
 import { Link } from 'react-router-dom';
 import EmailInput from '../../components/validation-input/EmailInput';
 import SubmitButton from '../../components/submit-button/SubmitButton';
-import { Text } from '../../../stories/1-Button.stories';
-import TextInput from '../../components/text-input/TextInput';
 import Input from '../../components/input/Input';
 
 const CREATE_USER_URL = 'http://127.0.0.1:5000/auth/create_user';

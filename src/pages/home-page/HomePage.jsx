@@ -19,7 +19,6 @@ const HomePage = () => {
     const [creatingStore, setCreatingStore] = useState(false);
 
     const history = useHistory();
-
     const createStore = async () => {
         setCreatingStore(true);
         try {
@@ -42,7 +41,6 @@ const HomePage = () => {
         }
         setCreatingStore(false);
     };
-
     const resumeCreateStore = () => {
         // TODO: pass storeData.id to create page
         history.push('/create');
@@ -76,12 +74,12 @@ const HomePage = () => {
                 } else {
                     throw new Error(response.statusText);
                 }
-            } catch (error) {
-                console.error(error); // eslint-disable-line
-                // setErrorMessage('Server error, please try again later.');
+                setLoading(false);
+            } catch (e) {
+                console.log(e);
             }
-            setLoading(false);
         };
+
 
         getAllStores();
     }, [history]);
@@ -94,11 +92,15 @@ const HomePage = () => {
         <>
             <BodyWrapper>
                 <Page pageTitle="Store Status">
-                    <div className="flex flex-column flex-vertical-center full-width full-height">
+                    <div
+                        className="flex flex-column flex-vertical-center full-width full-height"
+                    >
                         {
                             storeData === null ? (
                                 <>
-                                    <header className="page-sub-title home-page-subtitle">
+                                    <header
+                                        className="page-sub-title home-page-subtitle"
+                                    >
                                         No stores created yet!
                                     </header>
                                     <div className="home-page-button-container">
@@ -113,7 +115,10 @@ const HomePage = () => {
                             ) : (
                                 <>
                                     <div className="home-page-image-container">
-                                        <img alt="store preview" src={storeData.thumbnail} />
+                                        <img
+                                            alt="store preview"
+                                            src={storeData.thumbnail}
+                                        />
                                     </div>
                                     <div className="home-page-button-container">
                                         <SubmitButton

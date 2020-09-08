@@ -7,8 +7,6 @@ import Footer from '../../layouts/footer/Footer';
 import Loader from '../../components/loader/Loader';
 import SubmitButton from '../../components/submit-button/SubmitButton';
 import { URLS } from '../../utils/urls';
-// eslint-disable-next-line
-// import { useHomePageData, HomePageActionEnums } from '../../data-store/home-page-data-store/HomePageDataStore';
 
 const { GET_ALL_STORES_URL } = URLS;
 const { CREATE_STORE_URL } = URLS;

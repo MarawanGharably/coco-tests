@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import EmailInput from '../../components/validation-input/EmailInput';
 import SubmitButton from '../../components/submit-button/SubmitButton';
 import Input from '../../components/input/Input';
-import { URLS } from '../../utils/urls';
 import { createUser } from '../../utils/apiUtils';
 
 

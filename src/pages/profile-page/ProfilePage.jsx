@@ -29,7 +29,6 @@ const ProfilePage = () => {
     useEffect(() => {
         apiGetProfile()
             .then((response) => {
-                console.log(response);
                 dispatch({
                     type: Action.SET_KEY_VALUE,
                     payload: {

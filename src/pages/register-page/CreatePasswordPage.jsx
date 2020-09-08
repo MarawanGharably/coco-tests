@@ -5,10 +5,10 @@ import PageRow from '../../components/page-row/PageRow';
 import PageItem from '../../components/page-item/PageItem';
 import PasswordInput from '../../components/validation-input/PasswordInput';
 import SubmitButton from '../../components/submit-button/SubmitButton';
-import { API_URL } from '../../utils/envVariables';
 import { AuthAction, useAuth } from '../../auth/Auth';
+import { URLS } from '../../utils/urls';
 
-const SET_PASSWORD_URL = `${API_URL}/auth/password`;
+const { SET_PASSWORD_URL } = URLS;
 
 const CreatePasswordPage = () => {
     const [email, setEmail] = useState('');

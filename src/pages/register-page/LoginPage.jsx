@@ -6,10 +6,10 @@ import PageItem from '../../components/page-item/PageItem';
 import SubmitButton from '../../components/submit-button/SubmitButton';
 import EmailInput from '../../components/validation-input/EmailInput';
 import PasswordInput from '../../components/validation-input/PasswordInput';
-import { API_URL } from '../../utils/envVariables';
 import { AuthAction, useAuth } from '../../auth/Auth';
+import { URLS } from '../../utils/urls';
 
-const LOGIN_URL = `${API_URL}/auth/login`;
+const { LOGIN_URL } = URLS;
 
 const LoginPage = () => {
     const [submitting, setSubmitting] = useState(false);

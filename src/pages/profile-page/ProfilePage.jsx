@@ -7,10 +7,8 @@ import TextInput from '../../components/text-input/TextInput';
 import { getKeyValueDataStore } from '../../data-store/KeyValueDataStoreFactory';
 import Footer from '../../layouts/footer/Footer';
 import BodyWrapper from '../../layouts/body-wrapper/BodyWrapper';
-import { API_URL } from '../../utils/envVariables';
-import { apiSubmitProfile } from '../../utils/apiUtils';
+import { apiGetProfile, apiSubmitProfile } from '../../utils/apiUtils';
 
-const PROFILE_URL = `${API_URL}/client/profile`;
 
 const { Action, ContextProvider, useDataStore } = getKeyValueDataStore({
     brandName: '',
@@ -29,81 +27,65 @@ const ProfilePage = () => {
     const history = useHistory();
 
     useEffect(() => {
-        (async () => {
-            try {
-                const response = await fetch(PROFILE_URL, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
+        apiGetProfile()
+            .then((response) => {
+                console.log(response);
+                dispatch({
+                    type: Action.SET_KEY_VALUE,
+                    payload: {
+                        brandName: response.brand_name,
+                        brandWebsite: response.brand_website,
+                        brandProductCategory: response.brand_product_category,
+                        brandInstagram: response.brand_instagram,
+                        name: response.account_owner,
+                        position: response.owner_position,
                     },
-                    credentials: 'include',
                 });
-
-                const statusCode = response.status;
-                if (statusCode === 200) {
-                    const responseJSON = await response.json();
-                    dispatch({
-                        type: Action.SET_KEY_VALUE,
-                        payload: {
-                            brandName: responseJSON.brand_name,
-                            brandWebsite: responseJSON.brand_website,
-                            brandProductCategory: responseJSON.brand_product_category,
-                            brandInstagram: responseJSON.brand_instagram,
-                            name: responseJSON.account_owner,
-                            position: responseJSON.owner_position,
-                        },
-                    });
-                } else if (statusCode === 401) {
+            }).catch((err) => {
+                const statusCode = err.status;
+                if (statusCode === 401) {
                     console.error('Unauthorized'); // eslint-disable-line
                     history.push('/login');
                 } else {
-                    throw new Error(response.statusText);
+                    console.error(err);
                 }
-            } catch (error) {
-                console.error(error); // eslint-disable-line
-                setStatusMessage('Server error, please try again later.');
-            }
-        })();
+            });
     }, [dispatch, history]);
 
+
+    const onSubmitFailed = (err) => {
+        setSubmitting(false);
+        console.error(err); // eslint-disable-line
+        const statusCode = err.status;
+        if (statusCode === 400) {
+            setStatusMessage(err.statusText);
+        } else if (statusCode === 401) {
+            history.push('/login');
+        }
+    };
 
     const submit = async () => {
         setSubmitting(true);
         setStatusMessage('');
 
-        try {
-            const {
-                brandName, brandWebsite, brandProductCategory, brandInstagram, name, position,
-            } = state;
-            const payload = {
-                brand_name: brandName,
-                brand_website: brandWebsite,
-                brand_product_category: brandProductCategory,
-                brand_instagram: brandInstagram,
-                account_owner: name,
-                owner_position: position,
-            };
-            apiSubmitProfile(payload)
-                .then((response) => response.json())
-                .then((response) => {
-                    const statusCode = response.status;
-                    if (statusCode === 200) {
-                        setStatusMessage('Data Updated');
-                    } else if (statusCode === 400) {
-                        console.error('Bad request'); // eslint-disable-line
-                        setStatusMessage('Invalid data');
-                    } else if (statusCode === 401) {
-                        console.error('Unauthorized'); // eslint-disable-line
-                        history.push('/login');
-                    } else {
-                        throw new Error(response.statusText);
-                    }
-                });
-        } catch (error) {
-            console.error(error); // eslint-disable-line
-            setStatusMessage('Server error, please try again later.');
-        }
-        setSubmitting(false);
+        const {
+            brandName, brandWebsite, brandProductCategory, brandInstagram, name, position,
+        } = state;
+        const payload = {
+            brand_name: brandName,
+            brand_website: brandWebsite,
+            brand_product_category: brandProductCategory,
+            brand_instagram: brandInstagram,
+            account_owner: name,
+            owner_position: position,
+        };
+        apiSubmitProfile(payload)
+            .then(() => {
+                setSubmitting(false);
+                setStatusMessage('Data Updated');
+            }).catch((err) => {
+                onSubmitFailed(err);
+            });
     };
 
     const onTextInputChange = (e) => {

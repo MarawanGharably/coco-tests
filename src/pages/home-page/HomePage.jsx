@@ -2,16 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import Page from '../../layouts/page-template/Page';
-import { API_URL } from '../../utils/envVariables';
 import BodyWrapper from '../../layouts/body-wrapper/BodyWrapper';
 import Footer from '../../layouts/footer/Footer';
 import Loader from '../../components/loader/Loader';
 import SubmitButton from '../../components/submit-button/SubmitButton';
-// eslint-disable-next-line
-// import { useHomePageData, HomePageActionEnums } from '../../data-store/home-page-data-store/HomePageDataStore';
+import { URLS } from '../../utils/urls';
 
-const GET_ALL_STORES_URL = `${API_URL}/client/stores`;
-const CREATE_STORE_URL = `${API_URL}/store`;
+const { GET_ALL_STORES_URL } = URLS;
+const { CREATE_STORE_URL } = URLS;
 
 const HomePage = () => {
     const [loading, setLoading] = useState(true);

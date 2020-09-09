@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import EmailInput from '../../components/validation-input/EmailInput';
 import SubmitButton from '../../components/submit-button/SubmitButton';
 import Input from '../../components/input/Input';
+import { createUser } from '../../utils/apiUtils';
 
-const CREATE_USER_URL = 'http://127.0.0.1:5000/auth/create_user';
 
 const CreateUser = () => {
     const [submitting, setSubmitting] = useState(false);
@@ -13,26 +13,6 @@ const CreateUser = () => {
     const [name, setName] = useState('');
     const [userName, setUserName] = useState('');
     const [error, setError] = useState('');
-
-
-    const createUser = async (callback) => {
-        await fetch(CREATE_USER_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify({
-                email,
-                given_name: name,
-                username: userName,
-            }),
-        })
-            .then((response) => response.json())
-            .then((result) => {
-                callback(result);
-            }).catch((err) => setError(err));
-    };
 
     const onNameChange = (e) => {
         e.persist();
@@ -56,10 +36,23 @@ const CreateUser = () => {
         setSubmitting(false);
     };
 
+    const onUserCreateFailed = (err) => {
+        setSubmitting(false);
+        setError(err);
+    };
 
     const onRegisterClicked = () => {
         setSubmitting(true);
-        createUser(onUserCreated);
+
+        createUser({
+            email,
+            given_name: name,
+            username: userName,
+        })
+            .then((result) => {
+                onUserCreated(result);
+            })
+            .catch((err) => onUserCreateFailed(err));
     };
 
     return (
@@ -96,7 +89,7 @@ const CreateUser = () => {
                 onClick={onRegisterClicked}
             />
 
-            <p>{error}</p>
+            {error.length >= 1 && <p>{error}</p>}
         </div>
 
     );

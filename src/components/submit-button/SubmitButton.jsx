@@ -20,6 +20,7 @@ const SubmitButton = ({
             text={buttonText}
             buttonStyle={buttonStyle}
             onClick={onClick}
+            type="submit"
         />
     )
 );

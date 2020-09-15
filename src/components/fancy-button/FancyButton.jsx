@@ -25,9 +25,9 @@ const baseTextCss = css`
 
 // Fancy button uses emotion's style composition to receieve styles from props
 const FancyButton = ({
-    buttonStyle, textStyle, onClick, text,
+    buttonStyle, textStyle, onClick, type, text,
 }) => (
-    <button css={[baseButtonCss, buttonStyle]} type="button" aria-label="fancy button" onClick={onClick}>
+    <button css={[baseButtonCss, buttonStyle]} type="button" aria-label="fancy button" onClick={onClick} type={type}>
         <span css={[baseTextCss, textStyle]}>{text}</span>
     </button>
 );
@@ -35,6 +35,7 @@ const FancyButton = ({
 FancyButton.propTypes = {
     buttonStyle: PropTypes.func,
     onClick: PropTypes.func,
+    type: PropTypes.string,
     textStyle: PropTypes.func,
     text: PropTypes.string,
 };
@@ -42,6 +43,7 @@ FancyButton.propTypes = {
 FancyButton.defaultProps = {
     buttonStyle: null,
     onClick: null,
+    type: null,
     textStyle: null,
     text: '',
 };

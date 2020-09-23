@@ -7,4 +7,6 @@ export const URLS = {
     PROFILE_URL: `${API_URL}/client/profile`,
     GET_ALL_STORES_URL: `${API_URL}/client/stores`,
     CREATE_STORE_URL: `${API_URL}/store`,
+    GET_ALL_CMS_STORES: `${API_URL}/cms/stores`,
+    CREATE_STORE_ACCESS_POLICY: `${API_URL}/admin/create-policy/`,
 };

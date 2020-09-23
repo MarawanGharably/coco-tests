@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { css } from '@emotion/react';
 import { Link } from 'react-router-dom';
 import EmailInput from '../../components/validation-input/EmailInput';
 import SubmitButton from '../../components/submit-button/SubmitButton';
 import Input from '../../components/input/Input';
-import { createUser } from '../../utils/apiUtils';
+import { apiGetAllCMSStores, createUser } from '../../utils/apiUtils';
 
 
 const CreateUser = () => {

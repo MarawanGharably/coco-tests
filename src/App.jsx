@@ -12,11 +12,12 @@ import { ProfilePage, ContextProvider as ProfileContextProvider } from './pages/
 import ErrorPage from './pages/error-page/ErrorPage';
 import LoginPage from './pages/register-page/LoginPage';
 import CreatePasswordPage from './pages/register-page/CreatePasswordPage';
-import CreateUser from './pages/register-page/CreateUser';
+import CreateUser from './pages/admin-pages/CreateUser';
 
 // Only needs to import CSS once at <App /> level.
 // All imports for styling should happen in main.scss level from here on
 import './main.scss';
+import AdminPage from './pages/admin-pages/Admin';
 
 const App = () => (
     <div className="app-container flex flex-column flex-1">
@@ -36,8 +37,8 @@ const App = () => (
                     render={() => <RegisterPage />}
                 />
                 <Route
-                    path="/create-user"
-                    render={() => <CreateUser />}
+                    path="/admin"
+                    render={() => <AdminPage />}
                 />
                 <PrivateRoute
                     path="/"

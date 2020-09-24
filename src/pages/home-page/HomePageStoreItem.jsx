@@ -22,7 +22,7 @@ const HomePageStoreItem = ({ storeInfo, handleEditStore }) => {
             <FancyButton
                 text="EDIT"
                 buttonStyle={editButtonStyle}
-                onClick={() => handleEditStore(_id)}
+                onClick={() => handleEditStore(_id.$oid)}
                 type="button"
             />
         </div>

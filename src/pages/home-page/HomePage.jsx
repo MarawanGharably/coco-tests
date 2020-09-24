@@ -14,9 +14,9 @@ const { GET_ALL_STORES_URL } = URLS;
 
 // eslint-disable
 // const DUMMY_GET_STORES_DATA = [
-//     { _id: 'store1', name: 'myStore', thumbnail: 'https://placedog.net/150/150' },
-//     { _id: 'store2', name: 'myStore', thumbnail: 'https://placedog.net/150/150' },
-//     { _id: 'store3', name: 'myStore', thumbnail: 'https://placedog.net/150/150' },
+//     { _id: { $oid: 'store1' }, name: 'myStore', thumbnail: 'https://placedog.net/150/150' },
+//     { _id: { $oid: 'store2' }, name: 'myStore', thumbnail: 'https://placedog.net/150/150' },
+//     { _id: { $oid: 'store3' }, name: 'myStore', thumbnail: 'https://placedog.net/150/150' },
 // ];
 // eslint-enable
 
@@ -72,7 +72,7 @@ const HomePage = () => {
     if (storeData) {
         storeList = storeData.map((storeInfo) => (
             <HomePageStoreItem
-                key={storeInfo._id} // eslint-disable-line no-underscore-dangle
+                key={storeInfo._id.$oid} // eslint-disable-line no-underscore-dangle
                 storeInfo={storeInfo}
                 handleEditStore={handleEditStore}
             />
@@ -89,11 +89,8 @@ const HomePage = () => {
                                 <section className="flex home-page-wrapper">
                                     {storeList}
                                 </section>
-                            )
-                            : (
-                                <header
-                                    className="page-sub-title"
-                                >
+                            ) : (
+                                <header className="page-sub-title">
                                     There are no stores for this client
                                 </header>
                             )

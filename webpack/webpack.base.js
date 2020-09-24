@@ -3,12 +3,10 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { envKeys } = require('../dotenv/config');
-
 const DIR_PATH = {
     BUILD: path.resolve(__dirname, '../build'),
     SRC: path.resolve(__dirname, '../src'),
 };
-
 const config = {
     entry: [
         path.join(DIR_PATH.SRC, 'index.jsx'),
@@ -68,5 +66,4 @@ const config = {
         extensions: ['*', '.js', '.jsx', '.scss'],
     },
 };
-
 module.exports = config;

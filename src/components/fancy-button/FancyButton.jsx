@@ -42,7 +42,7 @@ FancyButton.propTypes = {
 };
 
 FancyButton.defaultProps = {
-    buttonStyle: null,
+    buttonStyle: 'button',
     onClick: null,
     type: 'button',
     textStyle: null,

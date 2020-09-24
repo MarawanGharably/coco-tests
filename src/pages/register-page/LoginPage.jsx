@@ -82,28 +82,30 @@ const LoginPage = () => {
             pageTitle="Login"
             pageSubTitle="Welcome back"
         >
-            <PageRow column width={width}>
-                <PageItem>
-                    <EmailInput value={email} handleChange={onEmailInputChange} />
-                </PageItem>
-                <PageItem>
-                    <PasswordInput value={password} handleChange={onPasswordInputChange} />
-                </PageItem>
-            </PageRow>
-            <section className="login-page-helper-section flex">
-                <div>
-                    Don&apos;t have an account?
-                    <a href="mailto:contact@shopobsess.co"> Send us an email</a>
-                </div>
-                <div className="forget-password">Don&apos;t have a password?</div>
-            </section>
-            <SubmitButton
-                submitting={submitting}
-                onClick={login}
-            />
-            <h1 style={{ textAlign: 'center' }}>
-                {errorMessage}
-            </h1>
+            <form className="flex flex-column flex-center">
+                <PageRow column width={width}>
+                    <PageItem>
+                        <EmailInput value={email} handleChange={onEmailInputChange} />
+                    </PageItem>
+                    <PageItem>
+                        <PasswordInput value={password} handleChange={onPasswordInputChange} />
+                    </PageItem>
+                </PageRow>
+                <section className="login-page-helper-section flex">
+                    <div>
+                        Don&apos;t have an account?
+                        <a href="mailto:contact@shopobsess.co"> Send us an email</a>
+                    </div>
+                    <div className="forget-password">Don&apos;t have a password?</div>
+                </section>
+                <SubmitButton
+                    submitting={submitting}
+                    onClick={login}
+                />
+                <h1 style={{ textAlign: 'center' }}>
+                    {errorMessage}
+                </h1>
+            </form>
         </Page>
     );
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-const OBSESS_LOGO_URL = 'https://cdn.obsessvr.com/coco-header-logo.png';
+const OBSESS_LOGO_URL = 'https://cdn.obsessvr.com/coco/coco-header-logo-blue.png';
 
 const ObsessHeaderLogo = () => (
     <NavLink to="/" tabIndex="0">

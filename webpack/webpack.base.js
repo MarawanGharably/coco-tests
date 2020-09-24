@@ -15,7 +15,7 @@ const config = {
     ],
     output: {
         path: DIR_PATH.BUILD,
-        publicPath: '',
+        publicPath: '/',
         filename: 'bundle.[hash].js',
     },
     plugins: [

@@ -16,7 +16,7 @@
 
 .product {
     $border: 1px solid $footer-color;
-    $selected-border: 8px solid $obsess-pink;
+    $selected-border: 8px solid $obsess-blue;
 
     &-item {
         width: 100%;
@@ -34,7 +34,7 @@
             }
         }
         &-selected {
-            // background: $obsess-pink;
+            // background: $obsess-blue;
             border: $selected-border;
         }
         & img {

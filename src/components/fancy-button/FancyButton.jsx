@@ -8,8 +8,8 @@ const baseButtonCss = css`
     justify-content: center;
     width: inherit;
     height: inherit;
-    background: #FF74A6;
-    border: 1px solid #FF74A6;
+    background: #3c76fa;
+    border: 1px solid #3c76fa;
     border-radius: 5px;
     &:hover {
         cursor: pointer;
@@ -23,11 +23,12 @@ const baseTextCss = css`
     letter-spacing: 0.8px;
 `;
 
-// Fancy button uses emotion's style composition to receieve styles from props
+// Fancy button uses emotion's style composition to receive styles from props
 const FancyButton = ({
     buttonStyle, textStyle, onClick, type, text,
 }) => (
-    <button css={[baseButtonCss, buttonStyle]} type="button" aria-label="fancy button" onClick={onClick} type={type}>
+    // eslint-disable-next-line react/button-has-type
+    <button css={[baseButtonCss, buttonStyle]} aria-label="fancy button" onClick={onClick} type={type}>
         <span css={[baseTextCss, textStyle]}>{text}</span>
     </button>
 );
@@ -43,7 +44,7 @@ FancyButton.propTypes = {
 FancyButton.defaultProps = {
     buttonStyle: null,
     onClick: null,
-    type: null,
+    type: 'button',
     textStyle: null,
     text: '',
 };

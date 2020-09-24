@@ -5,15 +5,15 @@
     width: 11em;
     height: 11em;
     border-radius: 50%;
-    background: $obsess-pink;
-    background: linear-gradient(to right, $obsess-pink 10%, rgba(255, 255, 255, 0) 42%);
+    background: $obsess-blue;
+    background: linear-gradient(to right, $obsess-blue 10%, rgba(255, 255, 255, 0) 42%);
     position: relative;
     animation: load3 1.4s infinite linear;
     transform: translateZ(0);
     &:before {
       width: 50%;
       height: 50%;
-      background: $obsess-pink;
+      background: $obsess-blue;
       border-radius: 100% 0 0 0;
       position: absolute;
       top: 0;

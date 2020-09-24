@@ -27,6 +27,7 @@ const baseTextCss = css`
 const FancyButton = ({
     buttonStyle, textStyle, onClick, type, text,
 }) => (
+    // eslint-disable-next-line react/button-has-type
     <button css={[baseButtonCss, buttonStyle]} aria-label="fancy button" onClick={onClick} type={type}>
         <span css={[baseTextCss, textStyle]}>{text}</span>
     </button>

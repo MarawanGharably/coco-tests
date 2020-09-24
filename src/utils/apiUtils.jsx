@@ -32,7 +32,6 @@ const makePOSTRequest = (_url, payload) => new Promise((resolve, reject) => {
             handleResponse(resolve, reject, response);
         })
         .catch((err) => {
-            console.log(err);
             reject(err);
         });
 });

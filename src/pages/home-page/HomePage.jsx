@@ -54,7 +54,7 @@ const HomePage = () => {
         getAllStores();
     }, [history]);
 
-    const handleEditStore = (storeId) => { // eslint-disable-line
+    const handleEditStore = (storeId) => {
         dispatch({
             type: HomePageActionEnums.RECEIVE_HOMEPAGE_DATA,
             payload: {
@@ -72,9 +72,9 @@ const HomePage = () => {
     if (storeData) {
         storeList = storeData.map((storeInfo) => (
             <HomePageStoreItem
-                key={storeInfo._id} // eslint-disable-line
+                key={storeInfo._id} // eslint-disable-line no-underscore-dangle
                 storeInfo={storeInfo}
-                handleEditStore={handleEditStore} // eslint-disable-line
+                handleEditStore={handleEditStore}
             />
         ));
     }

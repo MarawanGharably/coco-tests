@@ -4,7 +4,7 @@ import FancyButton from '../../components/fancy-button/FancyButton';
 import './_home-page.scss';
 
 
-const HomePageStoreItem = ({ storeInfo, editStore }) => {
+const HomePageStoreItem = ({ storeInfo, handleEditStore }) => {
     const { _id, name, thumbnail } = storeInfo;
 
     const editButtonStyle = {
@@ -22,7 +22,7 @@ const HomePageStoreItem = ({ storeInfo, editStore }) => {
             <FancyButton
                 text="EDIT"
                 buttonStyle={editButtonStyle}
-                onClick={() => editStore(_id)}
+                onClick={() => handleEditStore(_id)}
                 type="button"
             />
         </div>
@@ -31,7 +31,7 @@ const HomePageStoreItem = ({ storeInfo, editStore }) => {
 
 HomePageStoreItem.propTypes = {
     storeInfo: PropTypes.InstanceOf(PropTypes.Object).isRequired,
-    editStore: PropTypes.func.isRequired,
+    handleEditStore: PropTypes.func.isRequired,
 };
 
 export default HomePageStoreItem;

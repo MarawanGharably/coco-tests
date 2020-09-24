@@ -7,6 +7,7 @@ import Footer from '../../layouts/footer/Footer';
 import Loader from '../../components/loader/Loader';
 import { URLS } from '../../utils/urls';
 import HomePageStoreItem from './HomePageStoreItem';
+import { useHomePageData, HomePageActionEnums } from '../../data-store/home-page-data-store/HomePageDataStore';
 import './_home-page.scss';
 
 const { GET_ALL_STORES_URL } = URLS;
@@ -20,9 +21,10 @@ const { GET_ALL_STORES_URL } = URLS;
 // eslint-enable
 
 const HomePage = () => {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [storeData, setStoreData] = useState(null);
     const history = useHistory();
+    const [, dispatch] = useHomePageData();
 
     useEffect(() => {
         const getAllStores = async () => {
@@ -52,9 +54,14 @@ const HomePage = () => {
         getAllStores();
     }, [history]);
 
-    const editStore = (id) => { // eslint-disable-line
-        // TODO: pass storeData.id to a store being edited
-        // history.push('/create');
+    const handleEditStore = (storeId) => { // eslint-disable-line
+        dispatch({
+            type: HomePageActionEnums.RECEIVE_HOMEPAGE_DATA,
+            payload: {
+                storeId,
+            },
+        });
+        history.push('/create');
     };
 
     if (loading) {
@@ -67,7 +74,7 @@ const HomePage = () => {
             <HomePageStoreItem
                 key={storeInfo._id} // eslint-disable-line
                 storeInfo={storeInfo}
-                editStore={editStore} // eslint-disable-line
+                handleEditStore={handleEditStore} // eslint-disable-line
             />
         ));
     }

@@ -61,6 +61,10 @@ const LoginPage = () => {
                 console.error('Invalid credentials'); // eslint-disable-line
                 setSubmitting(false);
                 setErrorMessage('Invalid credentials, please try again.');
+            } else if (statusCode === 403) {
+                console.error('Invalid credentials'); // eslint-disable-line
+                setSubmitting(false);
+                setErrorMessage('Unable to login. Please try again later.');
             } else {
                 throw new Error(response.statusText);
             }

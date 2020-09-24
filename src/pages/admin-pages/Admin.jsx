@@ -18,11 +18,11 @@ const AdminPage = () => {
                 <div id="admin-page" className="flex full-width">
                     <NavBar>
                         <NavBarItem
-                            name="Policies"
+                            name="CREATE POLICIES"
                             pathName={policiesPath}
                         />
                         <NavBarItem
-                            name="Users"
+                            name="CREATE USERS"
                             pathName={usersPath}
                         />
                     </NavBar>
@@ -34,7 +34,6 @@ const AdminPage = () => {
                             path={policiesPath}
                             render={() => <PoliciesPage />}
                         />
-
                         <Route
                             path={usersPath}
                             render={() => <CreateUser />}
@@ -42,9 +41,6 @@ const AdminPage = () => {
                     </Switch>
                 </div>
             </BodyWrapper>
-            <FooterNavContextComponent>
-                <Footer />
-            </FooterNavContextComponent>
         </>
     );
 };

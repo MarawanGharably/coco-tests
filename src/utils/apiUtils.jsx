@@ -1,57 +1,61 @@
 import { URLS } from './urls';
 
+const handleResponse = (resolve, reject, response) => {
+    switch (response.status) {
+        case 200: {
+            resolve(response.json());
+            break;
+        }
+        default: {
+            response.json().then((err) => reject(err));
+        }
+    }
+};
+
+const headers = {
+    // need this for cookie to set
+    'Content-Type': 'application/json',
+};
+
+const requestOptions = {
+    credentials: 'include',
+};
 
 const makePOSTRequest = (_url, payload) => new Promise((resolve, reject) => {
     fetch(_url, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include', // need this for cookie to set
+        headers,
+        ...requestOptions,
         body: JSON.stringify(payload),
     })
         .then((response) => {
-            switch (response.status) {
-                case 200: {
-                    resolve(response.json());
-                    break;
-                }
-                default: {
-                    reject(response);
-                }
-            }
+            handleResponse(resolve, reject, response);
         })
         .catch((err) => {
+            console.log(err);
             reject(err);
         });
 });
 
-export const createUser = (payload) => makePOSTRequest(URLS.CREATE_USER_URL, payload);
-export const apiSubmitProfile = (payload) => makePOSTRequest(URLS.PROFILE_URL, payload);
-export const apiAdminCreateStorePolicy = (storeId) => makePOSTRequest(`${URLS.CREATE_STORE_ACCESS_POLICY}${storeId}`);
-
-
 const makeGETRequest = (_url) => new Promise((resolve, reject) => {
     fetch(_url, {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
+        headers,
+        ...requestOptions,
     }).then((response) => {
-        switch (response.status) {
-            case 200: {
-                resolve(response.json());
-                break;
-            }
-            default: {
-                reject(response);
-            }
-        }
+        handleResponse(resolve, reject, response);
     })
         .catch((err) => reject(err));
 });
 
 
-export const apiGetProfile = () => makeGETRequest(URLS.PROFILE_URL);
+// ADMIN APIs
+export const apiAdminCreateUser = (payload) => makePOSTRequest(URLS.CREATE_USER_URL, payload);
+export const apiAdminGetAllStorePolicies = () => makeGETRequest(URLS.STORE_ACCESS_POLICIES_API);
 export const apiGetAllCMSStores = () => makeGETRequest(URLS.GET_ALL_CMS_STORES);
+export const apiAdminCreateStorePolicy = (payload) => makePOSTRequest(`${URLS.STORE_ACCESS_POLICIES_API}`, payload);
+
+
+// PROFILE APIs
+export const apiSubmitProfile = (payload) => makePOSTRequest(URLS.PROFILE_URL, payload);
+export const apiGetProfile = () => makeGETRequest(URLS.PROFILE_URL);

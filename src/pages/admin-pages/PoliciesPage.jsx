@@ -1,45 +1,76 @@
 import React, { useEffect, useState } from 'react';
-import { Dropdown } from 'semantic-ui-react';
 import Select from 'react-dropdown-select';
 import { apiAdminCreateStorePolicy, apiGetAllCMSStores } from '../../utils/apiUtils';
+import SubmitButton from '../../components/submit-button/SubmitButton';
 
 
 const PoliciesPage = () => {
     const [stores, setStores] = useState([]);
     const [selectedStore, setSelectedStore] = useState(null);
-    const [submitEnabled, enableSubmit] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
+    const [error, setError] = useState('');
+
+    const getPolicies = () => {
+        apiGetAllCMSStores()
+            .then((response) => setStores(
+                response.map((option) => (
+                    {
+                        ...option,
+                        label: option.name,
+                        // eslint-disable-next-line no-underscore-dangle
+                        value: option._id.$oid,
+                    })),
+            ))
+            .catch((err) => {
+                console.log(err);
+                setSubmitting(false);
+            });
+    };
 
     useEffect(() => {
-        // apiGetAllCMSStores()
-        //     .then((response) => setStores(response));
-    });
+        getPolicies();
+    }, []);
 
     const onStoreSelected = (value) => {
         setSelectedStore(value);
-        enableSubmit(true);
     };
 
 
     const onClickCreatePolicy = () => {
-        // eslint-disable-next-line no-underscore-dangle
-        const storeId = selectedStore._id.$oid;
-        apiAdminCreateStorePolicy(storeId)
-            .then((response) => console.log(response));
+        if (selectedStore) {
+            setSubmitting(true);
+            // eslint-disable-next-line no-underscore-dangle
+            const storeId = selectedStore._id.$oid;
+            apiAdminCreateStorePolicy({ store_id: storeId })
+                .then(() => {
+                    setError('Success');
+                    setSubmitting(false);
+                    setSelectedStore(null);
+                }).catch((err) => {
+                    setError(err);
+                    setSubmitting(false);
+                });
+        } else {
+            setError('Please select a store.');
+        }
     };
 
     return (
         <div className="flex flex-column flex-center full-width">
-            <h2>Manage Store Policies</h2>
+            <h2>Select Store</h2>
             <Select
                 options={stores}
-                onChange={(values) => onStoreSelected(values[0])}
-                searchBy="name"
-                labelField="name"
+                onChange={(value) => onStoreSelected(value[0])}
             />
-            <button type="submit" enabled={submitEnabled} onClick={() => onClickCreatePolicy()}>
-                Create New
-                Policy
-            </button>
+
+            <SubmitButton
+                buttonText="Create New Policy"
+                submitting={submitting}
+                onClick={() => onClickCreatePolicy()}
+            />
+
+            {error.length >= 1 && <p>{error}</p>}
+
         </div>
     );
 };

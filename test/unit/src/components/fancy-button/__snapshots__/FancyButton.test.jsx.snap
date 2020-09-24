@@ -43,7 +43,6 @@ Object {
       <button
         aria-label="fancy button"
         class="emotion-1"
-        type="button"
       >
         <span
           class="emotion-0"
@@ -92,7 +91,6 @@ Object {
     <button
       aria-label="fancy button"
       class="emotion-1"
-      type="button"
     >
       <span
         class="emotion-0"

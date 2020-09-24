@@ -70,11 +70,11 @@ const HomePage = () => {
                 } else if (statusCode === 401 || statusCode === 404) {
                     history.push('/login');
                 } else {
-                    console.log(response);
                     throw new Error(response.statusText);
                 }
                 setLoading(false);
             } catch (e) {
+                // eslint-disable-next-line no-console
                 console.log(e);
             }
         };

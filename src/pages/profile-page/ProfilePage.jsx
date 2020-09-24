@@ -46,6 +46,7 @@ const ProfilePage = () => {
                     console.error('Unauthorized'); // eslint-disable-line
                     history.push('/login');
                 } else {
+                    // eslint-disable-next-line no-console
                     console.error(err);
                 }
             });

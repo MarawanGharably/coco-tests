@@ -1,29 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { css } from '@emotion/react';
-import { Link } from 'react-router-dom';
+import Select from 'react-dropdown-select';
 import EmailInput from '../../components/validation-input/EmailInput';
 import SubmitButton from '../../components/submit-button/SubmitButton';
 import Input from '../../components/input/Input';
-import { createUser } from '../../utils/apiUtils';
+import { apiAdminGetAllStorePolicies, apiAdminCreateUser } from '../../utils/apiUtils';
 
 
 const CreateUser = () => {
     const [submitting, setSubmitting] = useState(false);
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
-    const [userName, setUserName] = useState('');
     const [error, setError] = useState('');
+    const [policies, setPolicies] = useState([]);
+    const [selectedPolicies, setSelectedPolicies] = useState([]);
+
+    const getPolicies = () => {
+        apiAdminGetAllStorePolicies()
+            .then((response) => {
+                setPolicies(response.map((option) => ({
+                    ...option,
+                    label: option.name,
+                    value: option.access_policy,
+                })));
+            })
+            .catch((err) => setError(err));
+    };
+
+    useEffect(() => {
+        getPolicies();
+    }, []);
 
     const onNameChange = (e) => {
         e.persist();
         const { value } = e.target;
         setName(value);
-    };
-
-    const onUserNameChange = (e) => {
-        e.persist();
-        const { value } = e.target;
-        setUserName(value);
     };
 
     const onEmailInputChange = (e) => {
@@ -43,11 +54,10 @@ const CreateUser = () => {
 
     const onRegisterClicked = () => {
         setSubmitting(true);
-
-        createUser({
+        apiAdminCreateUser({
             email,
             given_name: name,
-            username: userName,
+            policies: selectedPolicies,
         })
             .then((result) => {
                 onUserCreated(result);
@@ -55,9 +65,12 @@ const CreateUser = () => {
             .catch((err) => onUserCreateFailed(err));
     };
 
+    const onPoliciesSelected = (values) => {
+        setSelectedPolicies(values.map((item) => item.value));
+    };
+
     return (
         <div className="flex flex-column flex-center full-width">
-            <Link to="/">Home</Link>
             <h2>Create User</h2>
 
             <div css={css`margin: 3em 0;`}>
@@ -69,14 +82,6 @@ const CreateUser = () => {
                 />
             </div>
             <div css={css`margin: 3em 0;`}>
-                <Input
-                    labelTitle="Username"
-                    width="40em"
-                    value={userName}
-                    handleChange={onUserNameChange}
-                />
-            </div>
-            <div css={css`margin: 3em 0;`}>
                 <EmailInput
                     width="40em"
                     value={email}
@@ -84,15 +89,25 @@ const CreateUser = () => {
                 />
             </div>
 
+            <Select
+                multi
+                options={policies}
+                values={[]}
+                onChange={(value) => onPoliciesSelected(value)}
+            />
+
             <SubmitButton
+                className="flex flex-vertical-center flex-grow"
                 submitting={submitting}
                 onClick={onRegisterClicked}
             />
 
             {error.length >= 1 && <p>{error}</p>}
+
         </div>
 
     );
 };
+
 
 export default CreateUser;

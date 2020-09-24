@@ -22,7 +22,6 @@ const PoliciesPage = () => {
                     })),
             ))
             .catch((err) => {
-                console.log(err);
                 setSubmitting(false);
             });
     };

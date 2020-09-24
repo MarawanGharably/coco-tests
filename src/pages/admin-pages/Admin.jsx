@@ -3,8 +3,6 @@ import React from 'react';
 import BodyWrapper from '../../layouts/body-wrapper/BodyWrapper';
 import NavBar from '../../components/nav-bar/NavBar';
 import NavBarItem from '../../components/nav-bar/NavBarItem';
-import FooterNavContextComponent from '../create-page/FooterNavContextComponent';
-import Footer from '../../layouts/footer/Footer';
 import CreateUser from './CreateUser';
 import PoliciesPage from './PoliciesPage';
 

@@ -4,7 +4,7 @@ export const URLS = {
     LOGIN_URL: `${API_URL}/auth/login`,
     SET_PASSWORD_URL: `${API_URL}/auth/password`,
     PROFILE_URL: `${API_URL}/client/profile`,
-    GET_ALL_STORES_URL: `${API_URL}/client/stores`,
+    GET_ALL_STORES_URL: `${API_URL}/client/users/stores`,
     CREATE_STORE_URL: `${API_URL}/store`,
     GET_ALL_CMS_STORES: `${API_URL}/cms/stores`,
     STORE_ACCESS_POLICIES_API: `${API_URL}/admin/access/policy`,

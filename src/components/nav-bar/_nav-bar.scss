@@ -43,7 +43,7 @@
         }
         &-selected {
             @extend %nav-bar-parent;
-            color: $obsess-pink;
+            color: $obsess-blue;
         }
         &-child {
             @extend %nav-bar-child;

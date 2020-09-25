@@ -31,12 +31,12 @@ const SceneNavigatorItem = ({ sceneId, name, index }) => {
     };
 
     const sceneNameStyle = css`
-        color: ${selected && '#FF74A6'};
+        color: ${selected && '#3c76fa'};
     `;
 
     const sceneArrowStyle = css`
-        border-left: 2px solid ${selected ? '#FF74A6' : 'black'};
-        border-top: 2px solid ${selected ? '#FF74A6' : 'black'};
+        border-left: 2px solid ${selected ? '#3c76fa' : 'black'};
+        border-top: 2px solid ${selected ? '#3c76fa' : 'black'};
     `;
 
     return (

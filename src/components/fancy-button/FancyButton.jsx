@@ -8,8 +8,8 @@ const baseButtonCss = css`
     justify-content: center;
     width: inherit;
     height: inherit;
-    background: #FF74A6;
-    border: 1px solid #FF74A6;
+    background: #3c76fa;
+    border: 1px solid #3c76fa;
     border-radius: 5px;
     &:hover {
         cursor: pointer;
@@ -23,7 +23,7 @@ const baseTextCss = css`
     letter-spacing: 0.8px;
 `;
 
-// Fancy button uses emotion's style composition to receieve styles from props
+// Fancy button uses emotion's style composition to receive styles from props
 const FancyButton = ({
     buttonStyle, textStyle, onClick, type, text,
 }) => (
@@ -44,7 +44,7 @@ FancyButton.propTypes = {
 FancyButton.defaultProps = {
     buttonStyle: 'button',
     onClick: null,
-    type: null,
+    type: 'button',
     textStyle: null,
     text: '',
 };

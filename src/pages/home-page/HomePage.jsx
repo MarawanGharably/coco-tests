@@ -5,44 +5,26 @@ import Page from '../../layouts/page-template/Page';
 import BodyWrapper from '../../layouts/body-wrapper/BodyWrapper';
 import Footer from '../../layouts/footer/Footer';
 import Loader from '../../components/loader/Loader';
-import SubmitButton from '../../components/submit-button/SubmitButton';
 import { URLS } from '../../utils/urls';
+import HomePageStoreItem from './HomePageStoreItem';
+import { useHomePageData, HomePageActionEnums } from '../../data-store/home-page-data-store/HomePageDataStore';
+import './_home-page.scss';
 
 const { GET_ALL_STORES_URL } = URLS;
-const { CREATE_STORE_URL } = URLS;
+
+// eslint-disable
+// const DUMMY_GET_STORES_DATA = [
+//     { _id: { $oid: 'store1' }, name: 'myStore', thumbnail: 'https://placedog.net/150/150' },
+//     { _id: { $oid: 'store2' }, name: 'myStore', thumbnail: 'https://placedog.net/150/150' },
+//     { _id: { $oid: 'store3' }, name: 'myStore', thumbnail: 'https://placedog.net/150/150' },
+// ];
+// eslint-enable
 
 const HomePage = () => {
     const [loading, setLoading] = useState(true);
     const [storeData, setStoreData] = useState(null);
-    const [creatingStore, setCreatingStore] = useState(false);
-
     const history = useHistory();
-    const createStore = async () => {
-        setCreatingStore(true);
-        try {
-            const response = await fetch(CREATE_STORE_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
-            });
-            const statusCode = response.status;
-            if (statusCode === 200) {
-                // const responseJSON = await response.json();
-                // const storeId = responseJSON.id;
-                // TODO: pass storeId to create page
-                history.push('/create');
-            }
-        } catch (error) {
-            console.error(error); // eslint-disable-line
-        }
-        setCreatingStore(false);
-    };
-    const resumeCreateStore = () => {
-        // TODO: pass storeData.id to create page
-        history.push('/create');
-    };
+    const [, dispatch] = useHomePageData();
 
     useEffect(() => {
         const getAllStores = async () => {
@@ -54,83 +36,65 @@ const HomePage = () => {
                 });
                 const statusCode = response.status;
                 if (statusCode === 200) {
-                    const responseJSON = await response.json();
-                    // * IMPORTANT: COCO v1 only have 1 store per client
-                    if (responseJSON.length > 0) {
-                        // No store created yet
-                        const jsonStoreInfo = responseJSON[0];
-                        setStoreData({
-                            id: jsonStoreInfo._id, // eslint-disable-line
-                            buildStage: jsonStoreInfo.build_stage,
-                            thumbnail: jsonStoreInfo.thumbnail,
-                        });
+                    const storeDataResponse = await response.json();
+                    if (storeDataResponse.length > 0) {
+                        setStoreData(storeDataResponse);
                     }
-                    // TODO: get store data needs to be implemented after create store
-                    // TODO: create store needs default thumbnail and stuff
                 } else if (statusCode === 401 || statusCode === 404) {
                     history.push('/login');
                 } else {
-                    throw new Error(response.statusText);
+                    throw new Error(response);
                 }
                 setLoading(false);
-            } catch (e) {
-                // eslint-disable-next-line no-console
-                console.log(e);
+            } catch (error) {
+                throw new Error(error);
             }
         };
 
-
         getAllStores();
     }, [history]);
+
+    const handleEditStore = (storeId) => {
+        dispatch({
+            type: HomePageActionEnums.RECEIVE_HOMEPAGE_DATA,
+            payload: {
+                storeId,
+            },
+        });
+        history.push('/create');
+    };
 
     if (loading) {
         return <Loader />;
     }
 
+    let storeList = null;
+    if (storeData) {
+        storeList = storeData.map((storeInfo) => (
+            <HomePageStoreItem
+                key={storeInfo._id.$oid} // eslint-disable-line no-underscore-dangle
+                storeInfo={storeInfo}
+                handleEditStore={handleEditStore}
+            />
+        ));
+    }
+
     return (
         <>
             <BodyWrapper>
-                <Page pageTitle="Store Status">
-                    <div
-                        className="flex flex-column flex-vertical-center full-width full-height"
-                    >
-                        {
-                            storeData === null ? (
-                                <>
-                                    <header
-                                        className="page-sub-title home-page-subtitle"
-                                    >
-                                        No stores created yet!
-                                    </header>
-                                    <div className="home-page-button-container">
-                                        <SubmitButton
-                                            buttonText="START CREATING"
-                                            buttonStyle={null}
-                                            submitting={creatingStore}
-                                            onClick={createStore}
-                                        />
-                                    </div>
-                                </>
+                <Page pageTitle="Your Stores">
+                    {
+                        storeData
+                            ? (
+                                <section className="flex home-page-wrapper">
+                                    {storeList}
+                                </section>
                             ) : (
-                                <>
-                                    <div className="home-page-image-container">
-                                        <img
-                                            alt="store preview"
-                                            src={storeData.thumbnail}
-                                        />
-                                    </div>
-                                    <div className="home-page-button-container">
-                                        <SubmitButton
-                                            buttonText="RESUME CREATING"
-                                            buttonStyle={null}
-                                            submitting={creatingStore}
-                                            onClick={resumeCreateStore}
-                                        />
-                                    </div>
-                                </>
+                                <header className="page-sub-title">
+                                    There are no stores for this client
+                                </header>
                             )
-                        }
-                    </div>
+                    }
                 </Page>
             </BodyWrapper>
             <Footer hasSubmitButton={false} />

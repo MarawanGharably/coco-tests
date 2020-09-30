@@ -28,6 +28,14 @@
         "emotion"
     ],
     "rules": {
+        "no-console": [
+            "error",
+            {
+                "allow": [
+                    "error"
+                ]
+            }
+        ],
         "indent": [
             "error",
             4,

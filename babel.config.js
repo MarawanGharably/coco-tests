@@ -1,10 +1,17 @@
 module.exports = {
+    // presets are applied from bottom to top
     presets: [
         '@babel/preset-env',
         '@babel/preset-react',
-        '@emotion/babel-preset-css-prop',
+        ['@emotion/babel-preset-css-prop',
+            {
+                sourceMap: true,
+            },
+        ],
     ],
+    // plugins are applied from top to bottom
     plugins: [
+        '@babel/plugin-syntax-dynamic-import',
         [
             'transform-react-remove-prop-types',
             {
@@ -22,6 +29,5 @@ module.exports = {
             },
         ],
         '@babel/plugin-transform-runtime',
-        '@babel/plugin-syntax-dynamic-import',
     ],
 };

@@ -15,10 +15,12 @@ const PageRow = ({ header, column, width, hasInfo, infoTitle, infoText, children
 
     return (
         <div className="flex flex-center flex-column" css={rowDimsCss}>
-            <header className="page-row-header flex">
-                {header}
-                {hasInfo && <InfoHover title={infoTitle} message={infoText} />}
-            </header>
+            {header && (
+                <header className="page-row-header flex">
+                    {header}
+                    {hasInfo && <InfoHover title={infoTitle} message={infoText} />}
+                </header>
+            )}
             <div className="page-row flex flex-center flex-1">
                 {column ? <div className="full-width">{children}</div> : children}
             </div>

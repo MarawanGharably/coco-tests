@@ -6,6 +6,9 @@ const handleResponse = (resolve, reject, response) => {
             resolve(response.json());
             break;
         }
+        case 403: {
+            // Need to redirect to login
+        }
         default: {
             response.json().then((err) => reject(err));
         }
@@ -54,6 +57,9 @@ export const apiAdminGetAllStorePolicies = () => makeGETRequest(URLS.STORE_ACCES
 export const apiGetAllCMSStores = () => makeGETRequest(URLS.GET_ALL_CMS_STORES);
 export const apiAdminCreateStorePolicy = (payload) => makePOSTRequest(`${URLS.STORE_ACCESS_POLICIES_API}`, payload);
 
+
+// AUTH APIs
+export const apiUserAuthLogout = () => makeGETRequest(URLS.LOGOUT_URL);
 
 // PROFILE APIs
 export const apiSubmitProfile = (payload) => makePOSTRequest(URLS.PROFILE_URL, payload);

@@ -2,6 +2,9 @@
     &-button {
         background: white;
         border: none;
+        width: 50px;
+        margin: 0 0 0 auto;
+        cursor: pointer;
     }
     &-image-container {
         width: 3em;
@@ -14,4 +17,42 @@
         margin-left: 0.5em;
         width: 1em;
     }
+}
+
+.align-right {
+    text-align: right;
+    background: #3498db;
+    flex-direction: column;
+    justify-content: flex-end
+    /*display: inline-block;*/
+}
+
+.user-drop-down-container {
+    background: white;
+    margin-top: 8px;
+    margin-right: 0.5em;
+    position: fixed;
+    right: 0;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: lightgrey;
+    //box-shadow: 2px 2px #88888850;
+
+}
+
+.user-menu-separator {
+    height: 1px;
+    background: lightgrey;
+}
+
+.user-menu-row {
+    cursor: pointer;
+    background: white;
+    text-align: right;
+    padding: 14px;
+}
+
+.user-menu-row :hover{
+    color: $obsess-grey;;
 }

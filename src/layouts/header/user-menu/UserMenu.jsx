@@ -2,10 +2,11 @@ import React from 'react';
 import LogOutButton from './menu-items/LogOut';
 
 const UserMenu = (props) => {
-    console.log(props);
+    // eslint-disable-next-line react/prop-types
+    const { setDisplayDropdown } = props;
     return (
         <div id="user-dropdown-container" className="user-drop-down-container" on>
-            <LogOutButton setDisplayDropdown={props.setDisplayDropdown} />
+            <LogOutButton setDisplayDropdown={setDisplayDropdown} />
         </div>
     );
 };

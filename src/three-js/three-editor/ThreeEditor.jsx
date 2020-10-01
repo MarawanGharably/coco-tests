@@ -101,6 +101,7 @@ export const ThreeEditor = ({ children }) => {
         });
     };
 
+    // Possible move this down a layer in the future to make mouse down events more extensible
     const onMouseDown = (ev) => {
         if (ev.button !== 2 || ev.target.tagName !== 'CANVAS') {
             return;
@@ -180,6 +181,7 @@ export const ThreeEditor = ({ children }) => {
         return () => {
             window.removeEventListener('resize', windowResizeHandler);
             window.removeEventListener('mousedown', onMouseDown);
+
             controls.dispose();
             scene.dispose();
             renderer.dispose();

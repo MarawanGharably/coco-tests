@@ -1,4 +1,5 @@
-import React, { useReducer, useContext } from 'react';
+import React, { useReducer, useContext, useEffect } from 'react';
+
 
 const initialState = {
     currentSceneId: '',
@@ -23,11 +24,13 @@ const editorReducer = (state, action) => {
     switch (type) {
         case SET_CURRENT_SCENE_ID:
             return ({
-                ...state, currentSceneId: payload.currentSceneId,
+                ...state,
+                currentSceneId: payload.currentSceneId,
             });
         case SET_SCENE_DATA:
             return ({
-                ...state, sceneData: [...payload.sceneData],
+                ...state,
+                sceneData: [...payload.sceneData],
             });
         default:
             throw new TypeError(`${type} is not a valid action!`);
@@ -36,6 +39,18 @@ const editorReducer = (state, action) => {
 
 const EditorDataStore = ({ children }) => {
     const [state, dispatch] = useReducer(editorReducer, initialState);
+
+    // After first time loading new scene data, set current scene as first scene
+    useEffect(() => {
+        if (state.sceneData.length > 0) {
+            dispatch({
+                type: SET_CURRENT_SCENE_ID,
+                payload: {
+                    currentSceneId: state.sceneData[0]._id.$oid, //eslint-disable-line
+                },
+            });
+        }
+    }, [state.sceneData]);
 
     return (
         <StateContext.Provider value={state}>

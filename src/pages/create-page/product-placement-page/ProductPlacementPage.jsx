@@ -9,7 +9,7 @@ import { URLS } from '../../../utils/urls';
 import { formURL } from '../../../utils/urlHelper';
 import HotspotEditor from '../../../three-js/three-editor/HotspotEditor';
 import { useHomePageDataStore } from '../../../data-store/home-page-data-store/HomePageDataStore';
-import { EditorDataStore, useEditorDataStore, EditorActionEnums } from '../../../data-store/editor-data-store/EditorDataStore';
+import { useEditorDataStore, EditorActionEnums } from '../../../data-store/editor-data-store/EditorDataStore';
 
 const { GET_ALL_SCENES_DATA } = URLS;
 
@@ -49,7 +49,7 @@ const ProductPlacementPage = () => {
         };
 
         getAllScenesData();
-    }, [editorDataStoreDispatch, homePageDataStore.selectedStoreId]);
+    }, []); //eslint-disable-line
 
     const sceneClickHandler = (sceneId) => {
         editorDataStoreDispatch({
@@ -82,23 +82,21 @@ const ProductPlacementPage = () => {
     }
 
     return (
-        <EditorDataStore>
-            <div className="product-placement-page flex full-width">
-                <Page
-                    pageTitle="Product Placement"
-                    pageSubTitle="Place products approximately and we will fix it during review"
-                >
-                    <PageRow width="80%">
-                        <div id="three-editor-container" className="full-width">
-                            <HotspotEditor />
-                        </div>
-                    </PageRow>
-                </Page>
-                <RightSideBar cols="1" rowHeight="20em" title="Scenes">
-                    {renderScenes()}
-                </RightSideBar>
-            </div>
-        </EditorDataStore>
+        <div className="product-placement-page flex full-width">
+            <Page
+                pageTitle="Product Placement"
+                pageSubTitle="Place products approximately and we will fix it during review"
+            >
+                <PageRow width="80%">
+                    <div id="three-editor-container" className="full-width">
+                        <HotspotEditor />
+                    </div>
+                </PageRow>
+            </Page>
+            <RightSideBar cols="1" rowHeight="20em" title="Scenes">
+                {renderScenes()}
+            </RightSideBar>
+        </div>
     );
 };
 

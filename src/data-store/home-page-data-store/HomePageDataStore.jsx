@@ -1,19 +1,25 @@
 import React, { useContext, useReducer } from 'react';
 
 const initialState = {
-    storeId: '',
-    buildStage: '',
-    thumbnailUrl: '',
+    storeData: null,
+    storeThumbnails: [],
+    selectedStoreId: '',
 };
 
 const StateContext = React.createContext(initialState);
 const DispatchContext = React.createContext();
 
 const HomePageActionEnums = Object.freeze({
-    RECEIVE_HOMEPAGE_DATA: 'RECEIVE_HOMEPAGE_DATA',
+    SET_STORE_DATA: 'SET_STORE_DATA',
+    SET_STORE_THUMBNAILS: 'SET_STORE_THUMBNAILS',
+    SET_SELECTED_STORE_ID: 'SET_SELECTED_STORE_ID',
 });
 
-const { RECEIVE_HOMEPAGE_DATA } = HomePageActionEnums;
+const {
+    SET_STORE_DATA,
+    SET_STORE_THUMBNAILS,
+    SET_SELECTED_STORE_ID,
+} = HomePageActionEnums;
 
 const homePageReducer = (state, action) => {
     const {
@@ -21,9 +27,17 @@ const homePageReducer = (state, action) => {
     } = action;
 
     switch (type) {
-        case RECEIVE_HOMEPAGE_DATA:
+        case SET_STORE_DATA:
             return ({
-                ...state, ...payload,
+                ...state, storeData: payload.storeData,
+            });
+        case SET_STORE_THUMBNAILS:
+            return ({
+                ...state, storeThumbnails: payload.storeThumbnails,
+            });
+        case SET_SELECTED_STORE_ID:
+            return ({
+                ...state, selectedStoreId: payload.selectedStoreId,
             });
         default:
             throw new TypeError(`${type} is not a valid action!`);
@@ -41,11 +55,11 @@ const HomePageDataStore = ({ children }) => {
     );
 };
 
-const useHomePageData = () => {
+const useHomePageDataStore = () => {
     const state = useContext(StateContext);
     const dispatch = useContext(DispatchContext);
 
     return [state, dispatch];
 };
 
-export { HomePageDataStore, useHomePageData, HomePageActionEnums };
+export { HomePageDataStore, useHomePageDataStore, HomePageActionEnums };

@@ -1,26 +1,33 @@
 import React, { useReducer, useContext } from 'react';
 
 const initialState = {
-    sceneId: null,
-    currentlySelected: 0,
+    currentSceneId: '',
+    sceneData: [],
 };
 
 const EditorActionEnums = {
-    SET_CURRENTLY_SELECTED: 'SET_CURRENTLY_SELECTED',
+    SET_CURRENT_SCENE_ID: 'SET_CURRENT_SCENE_ID',
+    SET_SCENE_DATA: 'SET_SCENE_DATA',
 };
 
-const { SET_CURRENTLY_SELECTED } = EditorActionEnums;
+const {
+    SET_CURRENT_SCENE_ID,
+    SET_SCENE_DATA,
+} = EditorActionEnums;
 
 const StateContext = React.createContext(initialState);
 const DispatchContext = React.createContext();
 
 const editorReducer = (state, action) => {
     const { type, payload } = action;
-
     switch (type) {
-        case SET_CURRENTLY_SELECTED:
+        case SET_CURRENT_SCENE_ID:
             return ({
-                ...state, ...payload,
+                ...state, currentSceneId: payload.currentSceneId,
+            });
+        case SET_SCENE_DATA:
+            return ({
+                ...state, sceneData: [...payload.sceneData],
             });
         default:
             throw new TypeError(`${type} is not a valid action!`);

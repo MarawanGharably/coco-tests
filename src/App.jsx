@@ -5,6 +5,7 @@ import { AuthContextProvider } from './auth/Auth';
 import PrivateRoute from './components/route/PrivateRoute';
 import Header from './layouts/header/Header';
 import { HomePageDataStore } from './data-store/home-page-data-store/HomePageDataStore';
+import { EditorDataStore } from './data-store/editor-data-store/EditorDataStore';
 import HomePage from './pages/home-page/HomePage';
 import CreatePage from './pages/create-page/CreatePage';
 import RegisterPage from './pages/register-page/RegisterPage';
@@ -50,7 +51,13 @@ const App = () => (
                 />
                 <PrivateRoute
                     path="/create"
-                    render={() => <CreatePage />}
+                    render={() => (
+                        <HomePageDataStore>
+                            <EditorDataStore>
+                                <CreatePage />
+                            </EditorDataStore>
+                        </HomePageDataStore>
+                    )}
                 />
                 <PrivateRoute
                     path="/profile"

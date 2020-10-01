@@ -29,7 +29,7 @@ const CreatePasswordPage = () => {
         const oldPassword = params[1].split(/=(.+)/)[1];
         setEmail(urlEmail);
         setPassword(oldPassword);
-        console.log('=>', oldPassword);
+        console.log('=>', oldPassword); // eslint-disable-line
     }, []);
 
     const onNewPasswordInputChange = (e) => {

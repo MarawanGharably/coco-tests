@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import UserMenu from '../user-menu/UserMenu';
-const DROPDOWN_ICON_URL = 'https://cdn.obsessvr.com/dropdown-bar-icon.svg';
 
+const DROPDOWN_ICON_URL = 'https://cdn.obsessvr.com/dropdown-bar-icon.svg';
 
 const UserIcon = ({ imgUrl }) => {
     const [displayDropdown, setDisplayDropdown] = useState(false);

@@ -6,9 +6,6 @@ const handleResponse = (resolve, reject, response) => {
             resolve(response.json());
             break;
         }
-        case 403: {
-            // Need to redirect to login
-        }
         default: {
             response.json().then((err) => reject(err));
         }

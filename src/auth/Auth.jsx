@@ -14,14 +14,18 @@ const initialState = {
     isAuthenticated: elapsedDays > 0 && elapsedDays < 1, // 1 day login persistence
 };
 
+const tenYearsInPast = new Date();
+tenYearsInPast.setFullYear(tenYearsInPast.getFullYear() - 10);
+
 const AuthContext = createContext(initialState);
 const DispatchContext = createContext();
 
 export const AuthAction = Object.freeze({
     LOGGED_IN: 'LOGGED_IN',
+    LOGGED_OUT: 'LOGGED_OUT',
 });
 
-const { LOGGED_IN } = AuthAction;
+const { LOGGED_IN, LOGGED_OUT } = AuthAction;
 
 const authReducer = (_, action) => {
     const { type } = action;
@@ -33,6 +37,11 @@ const authReducer = (_, action) => {
             localStorage.setItem(LOCAL_STORAGE_LOGGED_IN_TIME_STAMP, (new Date()).toISOString());
             return ({
                 isAuthenticated: true,
+            });
+        case LOGGED_OUT:
+            localStorage.setItem(LOCAL_STORAGE_LOGGED_IN_TIME_STAMP, tenYearsInPast.toISOString());
+            return ({
+                isAuthenticated: false,
             });
         default:
             throw new TypeError(`${type} is not a valid action!`);

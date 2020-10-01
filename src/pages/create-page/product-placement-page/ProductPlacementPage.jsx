@@ -7,7 +7,7 @@ import SceneSideBarItem from '../../../components/right-side-bar/SceneSideBarIte
 import Loader from '../../../components/loader/Loader';
 import { URLS } from '../../../utils/urls';
 import { formURL } from '../../../utils/urlHelper';
-import SceneNavigator from '../../../components/scene-navigator/SceneNavigator';
+import HotspotEditor from '../../../three-js/three-editor/HotspotEditor';
 import { useHomePageDataStore } from '../../../data-store/home-page-data-store/HomePageDataStore';
 import { EditorDataStore, useEditorDataStore, EditorActionEnums } from '../../../data-store/editor-data-store/EditorDataStore';
 
@@ -87,8 +87,10 @@ const ProductPlacementPage = () => {
                     pageTitle="Product Placement"
                     pageSubTitle="Place products approximately and we will fix it during review"
                 >
-                    <PageRow width="85%">
-                        <SceneNavigator />
+                    <PageRow width="80%">
+                        <div id="three-editor-container" className="full-width">
+                            <HotspotEditor />
+                        </div>
                     </PageRow>
                 </Page>
                 <RightSideBar cols="1" rowHeight="20em" title="Scenes">

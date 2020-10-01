@@ -52,7 +52,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
     }
 
     loadCubeTexture = (url, LOD = 1) => {
-        const baseUrl = 'https://cdn.obsessvr.com/obsess-cms-beta/clients/Coach/5f04a065ec0821b7050996d6/scenes/5f04a065ec0821b7050996d5/images/cube_map';
+        // const baseUrl = 'https://cdn.obsessvr.com/obsess-cms-beta/clients/Coach/5f04a065ec0821b7050996d6/scenes/5f04a065ec0821b7050996d5/images/cube_map';
 
         // const loadOrder = [
         //     `${baseUrl}/1k_back.jpg`,
@@ -63,7 +63,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
         //     `${baseUrl}/1k_left.jpg`,
         // ];
 
-        const loadOrder = this.buildLODUrls(baseUrl, LOD);
+        const loadOrder = this.buildLODUrls(url, LOD);
 
         this.loader = this.setupTextureLoader();
 
@@ -111,7 +111,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
         Object.keys(loadObject).forEach((side) => {
             for (let i = iterations - 1; i >= 0; i -= 1) {
                 for (let j = 0; j < iterations; j += 1) {
-                    const imageName = `${baseUrl}/${LOD}k_${side}_${i}_${j}.jpg`;
+                    const imageName = `${baseUrl}${LOD}k_${side}_${i}_${j}.jpg`;
                     loadObject[side].push(imageName);
                 }
             }

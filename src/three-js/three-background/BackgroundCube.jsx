@@ -2,18 +2,22 @@ import { useEffect, useRef } from 'react';
 import { useThree } from '../three-editor/ThreeEditor';
 import ThreeBackgroundCube from './ThreeBackgroundCube';
 import { useCollisionManager, CollisionManagerActionEnums } from '../collision-manager/CollisionManager';
+import { useEditorDataStore } from '../../data-store/editor-data-store/EditorDataStore';
+import { formURL } from '../../utils/urlHelper';
 
 
 const BackgroundCube = () => {
     const [state] = useThree();
     const [, colliderDispatch] = useCollisionManager();
+    const [editorState] = useEditorDataStore();
+
+    const { currentSceneId, sceneData } = editorState;
 
     const cube = useRef();
 
     useEffect(() => {
         cube.current = new ThreeBackgroundCube();
 
-        cube.current.loadCubeTexture('test', 1);
         cube.current.resolveFaceMaterialIndexes(1);
 
         colliderDispatch({
@@ -28,6 +32,17 @@ const BackgroundCube = () => {
             cube.current.dispose();
         };
     }, []); // eslint-disable-line
+
+    useEffect(() => {
+        sceneData.filter((scene) => {
+            if (scene._id.$oid === currentSceneId) { // eslint-disable-line
+                const cubemapDir = formURL(scene.cube_map_dir);
+                cube.current.loadCubeTexture(cubemapDir, 1);
+                return scene;
+            }
+            return null;
+        });
+    }, [currentSceneId, sceneData]);
 
     return (
         null

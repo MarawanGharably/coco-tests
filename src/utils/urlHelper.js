@@ -35,7 +35,7 @@ export function formURL(urlObject) {
             //     url = OriginUrlPrefixDict[UrlOriginEnum.CDN] + getCurrentBucket() + '/' + path;
             //     break;
             case UrlOriginEnum.S3: case UrlOriginEnum.CDN:
-                url = `${OriginUrlPrefixDict[UrlOriginEnum.S3] + getCurrentBucket()}/${getCurrentBucket()}/${path}`;
+                url = `${OriginUrlPrefixDict[UrlOriginEnum.CDN]}${getCurrentBucket()}/${path}`;
                 break;
             case UrlOriginEnum.External:
                 url = path;

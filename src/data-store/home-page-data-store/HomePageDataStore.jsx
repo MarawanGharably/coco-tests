@@ -46,6 +46,7 @@ const homePageReducer = (state, action) => {
 
 const HomePageDataStore = ({ children }) => {
     const [state, dispatch] = useReducer(homePageReducer, initialState);
+
     return (
         <StateContext.Provider value={state}>
             <DispatchContext.Provider value={dispatch}>

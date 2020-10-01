@@ -25,6 +25,7 @@ const ProductPlacementPage = () => {
                 const response = await fetch(GET_ALL_SCENES_DATA(homePageDataStore.selectedStoreId), { //eslint-disable-line
                     method: 'GET',
                     credentials: 'include',
+                    headers: { 'ovr-str-id': homePageDataStore.selectedStoreId },
                 });
                 const statusCode = response.status;
                 if (statusCode === 200) {

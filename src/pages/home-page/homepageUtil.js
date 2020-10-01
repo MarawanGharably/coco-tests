@@ -9,6 +9,7 @@ export const getFirstSceneImageUrl = async (storeId) => {
         const response = await fetch(GET_ALL_SCENES_DATA(storeId), {
             method: 'GET',
             credentials: 'include',
+            headers: { 'ovr-str-id': storeId },
         });
         const statusCode = response.status;
         if (statusCode === 200) {

@@ -17,7 +17,6 @@ const ProductPlacementPage = () => {
     const [editorDataStore, editorDataStoreDispatch] = useEditorDataStore();
 
     useEffect(() => {
-        // eslint-disable-next-line
         const sessionStorageStoreId = sessionStorage.getItem(sessionStorageKey.STORE_ID);
         const storeId = homePageDataStore.selectedStoreId || sessionStorageStoreId;
 

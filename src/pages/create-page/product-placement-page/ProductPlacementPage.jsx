@@ -5,13 +5,11 @@ import PageRow from '../../../components/page-row/PageRow';
 import RightSideBar from '../../../components/right-side-bar/RightSideBar';
 import SceneSideBarItem from '../../../components/right-side-bar/SceneSideBarItem';
 import Loader from '../../../components/loader/Loader';
-import { URLS } from '../../../utils/urls';
+import { apiGetAllScenesData } from '../../../utils/apiUtils';
 import { formURL } from '../../../utils/urlHelper';
 import HotspotEditor from '../../../three-js/three-editor/HotspotEditor';
-import { useHomePageDataStore } from '../../../data-store/home-page-data-store/HomePageDataStore';
+import { useHomePageDataStore, sessionStorageKey } from '../../../data-store/home-page-data-store/HomePageDataStore';
 import { useEditorDataStore, EditorActionEnums } from '../../../data-store/editor-data-store/EditorDataStore';
-
-const { GET_ALL_SCENES_DATA } = URLS;
 
 const ProductPlacementPage = () => {
     const [loading, setLoading] = useState(true);
@@ -19,37 +17,24 @@ const ProductPlacementPage = () => {
     const [editorDataStore, editorDataStoreDispatch] = useEditorDataStore();
 
     useEffect(() => {
-        const getAllScenesData = async () => {
-            try {
-                setLoading(true);
-                const response = await fetch(GET_ALL_SCENES_DATA(homePageDataStore.selectedStoreId), { //eslint-disable-line
-                    method: 'GET',
-                    credentials: 'include',
-                    headers: { 'ovr-str-id': homePageDataStore.selectedStoreId },
-                });
-                const statusCode = response.status;
-                if (statusCode === 200) {
-                    const scenesDataResponse = await response.json();
-                    if (scenesDataResponse.length > 0) {
-                        editorDataStoreDispatch({
-                            type: EditorActionEnums.SET_SCENE_DATA,
-                            payload: { sceneData: [...scenesDataResponse] },
-                        });
-                        setLoading(false);
-                    }
-                } else if (statusCode === 401 || statusCode === 404) {
-                    console.log('there are no scenes in this store'); // eslint-disable-line
-                } else {
-                    throw new Error(response);
+        // eslint-disable-next-line
+        const sessionStorageStoreId = sessionStorage.getItem(sessionStorageKey.STORE_ID);
+        const storeId = homePageDataStore.selectedStoreId || sessionStorageStoreId;
+
+        apiGetAllScenesData(storeId)
+            .then((scenesDataResponse) => {
+                if (scenesDataResponse.length > 0) {
+                    editorDataStoreDispatch({
+                        type: EditorActionEnums.SET_SCENE_DATA,
+                        payload: { sceneData: [...scenesDataResponse] },
+                    });
                 }
                 setLoading(false);
-            } catch (error) {
-                throw new Error(error);
-            }
-        };
+            }).catch((err) => {
+                console.error(err);
+            });
+    }, [editorDataStoreDispatch, homePageDataStore.selectedStoreId]);
 
-        getAllScenesData();
-    }, []); //eslint-disable-line
 
     const sceneClickHandler = (sceneId) => {
         editorDataStoreDispatch({

@@ -1,5 +1,9 @@
 import React, { useContext, useReducer } from 'react';
 
+const sessionStorageKey = Object.freeze({
+    STORE_ID: 'STORE_ID',
+});
+
 const initialState = {
     storeData: null,
     storeThumbnails: [],
@@ -63,4 +67,6 @@ const useHomePageDataStore = () => {
     return [state, dispatch];
 };
 
-export { HomePageDataStore, useHomePageDataStore, HomePageActionEnums };
+export {
+    HomePageDataStore, useHomePageDataStore, HomePageActionEnums, sessionStorageKey,
+};

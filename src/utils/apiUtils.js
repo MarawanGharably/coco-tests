@@ -17,9 +17,15 @@ const handleResponse = (resolve, reject, response) => {
     }
 };
 
-const headers = {
+const headers = (storeId = null) => {
+    if (storeId) {
+        return {
+            'Content-Type': 'application/json',
+            'ovr-str-id': storeId,
+        };
+    }
     // need this for cookie to set
-    'Content-Type': 'application/json',
+    return { 'Content-Type': 'application/json' };
 };
 
 const requestOptions = {
@@ -29,7 +35,7 @@ const requestOptions = {
 const makePOSTRequest = (_url, payload) => new Promise((resolve, reject) => {
     fetch(_url, {
         method: 'POST',
-        headers,
+        headers: headers(),
         ...requestOptions,
         body: JSON.stringify(payload),
     })
@@ -41,10 +47,10 @@ const makePOSTRequest = (_url, payload) => new Promise((resolve, reject) => {
         });
 });
 
-const makeGETRequest = (_url) => new Promise((resolve, reject) => {
+const makeGETRequest = (_url, storeId = null) => new Promise((resolve, reject) => {
     fetch(_url, {
         method: 'GET',
-        headers,
+        headers: headers(storeId),
         ...requestOptions,
     }).then((response) => {
         handleResponse(resolve, reject, response);
@@ -55,7 +61,7 @@ const makeGETRequest = (_url) => new Promise((resolve, reject) => {
 const makePUTRequest = (_url, payload) => new Promise((resolve, reject) => {
     fetch(_url, {
         method: 'PUT',
-        headers,
+        headers: headers(),
         ...requestOptions,
         body: JSON.stringify(payload),
     })
@@ -70,7 +76,7 @@ const makePUTRequest = (_url, payload) => new Promise((resolve, reject) => {
 const makeDELETERequest = (_url) => new Promise((resolve, reject) => {
     fetch(_url, {
         method: 'DELETE',
-        headers,
+        headers: headers(),
         ...requestOptions,
     })
         .then((response) => {
@@ -97,6 +103,12 @@ export const apiGetProfile = () => makeGETRequest(URLS.PROFILE_URL);
 
 // HOTSPOT_APIs
 export const apiGetHotspotsByType = (type, sceneId) => makeGETRequest(`${URLS.CMS_HOTSPOT_URL}/${type}/${sceneId}`);
-export const apiCreateHotspotByType = (type, payload) => makePOSTRequest(`${URL.CMS_HOTSPOT_URL}/${type}`, payload);
-export const apiUpdateHotspotByType = (type, hotspotId, payload) => makePUTRequest(`${URL.CMS_HOTSPOT_URL}/${type}/${hotspotId}`, payload);
-export const apiDeleteHotspotByType = (type, hotspotId) => makeDELETERequest(`${URL.CMS_HOTSPOT_URL}/${type}/${hotspotId}`);
+export const apiCreateHotspotByType = (type, payload) => makePOSTRequest(`${URLS.CMS_HOTSPOT_URL}/${type}`, payload);
+export const apiUpdateHotspotByType = (type, hotspotId, payload) => makePUTRequest(`${URLS.CMS_HOTSPOT_URL}/${type}/${hotspotId}`, payload);
+export const apiDeleteHotspotByType = (type, hotspotId) => makeDELETERequest(`${URLS.CMS_HOTSPOT_URL}/${type}/${hotspotId}`);
+
+// HOMEPAGE APIs
+export const apiGetClientStores = () => makeGETRequest(URLS.GET_ALL_STORES_URL);
+
+// PRODCT PLACEMENT PAGE APIs
+export const apiGetAllScenesData = (storeId) => makeGETRequest(URLS.GET_ALL_SCENES_DATA(storeId), storeId); // eslint-disable-line

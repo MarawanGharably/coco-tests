@@ -5,73 +5,48 @@ import Page from '../../layouts/page-template/Page';
 import BodyWrapper from '../../layouts/body-wrapper/BodyWrapper';
 import Footer from '../../layouts/footer/Footer';
 import Loader from '../../components/loader/Loader';
-import { URLS } from '../../utils/urls';
+import { apiGetClientStores } from '../../utils/apiUtils';
 import HomePageStoreItem from './HomePageStoreItem';
-import { useHomePageDataStore, HomePageActionEnums } from '../../data-store/home-page-data-store/HomePageDataStore';
+import { useHomePageDataStore, HomePageActionEnums, sessionStorageKey } from '../../data-store/home-page-data-store/HomePageDataStore';
 import { getStoreThumbnails } from './homepageUtil';
 import './_home-page.scss';
-
-const { GET_ALL_STORES_URL } = URLS; // eslint-disable-line
-
-// eslint-disable
-const DUMMY_GET_STORES_DATA = [
-    { _id: { $oid: '5d5485c5f84ac4280547e78e' }, name: 'storeName1' },
-    { _id: { $oid: '5ee27fe5eb151a60be4c28ac' }, name: 'storeName2' },
-    { _id: { $oid: '5eebd7dfcc8a96c35c65d225' }, name: 'storeName3' },
-];
-// eslint-enable
 
 const HomePage = () => {
     const [loading, setLoading] = useState(true);
     const [state, dispatch] = useHomePageDataStore();
     const history = useHistory();
 
+    // always clear session store id on homepage
+    sessionStorage.removeItem(sessionStorageKey.STORE_ID);
+
     useEffect(() => {
-        const getAllStores = async () => {
-            try {
-                setLoading(true);
-                const response = DUMMY_GET_STORES_DATA;
-                // const response = await fetch(GET_ALL_STORES_URL, {
-                //     method: 'GET',
-                //     credentials: 'include',
-                // });
-                const statusCode = 200;
-                // const statusCode = response.status;
-                if (statusCode === 200) {
-                    const storeDataResponse = response;
-                    // const storeDataResponse = await response.json();
-                    if (storeDataResponse.length > 0) {
-                        // for each store, get the first scene thumbnail url
-                        getStoreThumbnails(storeDataResponse)
-                            .then((res) => dispatch({
-                                type: HomePageActionEnums.SET_STORE_THUMBNAILS,
-                                payload: { storeThumbnails: res },
-                            }));
+        apiGetClientStores()
+            .then((clientStoreDataResponse) => {
+                getStoreThumbnails(clientStoreDataResponse)
+                    .then((storeThumbnailsResponse) => {
+                        dispatch({
+                            type: HomePageActionEnums.SET_STORE_THUMBNAILS,
+                            payload: { storeThumbnails: storeThumbnailsResponse },
+                        });
                         dispatch({
                             type: HomePageActionEnums.SET_STORE_DATA,
-                            payload: { storeData: storeDataResponse },
+                            payload: { storeData: clientStoreDataResponse },
                         });
-                    }
-                    setLoading(false);
-                } else if (statusCode === 401 || statusCode === 404) {
-                    history.push('/login');
-                } else {
-                    throw new Error(response);
-                }
-                setLoading(false);
-            } catch (error) {
-                throw new Error(error);
-            }
-        };
-
-        getAllStores();
+                        setLoading(false);
+                    }).catch((err) => console.error(err));
+            }).catch((err) => console.error(err));
     }, [dispatch, history]);
+
+    const setSessionStorageStoreId = (storeId) => {
+        sessionStorage.setItem(sessionStorageKey.STORE_ID, storeId);
+    };
 
     const handleEditStore = (storeId) => {
         dispatch({
             type: HomePageActionEnums.SET_SELECTED_STORE_ID,
             payload: { selectedStoreId: storeId },
         });
+        setSessionStorageStoreId(storeId);
         history.push('/create');
     };
 

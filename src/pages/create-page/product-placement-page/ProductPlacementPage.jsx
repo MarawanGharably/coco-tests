@@ -25,7 +25,7 @@ const ProductPlacementPage = () => {
                 if (scenesDataResponse.length > 0) {
                     editorDataStoreDispatch({
                         type: EditorActionEnums.SET_SCENE_DATA,
-                        payload: { sceneData: [...scenesDataResponse] },
+                        payload: { sceneData: scenesDataResponse },
                     });
                 }
                 setLoading(false);

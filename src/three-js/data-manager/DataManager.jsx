@@ -57,7 +57,7 @@ const dataManagerReducer = (state, action) => {
                     hotspot_type: 'product',
                 },
             };
-            const response = apiCreateHotspotByType(hotspotType, postData);
+            apiCreateHotspotByType(hotspotType, postData);
             return ({
                 ...state,
                 roomObjectData: [...state.roomObjectData, postData],
@@ -75,7 +75,6 @@ const dataManagerReducer = (state, action) => {
 
 export const DataManager = ({ hotspotType, sceneId, children }) => {
     const [state, dispatch] = useReducer(dataManagerReducer, initialState);
-    console.log(state);
     // Whenever sceneId changes, clear old room object data and retrieve existing room objects
     useEffect(() => {
         const fetchData = async () => {

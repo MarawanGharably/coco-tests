@@ -107,7 +107,9 @@ export const ThreeEditor = ({ children }) => {
 
     const renderMarker = (colliderTransform, visualTransform, renderProps = {}) => {
         const componentToRender = (props) => <TaggingModal {...props} />; // eslint-disable-line
-        const marker = new ThreeProductMarker(componentToRender, renderProps, colliderTransform, visualTransform);
+        const marker = new ThreeProductMarker(
+            componentToRender, renderProps, colliderTransform, visualTransform,
+        );
         marker.addToScene(sceneRef.current);
         marker.setUIDispatcher(UIDispatch);
         marker.setColliderDispatcher(colliderDispatch);
@@ -210,7 +212,9 @@ export const ThreeEditor = ({ children }) => {
     useEffect(() => {
         if (dataState.roomObjectData) {
             dataState.roomObjectData.forEach((object) => {
-                const marker = renderMarker(object.collider_transform, object.transform, { productSKU: object.sku });
+                const marker = renderMarker(
+                    object.collider_transform, object.transform, { productSKU: object.sku },
+                );
                 marker.setTransform(object.collider_transform, object.transform);
 
                 colliderDispatch({

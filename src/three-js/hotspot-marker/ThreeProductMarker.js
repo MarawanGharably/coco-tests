@@ -48,7 +48,9 @@ export default class ThreeProductMarker extends InteractionObject {
         this.sceneObject.setTransform(colliderMatrix);
 
         this.visualObject.matrix = visualMatrix;
-        this.visualObject.matrix.decompose(this.visualObject.position, this.visualObject.quaternion, this.visualObject.scale);
+        this.visualObject.matrix.decompose(
+            this.visualObject.position, this.visualObject.quaternion, this.visualObject.scale,
+        );
     }
 
     setPosition = (x, y, z) => {

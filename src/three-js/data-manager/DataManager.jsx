@@ -4,10 +4,11 @@ import React, {
 
 import PropTypes from 'prop-types';
 
-import { apiGetHotspotsByType } from '../../utils/apiUtils';
+import { apiGetHotspotsByType, apiCreateHotspotByType } from '../../utils/apiUtils';
 
 
 const initialState = {
+    loading: false,
     roomObjectData: [],
 };
 
@@ -20,24 +21,52 @@ export const DATA_MANAGER_ENUMS = {
     UPDATE_ROOM_OBJECT_DATA: 'UPDATE_ROOM_OBJECT_DATA',
     DELETE_ROOM_OBJECT_DATA: 'DELETE_ROOM_OBJECT_DATA',
     CLEAR_ROOM_OBJECT_DATA: 'CLEAR_ROOM_OBJECT_DATA',
+    ASSIGN_UUID: 'ASSIGN_UUID',
 };
 
 const {
-    GET_ROOM_OBJECT_DATA, POST_ROOM_OBJECT_DATA, UPDATE_ROOM_OBJECT_DATA, DELETE_ROOM_OBJECT_DATA, CLEAR_ROOM_OBJECT_DATA, //eslint-disable-line
+    SET_ROOM_OBJECT_DATA, POST_ROOM_OBJECT_DATA, UPDATE_ROOM_OBJECT_DATA, DELETE_ROOM_OBJECT_DATA, CLEAR_ROOM_OBJECT_DATA, ASSIGN_UUID, //eslint-disable-line
 } = DATA_MANAGER_ENUMS;
 
-const dataManagerReducer = async (state, action) => {
+const dataManagerReducer = (state, action) => {
     const { type, payload } = action;
     switch (type) {
-        case GET_ROOM_OBJECT_DATA: {
-            const { hotspotType, sceneId } = payload;
-            const roomObjectData = await apiGetHotspotsByType(hotspotType, sceneId);
+        case SET_ROOM_OBJECT_DATA: {
+            const { roomObjectData } = payload;
 
+            if (typeof roomObjectData === 'string') {
+                return state;
+            }
             return ({
                 ...state,
                 roomObjectData,
             });
         }
+        case POST_ROOM_OBJECT_DATA: {
+            const {
+                hotspotType, sceneId, transform, colliderTransform, sku,
+            } = payload;
+
+            const postData = {
+                type: hotspotType,
+                scene_id: sceneId,
+                collider_transform: colliderTransform.elements,
+                transform: transform.elements,
+                props: {
+                    product_sku: sku,
+                    hotspot_type: 'product',
+                },
+            };
+            const response = apiCreateHotspotByType(hotspotType, postData);
+            return ({
+                ...state,
+                roomObjectData: [...state.roomObjectData, postData],
+            });
+        }
+        case ASSIGN_UUID:
+            return ({
+                state,
+            });
         default:
             console.error(`Action of type ${type} not supported!`);
             return state;
@@ -46,14 +75,18 @@ const dataManagerReducer = async (state, action) => {
 
 export const DataManager = ({ hotspotType, sceneId, children }) => {
     const [state, dispatch] = useReducer(dataManagerReducer, initialState);
-
+    console.log(state);
     // Whenever sceneId changes, clear old room object data and retrieve existing room objects
     useEffect(() => {
-        dispatch({
-            type: GET_ROOM_OBJECT_DATA,
-            payload: { hotspotType, sceneId },
-        });
-    }, [hotspotType, sceneId]);
+        const fetchData = async () => {
+            const roomObjectData = await apiGetHotspotsByType(hotspotType, sceneId);
+            dispatch({
+                type: SET_ROOM_OBJECT_DATA,
+                payload: { roomObjectData: roomObjectData }, //eslint-disable-line
+            });
+        };
+        fetchData();
+    }, [sceneId]); // eslint-disable-line
 
     return (
         <dataState.Provider value={state}>

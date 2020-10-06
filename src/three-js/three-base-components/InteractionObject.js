@@ -3,13 +3,12 @@ import * as THREE from 'three';
 import ThreeSceneObject from './ThreeSceneObject';
 import ThreeSceneObjectComponent from './ThreeSceneObjectComponent';
 import BoxCollider from './BoxCollider';
-import { CollisionManagerActionEnums } from '../collision-manager/CollisionManager';
 
 export default class InteractionObject extends ThreeSceneObject {
     constructor() {
         super();
 
-        this.collider = new BoxCollider(1, 1, 1, this.onHover, this.onUnhover, this.onClick);
+        this.sceneObject = new BoxCollider(1, 1, 1, this.onHover, this.onUnhover, this.onClick);
         this.UIDispatcher = null;
     }
 
@@ -99,7 +98,7 @@ export default class InteractionObject extends ThreeSceneObject {
     setColliderTransform = (colliderTransformArray) => {
         const matrix4x4 = new THREE.Matrix4();
         matrix4x4.fromArray(colliderTransformArray);
-        this.collider.setTransform(matrix4x4);
+        this.sceneObject.setTransform(matrix4x4);
     }
 
     /**
@@ -158,14 +157,5 @@ export default class InteractionObject extends ThreeSceneObject {
             return null;
         }
         return this.colliderDispatcher;
-    }
-
-    removeFromScene() {
-        const colliderDispatch = this.getColliderDispatcher();
-
-        colliderDispatch({
-            type: CollisionManagerActionEnums.REMOVE_COLLIDERS,
-            payload: this.collider.uuid,
-        });
     }
 }

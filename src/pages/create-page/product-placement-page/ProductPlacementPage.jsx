@@ -29,10 +29,8 @@ const ProductPlacementPage = () => {
                     });
                 }
                 setLoading(false);
-            }).catch((err) => {
-                console.error(err);
             });
-    }, [editorDataStoreDispatch, homePageDataStore.selectedStoreId]);
+    }, []); //eslint-disable-line
 
 
     const sceneClickHandler = (sceneId) => {

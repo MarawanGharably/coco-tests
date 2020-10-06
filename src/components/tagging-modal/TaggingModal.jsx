@@ -7,6 +7,10 @@ import SubmitButton from '../submit-button/SubmitButton';
 import TextInput from '../text-input/TextInput';
 import FancyButton from '../fancy-button/FancyButton';
 import { useUIManager } from '../../three-js/ui-manager/UIManager';
+import { useDataManager, DATA_MANAGER_ENUMS } from '../../three-js/data-manager/DataManager';
+import { useEditorDataStore } from '../../data-store/editor-data-store/EditorDataStore';
+
+const { POST_ROOM_OBJECT_DATA } = DATA_MANAGER_ENUMS;
 
 const taggingButtonStyle = css`
 width: 10em;
@@ -25,10 +29,14 @@ color: black;
 `;
 
 const TaggingModal = ({
-    onClose, updateState, uuid, dispose,
+    productSKU = '', onClose, updateState, uuid, dispose, getTransforms,
 }) => {
-    const [SKU, setSKU] = useState('');
+    const [SKU, setSKU] = useState(productSKU);
     const [UIState] = useUIManager();
+    const [, dataDispatch] = useDataManager();
+    const [editorState] = useEditorDataStore();
+
+    const { currentSceneId } = editorState;
 
     useEffect(() => {
         const currentData = UIState.stateManager.get(uuid);
@@ -43,6 +51,18 @@ const TaggingModal = ({
 
     const handleSave = () => {
         updateState({ sku: SKU });
+        const transforms = getTransforms();
+        const { colliderTransform, visualTransform } = transforms;
+        dataDispatch({
+            type: POST_ROOM_OBJECT_DATA,
+            payload: {
+                colliderTransform,
+                hotspotType: 'product',
+                transform: visualTransform,
+                sceneId: currentSceneId,
+                sku: SKU,
+            },
+        });
         onClose();
     };
 
@@ -80,6 +100,7 @@ TaggingModal.propTypes = {
     onClose: PropTypes.func.isRequired,
     dispose: PropTypes.func.isRequired,
     uuid: PropTypes.string.isRequired,
+    getTransforms: PropTypes.func.isRequired,
 };
 
 export default TaggingModal;

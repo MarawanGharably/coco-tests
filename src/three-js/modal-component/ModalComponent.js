@@ -16,6 +16,7 @@ export default class ModalComponent extends ThreeSceneObjectComponent {
         this.renderProps.updateState = this.updateState;
         this.renderProps.uuid = this.uuid;
         this.renderProps.dispose = disposeFunc;
+        this.renderProps.getTransforms = this.getTransforms;
     }
 
     onClick() {
@@ -61,6 +62,13 @@ export default class ModalComponent extends ThreeSceneObjectComponent {
                 uiState,
             },
         });
+    }
+
+    // Retrieves Matrix transforms of visual and collider components
+    getTransforms = () => {
+        const colliderTransform = this.owner.sceneObject.matrix;
+        const visualTransform = this.owner.visualObject.matrix;
+        return { colliderTransform, visualTransform };
     }
 
     dispose() {

@@ -38,13 +38,13 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 
     setupTextureLoader = () => {
         const loadingManager = new THREE.LoadingManager();
-        loadingManager.onStart = (url, itemsLoaded, itemsTotal) => {
-            console.log(`Started loading file: ${url}.\nLoaded ${itemsLoaded} of ${itemsTotal} files.`); // eslint-disable-line
-        };
+        // loadingManager.onStart = (url, itemsLoaded, itemsTotal) => {
+        //     console.log(`Started loading file: ${url}.\nLoaded ${itemsLoaded} of ${itemsTotal} files.`); // eslint-disable-line
+        // };
 
-        loadingManager.onProgress = (url, itemsLoaded, itemsTotal) => {
-            console.log(`Loading file: ${url}.\nLoaded ${itemsLoaded} of ${itemsTotal} files.`); // eslint-disable-line
-        };
+        // loadingManager.onProgress = (url, itemsLoaded, itemsTotal) => {
+        //     console.log(`Loading file: ${url}.\nLoaded ${itemsLoaded} of ${itemsTotal} files.`); // eslint-disable-line
+        // };
 
         const loader = new THREE.TextureLoader(loadingManager);
 

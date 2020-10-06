@@ -22,7 +22,6 @@ const HomePage = () => {
     useEffect(() => {
         apiGetClientStores()
             .then((clientStoreDataResponse) => {
-                console.log('test', clientStoreDataResponse);
                 getStoreThumbnails(clientStoreDataResponse)
                     .then((storeThumbnailsResponse) => {
                         dispatch({

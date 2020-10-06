@@ -18,6 +18,7 @@ export default class ThreeSceneObject {
 
     removeFromScene() {
         this.scene.remove(this.sceneObject);
+
         this.scene = null;
     }
 
@@ -44,6 +45,7 @@ export default class ThreeSceneObject {
             });
             this.components = [];
             this.removeFromScene();
+            this.removeFromManager();
         }
     }
 }

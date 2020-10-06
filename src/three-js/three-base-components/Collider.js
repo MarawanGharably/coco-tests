@@ -15,7 +15,7 @@ export default class Collider extends THREE.Mesh {
         this.dispose = this.dispose.bind(this);
 
         // make the material invisible so we don't see the collider
-        this.material.visible = false;
+        this.material.visible = true;
 
         this.onHover = null;
         this.onUnhover = null;

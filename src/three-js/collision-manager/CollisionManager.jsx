@@ -3,6 +3,7 @@ import React, { createContext, useContext, useReducer } from 'react';
 
 const initialState = {
     colliders: [],
+    markers: [],
 };
 
 const CollisionState = createContext(initialState);
@@ -20,14 +21,16 @@ const { SET_COLLIDERS, REMOVE_COLLIDERS, CLEAR_COLLIDERS } = CollisionManagerAct
 const CollisionManagerReducer = (state, action) => {
     const { type, payload } = action;
     switch (type) {
-        case SET_COLLIDERS:
+        case SET_COLLIDERS: {
             return (
                 {
                     ...state,
-                    colliders: state.colliders.length !== 0
+                    colliders: (state.colliders.length !== 0
                         ? [...state.colliders, payload]
-                        : [payload],
+                        : [payload]),
+
                 });
+        }
         case REMOVE_COLLIDERS:
             return (
                 {

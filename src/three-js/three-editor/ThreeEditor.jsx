@@ -9,6 +9,8 @@ import { useCollisionManager, CollisionManagerActionEnums } from '../collision-m
 import ThreeProductMarker from '../hotspot-marker/ThreeProductMarker';
 import { useUIManager } from '../ui-manager/UIManager';
 import TaggingModal from '../../components/tagging-modal/TaggingModal';
+import { useEditorDataStore } from '../../data-store/editor-data-store/EditorDataStore';
+import { useDataManager } from '../data-manager/DataManager';
 
 const initialState = {
     scene: null,
@@ -59,11 +61,13 @@ const ThreeEditorReducer = (state, action) => {
 export const ThreeEditor = ({ children }) => {
     const [threeReady, setThreeReady] = useState(false);
     const [state, dispatch] = useReducer(ThreeEditorReducer, initialState);
-
-    const { updateList } = state;
-
     const [colliderState, colliderDispatch] = useCollisionManager();
     const [, UIDispatch] = useUIManager();
+    const [dataState] = useDataManager();
+    const [editorState] = useEditorDataStore();
+    const { currentSceneId } = editorState;
+    const { updateList } = state;
+
     // useRef used to prevent ThreeEditor from losing variable references.
     const canvasContainerRef = useRef();
     const rendererRef = useRef(new THREE.WebGLRenderer());
@@ -101,6 +105,17 @@ export const ThreeEditor = ({ children }) => {
         });
     };
 
+    const renderMarker = (colliderTransform, visualTransform, renderProps = {}) => {
+        const componentToRender = (props) => <TaggingModal {...props} />; // eslint-disable-line
+        const marker = new ThreeProductMarker(componentToRender, renderProps, colliderTransform, visualTransform);
+        marker.addToScene(sceneRef.current);
+        marker.setUIDispatcher(UIDispatch);
+        marker.setColliderDispatcher(colliderDispatch);
+        marker.sceneObject.name = 'marker';
+
+        return marker;
+    };
+
     // Possible move this down a layer in the future to make mouse down events more extensible
     const onMouseDown = (ev) => {
         if (ev.button !== 2 || ev.target.tagName !== 'CANVAS') {
@@ -123,16 +138,11 @@ export const ThreeEditor = ({ children }) => {
             return;
         }
 
-        const componentToRender = (props) => <TaggingModal {...props} />; // eslint-disable-line
-        const marker = new ThreeProductMarker(componentToRender, {});
-        marker.addToScene(sceneRef.current);
-        marker.setUIDispatcher(UIDispatch);
-        marker.setColliderDispatcher(colliderDispatch);
-        marker.collider.name = 'marker';
+        const marker = renderMarker();
 
         colliderDispatch({
             type: CollisionManagerActionEnums.SET_COLLIDERS,
-            payload: marker.collider,
+            payload: marker.sceneObject,
         });
         marker.setPosition(point.x, point.y, point.z);
 
@@ -195,7 +205,21 @@ export const ThreeEditor = ({ children }) => {
 
     useEffect(() => {
         colliderRef.current = colliderState.colliders;
-    });
+    }, [colliderState]);
+
+    useEffect(() => {
+        if (dataState.roomObjectData) {
+            dataState.roomObjectData.forEach((object) => {
+                const marker = renderMarker(object.collider_transform, object.transform, { productSKU: object.sku });
+                marker.setTransform(object.collider_transform, object.transform);
+
+                colliderDispatch({
+                    type: CollisionManagerActionEnums.SET_COLLIDERS,
+                    payload: marker.sceneObject,
+                });
+            });
+        }
+    }, [currentSceneId, dataState]); // eslint-disable-line
 
     return (
         <div

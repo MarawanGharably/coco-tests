@@ -101,6 +101,7 @@ TaggingModal.propTypes = {
     dispose: PropTypes.func.isRequired,
     uuid: PropTypes.string.isRequired,
     getTransforms: PropTypes.func.isRequired,
+    productSKU: PropTypes.string.isRequired,
 };
 
 export default TaggingModal;

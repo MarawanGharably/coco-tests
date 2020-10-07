@@ -19,5 +19,5 @@ export const routesInOrder = [
     // '/create/product-data',
     '/create/product-placement',
     // '/create/content-interactions',
-    '/homepage',
+    '/',
 ];

@@ -15,7 +15,7 @@ import ProductPlacementPage from './product-placement-page/ProductPlacementPage'
 // import DesignStylePage from './store-design-page/DesignStylePage';
 // import DesignMaterialsPage from './store-design-page/DesignMaterialsPage';
 // import ContentInteractionPage from './content-interaction-page/ContentInteractionPage';
-import SubmitPage from '../submit-page/SubmitPage';
+// import SubmitPage from '../submit-page/SubmitPage';
 import FooterNavContextComponent from './FooterNavContextComponent';
 
 const PlaceHolderPage = ({ name }) => (
@@ -31,7 +31,7 @@ const CreatePage = () => {
     // const productsPath = `${pathPrefix}product-data`;
     const placementPath = `${pathPrefix}product-placement`;
     // const interactionPath = `${pathPrefix}content-interactions`;
-    const submitPath = `${pathPrefix}submit`;
+    // const submitPath = `${pathPrefix}submit`;
 
     return (
         <>
@@ -79,10 +79,10 @@ const CreatePage = () => {
                             name="CONTENT INTERACTIONS"
                             pathName={interactionPath}
                         /> */}
-                        <NavBarItem
+                        {/* <NavBarItem
                             name="REVIEW & SUBMIT"
                             pathName={submitPath}
-                        />
+                        /> */}
                     </NavBar>
                     <Switch>
                         <Route exact path="/create">
@@ -123,10 +123,10 @@ const CreatePage = () => {
                             path={interactionPath}
                             render={() => <ContentInteractionPage />}
                         /> */}
-                        <Route
+                        {/* <Route
                             path={submitPath}
                             render={() => <SubmitPage />}
-                        />
+                        /> */}
                     </Switch>
                 </div>
             </BodyWrapper>

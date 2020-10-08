@@ -44,7 +44,7 @@ const dataManagerReducer = (state, action) => {
         }
         case POST_ROOM_OBJECT_DATA: {
             const {
-                hotspotType, sceneId, transform, colliderTransform, sku,
+                hotspotType, sceneId, transform, colliderTransform, sku, storeId,
             } = payload;
 
             const postData = {
@@ -57,7 +57,7 @@ const dataManagerReducer = (state, action) => {
                     hotspot_type: 'product',
                 },
             };
-            apiCreateHotspotByType(hotspotType, postData);
+            apiCreateHotspotByType(hotspotType, storeId, postData);
             return ({
                 ...state,
                 roomObjectData: [...state.roomObjectData, postData],
@@ -73,12 +73,15 @@ const dataManagerReducer = (state, action) => {
     }
 };
 
-export const DataManager = ({ hotspotType, sceneId, children }) => {
+export const DataManager = ({
+    hotspotType, sceneId, storeId, children,
+}) => {
     const [state, dispatch] = useReducer(dataManagerReducer, initialState);
+
     // Whenever sceneId changes, clear old room object data and retrieve existing room objects
     useEffect(() => {
         const fetchData = async () => {
-            const roomObjectData = await apiGetHotspotsByType(hotspotType, sceneId);
+            const roomObjectData = await apiGetHotspotsByType(hotspotType, storeId, sceneId);
             dispatch({
                 type: SET_ROOM_OBJECT_DATA,
                 payload: { roomObjectData: roomObjectData }, //eslint-disable-line
@@ -105,4 +108,5 @@ export const useDataManager = () => {
 DataManager.propTypes = {
     hotspotType: PropTypes.string.isRequired,
     sceneId: PropTypes.string.isRequired,
+    storeId: PropTypes.string.isRequired,
 };

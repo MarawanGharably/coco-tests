@@ -12,6 +12,8 @@ import TaggingModal from '../../components/tagging-modal/TaggingModal';
 import { useEditorDataStore } from '../../data-store/editor-data-store/EditorDataStore';
 import { useDataManager } from '../data-manager/DataManager';
 
+const DESKTOP_THRESHOLD = 0.005;
+
 const initialState = {
     scene: null,
     updateList: [],
@@ -60,7 +62,9 @@ const ThreeEditorReducer = (state, action) => {
 
 export const ThreeEditor = ({ children }) => {
     const [threeReady, setThreeReady] = useState(false);
+
     const [state, dispatch] = useReducer(ThreeEditorReducer, initialState);
+
     const [colliderState, colliderDispatch] = useCollisionManager();
     const [, UIDispatch] = useUIManager();
     const [dataState] = useDataManager();
@@ -78,8 +82,10 @@ export const ThreeEditor = ({ children }) => {
     const updateRef = useRef(updateList);
 
     const raycasterRef = useRef(new THREE.Raycaster());
-    const mouseRef = useRef(new THREE.Vector2());
     const colliderRef = useRef(colliderState.colliders);
+
+    const mouseRef = useRef(new THREE.Vector2());
+    const mouseStart = useRef(new THREE.Vector2());
 
     const renderer = rendererRef.current;
     const scene = sceneRef.current;
@@ -118,18 +124,36 @@ export const ThreeEditor = ({ children }) => {
         return marker;
     };
 
-    // Possible move this down a layer in the future to make mouse down events more extensible
-    const onMouseDown = (ev) => {
-        if (ev.button !== 2 || ev.target.tagName !== 'CANVAS') {
-            return;
-        }
-
+    const getMousePosition = (refToUpdate, ev) => {
         const {
             top, left, width, height,
         } = rendererRef.current.domElement.getBoundingClientRect();
 
-        mouseRef.current.x = -1 + 2 * (ev.clientX - left) / width; // eslint-disable-line
-        mouseRef.current.y = 1 - 2 * (ev.clientY - top) / height; // eslint-disable-line
+        refToUpdate.current.x = -1 + 2 * (ev.clientX - left) / width; // eslint-disable-line
+        refToUpdate.current.y = 1 - 2 * (ev.clientY - top) / height; // eslint-disable-line
+    };
+
+    const onMouseDown = (ev) => {
+        if (ev.button !== 0 || ev.target.tagName !== 'CANVAS') {
+            return;
+        }
+
+        getMousePosition(mouseStart, ev);
+    };
+
+    // Possible move this down a layer in the future to make mouse down events more extensible
+    const onMouseUp = (ev) => {
+        if (ev.button !== 0 || ev.target.tagName !== 'CANVAS') {
+            return;
+        }
+
+        getMousePosition(mouseRef, ev);
+
+        const dragDistance = mouseRef.current.distanceTo(mouseStart.current);
+
+        if (dragDistance > DESKTOP_THRESHOLD) {
+            return;
+        }
 
         raycasterRef.current.setFromCamera(mouseRef.current, cameraRef.current);
         const intersects = raycasterRef.current.intersectObjects(colliderRef.current);
@@ -184,6 +208,7 @@ export const ThreeEditor = ({ children }) => {
 
         window.addEventListener('resize', windowResizeHandler);
         window.addEventListener('mousedown', onMouseDown);
+        window.addEventListener('mouseup', onMouseUp);
         window.addEventListener('contextmenu', preventContextMenu);
 
         scene.add(cameraRef.current);
@@ -193,6 +218,7 @@ export const ThreeEditor = ({ children }) => {
         return () => {
             window.removeEventListener('resize', windowResizeHandler);
             window.removeEventListener('mousedown', onMouseDown);
+            window.removeEventListener('mouseup', onMouseUp);
 
             controls.dispose();
             scene.dispose();

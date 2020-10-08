@@ -6,15 +6,18 @@ import ColliderSphere from '../three-background/ColliderSphere';
 import { UIManager } from '../ui-manager/UIManager';
 import { DataManager } from '../data-manager/DataManager';
 import { useEditorDataStore } from '../../data-store/editor-data-store/EditorDataStore';
+import { useHomePageDataStore } from '../../data-store/home-page-data-store/HomePageDataStore';
 
 
 const HotspotEditor = () => {
     const [editorState] = useEditorDataStore();
+    const [storeState] = useHomePageDataStore();
 
     const { currentSceneId } = editorState;
+    const { selectedStoreId } = storeState;
 
     return (
-        <DataManager hotspotType="product" sceneId={currentSceneId}>
+        <DataManager hotspotType="product" sceneId={currentSceneId} storeId={selectedStoreId}>
             <CollisionManager>
                 <UIManager>
                     <ThreeEditor>

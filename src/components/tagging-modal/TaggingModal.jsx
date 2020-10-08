@@ -9,6 +9,7 @@ import FancyButton from '../fancy-button/FancyButton';
 import { useUIManager } from '../../three-js/ui-manager/UIManager';
 import { useDataManager, DATA_MANAGER_ENUMS } from '../../three-js/data-manager/DataManager';
 import { useEditorDataStore } from '../../data-store/editor-data-store/EditorDataStore';
+import { useHomePageDataStore } from '../../data-store/home-page-data-store/HomePageDataStore';
 
 const { POST_ROOM_OBJECT_DATA } = DATA_MANAGER_ENUMS;
 
@@ -35,7 +36,9 @@ const TaggingModal = ({
     const [UIState] = useUIManager();
     const [, dataDispatch] = useDataManager();
     const [editorState] = useEditorDataStore();
+    const [storeState] = useHomePageDataStore();
 
+    const { selectedStoreId } = storeState;
     const { currentSceneId } = editorState;
 
     useEffect(() => {
@@ -61,6 +64,7 @@ const TaggingModal = ({
                 transform: visualTransform,
                 sceneId: currentSceneId,
                 sku: SKU,
+                storeId: selectedStoreId,
             },
         });
         onClose();

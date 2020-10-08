@@ -1,4 +1,5 @@
-import React, { useContext, useReducer } from 'react';
+import React, { useContext, useReducer, useEffect } from 'react';
+
 
 const sessionStorageKey = Object.freeze({
     STORE_ID: 'STORE_ID',
@@ -50,6 +51,16 @@ const homePageReducer = (state, action) => {
 
 const HomePageDataStore = ({ children }) => {
     const [state, dispatch] = useReducer(homePageReducer, initialState);
+
+    useEffect(() => {
+        const sessionStorageStoreId = sessionStorage.getItem(sessionStorageKey.STORE_ID);
+        dispatch({
+            type: SET_SELECTED_STORE_ID,
+            payload: {
+                selectedStoreId: sessionStorageStoreId || '',
+            },
+        });
+    }, []);
 
     return (
         <StateContext.Provider value={state}>

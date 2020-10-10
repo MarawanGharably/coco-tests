@@ -57,8 +57,12 @@ const PoliciesPage = () => {
 
     return (
         <div className="flex flex-column flex-center full-width">
-            <h2>Select Store</h2>
+
+            <h2 className="title">Select Store</h2>
+
             <Select
+                className="select"
+                placeholder="Select a store"
                 options={stores}
                 onChange={(value) => onStoreSelected(value[0])}
             />
@@ -69,7 +73,7 @@ const PoliciesPage = () => {
                 onClick={() => onClickCreatePolicy()}
             />
 
-            {error.length >= 1 && <p>{error}</p>}
+            {error.length >= 1 && <p className="error">{error}</p>}
 
         </div>
     );

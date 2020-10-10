@@ -57,7 +57,7 @@ const CreatePasswordPage = () => {
             const statusCode = response.status;
             if (statusCode === 200) {
                 dispatch({ type: AuthAction.LOGGED_IN });
-                history.push('/profile');
+                history.push('/');
             } else if (statusCode === 400) {
                 console.error('Bad request'); // eslint-disable-line
                 setErrorMessage('Invalid password, please input a valid password.');

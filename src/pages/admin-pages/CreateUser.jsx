@@ -71,7 +71,7 @@ const CreateUser = () => {
 
     return (
         <div className="flex flex-column flex-center full-width">
-            <h2>Create User</h2>
+            <h2 className="title">Create User</h2>
 
             <div css={css`margin: 3em 0;`}>
                 <Input
@@ -90,7 +90,9 @@ const CreateUser = () => {
             </div>
 
             <Select
+                className="select"
                 multi
+                placeholder="Select store policies"
                 options={policies}
                 values={[]}
                 onChange={(value) => onPoliciesSelected(value)}
@@ -102,7 +104,7 @@ const CreateUser = () => {
                 onClick={onRegisterClicked}
             />
 
-            {error.length >= 1 && <p>{error}</p>}
+            {error.length >= 1 && <p className="error">{error}</p>}
 
         </div>
 

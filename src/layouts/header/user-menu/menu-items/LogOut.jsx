@@ -1,18 +1,26 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+
 import { AuthAction, useAuth } from '../../../../auth/Auth';
 import { apiUserAuthLogout } from '../../../../utils/apiUtils';
 
 
 const LogOutButton = (props) => {
     const [, authDispatch] = useAuth();
+    const history = useHistory();
+
     // eslint-disable-next-line react/prop-types
     const { setDisplayDropdown } = props;
+    const postLogout = () => {
+        setDisplayDropdown(false);
+        authDispatch({ type: AuthAction.LOGGED_OUT });
+        history.push('/');
+    };
+
     const logout = () => {
         apiUserAuthLogout()
-            .then(() => {
-                setDisplayDropdown(false);
-                authDispatch({ type: AuthAction.LOGGED_OUT });
-            });
+            .then(() => postLogout())
+            .catch(() => postLogout());
     };
 
     return (

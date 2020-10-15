@@ -41,7 +41,7 @@ const CollisionManagerReducer = (state, action) => {
             return (
                 {
                     ...state,
-                    updateList: [],
+                    colliders: [],
                 });
         default:
             console.error(`Action of type ${type} not supported!`);

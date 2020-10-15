@@ -4,7 +4,7 @@ import React, {
 
 import PropTypes from 'prop-types';
 
-import { apiGetHotspotsByType, apiCreateHotspotByType } from '../../utils/apiUtils';
+import { apiGetHotspotsByType } from '../../utils/apiUtils';
 
 
 const initialState = {
@@ -35,7 +35,10 @@ const dataManagerReducer = (state, action) => {
             const { roomObjectData } = payload;
 
             if (typeof roomObjectData === 'string') {
-                return state;
+                return ({
+                    ...state,
+                    roomObjectData: [],
+                });
             }
             return ({
                 ...state,
@@ -43,24 +46,10 @@ const dataManagerReducer = (state, action) => {
             });
         }
         case POST_ROOM_OBJECT_DATA: {
-            const {
-                hotspotType, sceneId, transform, colliderTransform, sku, storeId,
-            } = payload;
-
-            const postData = {
-                type: hotspotType,
-                scene_id: sceneId,
-                collider_transform: colliderTransform.elements,
-                transform: transform.elements,
-                props: {
-                    product_sku: sku,
-                    hotspot_type: 'product',
-                },
-            };
-            apiCreateHotspotByType(hotspotType, storeId, postData);
+            const { roomObject } = payload;
             return ({
                 ...state,
-                roomObjectData: [...state.roomObjectData, postData],
+                roomObjectData: [...state.roomObjectData, roomObject],
             });
         }
         case ASSIGN_UUID:
@@ -77,7 +66,6 @@ export const DataManager = ({
     hotspotType, sceneId, storeId, children,
 }) => {
     const [state, dispatch] = useReducer(dataManagerReducer, initialState);
-
     // Whenever sceneId changes, clear old room object data and retrieve existing room objects
     useEffect(() => {
         const fetchData = async () => {

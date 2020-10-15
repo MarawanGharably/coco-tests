@@ -51,6 +51,10 @@ export default class Collider extends THREE.Mesh {
         this.material.visible = isVisible;
     }
 
+    setOwner(owner) {
+        this.owner = owner;
+    }
+
     /** Clean up the collider, call this before deleting the collider. */
     dispose() {
         this.geometry.dispose();

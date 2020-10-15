@@ -10,6 +10,7 @@ export default class ModalComponent extends ThreeSceneObjectComponent {
         this.updateState = this.updateState.bind(this);
 
         this.uuid = uuidv1();
+
         this.componentToRender = componentToRender;
         this.renderProps = renderProps;
         this.renderProps.onClose = this.onModalClose;
@@ -72,6 +73,8 @@ export default class ModalComponent extends ThreeSceneObjectComponent {
     }
 
     dispose() {
-        this.onModalClose();
+        if (this.owner.scene) {
+            this.onModalClose();
+        }
     }
 }

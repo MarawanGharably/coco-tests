@@ -43,11 +43,18 @@ const UIManagerReducer = (state, action) => {
         }
         case REMOVE_UI: {
             const { uuid } = payload;
+
+            if (!dynamicUIs.has(uuid)) {
+                return state;
+            }
+
             const deleted = dynamicUIs.delete(uuid);
 
             if (!deleted) {
                 console.error(`Delete dynamic ui with uuid ${uuid} failed because it doesn't exist or deletion failure`); // eslint-disable-line no-console
+                return state;
             }
+
             return (
                 {
                     ...state,

@@ -6,6 +6,10 @@ const handleResponse = (resolve, reject, response) => {
             resolve(response.json());
             break;
         }
+        case 201: {
+            resolve(response.json());
+            break;
+        }
         case 403: {
             // Need to redirect to login
             break;
@@ -64,13 +68,11 @@ const makePUTRequest = (_url, payload, storeId = null) => new Promise((resolve, 
         headers: headers(storeId),
         ...requestOptions,
         body: JSON.stringify(payload),
-    })
-        .then((response) => {
-            handleResponse(resolve, reject, response);
-        })
-        .catch((err) => {
-            reject(err);
-        });
+    }).then((response) => {
+        handleResponse(resolve, reject, response);
+    }).catch((err) => {
+        reject(err);
+    });
 });
 
 const makeDELETERequest = (_url, storeId = null) => new Promise((resolve, reject) => {
@@ -78,13 +80,11 @@ const makeDELETERequest = (_url, storeId = null) => new Promise((resolve, reject
         method: 'DELETE',
         headers: headers(storeId),
         ...requestOptions,
-    })
-        .then((response) => {
-            handleResponse(resolve, reject, response);
-        })
-        .catch((err) => {
-            reject(err);
-        });
+    }).then((response) => {
+        handleResponse(resolve, reject, response);
+    }).catch((err) => {
+        reject(err);
+    });
 });
 
 // ADMIN APIs

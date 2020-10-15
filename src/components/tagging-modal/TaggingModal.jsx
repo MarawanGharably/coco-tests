@@ -10,8 +10,9 @@ import { useUIManager } from '../../three-js/ui-manager/UIManager';
 import { useDataManager, DATA_MANAGER_ENUMS } from '../../three-js/data-manager/DataManager';
 import { useEditorDataStore } from '../../data-store/editor-data-store/EditorDataStore';
 import { useHomePageDataStore } from '../../data-store/home-page-data-store/HomePageDataStore';
+import { apiCreateHotspotByType, apiUpdateHotspotByType, apiDeleteHotspotByType } from '../../utils/apiUtils';
 
-const { POST_ROOM_OBJECT_DATA } = DATA_MANAGER_ENUMS;
+const { POST_ROOM_OBJECT_DATA, UPDATE_ROOM_OBJECT_DATA } = DATA_MANAGER_ENUMS;
 
 const taggingButtonStyle = css`
 width: 10em;
@@ -30,13 +31,14 @@ color: black;
 `;
 
 const TaggingModal = ({
-    productSKU = '', onClose, updateState, uuid, dispose, getTransforms,
+    productSKU = '', onClose, updateState, uuid, dispose, getTransforms, id,
 }) => {
     const [SKU, setSKU] = useState(productSKU);
     const [UIState] = useUIManager();
     const [, dataDispatch] = useDataManager();
     const [editorState] = useEditorDataStore();
     const [storeState] = useHomePageDataStore();
+    const hotspotType = 'product';
 
     const { selectedStoreId } = storeState;
     const { currentSceneId } = editorState;
@@ -52,25 +54,70 @@ const TaggingModal = ({
         setSKU(e.target.value);
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         updateState({ sku: SKU });
         const transforms = getTransforms();
         const { colliderTransform, visualTransform } = transforms;
-        dataDispatch({
-            type: POST_ROOM_OBJECT_DATA,
-            payload: {
-                colliderTransform,
-                hotspotType: 'product',
-                transform: visualTransform,
-                sceneId: currentSceneId,
-                sku: SKU,
-                storeId: selectedStoreId,
+
+        const postData = {
+            type: hotspotType,
+            scene_id: currentSceneId,
+            collider_transform: colliderTransform.elements,
+            transform: visualTransform.elements,
+            props: {
+                product_sku: SKU,
+                hotspot_type: 'product',
             },
-        });
+        };
+
+        if (id) {
+            try {
+                const response = await apiUpdateHotspotByType(
+                    hotspotType, selectedStoreId, id, postData,
+                );
+                const roomObject = {
+                    collider_transform: colliderTransform.elements,
+                    transform: visualTransform.elements,
+                    id: response._id.$oid, //eslint-disable-line
+                    sku: SKU,
+                };
+
+                dataDispatch({
+                    type: UPDATE_ROOM_OBJECT_DATA,
+                    payload: {
+                        roomObject,
+                    },
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        } else {
+            try {
+                const response = await apiCreateHotspotByType(
+                    hotspotType, selectedStoreId, postData,
+                );
+                const roomObject = {
+                    collider_transform: colliderTransform.elements,
+                    transform: visualTransform.elements,
+                    id: response._id.$oid, //eslint-disable-line
+                    sku: SKU,
+                };
+
+                dataDispatch({
+                    type: POST_ROOM_OBJECT_DATA,
+                    payload: {
+                        roomObject,
+                    },
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
         onClose();
     };
 
-    const handleDelete = () => {
+    const handleDelete = async () => {
+        await apiDeleteHotspotByType(hotspotType, selectedStoreId, id);
         updateState({ sku: '' });
         dispose();
     };
@@ -106,6 +153,11 @@ TaggingModal.propTypes = {
     uuid: PropTypes.string.isRequired,
     getTransforms: PropTypes.func.isRequired,
     productSKU: PropTypes.string.isRequired,
+    id: PropTypes.string,
+};
+
+TaggingModal.defaultProps = {
+    id: '',
 };
 
 export default TaggingModal;

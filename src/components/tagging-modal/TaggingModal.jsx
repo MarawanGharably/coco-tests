@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-
 import { css } from '@emotion/react';
+import debounce from 'lodash.debounce';
+
 import Modal from '../modal/Modal';
 import SubmitButton from '../submit-button/SubmitButton';
 import TextInput from '../text-input/TextInput';
@@ -12,7 +13,7 @@ import { useEditorDataStore } from '../../data-store/editor-data-store/EditorDat
 import { useHomePageDataStore } from '../../data-store/home-page-data-store/HomePageDataStore';
 import { apiCreateHotspotByType, apiUpdateHotspotByType, apiDeleteHotspotByType } from '../../utils/apiUtils';
 
-const { POST_ROOM_OBJECT_DATA, UPDATE_ROOM_OBJECT_DATA } = DATA_MANAGER_ENUMS;
+const { POST_ROOM_OBJECT_DATA, UPDATE_ROOM_OBJECT_DATA, DELETE_ROOM_OBJECT_DATA } = DATA_MANAGER_ENUMS;
 
 const taggingButtonStyle = css`
 width: 10em;
@@ -54,7 +55,7 @@ const TaggingModal = ({
         setSKU(e.target.value);
     };
 
-    const handleSave = async () => {
+    const handleSave = debounce(async () => {
         updateState({ sku: SKU });
         const transforms = getTransforms();
         const { colliderTransform, visualTransform } = transforms;
@@ -114,13 +115,25 @@ const TaggingModal = ({
             }
         }
         onClose();
-    };
+    }, 500);
 
-    const handleDelete = async () => {
-        await apiDeleteHotspotByType(hotspotType, selectedStoreId, id);
-        updateState({ sku: '' });
-        dispose();
-    };
+    const handleDelete = debounce(async () => {
+        try {
+            await apiDeleteHotspotByType(hotspotType, selectedStoreId, id);
+            updateState({ sku: '' });
+
+            dispose();
+            dataDispatch({
+                type: DELETE_ROOM_OBJECT_DATA,
+                payload: {
+                    id,
+                },
+            });
+        } catch (err) {
+            console.error('Hotspot deletion failed\n', err);
+            dispose();
+        }
+    }, 500);
 
     const handleClose = () => {
         if (!SKU) {

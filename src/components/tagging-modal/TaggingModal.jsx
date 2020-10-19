@@ -13,7 +13,11 @@ import { useEditorDataStore } from '../../data-store/editor-data-store/EditorDat
 import { useHomePageDataStore } from '../../data-store/home-page-data-store/HomePageDataStore';
 import { apiCreateHotspotByType, apiUpdateHotspotByType, apiDeleteHotspotByType } from '../../utils/apiUtils';
 
-const { POST_ROOM_OBJECT_DATA, UPDATE_ROOM_OBJECT_DATA, DELETE_ROOM_OBJECT_DATA } = DATA_MANAGER_ENUMS;
+const {
+    POST_ROOM_OBJECT_DATA,
+    UPDATE_ROOM_OBJECT_DATA,
+    DELETE_ROOM_OBJECT_DATA,
+} = DATA_MANAGER_ENUMS;
 
 const taggingButtonStyle = css`
 width: 10em;

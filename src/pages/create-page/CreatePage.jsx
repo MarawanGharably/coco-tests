@@ -78,8 +78,8 @@ const CreatePage = () => {
                         {/* <NavBarItem
                             name="CONTENT INTERACTIONS"
                             pathName={interactionPath}
-                        /> */}
-                        {/* <NavBarItem
+                        />
+                        <NavBarItem
                             name="REVIEW & SUBMIT"
                             pathName={submitPath}
                         /> */}

@@ -22,6 +22,7 @@ const HomePage = () => {
     useEffect(() => {
         apiGetClientStores()
             .then((clientStoreDataResponse) => {
+                console.log(clientStoreDataResponse); // eslint-disable-line
                 getStoreThumbnails(clientStoreDataResponse)
                     .then((storeThumbnailsResponse) => {
                         dispatch({
@@ -57,6 +58,9 @@ const HomePage = () => {
     const renderStoresList = () => {
         const { storeData, storeThumbnails } = state;
         let storesList;
+
+        console.log(storeData); // eslint-disable-line
+        console.log(storeThumbnails); // eslint-disable-line
 
         if (storeData && storeThumbnails.length > 0) {
             const thumbnailObjects = storeThumbnails.reduce((obj, item) => (obj[item.storeId] = item.thumbnailUrl, obj), {}); //eslint-disable-line

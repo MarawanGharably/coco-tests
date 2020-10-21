@@ -60,6 +60,10 @@ const TaggingModal = ({
     };
 
     const handleSave = debounce(async () => {
+        if (!SKU) {
+            dispose();
+            return;
+        }
         updateState({ sku: SKU });
         const transforms = getTransforms();
         const { colliderTransform, visualTransform } = transforms;
@@ -116,10 +120,11 @@ const TaggingModal = ({
                 });
             } catch (err) {
                 console.error(err);
+                dispose();
             }
         }
         onClose();
-    }, 500);
+    }, 200);
 
     const handleDelete = debounce(async () => {
         try {
@@ -137,7 +142,7 @@ const TaggingModal = ({
             console.error('Hotspot deletion failed\n', err);
             dispose();
         }
-    }, 500);
+    }, 200);
 
     const handleClose = () => {
         if (!SKU) {

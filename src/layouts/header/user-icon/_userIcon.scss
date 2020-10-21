@@ -2,15 +2,13 @@
     &-button {
         background: white;
         border: none;
-        width: 50px;
+        width: 6em;
         margin: 0 0 0 auto;
         cursor: pointer;
     }
     &-image-container {
         width: 3em;
         height: 3em;
-        border-radius: 100%;
-        border: 1.5px solid $obsess-grey;
         overflow: hidden;
     }
     &-dropdown-container {

@@ -22,57 +22,55 @@ import AdminPage from './pages/admin-pages/Admin';
 const App = () => (
     <div className="app-container flex flex-column flex-1">
         <AuthContextProvider>
-            <Header />
-            <Switch>
-                <Route
-                    path="/password"
-                    render={() => <CreatePasswordPage />}
-                />
-                <Route
-                    path="/login"
-                    render={() => <LoginPage />}
-                />
-                <Route
-                    path="/signup"
-                    render={() => <RegisterPage />}
-                />
-                <Route
-                    path="/admin"
-                    render={() => <AdminPage />}
-                />
-                <PrivateRoute
-                    path="/"
-                    exact
-                    render={() => (
-                        <HomePageDataStore>
+            <HomePageDataStore>
+                <Header />
+                <Switch>
+                    <Route
+                        path="/password"
+                        render={() => <CreatePasswordPage />}
+                    />
+                    <Route
+                        path="/login"
+                        render={() => <LoginPage />}
+                    />
+                    <Route
+                        path="/signup"
+                        render={() => <RegisterPage />}
+                    />
+                    <Route
+                        path="/admin"
+                        render={() => <AdminPage />}
+                    />
+                    <PrivateRoute
+                        path="/"
+                        exact
+                        render={() => (
                             <HomePage />
-                        </HomePageDataStore>
-                    )}
-                />
-                <PrivateRoute
-                    path="/create"
-                    render={() => (
-                        <HomePageDataStore>
+                        )}
+                    />
+                    <PrivateRoute
+                        path="/create"
+                        render={() => (
                             <EditorDataStore>
                                 <CreatePage />
                             </EditorDataStore>
-                        </HomePageDataStore>
-                    )}
-                />
-                <PrivateRoute
-                    path="/profile"
-                    render={() => (
-                        <ProfileContextProvider>
-                            <ProfilePage />
-                        </ProfileContextProvider>
-                    )}
-                />
-                <PrivateRoute
-                    path="/404"
-                    exact
-                    render={() => <ErrorPage statusCode="404" />}
-                />
-            </Switch>
+                        )}
+                    />
+                    <PrivateRoute
+                        path="/profile"
+                        render={() => (
+                            <ProfileContextProvider>
+                                <ProfilePage />
+                            </ProfileContextProvider>
+                        )}
+                    />
+                    <PrivateRoute
+                        path="/404"
+                        exact
+                        render={() => <ErrorPage statusCode="404" />}
+                    />
+                </Switch>
+            </HomePageDataStore>
         </AuthContextProvider>
     </div>
 );

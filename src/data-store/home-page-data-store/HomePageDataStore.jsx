@@ -9,6 +9,7 @@ const initialState = {
     storeData: null,
     storeThumbnails: [],
     selectedStoreId: '',
+    pageHeaderTitle: '',
 };
 
 const StateContext = React.createContext(initialState);
@@ -18,12 +19,14 @@ const HomePageActionEnums = Object.freeze({
     SET_STORE_DATA: 'SET_STORE_DATA',
     SET_STORE_THUMBNAILS: 'SET_STORE_THUMBNAILS',
     SET_SELECTED_STORE_ID: 'SET_SELECTED_STORE_ID',
+    SET_PAGE_HEADER_TITLE: 'SET_PAGE_HEADER_TITLE',
 });
 
 const {
     SET_STORE_DATA,
     SET_STORE_THUMBNAILS,
     SET_SELECTED_STORE_ID,
+    SET_PAGE_HEADER_TITLE,
 } = HomePageActionEnums;
 
 const homePageReducer = (state, action) => {
@@ -43,6 +46,10 @@ const homePageReducer = (state, action) => {
         case SET_SELECTED_STORE_ID:
             return ({
                 ...state, selectedStoreId: payload.selectedStoreId,
+            });
+        case SET_PAGE_HEADER_TITLE:
+            return ({
+                ...state, pageHeaderTitle: payload.pageHeaderTitle,
             });
         default:
             throw new TypeError(`${type} is not a valid action!`);

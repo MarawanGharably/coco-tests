@@ -22,7 +22,7 @@ const UserIcon = ({ imgUrl }) => {
                     <img id="user-icon-dropdown-icon" className="full-width" alt="dropdown icon" src={DROPDOWN_ICON_URL} />
                 </div>
             </button>
-            {displayDropdown && <UserMenu setDisplayDropdown={setDisplayDropdown} /> }
+            {displayDropdown && <UserMenu setDisplayDropdown={setDisplayDropdown} />}
         </div>
     );
 };
@@ -32,7 +32,7 @@ UserIcon.propTypes = {
 };
 
 UserIcon.defaultProps = {
-    imgUrl: 'https://placedog.net/150/150',
+    imgUrl: 'https://cdn.obsessvr.com/coco/Default-Profile-Icon.png',
 };
 
 export default UserIcon;

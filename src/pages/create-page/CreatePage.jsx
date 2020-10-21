@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 
 import BodyWrapper from '../../layouts/body-wrapper/BodyWrapper';
 import Footer from '../../layouts/footer/Footer';
-import NavBar from '../../components/nav-bar/NavBar';
-import NavBarItem from '../../components/nav-bar/NavBarItem';
 import Page from '../../layouts/page-template/Page';
 // import BrandElementsPage from './brand-elements-page/BrandElementsPage';
 import ProductPlacementPage from './product-placement-page/ProductPlacementPage';
@@ -37,8 +35,8 @@ const CreatePage = () => {
         <>
             <BodyWrapper>
                 <div id="create-store-page" className="flex full-width">
-                    <NavBar>
-                        {/* <NavBarItem
+                    {/* <NavBar>
+                        <NavBarItem
                             name="DESIGN"
                             pathName={designPath}
                         >
@@ -70,20 +68,20 @@ const CreatePage = () => {
                         <NavBarItem
                             name="PRODUCT DATA"
                             pathName={productsPath}
-                        /> */}
+                        />
                         <NavBarItem
                             name="PRODUCT PLACEMENT"
                             pathName={placementPath}
                         />
-                        {/* <NavBarItem
+                        <NavBarItem
                             name="CONTENT INTERACTIONS"
                             pathName={interactionPath}
                         />
                         <NavBarItem
                             name="REVIEW & SUBMIT"
                             pathName={submitPath}
-                        /> */}
-                    </NavBar>
+                        />
+                    </NavBar> */}
                     <Switch>
                         <Route exact path="/create">
                             <Redirect to={`${placementPath}`} />
@@ -122,8 +120,8 @@ const CreatePage = () => {
                         {/* <Route
                             path={interactionPath}
                             render={() => <ContentInteractionPage />}
-                        /> */}
-                        {/* <Route
+                        />
+                        <Route
                             path={submitPath}
                             render={() => <SubmitPage />}
                         /> */}

@@ -9,6 +9,7 @@ export default class InteractionObject extends ThreeSceneObject {
         super();
 
         this.sceneObject = new BoxCollider(1, 1, 1, this.onHover, this.onUnhover, this.onClick);
+        this.sceneObject.setOwner(this);
         this.UIDispatcher = null;
     }
 

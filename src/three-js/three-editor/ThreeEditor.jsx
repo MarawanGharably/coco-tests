@@ -119,7 +119,6 @@ export const ThreeEditor = ({ children }) => {
         marker.addToScene(sceneRef.current);
         marker.setUIDispatcher(UIDispatch);
         marker.setColliderDispatcher(colliderDispatch);
-        marker.sceneObject.name = 'marker';
 
         return marker;
     };
@@ -236,19 +235,41 @@ export const ThreeEditor = ({ children }) => {
     }, [colliderState]);
 
     useEffect(() => {
-        if (dataState.roomObjectData) {
-            dataState.roomObjectData.forEach((object) => {
-                const marker = renderMarker(
-                    object.collider_transform, object.transform, { productSKU: object.sku },
-                );
-                marker.setTransform(object.collider_transform, object.transform);
-
-                colliderDispatch({
-                    type: CollisionManagerActionEnums.SET_COLLIDERS,
-                    payload: marker.sceneObject,
-                });
+        const resetRoomObjects = () => {
+            colliderRef.current.forEach((collider) => {
+                if (collider.name === 'marker') {
+                    colliderDispatch({
+                        type: CollisionManagerActionEnums.REMOVE_COLLIDERS,
+                        payload: collider.uuid,
+                    });
+                    collider.owner.dispose();
+                }
             });
-        }
+        };
+
+        const setNewRoomObjectData = () => {
+            if (dataState.roomObjectData) {
+                dataState.roomObjectData.forEach((object) => {
+                    const marker = renderMarker(
+                        object.collider_transform,
+                        object.transform,
+                        {
+                            productSKU: object.sku,
+                            id: object.id,
+                        },
+                    );
+                    marker.setTransform(object.collider_transform, object.transform);
+
+                    colliderDispatch({
+                        type: CollisionManagerActionEnums.SET_COLLIDERS,
+                        payload: marker.sceneObject,
+                    });
+                });
+            }
+        };
+
+        resetRoomObjects();
+        setNewRoomObjectData();
     }, [currentSceneId, dataState]); // eslint-disable-line
 
     return (

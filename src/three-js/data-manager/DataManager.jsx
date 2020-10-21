@@ -4,7 +4,7 @@ import React, {
 
 import PropTypes from 'prop-types';
 
-import { apiGetHotspotsByType, apiCreateHotspotByType } from '../../utils/apiUtils';
+import { apiGetHotspotsByType } from '../../utils/apiUtils';
 
 
 const initialState = {
@@ -35,7 +35,10 @@ const dataManagerReducer = (state, action) => {
             const { roomObjectData } = payload;
 
             if (typeof roomObjectData === 'string') {
-                return state;
+                return ({
+                    ...state,
+                    roomObjectData: [],
+                });
             }
             return ({
                 ...state,
@@ -43,29 +46,49 @@ const dataManagerReducer = (state, action) => {
             });
         }
         case POST_ROOM_OBJECT_DATA: {
-            const {
-                hotspotType, sceneId, transform, colliderTransform, sku, storeId,
-            } = payload;
+            const { roomObject } = payload;
 
-            const postData = {
-                type: hotspotType,
-                scene_id: sceneId,
-                collider_transform: colliderTransform.elements,
-                transform: transform.elements,
-                props: {
-                    product_sku: sku,
-                    hotspot_type: 'product',
-                },
-            };
-            apiCreateHotspotByType(hotspotType, storeId, postData);
             return ({
                 ...state,
-                roomObjectData: [...state.roomObjectData, postData],
+                roomObjectData: [...state.roomObjectData, roomObject],
+            });
+        }
+        case UPDATE_ROOM_OBJECT_DATA: {
+            const { roomObject } = payload;
+            const updatedRoomObjectData = state.roomObjectData.map((originalRoomObject) => {
+                if (originalRoomObject.id === roomObject.id) {
+                    return roomObject;
+                }
+                return originalRoomObject;
+            });
+
+            return ({
+                state,
+                roomObjectData: updatedRoomObjectData,
+            });
+        }
+        case DELETE_ROOM_OBJECT_DATA: {
+            const { id } = payload;
+            const filteredRoomObjects = state.roomObjectData.filter((roomObject) => {
+                if (roomObject.id === id) {
+                    return false;
+                }
+                return true;
+            });
+
+            return ({
+                state,
+                roomObjectData: filteredRoomObjects,
             });
         }
         case ASSIGN_UUID:
             return ({
                 state,
+            });
+        case CLEAR_ROOM_OBJECT_DATA:
+            return ({
+                ...state,
+                roomObjectData: [],
             });
         default:
             console.error(`Action of type ${type} not supported!`);
@@ -77,17 +100,23 @@ export const DataManager = ({
     hotspotType, sceneId, storeId, children,
 }) => {
     const [state, dispatch] = useReducer(dataManagerReducer, initialState);
-
     // Whenever sceneId changes, clear old room object data and retrieve existing room objects
     useEffect(() => {
-        const fetchData = async () => {
+        const clearRoomData = () => {
+            dispatch({
+                type: CLEAR_ROOM_OBJECT_DATA,
+            });
+        };
+        const setRoomDataAsync = async () => {
             const roomObjectData = await apiGetHotspotsByType(hotspotType, storeId, sceneId);
             dispatch({
                 type: SET_ROOM_OBJECT_DATA,
                 payload: { roomObjectData: roomObjectData }, //eslint-disable-line
             });
         };
-        fetchData();
+
+        clearRoomData();
+        setRoomDataAsync();
     }, [sceneId]); // eslint-disable-line
 
     return (

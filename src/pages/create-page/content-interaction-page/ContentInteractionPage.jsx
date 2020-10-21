@@ -4,7 +4,6 @@ import PageRow from '../../../components/page-row/PageRow';
 import PageItem from '../../../components/page-item/PageItem';
 import RightSideBar from '../../../components/right-side-bar/RightSideBar';
 import ContentSideBarItem from '../../../components/right-side-bar/ContentSideBarItem';
-import SceneNavigator from '../../../components/scene-navigator/SceneNavigator';
 import { EditorDataStore } from '../../../data-store/editor-data-store/EditorDataStore';
 
 const ContentInteractionPage = () => (
@@ -13,9 +12,7 @@ const ContentInteractionPage = () => (
             pageTitle="Content Interactions"
             pageSubTitle="Choose where you'd like to place each content interaction"
         >
-            <PageRow width="85%">
-                <SceneNavigator />
-            </PageRow>
+            <PageRow width="85%" />
             <PageRow>
                 <PageItem>
                     <div>This is a page content upload slot</div>

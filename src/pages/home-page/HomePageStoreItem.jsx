@@ -5,8 +5,8 @@ import './_home-page.scss';
 
 
 const HomePageStoreItem = ({ storeInfo, handleEditStore, thumbnailUrl }) => {
-    const { client, name } = storeInfo;
-    const storeId = client.$oid;
+    const { _id, name } = storeInfo;
+    const storeId = _id.$oid;
 
     const editButtonStyle = {
         width: '17em',

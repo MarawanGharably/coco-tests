@@ -21,7 +21,7 @@ const ProductPlacementPage = () => {
             <Page
                 pageSubTitle="Click on 360 image to place hotspot and enter SKU ID"
             >
-                <PageRow width="80%">
+                <PageRow width="95%">
                     <div id="three-editor-container" className="full-width">
                         <HotspotEditor />
                     </div>

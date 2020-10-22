@@ -2,6 +2,7 @@
 // Import Modules here
 @import "obsess-logo/obsessLogo";
 @import "user-icon/userIcon";
+@import "title/headerTitle";
 // ******************************************************************************* //
 $header-height: 5.5vh;
 
@@ -12,6 +13,7 @@ $header-height: 5.5vh;
         border-color: $footer-color;
         border-width: 0 0 0.2em 0;
         border-radius: 0 0 0.3em 0.3em;
+        margin: 1em 0em;
     }
     &-left-side {
         margin: 0 auto 0 2.6em;

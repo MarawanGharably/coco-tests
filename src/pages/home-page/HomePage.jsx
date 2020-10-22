@@ -35,6 +35,11 @@ const HomePage = () => {
                         setLoading(false);
                     }).catch((err) => console.error(err));
             }).catch((err) => console.error(err));
+
+        dispatch({
+            type: HomePageActionEnums.SET_PAGE_HEADER_TITLE,
+            payload: { pageHeaderTitle: '' },
+        });
     }, [dispatch, history]);
 
     const setSessionStorageStoreId = (storeId) => {

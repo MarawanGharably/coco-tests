@@ -189,19 +189,24 @@ export const ThreeEditor = ({ children }) => {
         });
 
         const canvasContainer = canvasContainerRef.current;
-        const aspectRatio = canvasContainer.offsetWidth / canvasContainer.offsetHeight;
+        const widthMultiplier = 1;
+        const heightMultiplier = 1.1;
+        const aspectRatio = (canvasContainer.offsetWidth * widthMultiplier)
+            / (canvasContainer.offsetHeight * heightMultiplier);
         // set new reference for cameraRef.current here
         cameraRef.current = new THREE.PerspectiveCamera(70, aspectRatio, 0.1, 1000);
         const controls = new OrbitControls(cameraRef.current, renderer.domElement);
 
         const windowResizeHandler = () => {
-            const currentAspectRatio = canvasContainer.offsetWidth / canvasContainer.offsetHeight;
+            const currentAspectRatio = (canvasContainer.offsetWidth * widthMultiplier)
+                / (canvasContainer.offsetHeight * heightMultiplier);
             cameraRef.current.aspect = currentAspectRatio;
             cameraRef.current.updateProjectionMatrix();
-            renderer.setSize(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
+            renderer.setSize((canvasContainer.offsetWidth * widthMultiplier),
+                (canvasContainer.offsetHeight * heightMultiplier));
         };
 
-        setupRenderer(rendererRef.current, canvasContainer);
+        setupRenderer(rendererRef.current, canvasContainer, widthMultiplier, heightMultiplier);
         setupCamera(aspectRatio, cameraRef.current);
         setupControls(controls);
 

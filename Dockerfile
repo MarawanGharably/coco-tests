@@ -8,7 +8,8 @@ ARG BUILD_STAGE=beta
 RUN echo ${BUILD_STAGE}
 
 RUN apt-get update && \
-    npm install -g npm@latest
+    apt-get install -y ssh git build-essential curl && \
+    npm i npm@latest -g
 
 # setup work directory, relative path will be inside this directory
 # we need this because Jest can't find tests without this work directory

@@ -1,4 +1,4 @@
-image: docker:latest
+image: docker:19
 
 variables:
   VERSION: 0.2.0
@@ -21,7 +21,7 @@ variables:
 
 
 services:
-  - docker:stable-dind
+  - docker:19-dind
 
 stages:
   - build

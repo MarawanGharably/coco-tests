@@ -4,7 +4,7 @@ FROM node AS build-env
 LABEL version="0.2.0"
 
 # variable passed in with build command
-ARG BUILD_STAGE=beta
+ARG BUILD_STAGE=prod
 RUN echo ${BUILD_STAGE}
 
 RUN apt-get update

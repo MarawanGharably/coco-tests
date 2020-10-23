@@ -7,8 +7,11 @@ LABEL version="0.2.0"
 ARG BUILD_STAGE=beta
 RUN echo ${BUILD_STAGE}
 
+RUN cd $(npm root -g)/npm && \
+    npm install fs-extra && \
+    sed -i -e s/graceful-fs/fs-extra/ -e s/fs.rename/fs.move/ ./lib/utils/rename.js
+
 RUN apt-get update && \
-    apt-get install -y ssh git build-essential curl && \
     npm i npm@latest -g
 
 # setup work directory, relative path will be inside this directory

@@ -67,7 +67,7 @@ build:feature:
     # build the deploy feature image
     - docker build
       -f Dockerfile
-      --build-arg STAGE=${NPM_BUILD_STAGE}
+      --build-arg BUILD_STAGE=${NPM_BUILD_STAGE}
       -t $FEATURE_SERVICE_IMAGE .
     - docker push $FEATURE_SERVICE_IMAGE
   only:
@@ -132,7 +132,7 @@ build:beta:
     # build the deploy beta image
     - docker build
       -f Dockerfile
-      --build-arg STAGE=$NPM_BUILD_STAGE
+      --build-arg BUILD_STAGE=$NPM_BUILD_STAGE
       -t $BETA_SERVICE_IMAGE .
     - docker push $BETA_SERVICE_IMAGE
   only:
@@ -204,7 +204,7 @@ build:prod:
     # build the deploy prod image
     - docker build
       -f Dockerfile
-      --build-arg STAGE=$NPM_BUILD_STAGE
+      --build-arg BUILD_STAGE=$NPM_BUILD_STAGE
       -t $PROD_SERVICE_IMAGE .
     - docker push $PROD_SERVICE_IMAGE
   only:

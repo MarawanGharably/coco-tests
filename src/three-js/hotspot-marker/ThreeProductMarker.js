@@ -53,6 +53,12 @@ export default class ThreeProductMarker extends InteractionObject {
         );
     }
 
+    setScale = () => {
+        this.sceneObject.scale.x = 0.5;
+        this.sceneObject.scale.y = 0.5;
+        this.sceneObject.scale.z = 0.5;
+    }
+
     setPosition = (x, y, z) => {
         this.sceneObject.position.x = x;
         this.sceneObject.position.y = y;
@@ -67,6 +73,13 @@ export default class ThreeProductMarker extends InteractionObject {
         this.components.forEach((component) => {
             component.onClick();
         });
+    }
+
+    // Retrieves Matrix transforms of visual and collider components
+    getTransforms = () => {
+        const colliderTransform = this.sceneObject.matrix;
+        const visualTransform = this.visualObject.matrix;
+        return { colliderTransform, visualTransform };
     }
 
     removeFromManager() {

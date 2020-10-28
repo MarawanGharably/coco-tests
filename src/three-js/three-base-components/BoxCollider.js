@@ -16,6 +16,7 @@ export default class BoxCollider extends Collider {
         const colliderMaterial = new THREE.MeshBasicMaterial({
             color: 0xFFFFFF, opacity: 0, transparent: true, depthTest: false,
         });
+
         // colliderMaterial.wireframe = true;
         super(boxGeometry, colliderMaterial, onHover, onUnhover, onClick);
     }

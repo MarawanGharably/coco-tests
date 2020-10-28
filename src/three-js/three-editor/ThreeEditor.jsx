@@ -117,6 +117,7 @@ export const ThreeEditor = ({ children }) => {
             componentToRender, renderProps, colliderTransform, visualTransform,
         );
         marker.addToScene(sceneRef.current);
+        marker.setScale();
         marker.setUIDispatcher(UIDispatch);
         marker.setColliderDispatcher(colliderDispatch);
 
@@ -264,7 +265,6 @@ export const ThreeEditor = ({ children }) => {
                         },
                     );
                     marker.setTransform(object.collider_transform, object.transform);
-
                     colliderDispatch({
                         type: CollisionManagerActionEnums.SET_COLLIDERS,
                         payload: marker.sceneObject,

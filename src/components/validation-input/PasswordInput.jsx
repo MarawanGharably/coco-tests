@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Input from '../input/Input';
 import { validatePassword } from './utils/validate';
 
-const PasswordInput = ({ value, handleChange }) => (
+const PasswordInput = ({ value, handleChange, validate }) => (
     <Input
         type="password"
         formField="password"
@@ -14,12 +14,18 @@ const PasswordInput = ({ value, handleChange }) => (
         value={value}
         handleChange={handleChange}
         validationFunc={validatePassword}
+        validate={validate}
     />
 );
 
 PasswordInput.propTypes = {
     value: PropTypes.string.isRequired,
     handleChange: PropTypes.func.isRequired,
+    validate: PropTypes.bool,
+};
+
+PasswordInput.defaultProps = {
+    validate: true,
 };
 
 export default PasswordInput;

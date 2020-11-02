@@ -12,10 +12,11 @@ const Input = ({
     handleChange,
     decoratorComponent,
     validationFunc,
+    validate,
 }) => {
     const {
         text, handleUserInput, isValid, renderErrors,
-    } = useInput(validationFunc, handleChange);
+    } = useInput(validate, validationFunc, handleChange);
 
     const inputElement = useRef(null);
     const focusInput = () => { inputElement.current.focus(); };
@@ -73,6 +74,7 @@ Input.propTypes = {
     handleChange: PropTypes.func,
     validationFunc: PropTypes.func,
     decoratorComponent: PropTypes.element,
+    validate: PropTypes.bool,
 };
 
 Input.defaultProps = {
@@ -82,6 +84,7 @@ Input.defaultProps = {
     handleChange: null,
     validationFunc: null,
     decoratorComponent: null,
+    validate: true,
 };
 
 export default Input;

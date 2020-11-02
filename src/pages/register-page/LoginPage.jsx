@@ -60,11 +60,11 @@ const LoginPage = () => {
             } else if (statusCode === 401) {
                 console.error('Invalid credentials'); // eslint-disable-line
                 setSubmitting(false);
-                setErrorMessage('Invalid credentials, please try again.');
+                setErrorMessage('Wrong email or password.');
             } else if (statusCode === 403) {
                 console.error('Invalid credentials'); // eslint-disable-line
                 setSubmitting(false);
-                setErrorMessage('Unable to login. Please try again later.');
+                setErrorMessage('Wrong email or password.');
             } else {
                 throw new Error(response.statusText);
             }
@@ -85,10 +85,10 @@ const LoginPage = () => {
             <form className="flex flex-column flex-center">
                 <PageRow column width={width}>
                     <PageItem>
-                        <EmailInput value={email} handleChange={onEmailInputChange} />
+                        <EmailInput value={email} handleChange={onEmailInputChange} validate={false} />
                     </PageItem>
                     <PageItem>
-                        <PasswordInput value={password} handleChange={onPasswordInputChange} />
+                        <PasswordInput value={password} handleChange={onPasswordInputChange} validate={false} />
                     </PageItem>
                 </PageRow>
                 <section className="login-page-helper-section flex">

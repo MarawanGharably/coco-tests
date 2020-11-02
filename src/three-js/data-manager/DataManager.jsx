@@ -97,47 +97,48 @@ const dataManagerReducer = (state, action) => {
     }
 };
 
+// const updateColliderTransformByRoom = () => {
+//     state.roomObjectData.forEach((object) => {
+//         const newColliderArray = [];
+//         for (let i = 0; i < object.collider_transform.length; i += 1) {
+//             if (i !== 15 && object.collider_transform[i] === 1) {
+//                 newColliderArray.push(0.5);
+//             } else {
+//                 newColliderArray.push(object.collider_transform[i]);
+//             }
+//         }
+//         console.log(object);
+
+//         const postData = {
+//             id: object.id,
+//             type: 'product',
+//             scene_id: sceneId,
+//             collider_transform: newColliderArray,
+//             transform: object.transform,
+//             props: {
+//                 product_sku: object.sku,
+//                 hotspot_type: 'product',
+//             },
+//         };
+
+//         console.log(postData, storeState);
+
+//         try {
+//             const response = apiUpdateHotspotByType(
+//                  hotspotType, storeState.selectedStoreId, object.id, postData);
+//             console.log(response);
+//         } catch (err) {
+//             console.error(err);
+//         }
+//     });
+// };
+
 export const DataManager = ({
     hotspotType, sceneId, storeId, children,
 }) => {
     const [state, dispatch] = useReducer(dataManagerReducer, initialState);
     // const [storeState] = useHomePageDataStore();
 
-    // const updateColliderTransformByRoom = () => {
-    //     state.roomObjectData.forEach((object) => {
-    //         const newColliderArray = [];
-    //         for (let i = 0; i < object.collider_transform.length; i += 1) {
-    //             if (i !== 15 && object.collider_transform[i] === 1) {
-    //                 newColliderArray.push(0.5);
-    //             } else {
-    //                 newColliderArray.push(object.collider_transform[i]);
-    //             }
-    //         }
-    //         console.log(object);
-
-    //         const postData = {
-    //             id: object.id,
-    //             type: 'product',
-    //             scene_id: sceneId,
-    //             collider_transform: newColliderArray,
-    //             transform: object.transform,
-    //             props: {
-    //                 product_sku: object.sku,
-    //                 hotspot_type: 'product',
-    //             },
-    //         };
-
-    //         console.log(postData, storeState);
-
-    //         try {
-    //             const response = apiUpdateHotspotByType(
-    //                  hotspotType, storeState.selectedStoreId, object.id, postData);
-    //             console.log(response);
-    //         } catch (err) {
-    //             console.error(err);
-    //         }
-    //     });
-    // };
 
     // Whenever sceneId changes, clear old room object data and retrieve existing room objects
     useEffect(() => {

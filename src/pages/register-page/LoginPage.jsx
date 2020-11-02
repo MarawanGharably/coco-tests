@@ -85,10 +85,18 @@ const LoginPage = () => {
             <form className="flex flex-column flex-center">
                 <PageRow column width={width}>
                     <PageItem>
-                        <EmailInput value={email} handleChange={onEmailInputChange} validate={false} />
+                        <EmailInput
+                            value={email}
+                            handleChange={onEmailInputChange}
+                            validate={false}
+                        />
                     </PageItem>
                     <PageItem>
-                        <PasswordInput value={password} handleChange={onPasswordInputChange} validate={false} />
+                        <PasswordInput
+                            value={password}
+                            handleChange={onPasswordInputChange}
+                            validate={false}
+                        />
                     </PageItem>
                 </PageRow>
                 <section className="login-page-helper-section flex">

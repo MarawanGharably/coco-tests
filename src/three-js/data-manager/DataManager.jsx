@@ -130,7 +130,8 @@ export const DataManager = ({
     //         console.log(postData, storeState);
 
     //         try {
-    //             const response = apiUpdateHotspotByType(hotspotType, storeState.selectedStoreId, object.id, postData);
+    //             const response = apiUpdateHotspotByType(
+    //                  hotspotType, storeState.selectedStoreId, object.id, postData);
     //             console.log(response);
     //         } catch (err) {
     //             console.error(err);

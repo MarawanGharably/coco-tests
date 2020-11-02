@@ -15,7 +15,7 @@ const Input = ({
 }) => {
     const {
         text, handleUserInput, isValid, renderErrors,
-    } = useInput(validationFunc);
+    } = useInput(validationFunc, handleChange);
 
     const inputElement = useRef(null);
     const focusInput = () => { inputElement.current.focus(); };
@@ -49,7 +49,7 @@ const Input = ({
                         className="input-field"
                         type={type}
                         value={value || text}
-                        onChange={handleChange || handleUserInput}
+                        onChange={handleUserInput}
                         ref={inputElement}
                     />
                 </div>

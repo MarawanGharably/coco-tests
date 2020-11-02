@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import debounce from 'lodash.debounce';
 import ErrorMessage from './ErrorMessage';
 
-const useInput = (validate = null) => {
+const useInput = (validate = null, inheritedInputFunc = null) => {
     const [text, setText] = useState('');
     const [isValid, setIsValid] = useState(false);
     const [errors, setErrors] = useState([]);
@@ -15,6 +15,9 @@ const useInput = (validate = null) => {
     const handleUserInput = (e) => {
         e.persist();
         const { value } = e.target;
+        if (inheritedInputFunc) {
+            inheritedInputFunc(e);
+        }
         setText(value);
         if (validate) {
             debouncedSetErrors(value);

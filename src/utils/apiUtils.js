@@ -1,5 +1,15 @@
 import { URLS } from './urls';
 
+const handleErrorResponses = (resolve, reject, response) => {
+    const error = response[0];
+    if (error === 'Signature has expired') {
+        window.location.href = '/login';
+    } else {
+        reject(response);
+    }
+};
+
+
 const handleResponse = (resolve, reject, response) => {
     switch (response.status) {
         case 200: {
@@ -8,6 +18,11 @@ const handleResponse = (resolve, reject, response) => {
         }
         case 201: {
             resolve(response.json());
+            break;
+        }
+        case 401: {
+            response.json()
+                .then((responseJson) => handleErrorResponses(resolve, reject, responseJson));
             break;
         }
         case 403: {

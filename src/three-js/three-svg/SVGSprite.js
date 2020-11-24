@@ -5,9 +5,9 @@ export default class SVGSprite extends THREE.Sprite {
     constructor() {
         const material = new THREE.SpriteMaterial();
         super(material);
-        this.scale.x = 0.5;
-        this.scale.y = 0.5;
-        this.scale.z = 0.5;
+        this.scale.x = 0.35;
+        this.scale.y = 0.35;
+        this.scale.z = 0.35;
 
         this.setSVGString = this.setSVGString.bind(this);
     }

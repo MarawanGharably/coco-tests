@@ -53,10 +53,10 @@ export default class ThreeProductMarker extends InteractionObject {
         );
     }
 
-    setScale = () => {
-        this.sceneObject.scale.x = 0.5;
-        this.sceneObject.scale.y = 0.5;
-        this.sceneObject.scale.z = 0.5;
+    setScale = (scale = 0.35) => {
+        this.sceneObject.scale.x = scale;
+        this.sceneObject.scale.y = scale;
+        this.sceneObject.scale.z = scale;
     }
 
     setPosition = (x, y, z) => {

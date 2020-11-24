@@ -157,7 +157,7 @@ const TaggingModal = ({
             <div className="flex flex-vertical-center flex-column full-width full-height">
                 <header className="tagging-modal-header">SKU</header>
                 <div style={{ margin: '0 0 2em' }}>
-                    <TextInput type="text" placeholder="Enter SKU" handleChange={handleChange} value={SKU} />
+                    <TextInput type="text" placeholder="Enter SKU" handleChange={handleChange} value={SKU} focusOnMount />
                 </div>
                 <div className="flex">
                     <SubmitButton buttonText="SAVE" buttonStyle={taggingButtonStyle} onClick={handleSave} />

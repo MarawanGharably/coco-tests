@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { css } from '@emotion/react';
 import PropTypes from 'prop-types';
 import useInput from './InputHook';
@@ -13,6 +13,7 @@ const Input = ({
     decoratorComponent,
     validationFunc,
     validate,
+    focusOnMount,
 }) => {
     const {
         text, handleUserInput, isValid, renderErrors,
@@ -28,6 +29,12 @@ const Input = ({
             border: ${isValid ? '1px solid green' : '1px solid red'};
         }
     `;
+
+    useEffect(() => {
+        if (focusOnMount) {
+            focusInput();
+        }
+    }, [focusOnMount]);
 
     // Returns an input that prioritizes text/onChange handlers from props.
     // If no props are passed down, we will use the in-built onChange handler
@@ -75,6 +82,7 @@ Input.propTypes = {
     validationFunc: PropTypes.func,
     decoratorComponent: PropTypes.element,
     validate: PropTypes.bool,
+    focusOnMount: PropTypes.bool,
 };
 
 Input.defaultProps = {
@@ -85,6 +93,7 @@ Input.defaultProps = {
     validationFunc: null,
     decoratorComponent: null,
     validate: true,
+    focusOnMount: false,
 };
 
 export default Input;

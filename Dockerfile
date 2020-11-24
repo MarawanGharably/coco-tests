@@ -44,7 +44,7 @@ COPY .eslintignore .eslintignore
 RUN npm run lint
 
 # build the application and copy it into the webroot
-RUN if [ ${BUILD_STAGE} = "prod" ] ; then npm run build-prod ; elif [ ${BUILD_STAGE} = "beta" ] ; then npm run build-beta ; else npm run build-feature ; fi
+RUN if [ ${BUILD_STAGE} = "prod" ] ; then npm run build-prod ; elif [ ${BUILD_STAGE} = "beta" ] ; then npm run build-beta ; elif [ ${BUILD_STAGE} = "feature" ] ; then npm run build-feature ; else npm run build-dev ; fi
 # copy built application into the webroot
 RUN mkdir /www && \
     cp -rpv build/* /www

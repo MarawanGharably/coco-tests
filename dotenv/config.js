@@ -13,6 +13,9 @@ switch (env) {
     case "dev":
         parsedEnv = dotenv.config({ path: path.resolve(process.cwd(), "dotenv/dev.env") }).parsed;
         break;
+    case "feature":
+        parsedEnv = dotenv.config({ path: path.resolve(process.cwd(), "dotenv/feature.env") }).parsed;
+        break;
     case "beta":
         parsedEnv = dotenv.config({ path: path.resolve(process.cwd(), "dotenv/beta.env") }).parsed;
         break;

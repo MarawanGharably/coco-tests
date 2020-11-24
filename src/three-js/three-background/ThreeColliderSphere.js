@@ -5,7 +5,7 @@ export default class ThreeColliderSphere extends ThreeSceneObject {
     constructor() {
         super();
 
-        const geometry = new THREE.SphereGeometry(-10);
+        const geometry = new THREE.SphereGeometry(-10, 20, 20);
         const material = new THREE.MeshBasicMaterial({
             color: 0x00ff00,
             transparent: true,

@@ -3,11 +3,20 @@ import * as THREE from 'three';
 import ThreeSceneObject from '../three-base-components/ThreeSceneObject';
 import WireframeHelper from './WireframeHelper';
 
-const BackgroundLODS = Object.freeze({
-    LOD1: 1,
-    LOD2: 2,
-    LOD3: 3,
+const LOD_TO_GRID_SIZE_MAP = Object.freeze({
+    1: 2,
+    2: 4,
+    3: 8,
 });
+
+/**
+ * LOD 1 (1k):
+ *  2x2 grid per face made of 512x512 textures
+ * LOD 2 (2k):
+ *  4x4 grid per face made of 512x512 textures
+ * LOD 3 (4k):
+ *  8x8 grid per face made of 512x512 textures
+ */
 
 /**
  * Key: Index or Arr | Side of Cube | Coordinate representation
@@ -20,10 +29,20 @@ const BackgroundLODS = Object.freeze({
 */
 
 export default class ThreeBackgroundCube extends ThreeSceneObject {
-    constructor() {
+    constructor(LOD = 1) {
         super();
 
-        const geometry = new THREE.BoxGeometry(-20, 20, 20, 2, 2, 2);
+        this.LOD = LOD;
+        this.gridSize = LOD_TO_GRID_SIZE_MAP[LOD];
+
+        const geometry = new THREE.BoxGeometry(
+            -20,
+            20,
+            20,
+            this.gridSize,
+            this.gridSize,
+            this.gridSize,
+        );
         geometry.rotateY(THREE.MathUtils.degToRad(180));
         this.setupFaceUV(geometry);
 
@@ -43,7 +62,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
         return loader;
     }
 
-    loadCubeTexture = (url, LOD = 1) => {
+    loadCubeTexture = (url) => {
         // const baseUrl = 'https://cdn.obsessvr.com/obsess-cms-beta/clients/Coach/5f04a065ec0821b7050996d6/scenes/5f04a065ec0821b7050996d5/images/cube_map';
 
         // const loadOrder = [
@@ -55,7 +74,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
         //     `${baseUrl}/1k_left.jpg`,
         // ];
 
-        const loadOrder = this.buildLODUrls(url, LOD);
+        const loadOrder = this.buildLODUrls(url);
 
         this.loader = this.setupTextureLoader();
 
@@ -71,25 +90,11 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
     }
 
     // Build load order of cubemaps
-    buildLODUrls = (baseUrl, LOD) => {
-        if (!baseUrl || !LOD) {
+    buildLODUrls = (baseUrl) => {
+        if (!baseUrl) {
             return null;
         }
 
-        const setIterations = () => {
-            switch (LOD) {
-                case BackgroundLODS.LOD1:
-                    return 2;
-                case BackgroundLODS.LOD2:
-                    return 4;
-                case BackgroundLODS.LOD3:
-                    return 8;
-                default:
-                    return 2;
-            }
-        };
-
-        const iterations = setIterations();
         // controls current configuration of cube object
         const loadObject = {
             back: [],
@@ -100,10 +105,11 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
             left: [],
         };
 
+        const iterations = this.gridSize;
         Object.keys(loadObject).forEach((side) => {
             for (let i = iterations - 1; i >= 0; i -= 1) {
                 for (let j = 0; j < iterations; j += 1) {
-                    const imageName = `${baseUrl}${LOD}k_${side}_${i}_${j}.jpg`;
+                    const imageName = `${baseUrl}${this.LOD}k_${side}_${i}_${j}.jpg`;
                     loadObject[side].push(imageName);
                 }
             }
@@ -117,7 +123,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
         return loadOrder;
     }
 
-    resolveFaceMaterialIndexes = (LOD) => { // eslint-disable-line
+    resolveFaceMaterialIndexes = () => { // eslint-disable-line
         let currentMaterialIndex = 0;
         this.sceneObject.geometry.faces.forEach((face, index) => {
             face.materialIndex = currentMaterialIndex; // eslint-disable-line

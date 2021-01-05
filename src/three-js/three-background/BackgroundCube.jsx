@@ -5,6 +5,8 @@ import { useCollisionManager, CollisionManagerActionEnums } from '../collision-m
 import { useEditorDataStore } from '../../data-store/editor-data-store/EditorDataStore';
 import { formURL } from '../../utils/urlHelper';
 
+// SET LOD
+const LOD = 2;
 
 const BackgroundCube = () => {
     const [state] = useThree();
@@ -16,7 +18,7 @@ const BackgroundCube = () => {
     const cube = useRef();
 
     useEffect(() => {
-        cube.current = new ThreeBackgroundCube();
+        cube.current = new ThreeBackgroundCube(LOD);
 
         cube.current.resolveFaceMaterialIndexes(1);
 
@@ -37,7 +39,7 @@ const BackgroundCube = () => {
         sceneData.filter((scene) => {
             if (scene._id.$oid === currentSceneId) { // eslint-disable-line
                 const cubemapDir = formURL(scene.cube_map_dir);
-                cube.current.loadCubeTexture(cubemapDir, 1);
+                cube.current.loadCubeTexture(cubemapDir);
                 return scene;
             }
             return null;

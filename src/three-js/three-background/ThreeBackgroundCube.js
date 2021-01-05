@@ -9,6 +9,12 @@ const LOD_TO_GRID_SEGMENTS_MAP = Object.freeze({
     3: 8,
 });
 
+const LOD_TO_RESOLUTION = Object.freeze({
+    1: '1k',
+    2: '2k',
+    3: '4k',
+});
+
 /**
  * LOD 1 (1k):
  *  2x2 grid per face made of 512x512 textures
@@ -106,10 +112,12 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
         };
 
         const iterations = this.gridSegments;
+        const resolution = LOD_TO_RESOLUTION[this.LOD];
+
         Object.keys(loadObject).forEach((side) => {
             for (let i = iterations - 1; i >= 0; i -= 1) {
                 for (let j = 0; j < iterations; j += 1) {
-                    const imageName = `${baseUrl}${this.LOD}k_${side}_${i}_${j}.jpg`;
+                    const imageName = `${baseUrl}${resolution}_${side}_${i}_${j}.jpg`;
                     loadObject[side].push(imageName);
                 }
             }

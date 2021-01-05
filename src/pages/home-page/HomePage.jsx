@@ -8,7 +8,7 @@ import Loader from '../../components/loader/Loader';
 import { apiGetClientStores } from '../../utils/apiUtils';
 import HomePageStoreItem from './HomePageStoreItem';
 import { useHomePageDataStore, HomePageActionEnums, sessionStorageKey } from '../../data-store/home-page-data-store/HomePageDataStore';
-import { getStoreThumbnails } from './homepageUtil';
+import { getStoreThumbnails, homepageThumbnailReducer } from './homepageUtil';
 import './_home-page.scss';
 
 const HomePage = () => {
@@ -62,15 +62,15 @@ const HomePage = () => {
     const renderStoresList = () => {
         const { storeData, storeThumbnails } = state;
         let storesList;
-
         if (storeData && storeThumbnails.length > 0) {
-            const thumbnailObjects = storeThumbnails.reduce((obj, item) => (obj[item.storeId] = item.thumbnailUrl, obj), {}); //eslint-disable-line
+            const thumbnailUrlMap = homepageThumbnailReducer(storeThumbnails);
+
             storesList = storeData.map((storeInfo) => (
                 <HomePageStoreItem
                     key={storeInfo._id.$oid} // eslint-disable-line
                     storeInfo={storeInfo}
                     handleEditStore={handleEditStore}
-                    thumbnailUrl={thumbnailObjects[storeInfo._id.$oid]} // eslint-disable-line
+                    thumbnailUrl={thumbnailUrlMap[storeInfo._id.$oid]} // eslint-disable-line
                 />
             ));
         }

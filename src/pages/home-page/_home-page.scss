@@ -1,7 +1,9 @@
 .home-page {
     &-wrapper {
+        flex:1;
         flex-wrap: wrap;
         place-content: center;
+        overflow: auto;
     }
     &-card {
         margin: 3em 2.5em;

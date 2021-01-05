@@ -113,6 +113,10 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 
         const iterations = this.gridSegments;
         const resolution = LOD_TO_RESOLUTION[this.LOD];
+        // resolution definition:
+        // LOD1 = '1k'
+        // LOD2 = '2k'
+        // LOD3 = '4k'
 
         Object.keys(loadObject).forEach((side) => {
             for (let i = iterations - 1; i >= 0; i -= 1) {

@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import ThreeSceneObject from '../three-base-components/ThreeSceneObject';
 import WireframeHelper from './WireframeHelper';
 
-const LOD_TO_GRID_SIZE_MAP = Object.freeze({
+const LOD_TO_GRID_SEGMENTS_MAP = Object.freeze({
     1: 2,
     2: 4,
     3: 8,
@@ -33,15 +33,15 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
         super();
 
         this.LOD = LOD;
-        this.gridSize = LOD_TO_GRID_SIZE_MAP[LOD];
+        this.gridSegments = LOD_TO_GRID_SEGMENTS_MAP[LOD];
 
         const geometry = new THREE.BoxGeometry(
             -20,
             20,
             20,
-            this.gridSize,
-            this.gridSize,
-            this.gridSize,
+            this.gridSegments,
+            this.gridSegments,
+            this.gridSegments,
         );
         geometry.rotateY(THREE.MathUtils.degToRad(180));
         this.setupFaceUV(geometry);
@@ -105,7 +105,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
             left: [],
         };
 
-        const iterations = this.gridSize;
+        const iterations = this.gridSegments;
         Object.keys(loadObject).forEach((side) => {
             for (let i = iterations - 1; i >= 0; i -= 1) {
                 for (let j = 0; j < iterations; j += 1) {

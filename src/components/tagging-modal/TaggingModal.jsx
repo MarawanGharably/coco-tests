@@ -56,7 +56,8 @@ const TaggingModal = ({
     }, [UIState, uuid]);
 
     const handleChange = (e) => {
-        setSKU(e.target.value);
+        const value = e.target.value.trim();
+        setSKU(value);
     };
 
     const handleSave = debounce(async () => {

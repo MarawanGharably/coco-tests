@@ -209,7 +209,6 @@ export const ThreeEditor = ({ children }) => {
         // set new reference for cameraRef.current here
         cameraRef.current = new THREE.PerspectiveCamera(70, aspectRatio, 0.1, 1000);
         const controls = new OrbitControls(cameraRef.current, renderer.domElement);
-        controls.enableZoom = false;
 
         const windowResizeHandler = () => {
             const currentAspectRatio = (canvasContainer.offsetWidth * widthMultiplier)

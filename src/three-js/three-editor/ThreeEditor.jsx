@@ -228,7 +228,7 @@ export const ThreeEditor = ({ children }) => {
         window.addEventListener('mousedown', onMouseDown);
         window.addEventListener('mouseup', onMouseUp);
         window.addEventListener('contextmenu', preventContextMenu);
-        window.addEventListener('wheel', mouseWheelHandler, { passive: true });
+        canvasContainerRef.current.addEventListener('wheel', mouseWheelHandler, { passive: true });
 
         scene.add(cameraRef.current);
         clock.start();
@@ -238,7 +238,7 @@ export const ThreeEditor = ({ children }) => {
             window.removeEventListener('resize', windowResizeHandler);
             window.removeEventListener('mousedown', onMouseDown);
             window.removeEventListener('mouseup', onMouseUp);
-            window.removeEventListener('wheel', mouseWheelHandler);
+            canvasContainerRef.current.removeEventListener('wheel', mouseWheelHandler);
 
             controls.dispose();
             scene.dispose();

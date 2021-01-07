@@ -13,6 +13,8 @@ import { useEditorDataStore } from '../../data-store/editor-data-store/EditorDat
 import { useDataManager } from '../data-manager/DataManager';
 
 const DESKTOP_THRESHOLD = 0.005;
+const MIN_ZOOM_FOV = 20;
+const MAX_ZOOM_FOV = 70;
 
 const initialState = {
     scene: null,
@@ -124,30 +126,30 @@ export const ThreeEditor = ({ children }) => {
         return marker;
     };
 
-    const getMousePosition = (refToUpdate, ev) => {
+    const getMousePosition = (refToUpdate, e) => {
         const {
             top, left, width, height,
         } = rendererRef.current.domElement.getBoundingClientRect();
 
-        refToUpdate.current.x = -1 + 2 * (ev.clientX - left) / width; // eslint-disable-line
-        refToUpdate.current.y = 1 - 2 * (ev.clientY - top) / height; // eslint-disable-line
+        refToUpdate.current.x = -1 + 2 * (e.clientX - left) / width; // eslint-disable-line
+        refToUpdate.current.y = 1 - 2 * (e.clientY - top) / height; // eslint-disable-line
     };
 
-    const onMouseDown = (ev) => {
-        if (ev.button !== 0 || ev.target.tagName !== 'CANVAS') {
+    const onMouseDown = (e) => {
+        if (e.button !== 0 || e.target.tagName !== 'CANVAS') {
             return;
         }
 
-        getMousePosition(mouseStart, ev);
+        getMousePosition(mouseStart, e);
     };
 
     // Possible move this down a layer in the future to make mouse down events more extensible
-    const onMouseUp = (ev) => {
-        if (ev.button !== 0 || ev.target.tagName !== 'CANVAS') {
+    const onMouseUp = (e) => {
+        if (e.button !== 0 || e.target.tagName !== 'CANVAS') {
             return;
         }
 
-        getMousePosition(mouseRef, ev);
+        getMousePosition(mouseRef, e);
 
         const dragDistance = mouseRef.current.distanceTo(mouseStart.current);
 
@@ -173,6 +175,16 @@ export const ThreeEditor = ({ children }) => {
         marker.setPosition(point.x, point.y, point.z);
 
         marker.renderComponentImmediately();
+    };
+
+    const mouseWheelHandler = (e) => {
+        const fovDelta = e.deltaY;
+        const temp = cameraRef.current.fov + (fovDelta * 0.05);
+
+        if (temp > MIN_ZOOM_FOV && temp < MAX_ZOOM_FOV) {
+            cameraRef.current.fov = temp;
+            cameraRef.current.updateProjectionMatrix();
+        }
     };
 
     const preventContextMenu = (e) => {
@@ -215,6 +227,7 @@ export const ThreeEditor = ({ children }) => {
         window.addEventListener('mousedown', onMouseDown);
         window.addEventListener('mouseup', onMouseUp);
         window.addEventListener('contextmenu', preventContextMenu);
+        canvasContainerRef.current.addEventListener('wheel', mouseWheelHandler, { passive: true });
 
         scene.add(cameraRef.current);
         clock.start();
@@ -224,6 +237,7 @@ export const ThreeEditor = ({ children }) => {
             window.removeEventListener('resize', windowResizeHandler);
             window.removeEventListener('mousedown', onMouseDown);
             window.removeEventListener('mouseup', onMouseUp);
+            canvasContainerRef.current.removeEventListener('wheel', mouseWheelHandler);
 
             controls.dispose();
             scene.dispose();

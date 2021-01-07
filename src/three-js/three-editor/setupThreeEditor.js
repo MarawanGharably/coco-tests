@@ -26,5 +26,6 @@ export const setupControls = (controls) => {
     controls.rotateSpeed = 0.3;
     controls.maxPolarAngle = Math.PI;
     controls.enableKeys = false;
+    controls.enableZoom = false;
     controls.enablePan = false;
 };

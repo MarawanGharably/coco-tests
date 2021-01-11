@@ -6,7 +6,7 @@ import { useEditorDataStore } from '../../data-store/editor-data-store/EditorDat
 import { formURL } from '../../utils/urlHelper';
 
 // SET LOD
-const LOD = 2;
+const LOD = 3;
 
 const BackgroundCube = () => {
     const [state] = useThree();

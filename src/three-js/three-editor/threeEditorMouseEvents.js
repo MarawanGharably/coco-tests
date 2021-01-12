@@ -7,9 +7,9 @@ export const threeEditorMouseEvents = (
     raycasterRef,
     colliderRef,
     renderMarker, // function
-    desktopThreshold,
-    minZoomFOV,
-    maxZoomFOV,
+    DESKTOP_THRESHOLD, // constant
+    MIN_ZOOM_FOV, // constant
+    MAX_ZOOM_FOV, // constant
     colliderDispatch, // function
     CollisionManagerActionEnums,
 ) => {
@@ -39,7 +39,7 @@ export const threeEditorMouseEvents = (
 
         const dragDistance = mouseRef.current.distanceTo(mouseStart.current);
 
-        if (dragDistance > desktopThreshold) {
+        if (dragDistance > DESKTOP_THRESHOLD) {
             return;
         }
 
@@ -67,7 +67,7 @@ export const threeEditorMouseEvents = (
         const fovDelta = e.deltaY;
         const temp = cameraRef.current.fov + (fovDelta * 0.05);
 
-        if (temp > minZoomFOV && temp < maxZoomFOV) {
+        if (temp > MIN_ZOOM_FOV && temp < MAX_ZOOM_FOV) {
             cameraRef.current.fov = temp; // eslint-disable-line
             cameraRef.current.updateProjectionMatrix();
         }
@@ -82,14 +82,14 @@ export const threeEditorMouseEvents = (
     };
 
     // main export of event listeners
-    const addThreeEditorEventListeners = () => {
+    const addThreeEditorMouseEventListeners = () => {
         window.addEventListener('mousedown', onMouseDown);
         window.addEventListener('mouseup', onMouseUp);
         window.addEventListener('contextmenu', preventContextMenu);
         canvasContainerRef.current.addEventListener('wheel', mouseWheelHandler, { passive: true });
     };
 
-    const removeThreeEditorEventListeners = () => {
+    const removeThreeEditorMouseEventListeners = () => {
         window.removeEventListener('mousedown', onMouseDown);
         window.removeEventListener('mouseup', onMouseUp);
         window.removeEventListener('contextmenu', preventContextMenu);
@@ -97,7 +97,7 @@ export const threeEditorMouseEvents = (
     };
 
     return {
-        addThreeEditorEventListeners,
-        removeThreeEditorEventListeners,
+        addThreeEditorMouseEventListeners,
+        removeThreeEditorMouseEventListeners,
     };
 };

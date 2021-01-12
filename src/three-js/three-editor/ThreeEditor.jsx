@@ -127,9 +127,10 @@ export const ThreeEditor = ({ children }) => {
         return marker;
     };
 
+    // mouse event listeners
     const {
-        addThreeEditorEventListeners,
-        removeThreeEditorEventListeners,
+        addThreeEditorMouseEventListeners,
+        removeThreeEditorMouseEventListeners,
     } = threeEditorMouseEvents(
         renderer,
         mouseStart,
@@ -175,7 +176,7 @@ export const ThreeEditor = ({ children }) => {
         setupControls(controls);
 
         window.addEventListener('resize', windowResizeHandler);
-        addThreeEditorEventListeners();
+        addThreeEditorMouseEventListeners();
 
         scene.add(cameraRef.current);
         clock.start();
@@ -183,7 +184,7 @@ export const ThreeEditor = ({ children }) => {
         setThreeReady(true);
         return () => {
             window.removeEventListener('resize', windowResizeHandler);
-            removeThreeEditorEventListeners();
+            removeThreeEditorMouseEventListeners();
 
             controls.dispose();
             scene.dispose();

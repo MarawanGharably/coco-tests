@@ -21,6 +21,8 @@ const UIManagerReducer = (state, action) => {
     const { dynamicUIs, stateManager } = state;
     const { type, payload } = action;
 
+    // console.log(payload);
+
     switch (type) {
         case ADD_UI: {
             const { uuid, componentToRender, renderProps } = payload;
@@ -92,8 +94,8 @@ export const UIManager = ({ children }) => {
     return (
         <UIState.Provider value={state}>
             <UIDispatch.Provider value={dispatch}>
-                { dynamicUIRender }
-                { children }
+                {dynamicUIRender}
+                {children}
             </UIDispatch.Provider>
         </UIState.Provider>
     );

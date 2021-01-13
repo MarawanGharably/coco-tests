@@ -13,10 +13,6 @@ import TaggingModal from '../../components/tagging-modal/TaggingModal';
 import { useEditorDataStore } from '../../data-store/editor-data-store/EditorDataStore';
 import { useDataManager } from '../data-manager/DataManager';
 
-const DESKTOP_THRESHOLD = 0.005;
-const MIN_ZOOM_FOV = 20;
-const MAX_ZOOM_FOV = 70;
-
 const initialState = {
     scene: null,
     updateList: [],
@@ -140,9 +136,6 @@ export const ThreeEditor = ({ children }) => {
         raycasterRef,
         colliderRef,
         renderMarker,
-        DESKTOP_THRESHOLD,
-        MIN_ZOOM_FOV,
-        MAX_ZOOM_FOV,
         colliderDispatch,
         CollisionManagerActionEnums,
     );

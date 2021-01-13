@@ -7,12 +7,13 @@ export const threeEditorMouseEvents = (
     raycasterRef,
     colliderRef,
     renderMarker, // function
-    DESKTOP_THRESHOLD, // constant
-    MIN_ZOOM_FOV, // constant
-    MAX_ZOOM_FOV, // constant
     colliderDispatch, // function
     CollisionManagerActionEnums,
 ) => {
+    const DESKTOP_THRESHOLD = 0.005;
+    const MIN_ZOOM_FOV = 20;
+    const MAX_ZOOM_FOV = 70;
+
     const getMousePosition = (refToUpdate, e) => {
         const {
             top, left, width, height,
@@ -30,25 +31,35 @@ export const threeEditorMouseEvents = (
         getMousePosition(mouseStart, e);
     };
 
+    const onMarkerDrag = (e) => console.log('~~~~~~~~~~~ marker dragging function ~~~~~~~~~~'); // eslint-disable-line
+
     const onMouseUp = (e) => {
         if (e.button !== 0 || e.target.tagName !== 'CANVAS') {
             return;
         }
 
         getMousePosition(mouseRef, e);
-
         const dragDistance = mouseRef.current.distanceTo(mouseStart.current);
+        const intersects = raycasterRef.current.intersectObjects(colliderRef.current);
+        const clickedItem = intersects[0];
+        const { point } = clickedItem;
+
+        console.log('~~~~ BEGIN intersects object ~~~~~~~'); // eslint-disable-line
+        console.log(intersects); // eslint-disable-line
+        console.log('~~~~ END intersects object ~~~~~~~'); // eslint-disable-line
 
         if (dragDistance > DESKTOP_THRESHOLD) {
+            if (clickedItem.object.name === 'marker') {
+                onMarkerDrag(); // TODO: MOVE THE MARKER FUNCTION
+            }
             return;
+            // early return so mouse up doesn't trigger a marker placement
         }
 
         raycasterRef.current.setFromCamera(mouseRef.current, cameraRef.current);
-        const intersects = raycasterRef.current.intersectObjects(colliderRef.current);
 
-        const { point } = intersects[0];
-        if (intersects[0].object.name === 'marker') {
-            intersects[0].object.onClick();
+        if (clickedItem.object.name === 'marker') {
+            clickedItem.object.onClick();
             return;
         }
 
@@ -81,7 +92,7 @@ export const threeEditorMouseEvents = (
         return true;
     };
 
-    // main export of event listeners
+    // 2 main functions of event listeners
     const addThreeEditorMouseEventListeners = () => {
         window.addEventListener('mousedown', onMouseDown);
         window.addEventListener('mouseup', onMouseUp);

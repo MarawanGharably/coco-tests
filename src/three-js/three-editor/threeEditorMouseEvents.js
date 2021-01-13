@@ -3,7 +3,7 @@
 export const threeEditorMouseEvents = (
     renderer,
     controls,
-    mouseStart,
+    mouseStartRef,
     mouseRef,
     canvasContainerRef,
     cameraRef,
@@ -31,12 +31,8 @@ export const threeEditorMouseEvents = (
     };
 
     const onMouseDown = (e) => {
-        // if (e.button !== 0 || e.target.tagName !== 'CANVAS') {
-        //     return;
-        // }
-
-        getMousePosition(mouseStart, e);
-        raycasterRef.current.setFromCamera(mouseStart.current, cameraRef.current);
+        getMousePosition(mouseStartRef, e);
+        raycasterRef.current.setFromCamera(mouseStartRef.current, cameraRef.current);
         const intersects = raycasterRef.current.intersectObjects(colliderRef.current);
 
         if (intersects[0].object.name === 'marker') {
@@ -44,9 +40,6 @@ export const threeEditorMouseEvents = (
             controls.enabled = false;
             focusedObject = intersects[0].object;
             console.log(focusedObject);
-
-            // onClick opens up modalUI - need to open up modal UI after replacement is done
-            intersects[0].object.onClick();
         }
     };
 
@@ -54,28 +47,28 @@ export const threeEditorMouseEvents = (
     const onMouseUp = (e) => {
         controls.enabled = true;
 
+        getMousePosition(mouseRef, e);
+        const dragDistance = mouseRef.current.distanceTo(mouseStartRef.current);
+
+        raycasterRef.current.setFromCamera(mouseRef.current, cameraRef.current);
+        const intersects = raycasterRef.current.intersectObjects(colliderRef.current);
+
         if (isMarkerClicked) {
             isMarkerClicked = false;
             focusedObject = null;
+            if (intersects[0].object.name === 'marker') {
+                intersects[0].object.onClick();
+                return;
+            }
             return;
         }
-
-        getMousePosition(mouseRef, e);
-
-        const dragDistance = mouseRef.current.distanceTo(mouseStart.current);
 
         if (dragDistance > DESKTOP_THRESHOLD) {
             return;
         }
 
-        raycasterRef.current.setFromCamera(mouseRef.current, cameraRef.current);
-        const intersects = raycasterRef.current.intersectObjects(colliderRef.current);
 
         const { point } = intersects[0];
-        if (intersects[0].object.name === 'marker') {
-            intersects[0].object.onClick();
-            return;
-        }
 
         const marker = renderMarker();
 
@@ -96,18 +89,6 @@ export const threeEditorMouseEvents = (
             cameraRef.current.fov = temp; // eslint-disable-line
             cameraRef.current.updateProjectionMatrix();
         }
-    };
-
-    const onMouseMove = (e) => {
-        // updateFocusedObject() create this function to update object that is in focus
-        console.log('~~~~~~~~~~~ onMouseMove function ~~~~~~~~~~');
-        getMousePosition(mouseStart, e);
-        console.log(focusedObject);
-        if (focusedObject) {
-
-        }
-
-        console.log(controls.enabled);
     };
 
     // onMouseMove(event) {
@@ -151,6 +132,17 @@ export const threeEditorMouseEvents = (
     //         this.focusedObject = null;
     //     }
     // }
+
+    const onMouseMove = (e) => {
+        console.log('~~~~~~~~~~~ onMouseMove function ~~~~~~~~~~');
+        // getMousePosition(mouseStartRef, e);
+        console.log(focusedObject);
+        if (focusedObject) {
+            // updateFocusedObject() create this function to update object that is in focus
+        }
+
+        // console.log(controls.enabled);
+    };
 
     const preventContextMenu = (e) => {
         if (e.target.id === 'modal-overlay') {

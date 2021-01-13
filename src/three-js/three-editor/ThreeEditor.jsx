@@ -84,7 +84,7 @@ export const ThreeEditor = ({ children }) => {
     const colliderRef = useRef(colliderState.colliders);
 
     const mouseRef = useRef(new THREE.Vector2());
-    const mouseStart = useRef(new THREE.Vector2());
+    const mouseStartRef = useRef(new THREE.Vector2());
 
     const renderer = rendererRef.current;
     const scene = sceneRef.current;
@@ -154,7 +154,7 @@ export const ThreeEditor = ({ children }) => {
         } = threeEditorMouseEvents(
             renderer,
             controls,
-            mouseStart,
+            mouseStartRef,
             mouseRef,
             canvasContainerRef,
             cameraRef,

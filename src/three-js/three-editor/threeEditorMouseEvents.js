@@ -1,5 +1,8 @@
+/* eslint-disable */
+
 export const threeEditorMouseEvents = (
     renderer,
+    controls,
     mouseStart,
     mouseRef,
     canvasContainerRef,
@@ -13,7 +16,10 @@ export const threeEditorMouseEvents = (
     const DESKTOP_THRESHOLD = 0.005;
     const MIN_ZOOM_FOV = 20;
     const MAX_ZOOM_FOV = 70;
+
     let isMarkerClicked = false;
+    const isMouseMoving = false;
+    let focusedObject = null;
 
     const getMousePosition = (refToUpdate, e) => {
         const {
@@ -24,32 +30,33 @@ export const threeEditorMouseEvents = (
         refToUpdate.current.y = 1 - 2 * (e.clientY - top) / height; // eslint-disable-line
     };
 
-    const onMarkerDrag = (e) => console.log('~~~~~~~~~~~ marker dragging function ~~~~~~~~~~'); // eslint-disable-line
-
     const onMouseDown = (e) => {
-        if (e.button !== 0 || e.target.tagName !== 'CANVAS') {
-            return;
-        }
+        // if (e.button !== 0 || e.target.tagName !== 'CANVAS') {
+        //     return;
+        // }
 
         getMousePosition(mouseStart, e);
         raycasterRef.current.setFromCamera(mouseStart.current, cameraRef.current);
         const intersects = raycasterRef.current.intersectObjects(colliderRef.current);
 
-        // console.log(`onMouseDown before: ${isMarkerClicked}`);
-        // console.log(intersects);
         if (intersects[0].object.name === 'marker') {
             isMarkerClicked = true;
+            controls.enabled = false;
+            focusedObject = intersects[0].object;
+            console.log(focusedObject);
+
             // onClick opens up modalUI - need to open up modal UI after replacement is done
             intersects[0].object.onClick();
         }
-        // console.log(`onMouseDown after: ${isMarkerClicked}`);
     };
 
 
     const onMouseUp = (e) => {
-        if (e.button !== 0 || e.target.tagName !== 'CANVAS' || isMarkerClicked) {
+        controls.enabled = true;
+
+        if (isMarkerClicked) {
             isMarkerClicked = false;
-            // console.log(`onMouseUp after: ${isMarkerClicked}`);
+            focusedObject = null;
             return;
         }
 
@@ -91,6 +98,60 @@ export const threeEditorMouseEvents = (
         }
     };
 
+    const onMouseMove = (e) => {
+        // updateFocusedObject() create this function to update object that is in focus
+        console.log('~~~~~~~~~~~ onMouseMove function ~~~~~~~~~~');
+        getMousePosition(mouseStart, e);
+        console.log(focusedObject);
+        if (focusedObject) {
+
+        }
+
+        console.log(controls.enabled);
+    };
+
+    // onMouseMove(event) {
+    //     let mousePosition = getMousePositionInWebGLRenderer(this.renderer, event.clientX, event.clientY);
+    //     if (this.isMoving && this.focusedObject) {
+    //         this.moveFocusedObject(mousePosition);
+    //         return;
+    //     }
+    //     this.updateFocusedObject(mousePosition);
+    // }
+
+    // moveFocusedObject(mousePosition) {
+    //     this.raycaster.setFromCamera(mousePosition, this.camera);
+    //     let hitObjects = this.raycaster.intersectObject(this.targetMesh);
+    //     if (hitObjects.length > 0) {
+    //         let newPos = hitObjects[0].point;
+    //         if (this.focusedObject.transform) {
+    //             this.focusedObject.transform.setPosition(newPos);
+    //         } else {
+    //             console.error('Focused object don`t have a transform property! Focused object: ' + this.focusedObject);
+    //         }
+    //     }
+    //     else {
+    //         console.log('Raycast not intersecting with target sphere!');
+    //     }
+    // }
+
+    // updateFocusedObject(mousePosition) {
+    //     let hitObject = this.doRaycast(mousePosition);
+    //     if (this.focusedObject === hitObject) {
+    //         return;
+    //     }
+    //     if (hitObject) {
+    //         this.focusedObject = hitObject;
+    //         document.body.style.cursor = 'grab';
+    //         document.body.style.cursor = '-webkit-grab';
+    //         (this.focusedObject.onHover || Function)()
+    //     } else {
+    //         document.body.style.cursor = 'default';
+    //         (this.focusedObject.onUnhover || Function)();
+    //         this.focusedObject = null;
+    //     }
+    // }
+
     const preventContextMenu = (e) => {
         if (e.target.id === 'modal-overlay') {
             e.preventDefault();
@@ -101,16 +162,18 @@ export const threeEditorMouseEvents = (
 
     // 2 main functions of event listeners
     const addThreeEditorMouseEventListeners = () => {
-        window.addEventListener('mousedown', onMouseDown);
-        window.addEventListener('mouseup', onMouseUp);
-        window.addEventListener('contextmenu', preventContextMenu);
+        canvasContainerRef.current.addEventListener('mousedown', onMouseDown);
+        canvasContainerRef.current.addEventListener('mouseup', onMouseUp);
+        canvasContainerRef.current.addEventListener('contextmenu', preventContextMenu);
+        canvasContainerRef.current.addEventListener('mousemove', onMouseMove);
         canvasContainerRef.current.addEventListener('wheel', mouseWheelHandler, { passive: true });
     };
 
     const removeThreeEditorMouseEventListeners = () => {
-        window.removeEventListener('mousedown', onMouseDown);
-        window.removeEventListener('mouseup', onMouseUp);
-        window.removeEventListener('contextmenu', preventContextMenu);
+        canvasContainerRef.current.removeEventListener('mousedown', onMouseDown);
+        canvasContainerRef.current.removeEventListener('mouseup', onMouseUp);
+        canvasContainerRef.current.removeEventListener('contextmenu', preventContextMenu);
+        canvasContainerRef.current.removeEventListener('mousemove', onMouseMove);
         canvasContainerRef.current.removeEventListener('wheel', mouseWheelHandler);
     };
 

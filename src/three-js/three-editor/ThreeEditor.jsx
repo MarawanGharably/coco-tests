@@ -123,23 +123,6 @@ export const ThreeEditor = ({ children }) => {
         return marker;
     };
 
-    // mouse event listeners
-    const {
-        addThreeEditorMouseEventListeners,
-        removeThreeEditorMouseEventListeners,
-    } = threeEditorMouseEvents(
-        renderer,
-        mouseStart,
-        mouseRef,
-        canvasContainerRef,
-        cameraRef,
-        raycasterRef,
-        colliderRef,
-        renderMarker,
-        colliderDispatch,
-        CollisionManagerActionEnums,
-    );
-
     useEffect(() => {
         dispatch({
             type: SET_SCENE,
@@ -163,6 +146,24 @@ export const ThreeEditor = ({ children }) => {
             renderer.setSize((canvasContainer.offsetWidth * widthMultiplier),
                 (canvasContainer.offsetHeight * heightMultiplier));
         };
+
+        // mouse event listeners
+        const {
+            addThreeEditorMouseEventListeners,
+            removeThreeEditorMouseEventListeners,
+        } = threeEditorMouseEvents(
+            renderer,
+            controls,
+            mouseStart,
+            mouseRef,
+            canvasContainerRef,
+            cameraRef,
+            raycasterRef,
+            colliderRef,
+            renderMarker,
+            colliderDispatch,
+            CollisionManagerActionEnums,
+        );
 
         setupRenderer(rendererRef.current, canvasContainer, widthMultiplier, heightMultiplier);
         setupCamera(aspectRatio, cameraRef.current);

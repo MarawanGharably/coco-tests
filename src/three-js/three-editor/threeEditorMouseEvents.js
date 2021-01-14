@@ -15,6 +15,7 @@ export const threeEditorMouseEvents = (
     const MIN_ZOOM_FOV = 20;
     const MAX_ZOOM_FOV = 70;
 
+    // reference to the object that is clicked/being dragged
     let isMarkerClicked = false;
     let focusedObject = null;
 
@@ -88,8 +89,9 @@ export const threeEditorMouseEvents = (
         getMousePosition(mouseRef, e);
         raycasterRef.current.setFromCamera(mouseRef.current, cameraRef.current);
         const intersects = raycasterRef.current.intersectObjects(colliderRef.current);
-        const { point } = intersects[0];
-        focusedObject.owner.setPosition(point.x, point.y, point.z);
+        const { point } = intersects[1];
+        const { x, y, z } = point;
+        focusedObject.owner.setPosition(x, y, z);
     };
 
     const updateFocusedObject = () => {

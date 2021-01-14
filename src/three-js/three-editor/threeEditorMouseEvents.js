@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 export const threeEditorMouseEvents = (
     renderer,
     controls,
@@ -18,7 +16,6 @@ export const threeEditorMouseEvents = (
     const MAX_ZOOM_FOV = 70;
 
     let isMarkerClicked = false;
-    const isMouseMoving = false;
     let focusedObject = null;
 
     const getMousePosition = (refToUpdate, e) => {
@@ -37,15 +34,13 @@ export const threeEditorMouseEvents = (
 
         if (intersects[0].object.name === 'marker') {
             isMarkerClicked = true;
-            controls.enabled = false;
+            controls.enabled = false; // eslint-disable-line
             focusedObject = intersects[0].object;
-            console.log(focusedObject);
         }
     };
 
-
     const onMouseUp = (e) => {
-        controls.enabled = true;
+        controls.enabled = true; // eslint-disable-line
 
         getMousePosition(mouseRef, e);
         const dragDistance = mouseRef.current.distanceTo(mouseStartRef.current);
@@ -55,7 +50,6 @@ export const threeEditorMouseEvents = (
 
         if (isMarkerClicked) {
             isMarkerClicked = false;
-            focusedObject = null;
             if (intersects[0].object.name === 'marker') {
                 intersects[0].object.onClick();
                 return;
@@ -66,7 +60,6 @@ export const threeEditorMouseEvents = (
         if (dragDistance > DESKTOP_THRESHOLD) {
             return;
         }
-
 
         const { point } = intersects[0];
 
@@ -91,57 +84,24 @@ export const threeEditorMouseEvents = (
         }
     };
 
-    // onMouseMove(event) {
-    //     let mousePosition = getMousePositionInWebGLRenderer(this.renderer, event.clientX, event.clientY);
-    //     if (this.isMoving && this.focusedObject) {
-    //         this.moveFocusedObject(mousePosition);
-    //         return;
-    //     }
-    //     this.updateFocusedObject(mousePosition);
-    // }
+    const moveFocusedObject = (e) => {
+        getMousePosition(mouseRef, e);
+        raycasterRef.current.setFromCamera(mouseRef.current, cameraRef.current);
+        const intersects = raycasterRef.current.intersectObjects(colliderRef.current);
+        const { point } = intersects[0];
+        focusedObject.owner.setPosition(point.x, point.y, point.z);
+    };
 
-    // moveFocusedObject(mousePosition) {
-    //     this.raycaster.setFromCamera(mousePosition, this.camera);
-    //     let hitObjects = this.raycaster.intersectObject(this.targetMesh);
-    //     if (hitObjects.length > 0) {
-    //         let newPos = hitObjects[0].point;
-    //         if (this.focusedObject.transform) {
-    //             this.focusedObject.transform.setPosition(newPos);
-    //         } else {
-    //             console.error('Focused object don`t have a transform property! Focused object: ' + this.focusedObject);
-    //         }
-    //     }
-    //     else {
-    //         console.log('Raycast not intersecting with target sphere!');
-    //     }
-    // }
-
-    // updateFocusedObject(mousePosition) {
-    //     let hitObject = this.doRaycast(mousePosition);
-    //     if (this.focusedObject === hitObject) {
-    //         return;
-    //     }
-    //     if (hitObject) {
-    //         this.focusedObject = hitObject;
-    //         document.body.style.cursor = 'grab';
-    //         document.body.style.cursor = '-webkit-grab';
-    //         (this.focusedObject.onHover || Function)()
-    //     } else {
-    //         document.body.style.cursor = 'default';
-    //         (this.focusedObject.onUnhover || Function)();
-    //         this.focusedObject = null;
-    //     }
-    // }
+    const updateFocusedObject = () => {
+        if (focusedObject) {
+            focusedObject = null;
+        }
+    };
 
     const onMouseMove = (e) => {
-        console.log('~~~~~~~~~~~ onMouseMove function ~~~~~~~~~~');
-        // getMousePosition(mouseStartRef, e);
-        console.log(focusedObject);
-        if (focusedObject) {
-            // updateFocusedObject() create this function to update object that is in focus
-        }
-
-        // console.log(controls.enabled);
+        if (focusedObject && isMarkerClicked) {
+            moveFocusedObject(e);
+        } else if (focusedObject) updateFocusedObject();
     };
 
     const preventContextMenu = (e) => {

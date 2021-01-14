@@ -5,16 +5,13 @@ import * as THREE from 'three';
 
 import OrbitControls from '../three-controls/OrbitControls';
 import { setupRenderer, setupCamera, setupControls } from './setupThreeEditor';
+import { threeEditorMouseEvents } from './threeEditorMouseEvents';
 import { useCollisionManager, CollisionManagerActionEnums } from '../collision-manager/CollisionManager';
 import ThreeProductMarker from '../hotspot-marker/ThreeProductMarker';
 import { useUIManager } from '../ui-manager/UIManager';
 import TaggingModal from '../../components/tagging-modal/TaggingModal';
 import { useEditorDataStore } from '../../data-store/editor-data-store/EditorDataStore';
 import { useDataManager } from '../data-manager/DataManager';
-
-const DESKTOP_THRESHOLD = 0.005;
-const MIN_ZOOM_FOV = 20;
-const MAX_ZOOM_FOV = 70;
 
 const initialState = {
     scene: null,
@@ -87,7 +84,7 @@ export const ThreeEditor = ({ children }) => {
     const colliderRef = useRef(colliderState.colliders);
 
     const mouseRef = useRef(new THREE.Vector2());
-    const mouseStart = useRef(new THREE.Vector2());
+    const mouseStartRef = useRef(new THREE.Vector2());
 
     const renderer = rendererRef.current;
     const scene = sceneRef.current;
@@ -126,75 +123,6 @@ export const ThreeEditor = ({ children }) => {
         return marker;
     };
 
-    const getMousePosition = (refToUpdate, e) => {
-        const {
-            top, left, width, height,
-        } = rendererRef.current.domElement.getBoundingClientRect();
-
-        refToUpdate.current.x = -1 + 2 * (e.clientX - left) / width; // eslint-disable-line
-        refToUpdate.current.y = 1 - 2 * (e.clientY - top) / height; // eslint-disable-line
-    };
-
-    const onMouseDown = (e) => {
-        if (e.button !== 0 || e.target.tagName !== 'CANVAS') {
-            return;
-        }
-
-        getMousePosition(mouseStart, e);
-    };
-
-    // Possible move this down a layer in the future to make mouse down events more extensible
-    const onMouseUp = (e) => {
-        if (e.button !== 0 || e.target.tagName !== 'CANVAS') {
-            return;
-        }
-
-        getMousePosition(mouseRef, e);
-
-        const dragDistance = mouseRef.current.distanceTo(mouseStart.current);
-
-        if (dragDistance > DESKTOP_THRESHOLD) {
-            return;
-        }
-
-        raycasterRef.current.setFromCamera(mouseRef.current, cameraRef.current);
-        const intersects = raycasterRef.current.intersectObjects(colliderRef.current);
-
-        const { point } = intersects[0];
-        if (intersects[0].object.name === 'marker') {
-            intersects[0].object.onClick();
-            return;
-        }
-
-        const marker = renderMarker();
-
-        colliderDispatch({
-            type: CollisionManagerActionEnums.SET_COLLIDERS,
-            payload: marker.sceneObject,
-        });
-        marker.setPosition(point.x, point.y, point.z);
-
-        marker.renderComponentImmediately();
-    };
-
-    const mouseWheelHandler = (e) => {
-        const fovDelta = e.deltaY;
-        const temp = cameraRef.current.fov + (fovDelta * 0.05);
-
-        if (temp > MIN_ZOOM_FOV && temp < MAX_ZOOM_FOV) {
-            cameraRef.current.fov = temp;
-            cameraRef.current.updateProjectionMatrix();
-        }
-    };
-
-    const preventContextMenu = (e) => {
-        if (e.target.id === 'modal-overlay') {
-            e.preventDefault();
-            return false;
-        }
-        return true;
-    };
-
     useEffect(() => {
         dispatch({
             type: SET_SCENE,
@@ -219,15 +147,30 @@ export const ThreeEditor = ({ children }) => {
                 (canvasContainer.offsetHeight * heightMultiplier));
         };
 
+        // mouse event listeners
+        const {
+            addThreeEditorMouseEventListeners,
+            removeThreeEditorMouseEventListeners,
+        } = threeEditorMouseEvents(
+            renderer,
+            controls,
+            mouseStartRef,
+            mouseRef,
+            canvasContainerRef,
+            cameraRef,
+            raycasterRef,
+            colliderRef,
+            renderMarker,
+            colliderDispatch,
+            CollisionManagerActionEnums,
+        );
+
         setupRenderer(rendererRef.current, canvasContainer, widthMultiplier, heightMultiplier);
         setupCamera(aspectRatio, cameraRef.current);
         setupControls(controls);
 
         window.addEventListener('resize', windowResizeHandler);
-        window.addEventListener('mousedown', onMouseDown);
-        window.addEventListener('mouseup', onMouseUp);
-        window.addEventListener('contextmenu', preventContextMenu);
-        canvasContainerRef.current.addEventListener('wheel', mouseWheelHandler, { passive: true });
+        addThreeEditorMouseEventListeners();
 
         scene.add(cameraRef.current);
         clock.start();
@@ -235,9 +178,7 @@ export const ThreeEditor = ({ children }) => {
         setThreeReady(true);
         return () => {
             window.removeEventListener('resize', windowResizeHandler);
-            window.removeEventListener('mousedown', onMouseDown);
-            window.removeEventListener('mouseup', onMouseUp);
-            canvasContainerRef.current.removeEventListener('wheel', mouseWheelHandler);
+            removeThreeEditorMouseEventListeners();
 
             controls.dispose();
             scene.dispose();

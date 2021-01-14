@@ -92,8 +92,8 @@ export const UIManager = ({ children }) => {
     return (
         <UIState.Provider value={state}>
             <UIDispatch.Provider value={dispatch}>
-                { dynamicUIRender }
-                { children }
+                {dynamicUIRender}
+                {children}
             </UIDispatch.Provider>
         </UIState.Provider>
     );

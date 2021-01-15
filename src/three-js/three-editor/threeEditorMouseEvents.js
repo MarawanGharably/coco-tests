@@ -33,10 +33,12 @@ export const threeEditorMouseEvents = (
         raycasterRef.current.setFromCamera(mouseStartRef.current, cameraRef.current);
         const intersects = raycasterRef.current.intersectObjects(colliderRef.current);
 
-        if (intersects[0].object.name === 'marker') {
+        const marker = intersects.find((intersect) => intersect.object.name === 'marker');
+
+        if (marker) {
             isMarkerClicked = true;
             controls.enabled = false; // eslint-disable-line
-            focusedObject = intersects[0].object;
+            focusedObject = marker.object;
         }
     };
 

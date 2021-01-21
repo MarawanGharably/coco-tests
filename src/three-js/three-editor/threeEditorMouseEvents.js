@@ -34,9 +34,11 @@ export const threeEditorMouseEvents = (
         refToUpdate.current.y = 1 - 2 * (e.clientY - top) / height; // eslint-disable-line
     };
 
-    const dragReleaseProductHotspotAutosave = async (object) => {
+    const dragReleaseProductHotspotAutoSave = async (object) => {
         const hotspotType = 'product';
-        const { colliderTransform, visualTransform } = object.object.owner.getTransforms();
+        const currentProductMarker = object.object.owner;
+        const { colliderTransform, visualTransform } = currentProductMarker.getTransforms();
+        const { id, productSKU } = currentProductMarker.modalComponentRenderProps;
 
         const postData = {
             type: hotspotType,
@@ -44,12 +46,11 @@ export const threeEditorMouseEvents = (
             collider_transform: colliderTransform.elements,
             transform: visualTransform.elements,
             props: {
-                product_sku: object.object.owner.productSKU,
-                hotspot_type: 'product',
+                product_sku: productSKU,
+                hotspot_type: hotspotType,
             },
         };
         const selectedStoreId = sessionStorage.getItem('STORE_ID');
-        const { id, productSKU } = object.object.owner.modalComponentRenderProps;
 
         if (id) {
             try {
@@ -104,7 +105,7 @@ export const threeEditorMouseEvents = (
             if (isMarkerClicked) {
                 isMarkerClicked = false;
                 pendingSaveProductObject = markerOnRelease;
-                dragReleaseProductHotspotAutosave(pendingSaveProductObject);
+                dragReleaseProductHotspotAutoSave(pendingSaveProductObject);
             }
             return;
         }

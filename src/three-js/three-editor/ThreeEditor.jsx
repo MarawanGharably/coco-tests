@@ -66,7 +66,7 @@ export const ThreeEditor = ({ children }) => {
 
     const [colliderState, colliderDispatch] = useCollisionManager();
     const [, UIDispatch] = useUIManager();
-    const [dataState] = useDataManager();
+    const [dataState, dataDispatch] = useDataManager();
     const [editorState] = useEditorDataStore();
     const { currentSceneId } = editorState;
     const { updateList } = state;
@@ -163,6 +163,8 @@ export const ThreeEditor = ({ children }) => {
             renderMarker,
             colliderDispatch,
             CollisionManagerActionEnums,
+            currentSceneId,
+            dataDispatch,
         );
 
         setupRenderer(rendererRef.current, canvasContainer, widthMultiplier, heightMultiplier);
@@ -185,7 +187,7 @@ export const ThreeEditor = ({ children }) => {
             renderer.dispose();
             updateList.length = 0;
         };
-    }, []); // eslint-disable-line
+    }, [currentSceneId]); // eslint-disable-line
 
     useEffect(() => {
         updateRef.current = updateList;

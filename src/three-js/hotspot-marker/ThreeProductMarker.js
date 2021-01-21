@@ -14,6 +14,7 @@ export default class ThreeProductMarker extends InteractionObject {
         super();
 
         const modalComponent = new ModalComponent(componentToRender, renderProps, this.dispose);
+        this.modalComponentRenderProps = renderProps;
         this.attachComponent(modalComponent);
 
         const svgUrl = 'https://cdn.obsess-vr.com/product-hotspot-icon-circle.svg';

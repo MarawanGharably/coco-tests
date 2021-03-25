@@ -2,14 +2,14 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import { Field, reduxForm } from 'redux-form';
-import { Input } from '../formFields';
-import SubmitButton from '../../submit-button/SubmitButton';
-import { isValidEmail } from '../../../utils/validation';
-import PageRow from '../../page-row/PageRow';
-import PageItem from '../../page-item/PageItem';
+import { Input } from '../../_formFields';
+import SubmitButton from '../../../submit-button/SubmitButton';
+import { isValidEmail } from '../../../../utils/validation';
+import PageRow from '../../../page-row/PageRow';
+import PageItem from '../../../page-item/PageItem';
 
 // Actions
-import { resetPasswordByEmail } from '../../../store/actions';
+import { resetPasswordByEmail } from '../../../../store/actions';
 
 
 class RequestVerificationCodeForm extends Component {

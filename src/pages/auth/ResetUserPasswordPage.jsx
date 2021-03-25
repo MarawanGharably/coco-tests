@@ -2,7 +2,7 @@ import React from 'react';
 import Page from '../../layouts/page-template/Page';
 import PageRow from '../../components/page-row/PageRow';
 import PageItem from '../../components/page-item/PageItem';
-import ResetUserPasswordForm from '../../components/Forms/ResetUserPasswordForm';
+import ResetUserPasswordForm from '../../components/Forms/Auth/ResetUserPasswordForm';
 
 
 const ResetUserPasswordPage = () => (

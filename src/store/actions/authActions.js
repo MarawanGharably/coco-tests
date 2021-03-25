@@ -43,7 +43,7 @@ export const resetPasswordConfirmCode = (email, code, password) => {
 };
 
 export const resetPasswordByEmail = email => {
-    if (!email) Promise.reject(new Error(false));
+    if (!email) return Promise.reject(new Error(false));
 
     return axiosApi
         .get(`${RESET_PASSWORD_BY_EMAIL_URL}?email=${email.trim()}`)
@@ -52,11 +52,13 @@ export const resetPasswordByEmail = email => {
 };
 
 
-
 export const logIn = (email, password) => dispatch => {
-    if (!email || !password) Promise.reject(new Error(false));
+    if (!email || !password) return Promise.reject(new Error('Missed required parameters'));
     return axiosApi
-        .post(LOGIN_URL, { username: email, password })
+        .post(LOGIN_URL, {
+            username: email.trim(),
+            password: password.trim(),
+        })
         .then(res => {
             dispatch({ type: types.LOGGED_IN, payload: true });
             return res;
@@ -64,10 +66,13 @@ export const logIn = (email, password) => dispatch => {
         .catch(err => Promise.reject(err.response));
 };
 
-export const logOut = () => dispatch => axiosApi
-    .get(LOGOUT_URL)
-    .then(res => {
-        dispatch({ type: types.LOGGED_OUT, payload: false });
-        return res;
-    })
-    .catch(err => err);
+
+export const logOut = () => dispatch => {
+    return axiosApi
+        .get(LOGOUT_URL)
+        .then(res => {
+            dispatch({ type: types.LOGGED_OUT, payload: false });
+            return res;
+        })
+        .catch(err => err);
+};

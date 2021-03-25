@@ -1,13 +1,20 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
-import { useAuth } from '../../auth/Auth';  // eslint-disable-line
+import PropTypes from 'prop-types';
 
 function PrivateRoute(props) {
-    const [state] = useAuth(); // eslint-disable-line
-    return (
-        // eslint-disable-next-line
-        state.isAuthenticated ? <Route {...props} /> : <Redirect to="/login" />
-    );
+    const { session } = props;
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    return session.isAuthenticated ? <Route {...props} /> : <Redirect to="/login" />;
 }
 
-export default PrivateRoute;
+PrivateRoute.propTypes = {
+    session: PropTypes.InstanceOf(PropTypes.Object).isRequired,
+};
+
+const mapStateToProps = ({ session }) => ({
+    session,
+});
+
+export default connect(mapStateToProps, {})(PrivateRoute);

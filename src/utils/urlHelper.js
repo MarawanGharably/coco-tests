@@ -60,3 +60,20 @@ export function getNameFromURL(link) {
     }
     return name;
 }
+
+/**
+ * Function convert url string query parameters into object
+ * @param url {string}
+ * @returns {object}
+ */
+export const getUrlQueryParams = (url) => {
+    if (!url) return {};
+
+    const [, queryString] = url.split('?');
+    if (!queryString) return {};
+
+    return JSON.parse(`{"${decodeURI(queryString)
+        .replace(/"/g, '\\"')
+        .replace(/&/g, '","')
+        .replace(/=/g, '":"')}"}`);
+};

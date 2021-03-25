@@ -7,12 +7,12 @@ import { HomePageDataStore } from './data-store/home-page-data-store/HomePageDat
 import { EditorDataStore } from './data-store/editor-data-store/EditorDataStore';
 import HomePage from './pages/home-page/HomePage';
 import CreatePage from './pages/create-page/CreatePage';
-import RegisterPage from './pages/register-page/RegisterPage';
+import RegisterPage from './pages/auth/RegisterPage';
 import { ProfilePage, ContextProvider as ProfileContextProvider } from './pages/profile-page/ProfilePage';
 import ErrorPage from './pages/error-page/ErrorPage';
-import LoginPage from './pages/register-page/LoginPage';
-import ResetUserPasswordWithParamsPage from './pages/register-page/ResetUserPasswordWithParamsPage';
-import ResetUserPasswordPage from './pages/register-page/ResetUserPasswordPage';
+import LoginPage from './pages/auth/LoginPage';
+import ResetUserPasswordWithParamsPage from './pages/auth/ResetUserPasswordWithParamsPage';
+import ResetUserPasswordPage from './pages/auth/ResetUserPasswordPage';
 
 // Only needs to import CSS once at <App /> level.
 // All imports for styling should happen in main.scss level from here on

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
-import { Input } from '../formFields';
-import SubmitButton from '../../submit-button/SubmitButton';
-import PageRow from '../../page-row/PageRow';
-import PageItem from '../../page-item/PageItem';
+import { Input } from '../../_formFields';
+import SubmitButton from '../../../submit-button/SubmitButton';
+import PageRow from '../../../page-row/PageRow';
+import PageItem from '../../../page-item/PageItem';
 
 // Actions
-import { resetPasswordConfirmCode } from '../../../store/actions';
+import { resetPasswordConfirmCode } from '../../../../store/actions';
 
 class ResetPasswordForm extends Component {
     constructor(props) {
@@ -49,7 +49,7 @@ class ResetPasswordForm extends Component {
         return (
             <form onSubmit={handleSubmit(this.handleSubmit)} style={{ width: '100%' }}>
                 <p style={{ fontSize: '2em', textAlign: 'center' }}>
-                    Your Verification Code was sent on
+                    Your Verification Code was sent on &nbsp;
                     {verificationCodeStatus.Destination}
                 </p>
                 <p style={{ fontSize: '2em', textAlign: 'center' }}>Please, insert your code to continue</p>

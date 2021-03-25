@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import PageRow from '../../page-row/PageRow';
+import PageRow from '../../../page-row/PageRow';
 import RequestVerificationCodeForm from './RequestVerificationCodeForm';
 import ResetPasswordForm from './ResetPasswordForm';
 

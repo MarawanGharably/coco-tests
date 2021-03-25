@@ -6,3 +6,4 @@ run/
 .idea/
 certs/
 var/
+package-lock.json

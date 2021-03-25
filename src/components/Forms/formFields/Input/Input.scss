@@ -1,0 +1,52 @@
+.redix-input-field{
+  display: flex;
+  flex-direction: column;
+  //width: 100%;
+  margin-bottom: 1rem;
+
+
+  .inputField{
+    border: 0.1em solid #505050;
+    border-radius: 0.5em;
+    padding: 5px 10px 0;
+
+    input{
+      width: 100%;
+      margin: 5px 0;
+      border: none;
+      font-size: 2em;
+      color: #505050;
+    }
+    input:focus{
+      outline: none;
+    }
+    label{
+      font-size: 2em;
+      font-weight: 600;
+      text-transform: capitalize;
+      margin: 5px 0 0 0;
+      color: #505050;
+    }
+  }
+
+
+  .form-field-error{
+    margin: 5px 0 5px 20px;
+    padding: 0;
+
+    .field-error{
+      color: red;
+      font-size: 11px;
+      width: 24em;
+      margin: 1px 0 0 5px;
+    }
+
+    .field-warn{
+      color: #ff8400;
+      font-size: 11px;
+      width: 24em;
+      margin: 1px 0 0 5px;
+    }
+  }
+
+}

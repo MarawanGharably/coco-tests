@@ -1,31 +1,30 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-import { AuthAction, useAuth } from '../../../../auth/Auth';
-import { apiUserAuthLogout } from '../../../../utils/apiUtils';
-
+// Actions
+import { logOut } from '../../../../store/actions';
 
 const LogOutButton = (props) => {
-    const [, authDispatch] = useAuth();
     const history = useHistory();
+    const dispatch = useDispatch();
 
     // eslint-disable-next-line react/prop-types
     const { setDisplayDropdown } = props;
-    const postLogout = () => {
-        setDisplayDropdown(false);
-        authDispatch({ type: AuthAction.LOGGED_OUT });
-        history.push('/');
-    };
 
     const logout = () => {
-        apiUserAuthLogout()
-            .then(() => postLogout())
-            .catch(() => postLogout());
+        dispatch(logOut())
+            .then(() => {
+                history.push('/');
+            })
+            .catch(() => {
+                setDisplayDropdown(false);
+            });
     };
 
     return (
-        // eslint-disable-next-line max-len
-        // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+    // eslint-disable-next-line max-len
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
         <div className="user-menu-row" onClick={() => logout()}>
             <span>Log Out</span>
         </div>

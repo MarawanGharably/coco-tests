@@ -40,9 +40,6 @@ COPY .eslintrc.json .eslintrc.json
 # copy eslint ignore
 COPY .eslintignore .eslintignore
 
-# Run linter
-RUN npm run lint
-
 # build the application and copy it into the webroot
 RUN if [ ${BUILD_STAGE} = "prod" ] ; then npm run build-prod ; elif [ ${BUILD_STAGE} = "beta" ] ; then npm run build-beta ; elif [ ${BUILD_STAGE} = "feature" ] ; then npm run build-feature ; else npm run build-dev ; fi
 # copy built application into the webroot

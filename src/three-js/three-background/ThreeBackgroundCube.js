@@ -1,19 +1,19 @@
-import * as THREE from 'three';
+import * as THREE from 'three'
 
-import ThreeSceneObject from '../three-base-components/ThreeSceneObject';
-import WireframeHelper from './WireframeHelper';
+import ThreeSceneObject from '../three-base-components/ThreeSceneObject'
+import WireframeHelper from './WireframeHelper'
 
 const LOD_TO_GRID_SEGMENTS_MAP = Object.freeze({
     1: 2,
     2: 4,
     3: 8,
-});
+})
 
 const LOD_TO_RESOLUTION = Object.freeze({
     1: '1k',
     2: '2k',
     3: '4k',
-});
+})
 
 /**
  * LOD 1 (1k):
@@ -36,10 +36,10 @@ const LOD_TO_RESOLUTION = Object.freeze({
 
 export default class ThreeBackgroundCube extends ThreeSceneObject {
     constructor(LOD = 1) {
-        super();
+        super()
 
-        this.LOD = LOD;
-        this.gridSegments = LOD_TO_GRID_SEGMENTS_MAP[LOD];
+        this.LOD = LOD
+        this.gridSegments = LOD_TO_GRID_SEGMENTS_MAP[LOD]
 
         const geometry = new THREE.BoxGeometry(
             -20,
@@ -48,24 +48,24 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
             this.gridSegments,
             this.gridSegments,
             this.gridSegments,
-        );
-        geometry.rotateY(THREE.MathUtils.degToRad(180));
-        this.setupFaceUV(geometry);
+        )
+        geometry.rotateY(THREE.MathUtils.degToRad(180))
+        this.setupFaceUV(geometry)
 
-        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
 
-        this.sceneObject = new THREE.Mesh(geometry, material);
-        this.objectWireframe = new WireframeHelper(geometry);
-        this.objectWireframe.sceneObject.visible = false;
+        this.sceneObject = new THREE.Mesh(geometry, material)
+        this.objectWireframe = new WireframeHelper(geometry)
+        this.objectWireframe.sceneObject.visible = false
 
-        this.loader = this.setupTextureLoader();
+        this.loader = this.setupTextureLoader()
     }
 
     setupTextureLoader = () => {
-        const loadingManager = new THREE.LoadingManager();
-        const loader = new THREE.TextureLoader(loadingManager);
+        const loadingManager = new THREE.LoadingManager()
+        const loader = new THREE.TextureLoader(loadingManager)
 
-        return loader;
+        return loader
     }
 
     loadCubeTexture = (url) => {
@@ -80,25 +80,25 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
         //     `${baseUrl}/1k_left.jpg`,
         // ];
 
-        const loadOrder = this.buildLODUrls(url);
+        const loadOrder = this.buildLODUrls(url)
 
-        this.loader = this.setupTextureLoader();
+        this.loader = this.setupTextureLoader()
 
         const meshMaterials = loadOrder.map((img) => {
-            const texture = this.loader.load(img);
-            texture.minFilter = THREE.NearestFilter;
-            texture.magFilter = THREE.NearestFilter;
+            const texture = this.loader.load(img)
+            texture.minFilter = THREE.LinearMipmapNearestFilter
+            texture.magFilter = THREE.LinearFilter
 
-            return new THREE.MeshBasicMaterial({ map: texture });
-        });
+            return new THREE.MeshBasicMaterial({ map: texture })
+        })
 
-        this.sceneObject.material = meshMaterials;
+        this.sceneObject.material = meshMaterials
     }
 
     // Build load order of cubemaps
     buildLODUrls = (baseUrl) => {
         if (!baseUrl) {
-            return null;
+            return null
         }
 
         // controls current configuration of cube object
@@ -109,10 +109,10 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
             bottom: [],
             right: [],
             left: [],
-        };
+        }
 
-        const iterations = this.gridSegments;
-        const resolution = LOD_TO_RESOLUTION[this.LOD];
+        const iterations = this.gridSegments
+        const resolution = LOD_TO_RESOLUTION[this.LOD]
         // resolution definition:
         // LOD1 = '1k'
         // LOD2 = '2k'
@@ -121,59 +121,59 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
         Object.keys(loadObject).forEach((side) => {
             for (let i = iterations - 1; i >= 0; i -= 1) {
                 for (let j = 0; j < iterations; j += 1) {
-                    const imageName = `${baseUrl}${resolution}_${side}_${i}_${j}.jpg`;
-                    loadObject[side].push(imageName);
+                    const imageName = `${baseUrl}${resolution}_${side}_${i}_${j}.jpg`
+                    loadObject[side].push(imageName)
                 }
             }
-        });
+        })
 
         const loadOrder = Object.values(loadObject).reduce((accumulator, currentValue) => {
-            currentValue.forEach((value) => accumulator.push(value));
-            return accumulator;
-        });
+            currentValue.forEach((value) => accumulator.push(value))
+            return accumulator
+        })
 
-        return loadOrder;
+        return loadOrder
     }
 
     resolveFaceMaterialIndexes = () => { // eslint-disable-line
-        let currentMaterialIndex = 0;
+        let currentMaterialIndex = 0
         this.sceneObject.geometry.faces.forEach((face, index) => {
-            face.materialIndex = currentMaterialIndex; // eslint-disable-line
+            face.materialIndex = currentMaterialIndex // eslint-disable-line
 
             if (index % 2 === 1) {
-                currentMaterialIndex += 1;
+                currentMaterialIndex += 1
             }
-        });
+        })
     }
 
     setupFaceUV = (geometry) => {
-        const uvArr = geometry.faceVertexUvs[0];
+        const uvArr = geometry.faceVertexUvs[0]
         /* eslint-disable */
         uvArr.forEach((faceUV, index) => {
             if (index % 2 === 0) {
-                faceUV[0].x = 0;
-                faceUV[0].y = 1;
-                faceUV[1].x = 0;
-                faceUV[1].y = 0;
-                faceUV[2].x = 1;
-                faceUV[2].y = 1;
+                faceUV[0].x = 0
+                faceUV[0].y = 1
+                faceUV[1].x = 0
+                faceUV[1].y = 0
+                faceUV[2].x = 1
+                faceUV[2].y = 1
             } else {
-                faceUV[0].x = 0;
-                faceUV[0].y = 0;
-                faceUV[1].x = 1;
-                faceUV[1].y = 0;
-                faceUV[2].x = 1;
-                faceUV[2].y = 1;
+                faceUV[0].x = 0
+                faceUV[0].y = 0
+                faceUV[1].x = 1
+                faceUV[1].y = 0
+                faceUV[2].x = 1
+                faceUV[2].y = 1
             }
-        });
+        })
         /* eslint-enable */
     }
 
     dispose() {
-        super.dispose();
+        super.dispose()
 
-        this.sceneObject.material.forEach((texture) => texture.dispose());
-        this.sceneObject.geometry.dispose();
-        this.sceneObject = null;
+        this.sceneObject.material.forEach((texture) => texture.dispose())
+        this.sceneObject.geometry.dispose()
+        this.sceneObject = null
     }
 }

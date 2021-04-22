@@ -1,26 +1,17 @@
 import * as types from '../types';
 import axiosApi from '../../utils/axiosApi';
-
 export const { API_URL } = process.env;
 
-const LOGIN_URL = `${API_URL}/auth/login`;
-const LOGOUT_URL = `${API_URL}/auth/logout`;
-const RESET_PASSWORD_BY_EMAIL_URL = `${API_URL}/auth/reset-password-by-email`;
-const RESET_PASSWORD_CONFIRM_CODE = `${API_URL}/auth/reset-password-confirm-code`;
-const SET_PASSWORD_URL = `${API_URL}/auth/password`;
-
-// export const singUp = (email, password) => (dispatch) => {};
-
-export const resetPassword = (username, oldPassword, newPassword) => dispatch => {
+export const resetPassword = (username, oldPassword, newPassword) => (dispatch) => {
     if (!username && !oldPassword && !newPassword) return Promise.reject(new Error({ error: 'Missed required parameters' }));
 
     return axiosApi
-        .post(SET_PASSWORD_URL, { username, oldPassword, newPassword })
-        .then(res => {
+        .post(`${API_URL}/auth/password`, { username, oldPassword, newPassword })
+        .then((res) => {
             dispatch({ type: types.LOGGED_IN, payload: true });
             return res;
         })
-        .catch(err => err.response);
+        .catch((err) => err.response);
 };
 
 /**
@@ -33,46 +24,44 @@ export const resetPasswordConfirmCode = (email, code, password) => {
     if (!email || !code || !password) return false;
 
     return axiosApi
-        .post(RESET_PASSWORD_CONFIRM_CODE, {
+        .post(`${API_URL}/auth/reset-password-confirm-code`, {
             email: email.trim(),
             code: code.trim(),
             password: password.trim(),
         })
-        .then(res => res)
-        .catch(err => Promise.reject(err.response));
+        .then((res) => res)
+        .catch((err) => Promise.reject(err.response));
 };
 
-export const resetPasswordByEmail = email => {
+export const resetPasswordByEmail = (email) => {
     if (!email) return Promise.reject(new Error(false));
 
     return axiosApi
-        .get(`${RESET_PASSWORD_BY_EMAIL_URL}?email=${email.trim()}`)
-        .then(res => res)
-        .catch(err => Promise.reject(err.response));
+        .get(`${API_URL}/auth/reset-password-by-email?email=${email.trim()}`)
+        .then((res) => res.data)
+        .catch((err) => Promise.reject(err.response));
 };
 
-
-export const logIn = (email, password) => dispatch => {
+export const logIn = (email, password) => (dispatch) => {
     if (!email || !password) return Promise.reject(new Error('Missed required parameters'));
     return axiosApi
-        .post(LOGIN_URL, {
+        .post(`${API_URL}/auth/login`, {
             username: email.trim(),
             password: password.trim(),
         })
-        .then(res => {
+        .then((res) => {
             dispatch({ type: types.LOGGED_IN, payload: true });
             return res;
         })
-        .catch(err => Promise.reject(err.response));
+        .catch((err) => Promise.reject(err.response));
 };
 
-
-export const logOut = () => dispatch => {
+export const logOut = () => (dispatch) => {
     return axiosApi
-        .get(LOGOUT_URL)
-        .then(res => {
+        .get(`${API_URL}/auth/logout`)
+        .then((res) => {
             dispatch({ type: types.LOGGED_OUT, payload: false });
             return res;
         })
-        .catch(err => err);
+        .catch((err) => err);
 };

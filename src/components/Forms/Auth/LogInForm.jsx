@@ -31,8 +31,8 @@ class LogInForm extends Component {
                 history.push('/');
             })
             .catch(err => {
+                const statusCode = err?.status;
                 console.error('Login Error', { err, statusCode }); // eslint-disable-line
-                const statusCode = err.status;
 
                 if (statusCode === 400) {
                     this.setState({ submitting: false, errorMessage: 'Invalid input, please try again.' });

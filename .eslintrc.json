@@ -65,6 +65,8 @@
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
         "arrow-parens": ["off"],
+        "keyword-spacing": ["off"],
+        "spaced-comment": ["off"],
         "object-curly-newline": ["off"],
         "arrow-body-style": ["off"],
         "no-multiple-empty-lines": [

@@ -14,38 +14,37 @@ class LogInForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            errorMessage: false,
+            error: false,
             submitting: false,
         };
     }
 
-    handleSubmit = values => {
+    handleSubmit = (values) => {
         // eslint-disable-next-line no-shadow
         const { logIn, history } = this.props;
         const { email, password } = values;
 
-        this.setState({ submitting: true, errorMessage: false });
+        this.setState({ submitting: true, error: false });
 
         logIn(email, password)
             .then(() => {
                 history.push('/');
             })
-            .catch(err => {
+            .catch((err) => {
                 const statusCode = err?.status;
-                console.error('Login Error', { err, statusCode }); // eslint-disable-line
+                const api_error_code = err?.data?.error_code || null;
 
-                if (statusCode === 400) {
-                    this.setState({ submitting: false, errorMessage: 'Invalid input, please try again.' });
-                } else if (statusCode === 401 || statusCode === 403) {
-                    this.setState({ submitting: false, errorMessage: 'Wrong email or password.' });
-                } else {
-                    this.setState({ submitting: false, errorMessage: 'Server error, please try again later.' });
+                console.error('Login Error', { err, statusCode, api_error_code }); // eslint-disable-line
+                if (api_error_code) this.setState({ submitting: false, error: err.data });
+                else {
+                    const errorData = { error_code: 'DEFAULT_ERROR_CODE', message: 'Server error, please try again later.' };
+                    this.setState({ submitting: false, error: errorData });
                 }
             });
     };
 
     render() {
-        const { submitting, errorMessage } = this.state;
+        const { submitting, error } = this.state;
         const { handleSubmit } = this.props;
 
         return (
@@ -67,13 +66,28 @@ class LogInForm extends Component {
                     <SubmitButton submitting={submitting} />
                 </div>
 
-                <h1 style={{ textAlign: 'center' }}>{errorMessage}</h1>
+                <ErrorMessage error={error} />
             </form>
         );
     }
 }
 
-const validate = values => {
+const ErrorMessage = ({ error }) => {
+    if (!error) return false;
+    const { message, error_code } = error;
+
+    if (error_code === 'ACCOUNT_NOT_VERIFIED') {
+        return (<h1 style={{ textAlign: 'center' }}>
+                Account registration is not completed.
+                <br />
+                Please, verify your email address first.
+            </h1>);
+    }
+
+    return <h1 style={{ textAlign: 'center' }}>{message}</h1>;
+};
+
+const validate = (values) => {
     const errors = {};
     if (!values.email || isValidEmail(values.email) !== true) errors.email = 'Email is not valid';
     if (!values.password || !isValidPassword(values.password)) errors.password = 'Password must be at least 8 characters long, contain uppercase and lowercase letters and numbers';

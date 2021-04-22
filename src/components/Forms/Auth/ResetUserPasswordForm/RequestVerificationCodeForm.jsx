@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { Field, reduxForm } from 'redux-form';
@@ -11,67 +11,82 @@ import PageItem from '../../../page-item/PageItem';
 // Actions
 import { resetPasswordByEmail } from '../../../../store/actions';
 
-
 class RequestVerificationCodeForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            errorMessage: false,
+            error: false,
             submitting: false,
         };
     }
 
-  handleSubmit = ({ email }) => {
-      const { onSuccessSubmitCallback } = this.props;
-      this.setState({ submitting: true, errorMessage: false });
+    handleSubmit = ({ email }) => {
+        const { onSuccessSubmitCallback } = this.props;
+        this.setState({ submitting: true, error: false });
 
-      resetPasswordByEmail(email)
-          .then((res) => {
-              onSuccessSubmitCallback(email, res.data); // push data UP
-          })
-          .catch((err) => {
-              this.setState({ submitting: false });
-              const errorCode = err.data && err.data.error_code ? err.data.error_code : false;
-              if (['LIMIT_EXCEEDED'].includes(errorCode)) this.setState({ errorMessage: err.data.message });
-              else if (errorCode === 'USER_NOT_FOUND') {
-                  const Msg = (
-                      <>
-                          {err.data.message}
-                          <p>
-                              <a href="/login">Sign Up</a>
-                          </p>
-                      </>
-                  );
+        resetPasswordByEmail(email)
+            .then((res) => {
+                // call success callback only if request was successful and request
+                // data is in correct format!
+                if (res.status === 'success') onSuccessSubmitCallback(email, res);
+                //push data UP
+                else throw new Error(res); //throw error to pass data down
+            })
+            .catch((err) => {
+                this.setState({ submitting: false });
+                const errorCode = err?.data?.error_code || null;
 
-                  this.setState({ errorMessage: Msg });
-              } else this.setState({ errorMessage: 'Server error, please try again later.' });
-          });
-  };
+                if (errorCode) this.setState({ error: { message: err.data.message, errorCode } });
+                else this.setState({ error: { message: 'Server error, please try again later.' } });
+            });
+    };
+
+    render() {
+        const { submitting, error } = this.state;
+        const { handleSubmit } = this.props;
+
+        return (
+            <form onSubmit={handleSubmit(this.handleSubmit)} style={{ width: '100%' }}>
+                <Field name="email" type="email" label="Email" component={Input} placeholder="email" extraClass="" />
+
+                <PageRow width="100%">
+                    <div>
+                        <PageItem>
+                            <SubmitButton submitting={submitting} />
+                        </PageItem>
+                    </div>
+                </PageRow>
+
+                {/* Error Messages */}
+                {error && (<ErrorMessage error={error}/>)}
+
+            </form>
+        );
+    }
+}
 
 
+const ErrorMessage =({error})=>{
+    if(!error) return false;
+    let {errorCode, message} = error;
 
-  render() {
-      const { submitting, errorMessage } = this.state;
-      const { handleSubmit } = this.props;
+    if(errorCode =='ACCOUNT_NOT_VERIFIED'){
+        return(<div className="flex flex-center page-row" style={{ flexFlow: 'column' }}>
+            <h1 style={{ textAlign: 'center' }}>Account registration is not completed.<br/>
+                Reset password feature available only for registered users.</h1>
 
-      return (
-          <form onSubmit={handleSubmit(this.handleSubmit)} style={{ width: '100%' }}>
-              <Field name="email" type="email" label="Email" component={Input} placeholder="email" extraClass="" />
+            <p style={{fontSize:'2em'}}>Probably you forgot to confirm your email address</p>
+        </div>)
+    }
 
-              <PageRow width="100%">
-                  <div>
-                      <PageItem>
-                          <SubmitButton submitting={submitting} />
-                      </PageItem>
-                  </div>
-              </PageRow>
-
-              <div className="flex flex-center page-row">
-                  <h1 style={{ textAlign: 'center' }}>{errorMessage}</h1>
-              </div>
-          </form>
-      );
-  }
+    return(<div className="flex flex-center page-row" style={{ flexFlow: 'column' }}>
+        <h1 style={{ textAlign: 'center' }}>{message}</h1>
+        {errorCode === 'USER_NOT_FOUND' && (
+            <div style={{ fontSize: '2em', fontWeight: 'bold' }}>
+                <a href="/login">Sign Up</a>
+            </div>
+        )}
+    </div>)
 }
 
 const validate = (values) => {
@@ -80,7 +95,6 @@ const validate = (values) => {
 
     return errors;
 };
-
 
 RequestVerificationCodeForm.propTypes = {
     onSuccessSubmitCallback: PropTypes.func.isRequired,

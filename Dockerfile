@@ -1,5 +1,5 @@
 # intermediate image for building the web app
-FROM node AS build-env
+FROM node:15 AS build-env
 
 LABEL version="0.2.0"
 

@@ -90,7 +90,7 @@ const ErrorMessage = ({ error }) => {
 const validate = (values) => {
     const errors = {};
     if (!values.email || isValidEmail(values.email) !== true) errors.email = 'Email is not valid';
-    if (!values.password || !isValidPassword(values.password)) errors.password = 'Password must be at least 8 characters long, contain uppercase and lowercase letters and numbers';
+    if (!values.password ) errors.password = 'Password cannot be empty';
     return errors;
 };
 

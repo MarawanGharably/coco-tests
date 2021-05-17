@@ -4,7 +4,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-left: $border;
+    overflow-y: auto;
 
     &-title {
         font-size: 2em;
@@ -15,13 +15,11 @@
 }
 
 .right {
-    $side-bar-height: calc(100vh - #{$header-height + $footer-height + 5});
-
     &-side-bar {
         width: 23em;
-        height: $side-bar-height;
+        height: 100%;
         display: grid;
-        overflow-y: auto;
+        overflow-y: inherit;
         &:hover {
             cursor: pointer;
         }

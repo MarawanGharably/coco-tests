@@ -8,5 +8,7 @@ export const URLS = {
     STORE_ACCESS_POLICIES_API: `${API_URL}/admin/access/policy`,
     CREATE_USER_URL: `${API_URL}/admin/create_user`,
     CMS_HOTSPOT_URL: `${API_URL}/cms/hotspots`,
+    GET_PRODUCT_LIBRARY_URL: (storeId) => `${API_URL}/cms/${storeId}/product_library`,
     GET_ALL_SCENES_DATA: (storeId) => `${API_URL}/cms/${storeId}/scenes`,
+    PUBLISH_SCENE_DATA: `${API_URL}/cms/push_objects`,
 };

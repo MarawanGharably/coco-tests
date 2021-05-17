@@ -12,20 +12,22 @@
         top: 0;
     }
     &-content-container {
+        position: relative;
         background: white;
-        height: 20em;
-        width: 45em;
         border-radius: 5px;
+        padding: 2em;
         border: 1px solid $obsess-grey;
         z-index: 2;
     }
     &-close-icon {
+        cursor: pointer;
+        top: -2.5em;
+        right: -2.5em;
         height: 5em;
         width: 5em;
         position: absolute;
         background: black;
         border-radius: 100%;
-        transform: translate(42.5em, -2.5em);
         border: none;
         &:focus {
             outline: none;

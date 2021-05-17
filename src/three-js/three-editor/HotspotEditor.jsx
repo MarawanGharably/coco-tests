@@ -17,7 +17,7 @@ const HotspotEditor = () => {
     const { selectedStoreId } = storeState;
 
     return (
-        <DataManager hotspotType="product" sceneId={currentSceneId} storeId={selectedStoreId}>
+        <DataManager hotspotTypes={['product', 'product_image']} sceneId={currentSceneId} storeId={selectedStoreId}>
             <CollisionManager>
                 <UIManager>
                     <ThreeEditor>

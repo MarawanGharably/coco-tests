@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Select from 'react-dropdown-select';
+import Select from 'react-select';
 import { apiAdminCreateStorePolicy, apiGetAllCMSStores } from '../../utils/apiUtils';
 import SubmitButton from '../../components/submit-button/SubmitButton';
 

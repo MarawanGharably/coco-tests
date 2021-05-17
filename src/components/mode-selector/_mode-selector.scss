@@ -1,0 +1,43 @@
+.mode-selector {
+    .radio-group {
+        flex-wrap: wrap;
+    }
+
+    .radio-container {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .radio {
+        height: 4em;
+        margin: 0 0.5em;
+        font-size: 1em;
+
+        label, span {
+            font-size: 1.2em;
+        }
+    }
+
+    .radio-custom-button-selector {
+        width: 2em;
+        height: 2em;
+        top: 50%;
+        right: 3em;
+        transform: translateY(-50%);
+
+        &::after {
+           top: 50%;
+           left: 50%;
+           transform: translate(-50%, -50%);  
+        }
+    }
+
+    .title {
+        flex-basis: 100%;
+        text-align: center;
+        font-size: 2em;
+        margin-top: 0.5em;
+        color: $obsess-grey;
+    }
+}

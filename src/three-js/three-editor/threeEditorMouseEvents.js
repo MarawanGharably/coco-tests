@@ -1,24 +1,34 @@
+import { Vector3, Matrix4 } from 'three';
 import { apiUpdateHotspotByType } from '../../utils/apiUtils';
-import { DATA_MANAGER_ENUMS } from '../data-manager/DataManager';
+
+import {
+    PRODUCT_TAGGING,
+    PRODUCT_PLACEMENT,
+} from '../../components/mode-selector/modeOptions';
 
 export const threeEditorMouseEvents = (
     renderer,
     controls,
     mouseStartRef,
     mouseRef,
-    canvasContainerRef,
     cameraRef,
     raycasterRef,
     colliderRef,
-    renderMarker, // function
+    renderProductMarker, // function
     colliderDispatch, // function
     CollisionManagerActionEnums,
     currentSceneId,
-    dataDispatch,
+    UIState,
+    UIDispatch,
+    UIManagerEnums,
+    mode,
 ) => {
     const DESKTOP_THRESHOLD = 0.005;
     const MIN_ZOOM_FOV = 20;
     const MAX_ZOOM_FOV = 70;
+    const offset = new Vector3();
+    const worldPosition = new Vector3();
+    const inverseMatrix = new Matrix4();
 
     // reference to the object that is clicked/being dragged
     let isMarkerClicked = false;
@@ -35,41 +45,37 @@ export const threeEditorMouseEvents = (
     };
 
     const dragReleaseProductHotspotAutoSave = async (object) => {
-        const hotspotType = 'product';
-        const currentProductMarker = object.object.owner;
+        const currentProductMarker = object.owner;
         const { colliderTransform, visualTransform } = currentProductMarker.getTransforms();
-        const { id, productSKU } = currentProductMarker.modalComponentRenderProps;
+        const {
+            id, type, productSKU, scale, renderOrder,
+        } = currentProductMarker.modalComponentRenderProps;
 
         const postData = {
-            type: hotspotType,
+            type,
             scene_id: currentSceneId,
             collider_transform: colliderTransform.elements,
             transform: visualTransform.elements,
             props: {
-                product_sku: productSKU,
-                hotspot_type: hotspotType,
+                hotspot_type: type,
+                ...(productSKU ? {
+                    product_sku: productSKU,
+                } : {}),
+                ...(scale ? {
+                    scale,
+                } : {}),
+                ...(renderOrder ? {
+                    renderOrder,
+                } : {}),
             },
         };
         const selectedStoreId = sessionStorage.getItem('STORE_ID');
 
         if (id) {
             try {
-                const response = await apiUpdateHotspotByType(
-                    hotspotType, selectedStoreId, id, postData,
+                await apiUpdateHotspotByType(
+                    type, selectedStoreId, id, postData,
                 );
-                const roomObject = {
-                    collider_transform: colliderTransform.elements,
-                    transform: visualTransform.elements,
-                    id: response._id.$oid, //eslint-disable-line
-                    sku: productSKU,
-                };
-
-                dataDispatch({
-                    type: DATA_MANAGER_ENUMS.UPDATE_ROOM_OBJECT_DATA,
-                    payload: {
-                        roomObject,
-                    },
-                });
             } catch (err) {
                 console.error(err);
             }
@@ -81,13 +87,73 @@ export const threeEditorMouseEvents = (
         getMousePosition(mouseStartRef, e);
         raycasterRef.current.setFromCamera(mouseStartRef.current, cameraRef.current);
         const intersects = raycasterRef.current.intersectObjects(colliderRef.current);
-
         const marker = intersects.find((intersect) => intersect.object.name === 'marker');
 
         if (marker) {
             isMarkerClicked = true;
             controls.enabled = false; // eslint-disable-line
             focusedObject = marker.object;
+            const { point } = marker;
+            inverseMatrix.copy(focusedObject.parent.matrixWorld).getInverse(inverseMatrix);
+            offset.copy(point).sub(worldPosition.setFromMatrixPosition(focusedObject.matrixWorld));
+        }
+    };
+
+    const getComponentUUID = (marker) => {
+        const { uuid } = marker.owner.components.find((component) => (
+            component.uuid
+        ));
+
+        return uuid;
+    };
+
+    const hasUI = (marker) => {
+        const uuid = getComponentUUID(marker);
+        return UIState.dynamicUIs.has(uuid);
+    };
+
+    const resetUI = (object) => {
+        if (!hasUI(object)) {
+            UIDispatch({
+                type: UIManagerEnums.RESET_UIS,
+            });
+        }
+    };
+
+    const addProductMarker = (intersects) => {
+        const { point } = intersects[0];
+
+        const newMarker = renderProductMarker();
+
+        colliderDispatch({
+            type: CollisionManagerActionEnums.SET_COLLIDERS,
+            payload: newMarker.sceneObject,
+        });
+
+        newMarker.setPosition(point.x, point.y, point.z);
+
+        newMarker.renderComponentImmediately();
+    };
+
+    const openProductUI = (markerOnRelease, intersects) => {
+        if (isMarkerClicked) {
+            isMarkerClicked = false;
+            const { type } = markerOnRelease.owner.modalComponentRenderProps;
+            const isProductMarker = mode === PRODUCT_TAGGING && type === 'product';
+            const isProductImage = (
+                mode === PRODUCT_PLACEMENT
+                    && type === 'product_image'
+                    && !hasUI(markerOnRelease)
+            );
+
+            if (isProductImage || isProductMarker) {
+                markerOnRelease.onClick();
+                return;
+            }
+        }
+
+        if (mode === PRODUCT_TAGGING) {
+            addProductMarker(intersects);
         }
     };
 
@@ -99,7 +165,12 @@ export const threeEditorMouseEvents = (
 
         raycasterRef.current.setFromCamera(mouseRef.current, cameraRef.current);
         const intersects = raycasterRef.current.intersectObjects(colliderRef.current);
-        const markerOnRelease = intersects.find((intersect) => intersect.object.name === 'marker');
+        const markerIntersection = intersects.find((intersect) => intersect.object.name === 'marker');
+        const markerOnRelease = markerIntersection && markerIntersection.object;
+
+        if (markerOnRelease) {
+            resetUI(markerOnRelease);
+        }
 
         if (dragDistance > DESKTOP_THRESHOLD) {
             if (isMarkerClicked) {
@@ -110,25 +181,7 @@ export const threeEditorMouseEvents = (
             return;
         }
 
-        if (isMarkerClicked) {
-            isMarkerClicked = false;
-            if (markerOnRelease.object.name === 'marker') {
-                markerOnRelease.object.onClick();
-            }
-            return;
-        }
-
-        const { point } = intersects[0];
-
-        const newMarker = renderMarker();
-
-        colliderDispatch({
-            type: CollisionManagerActionEnums.SET_COLLIDERS,
-            payload: newMarker.sceneObject,
-        });
-        newMarker.setPosition(point.x, point.y, point.z);
-
-        newMarker.renderComponentImmediately();
+        openProductUI(markerOnRelease, intersects);
     };
 
     const mouseWheelHandler = (e) => {
@@ -142,12 +195,18 @@ export const threeEditorMouseEvents = (
     };
 
     const moveFocusedObject = (e) => {
-        getMousePosition(mouseRef, e);
-        raycasterRef.current.setFromCamera(mouseRef.current, cameraRef.current);
-        const intersects = raycasterRef.current.intersectObjects(colliderRef.current);
-        const { point } = intersects[1];
-        const { x, y, z } = point;
-        focusedObject.owner.setPosition(x, y, z);
+        const { type } = focusedObject.owner.modalComponentRenderProps;
+        const isProductMarker = mode === PRODUCT_TAGGING && type === 'product';
+        const isProductImage = mode === PRODUCT_PLACEMENT && type === 'product_image';
+
+        if (isProductMarker || isProductImage) {
+            getMousePosition(mouseRef, e);
+            raycasterRef.current.setFromCamera(mouseRef.current, cameraRef.current);
+            const intersects = raycasterRef.current.intersectObjects(colliderRef.current);
+            const { point } = intersects[1];
+            const { x, y, z } = point.sub(offset).applyMatrix4(inverseMatrix);
+            focusedObject.owner.setPosition(x, y, z);
+        }
     };
 
     const onMouseMove = (e) => {
@@ -168,19 +227,19 @@ export const threeEditorMouseEvents = (
 
     // 2 main functions of event listeners
     const addThreeEditorMouseEventListeners = () => {
-        canvasContainerRef.current.addEventListener('mousedown', onMouseDown);
-        canvasContainerRef.current.addEventListener('mouseup', onMouseUp);
-        canvasContainerRef.current.addEventListener('contextmenu', preventContextMenu);
-        canvasContainerRef.current.addEventListener('mousemove', onMouseMove);
-        canvasContainerRef.current.addEventListener('wheel', mouseWheelHandler, { passive: true });
+        renderer.domElement.addEventListener('mousedown', onMouseDown);
+        renderer.domElement.addEventListener('mouseup', onMouseUp);
+        renderer.domElement.addEventListener('contextmenu', preventContextMenu);
+        renderer.domElement.addEventListener('mousemove', onMouseMove);
+        renderer.domElement.addEventListener('wheel', mouseWheelHandler, { passive: true });
     };
 
     const removeThreeEditorMouseEventListeners = () => {
-        canvasContainerRef.current.removeEventListener('mousedown', onMouseDown);
-        canvasContainerRef.current.removeEventListener('mouseup', onMouseUp);
-        canvasContainerRef.current.removeEventListener('contextmenu', preventContextMenu);
-        canvasContainerRef.current.removeEventListener('mousemove', onMouseMove);
-        canvasContainerRef.current.removeEventListener('wheel', mouseWheelHandler);
+        renderer.domElement.removeEventListener('mousedown', onMouseDown);
+        renderer.domElement.removeEventListener('mouseup', onMouseUp);
+        renderer.domElement.removeEventListener('contextmenu', preventContextMenu);
+        renderer.domElement.removeEventListener('mousemove', onMouseMove);
+        renderer.domElement.removeEventListener('wheel', mouseWheelHandler);
     };
 
     return {

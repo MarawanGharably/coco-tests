@@ -12,10 +12,13 @@ const UIDispatch = React.createContext();
 export const UIManagerEnums = Object.freeze({
     ADD_UI: 'ADD_UI',
     REMOVE_UI: 'REMOVE_UI',
+    RESET_UIS: 'RESET_UIS',
     UPDATE_UI_STATE: 'UPDATE_UI_STATE',
 });
 
-const { ADD_UI, REMOVE_UI, UPDATE_UI_STATE } = UIManagerEnums;
+const {
+    ADD_UI, REMOVE_UI, RESET_UIS, UPDATE_UI_STATE,
+} = UIManagerEnums;
 
 const UIManagerReducer = (state, action) => {
     const { dynamicUIs, stateManager } = state;
@@ -26,7 +29,7 @@ const UIManagerReducer = (state, action) => {
             const { uuid, componentToRender, renderProps } = payload;
             if (dynamicUIs.has(uuid)) {
                 console.error(`Dynamic UI with uuid ${uuid} already exist!`); // eslint-disable-line no-console
-                return { dynamicUIs };
+                return { ...state, dynamicUIs };
             }
 
             const uiData = {
@@ -61,9 +64,25 @@ const UIManagerReducer = (state, action) => {
                     dynamicUIs,
                 });
         }
+        case RESET_UIS: {
+            dynamicUIs.clear();
+
+            return ({
+                ...state,
+                dynamicUIs,
+            });
+        }
         case UPDATE_UI_STATE: {
             const { uuid, uiState } = payload;
-            stateManager.set(uuid, { uiState });
+            const currentState = stateManager.get(uuid);
+            const currentUIState = currentState ? currentState.uiState : {};
+
+            stateManager.set(uuid, {
+                uiState: {
+                    ...currentUIState,
+                    ...uiState,
+                },
+            });
 
             return ({
                 ...state,

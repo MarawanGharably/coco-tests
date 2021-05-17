@@ -1,7 +1,6 @@
 .loader {
     font-size: 10px;
     margin: 50px auto;
-    text-indent: -9999em;
     width: 11em;
     height: 11em;
     border-radius: 50%;
@@ -10,6 +9,9 @@
     position: relative;
     animation: load3 1.4s infinite linear;
     transform: translateZ(0);
+    -webkit-mask:radial-gradient(farthest-side,transparent 75%,#fff 0);
+    mask:radial-gradient(farthest-side,transparent 75%,#fff 0);
+
     &:before {
       width: 50%;
       height: 50%;

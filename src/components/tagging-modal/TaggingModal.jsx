@@ -8,16 +8,9 @@ import SubmitButton from '../submit-button/SubmitButton';
 import TextInput from '../text-input/TextInput';
 import FancyButton from '../fancy-button/FancyButton';
 import { useUIManager } from '../../three-js/ui-manager/UIManager';
-import { useDataManager, DATA_MANAGER_ENUMS } from '../../three-js/data-manager/DataManager';
 import { useEditorDataStore } from '../../data-store/editor-data-store/EditorDataStore';
 import { useHomePageDataStore } from '../../data-store/home-page-data-store/HomePageDataStore';
 import { apiCreateHotspotByType, apiUpdateHotspotByType, apiDeleteHotspotByType } from '../../utils/apiUtils';
-
-const {
-    POST_ROOM_OBJECT_DATA,
-    UPDATE_ROOM_OBJECT_DATA,
-    DELETE_ROOM_OBJECT_DATA,
-} = DATA_MANAGER_ENUMS;
 
 const taggingButtonStyle = css`
 width: 10em;
@@ -40,7 +33,6 @@ const TaggingModal = ({
 }) => {
     const [SKU, setSKU] = useState(productSKU);
     const [UIState] = useUIManager();
-    const [, dataDispatch] = useDataManager();
     const [editorState] = useEditorDataStore();
     const [storeState] = useHomePageDataStore();
     const hotspotType = 'product';
@@ -76,7 +68,7 @@ const TaggingModal = ({
             transform: visualTransform.elements,
             props: {
                 product_sku: SKU,
-                hotspot_type: 'product',
+                hotspot_type: hotspotType,
             },
         };
 
@@ -85,18 +77,10 @@ const TaggingModal = ({
                 const response = await apiUpdateHotspotByType(
                     hotspotType, selectedStoreId, id, postData,
                 );
-                const roomObject = {
-                    collider_transform: colliderTransform.elements,
-                    transform: visualTransform.elements,
-                    id: response._id.$oid, //eslint-disable-line
-                    sku: SKU,
-                };
 
-                dataDispatch({
-                    type: UPDATE_ROOM_OBJECT_DATA,
-                    payload: {
-                        roomObject,
-                    },
+                updateState({
+                    type: response.props.hotspot_type,
+                    id: response._id.$oid, //eslint-disable-line
                 });
             } catch (err) {
                 console.error(err);
@@ -106,18 +90,10 @@ const TaggingModal = ({
                 const response = await apiCreateHotspotByType(
                     hotspotType, selectedStoreId, postData,
                 );
-                const roomObject = {
-                    collider_transform: colliderTransform.elements,
-                    transform: visualTransform.elements,
-                    id: response._id.$oid, //eslint-disable-line
-                    sku: SKU,
-                };
 
-                dataDispatch({
-                    type: POST_ROOM_OBJECT_DATA,
-                    payload: {
-                        roomObject,
-                    },
+                updateState({
+                    type: response.props.hotspot_type,
+                    id: response._id.$oid, //eslint-disable-line
                 });
             } catch (err) {
                 console.error(err);
@@ -133,12 +109,6 @@ const TaggingModal = ({
             updateState({ sku: '' });
 
             dispose();
-            dataDispatch({
-                type: DELETE_ROOM_OBJECT_DATA,
-                payload: {
-                    id,
-                },
-            });
         } catch (err) {
             console.error('Hotspot deletion failed\n', err);
             dispose();
@@ -157,7 +127,7 @@ const TaggingModal = ({
         <Modal onClose={handleClose}>
             <div className="flex flex-vertical-center flex-column full-width full-height">
                 <header className="tagging-modal-header">SKU</header>
-                <div style={{ margin: '0 0 2em' }}>
+                <div style={{ margin: '0 2em 2em' }}>
                     <TextInput type="text" placeholder="Enter SKU" handleChange={handleChange} value={SKU} focusOnMount />
                 </div>
                 <div className="flex">

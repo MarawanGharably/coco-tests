@@ -1,5 +1,5 @@
 export const S3Bucket = Object.freeze({
-    DEV: 'obsess-cms-beta',
+    DEV: 'obsess-cms-dev',
     BETA: 'obsess-cms-beta',
     PROD: 'obsess-cms-prod',
 });
@@ -19,7 +19,7 @@ const OriginUrlPrefixDict = {
 export const S3Link = 'https://s3.amazonaws.com/';
 
 export function getCurrentBucket() {
-    if (['localhost', 'create.beta.shopobsess.co'].includes(window.location.hostname)) {
+    if (['localhost', '0.0.0.0', 'ardentpeak.org', 'create.beta.shopobsess.co'].includes(window.location.hostname)) {
         return S3Bucket.DEV;
     }
     return S3Bucket.BETA;

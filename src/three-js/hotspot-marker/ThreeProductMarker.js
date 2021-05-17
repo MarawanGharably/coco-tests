@@ -61,13 +61,9 @@ export default class ThreeProductMarker extends InteractionObject {
     }
 
     setPosition = (x, y, z) => {
-        this.sceneObject.position.x = x;
-        this.sceneObject.position.y = y;
-        this.sceneObject.position.z = z;
-
-        this.visualObject.position.x = x;
-        this.visualObject.position.y = y;
-        this.visualObject.position.z = z;
+        this.sceneObject.position.set(x, y, z);
+        this.sceneObject.position.clampLength(8, 8);
+        this.visualObject.position.copy(this.sceneObject.position);
     }
 
     renderComponentImmediately = () => {

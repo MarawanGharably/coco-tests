@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -15,6 +15,9 @@ import ProductPlacementPage from './product-placement-page/ProductPlacementPage'
 // import ContentInteractionPage from './content-interaction-page/ContentInteractionPage';
 // import SubmitPage from '../submit-page/SubmitPage';
 import FooterNavContextComponent from './FooterNavContextComponent';
+import Toast from '../../components/toast/Toast';
+import { useHomePageDataStore } from '../../data-store/home-page-data-store/HomePageDataStore';
+import { apiPublishSceneData } from '../../utils/apiUtils';
 
 const PlaceHolderPage = ({ name }) => (
     <Page pageTitle="Placeholder" pageSubTitle="Placeholder">
@@ -23,6 +26,8 @@ const PlaceHolderPage = ({ name }) => (
 );
 
 const CreatePage = () => {
+    const [{ selectedStoreId }] = useHomePageDataStore();
+    const [message, setMessage] = useState({});
     const pathPrefix = '/create/';
     // const designPath = `${pathPrefix}design`;
     // const elementsPath = `${pathPrefix}brand-elements`;
@@ -30,6 +35,23 @@ const CreatePage = () => {
     const placementPath = `${pathPrefix}product-placement`;
     // const interactionPath = `${pathPrefix}content-interactions`;
     // const submitPath = `${pathPrefix}submit`;
+
+    const publishSceneData = async () => {
+        try {
+            await apiPublishSceneData(selectedStoreId);
+
+            setMessage({
+                title: 'Store Published successfully',
+                backgroundColor: '#5cb85c',
+            });
+        } catch(error) {
+            setMessage({
+                title: 'An error occurred while publishing store',
+                backgroundColor: '#d9534f',
+            });
+            console.error(error);
+        }
+    };
 
     return (
         <>
@@ -129,7 +151,14 @@ const CreatePage = () => {
                 </div>
             </BodyWrapper>
             <FooterNavContextComponent>
-                <Footer />
+                <Toast
+                    close={() => setMessage({})}
+                    active={!!message.title}
+                    backgroundColor={message.backgroundColor}
+                >
+                    {message.title}
+                </Toast>
+                <Footer onSubmitClicked={publishSceneData} />
             </FooterNavContextComponent>
         </>
     );

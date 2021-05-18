@@ -64,7 +64,7 @@ const PoliciesPage = () => {
                 className="select"
                 placeholder="Select a store"
                 options={stores}
-                onChange={(value) => onStoreSelected(value[0])}
+                onChange={(value) => onStoreSelected(value)}
             />
 
             <SubmitButton

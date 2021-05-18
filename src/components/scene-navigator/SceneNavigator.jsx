@@ -57,9 +57,11 @@ const SceneNavigator = () => {
     };
 
     return (
-        <RightSideBar cols="1" rowHeight="20em" title="Scenes">
-            {loading ? <Loader /> : renderScenes()}
-        </RightSideBar>
+        <div className="scene-navigator">
+            <RightSideBar cols="1" rowHeight="20em" title="Scenes">
+                {loading ? <Loader /> : renderScenes()}
+            </RightSideBar>
+        </div>
     );
 };
 

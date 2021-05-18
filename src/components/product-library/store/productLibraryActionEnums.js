@@ -1,0 +1,15 @@
+export const SET_LOADING = 'SET_LOADING';
+export const SET_PRODUCTS = 'SET_PRODUCTS';
+export const SET_SELECTED_FOLDER = 'SET_SELECTED_FOLDER';
+export const DELETE_PRODUCT = 'DELETE_PRODUCT';
+export const DELETE_FOLDER = 'DELETE_FOLDER';
+export const SET_MODE = 'SET_MODE';
+
+export default {
+    SET_LOADING,
+    SET_PRODUCTS,
+    SET_SELECTED_FOLDER,
+    DELETE_PRODUCT,
+    DELETE_FOLDER,
+    SET_MODE,
+};

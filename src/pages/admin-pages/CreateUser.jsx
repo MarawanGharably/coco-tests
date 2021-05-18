@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { css } from '@emotion/react';
-import Select from 'react-dropdown-select';
+import Select from 'react-select';
 import EmailInput from '../../components/validation-input/EmailInput';
 import SubmitButton from '../../components/submit-button/SubmitButton';
 import Input from '../../components/input/Input';
@@ -91,10 +91,9 @@ const CreateUser = () => {
 
             <Select
                 className="select"
-                multi
+                isMulti
                 placeholder="Select store policies"
                 options={policies}
-                values={[]}
                 onChange={(value) => onPoliciesSelected(value)}
             />
 

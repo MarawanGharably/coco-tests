@@ -1,4 +1,8 @@
 .scene-navigator {
+    display: flex;
+    flex-direction: column;
+    max-height: 74.5vh;
+
     &-item {
         &-container {
             align-items: center;

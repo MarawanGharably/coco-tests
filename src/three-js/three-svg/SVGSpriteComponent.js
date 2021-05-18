@@ -86,6 +86,7 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
             throw new Error('Interactable Object can only have a single SVGSpriteComponent attached!');
         }
         this.owner.setVisualObject(this.svgSprite);
+        this.owner.visualObject.renderOrder = 1000;
         if (this.owner.scene) {
             this.owner.scene.add(this.owner.visualObject);
         }

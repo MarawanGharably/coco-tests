@@ -20,6 +20,15 @@ export default class ModalComponent extends ThreeSceneObjectComponent {
         this.renderProps.getTransforms = this.getTransforms;
     }
 
+    updateRenderProps(renderProps) {
+        this.renderProps = {
+            ...this.renderProps,
+            ...renderProps,
+        };
+
+        this.owner.modalComponentRenderProps = this.renderProps;
+    }
+
     onClick() {
         const UIDispatch = this.owner.getUIDispatcher();
         if (!UIDispatch) {
@@ -63,6 +72,8 @@ export default class ModalComponent extends ThreeSceneObjectComponent {
                 uiState,
             },
         });
+
+        this.updateRenderProps(uiState);
     }
 
     // Retrieves Matrix transforms of visual and collider components

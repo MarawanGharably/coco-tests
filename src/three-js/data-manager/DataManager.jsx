@@ -99,7 +99,7 @@ const dataManagerReducer = (state, action) => {
 
 
 export const DataManager = ({
-    hotspotType, sceneId, storeId, children,
+    hotspotTypes, sceneId, storeId, children,
 }) => {
     const [state, dispatch] = useReducer(dataManagerReducer, initialState);
 
@@ -156,8 +156,27 @@ export const DataManager = ({
                 type: CLEAR_ROOM_OBJECT_DATA,
             });
         };
+
+        const getRoomObjectData = async () => {
+            if (Array.isArray(hotspotTypes)) {
+                const promises = hotspotTypes.map((hotspotType) => (
+                    apiGetHotspotsByType(hotspotType, storeId, sceneId)
+                ));
+
+                return Promise.all(promises);
+            }
+
+            return apiGetHotspotsByType(hotspotTypes, storeId, sceneId);
+        };
+
         const setRoomDataAsync = async () => {
-            const roomObjectData = await apiGetHotspotsByType(hotspotType, storeId, sceneId);
+            if (!sceneId) return;
+
+            const response = await getRoomObjectData();
+            const roomObjectData = response.flat().filter((object) => (
+                typeof object !== 'string'
+            ));
+
             dispatch({
                 type: SET_ROOM_OBJECT_DATA,
                 payload: { roomObjectData: roomObjectData }, //eslint-disable-line
@@ -185,7 +204,10 @@ export const useDataManager = () => {
 };
 
 DataManager.propTypes = {
-    hotspotType: PropTypes.string.isRequired,
+    hotspotTypes: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.arrayOf(PropTypes.string),
+    ]).isRequired,
     sceneId: PropTypes.string.isRequired,
     storeId: PropTypes.string.isRequired,
 };

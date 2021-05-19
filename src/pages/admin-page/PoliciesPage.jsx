@@ -12,15 +12,17 @@ const PoliciesPage = () => {
 
     const getPolicies = () => {
         apiGetAllCMSStores()
-            .then((response) => setStores(
-                response.map((option) => (
-                    {
-                        ...option,
-                        label: option.name,
-                        // eslint-disable-next-line no-underscore-dangle
-                        value: option._id.$oid,
-                    })),
-            ))
+            .then((response) => {
+                setStores(
+                    response.map((option) => (
+                        {
+                            ...option,
+                            label: option.name,
+                            // eslint-disable-next-line no-underscore-dangle
+                            value: option._id.$oid,
+                        })),
+                );
+            })
             .catch((err) => {
                 setError(err);
                 setSubmitting(false);
@@ -30,6 +32,10 @@ const PoliciesPage = () => {
     useEffect(() => {
         getPolicies();
     }, []);
+
+    // useEffect(() => {
+    //     console.log(stores);
+    // }, [stores]);
 
     const onStoreSelected = (value) => {
         setSelectedStore(value);

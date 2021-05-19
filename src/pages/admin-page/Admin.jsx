@@ -5,7 +5,7 @@ import NavBar from '../../components/nav-bar/NavBar';
 import NavBarItem from '../../components/nav-bar/NavBarItem';
 import CreateUser from './CreateUser';
 import PoliciesPage from './PoliciesPage';
-import EditUserStoresPage from './edit-user-stores-page/EditUserStoresPage';
+import EditUserStoresPage from './EditUserStoresPage';
 
 const AdminPage = () => {
     const pathPrefix = '/admin';

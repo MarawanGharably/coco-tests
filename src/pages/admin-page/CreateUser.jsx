@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { css } from '@emotion/react';
 import Select from 'react-select';
 import EmailInput from '../../components/validation-input/EmailInput';
 import SubmitButton from '../../components/submit-button/SubmitButton';
 import Input from '../../components/input/Input';
 import { apiAdminGetAllStorePolicies, apiAdminCreateUser } from '../../utils/apiUtils';
-
+import Page from '../../layouts/page-template/Page';
+import PageRow from '../../components/page-row/PageRow';
+import PageItem from '../../components/page-item/PageItem';
 
 const CreateUser = () => {
     const [submitting, setSubmitting] = useState(false);
@@ -70,43 +71,55 @@ const CreateUser = () => {
     };
 
     return (
-        <div className="flex flex-column flex-center full-width">
-            <h2 className="title">Create User</h2>
 
-            <div css={css`margin: 3em 0;`}>
-                <Input
-                    labelTitle="Name"
-                    width="40em"
-                    value={name}
-                    handleChange={onNameChange}
+        <Page
+            pageTitle="Create User"
+            pageSubTitle="Create User and Add Stores"
+        >
+            <PageRow width="35em">
+                <PageItem>
+                    <Input
+                        labelTitle="Name"
+                        value={name}
+                        handleChange={onNameChange}
+                    />
+                </PageItem>
+            </PageRow>
+            <PageRow width="35em">
+                <PageItem>
+                    <EmailInput
+                        value={email}
+                        handleChange={onEmailInputChange}
+                    />
+                </PageItem>
+            </PageRow>
+            <PageRow width="auto">
+                <PageItem>
+                    <Select
+                        className="select"
+                        isMulti
+                        placeholder="Select Store Policies"
+                        options={policies}
+                        onChange={(value) => onPoliciesSelected(value)}
+                    />
+                </PageItem>
+            </PageRow>
+            {error.length > 0 && (
+                <PageRow width="auto">
+                    <PageItem>
+                        <div className="error">{error}</div>
+                    </PageItem>
+                </PageRow>
+            )}
+            <PageRow width="auto">
+                <SubmitButton
+                    buttonText="CREATE"
+                    className="flex flex-vertical-center flex-grow"
+                    submitting={submitting}
+                    onClick={onRegisterClicked}
                 />
-            </div>
-            <div css={css`margin: 3em 0;`}>
-                <EmailInput
-                    width="40em"
-                    value={email}
-                    handleChange={onEmailInputChange}
-                />
-            </div>
-
-            <Select
-                className="select"
-                isMulti
-                placeholder="Select store policies"
-                options={policies}
-                onChange={(value) => onPoliciesSelected(value)}
-            />
-
-            <SubmitButton
-                className="flex flex-vertical-center flex-grow"
-                submitting={submitting}
-                onClick={onRegisterClicked}
-            />
-
-            {error.length >= 1 && <p className="error">{error}</p>}
-
-        </div>
-
+            </PageRow>
+        </Page>
     );
 };
 

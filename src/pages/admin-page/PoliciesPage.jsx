@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import { apiAdminCreateStorePolicy, apiGetAllCMSStores } from '../../utils/apiUtils';
 import SubmitButton from '../../components/submit-button/SubmitButton';
-
+import Page from '../../layouts/page-template/Page';
+import PageRow from '../../components/page-row/PageRow';
+import PageItem from '../../components/page-item/PageItem';
 
 const PoliciesPage = () => {
     const [stores, setStores] = useState([]);
@@ -50,38 +52,45 @@ const PoliciesPage = () => {
             apiAdminCreateStorePolicy({ store_id: storeId })
                 .then(() => {
                     setError('Success');
-                    setSubmitting(false);
                     setSelectedStore(null);
                 }).catch((err) => {
                     setError(err);
-                    setSubmitting(false);
-                });
+                }).finally(() => setSubmitting(false));
         } else {
-            setError('Please select a store.');
+            setError('Please Select a Store');
         }
     };
 
     return (
-        <div className="flex flex-column flex-center full-width">
-
-            <h2 className="title">Select Store</h2>
-
-            <Select
-                className="select"
-                placeholder="Select a store"
-                options={stores}
-                onChange={(value) => onStoreSelected(value)}
-            />
-
-            <SubmitButton
-                buttonText="Create New Policy"
-                submitting={submitting}
-                onClick={() => onClickCreatePolicy()}
-            />
-
-            {error.length >= 1 && <p className="error">{error}</p>}
-
-        </div>
+        <Page
+            pageTitle="Create Store Policy"
+            pageSubTitle="Select a Store To Create a New Policy"
+        >
+            <PageRow width="auto">
+                <PageItem>
+                    <Select
+                        className="select"
+                        placeholder="Select a Store"
+                        options={stores}
+                        onChange={(value) => onStoreSelected(value)}
+                    />
+                </PageItem>
+            </PageRow>
+            {error.length > 0 && (
+                <PageRow width="auto">
+                    <PageItem>
+                        <div className="error">{error}</div>
+                    </PageItem>
+                </PageRow>
+            )}
+            <PageRow width="auto">
+                <SubmitButton
+                    buttonText="CREATE"
+                    submitting={submitting}
+                    onClick={onClickCreatePolicy}
+                />
+            </PageRow>
+        </Page>
     );
 };
 

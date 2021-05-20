@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -15,12 +15,11 @@ import ProductPlacementPage from './product-placement-page/ProductPlacementPage'
 // import SubmitPage from '../submit-page/SubmitPage';
 import FooterNavContextComponent from './FooterNavContextComponent';
 import Toast from '../../components/toast/Toast';
-import { useHomePageDataStore } from '../../data-store/home-page-data-store/HomePageDataStore';
-import { apiPublishSceneData } from '../../utils/apiUtils';
+import usePublishStore from './PublishStore';
+import LoadingScreen from '../../components/loading-screen/LoadingScreen';
 
 const CreatePage = () => {
-    const [{ selectedStoreId }] = useHomePageDataStore();
-    const [message, setMessage] = useState({});
+    const { isLoading, message, clearMessage, publishSceneData } = usePublishStore();
     const pathPrefix = '/create';
     // const designPath = `${pathPrefix}/design`;
     // const elementsPath = `${pathPrefix}/brand-elements`;
@@ -28,23 +27,6 @@ const CreatePage = () => {
     const placementPath = `${pathPrefix}/product-placement`;
     // const interactionPath = `${pathPrefix}/content-interactions`;
     // const submitPath = `${pathPrefix}/submit`;
-
-    const publishSceneData = async () => {
-        try {
-            await apiPublishSceneData(selectedStoreId);
-
-            setMessage({
-                title: 'Store Published successfully',
-                backgroundColor: '#5cb85c',
-            });
-        } catch (error) {
-            setMessage({
-                title: 'An error occurred while publishing store',
-                backgroundColor: '#d9534f',
-            });
-            console.error(error);
-        }
-    };
 
     return (
         <>
@@ -142,10 +124,11 @@ const CreatePage = () => {
                         /> */}
                     </Switch>
                 </div>
+                {isLoading && <LoadingScreen />}
             </BodyWrapper>
             <FooterNavContextComponent>
                 <Toast
-                    close={() => setMessage({})}
+                    close={clearMessage}
                     active={!!message.title}
                     backgroundColor={message.backgroundColor}
                 >

@@ -16,9 +16,8 @@ import {
 } from '../store/productLibraryActionEnums';
 
 const useAPI = () => {
-    const [storeState] = useHomePageDataStore();
-
-    const { selectedStoreId } = storeState;
+    const [{ selectedStoreId }] = useHomePageDataStore();
+    const defaultFolder = { label: GENERAL_LABEL };
 
     const parseProducts = (products) => (
         products.map((product) => ({
@@ -69,7 +68,8 @@ const useAPI = () => {
             const response = await apiCreateProduct(selectedStoreId, postData);
             const products = parseProducts(response.products);
             const folders = parseFolders(response.folders);
-            const selectedFolder = folders.find(({ label }) => label === folder.label);
+            const productFolder = folders.find(({ label }) => label === folder.label);
+            const selectedFolder = productFolder || defaultFolder;
 
             dispatch({
                 type: SET_PRODUCTS,
@@ -101,6 +101,7 @@ const useAPI = () => {
                 payload: {
                     products,
                     folders,
+                    selectedFolder: defaultFolder,
                 },
             });
         } catch (error) {

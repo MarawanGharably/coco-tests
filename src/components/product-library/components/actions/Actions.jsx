@@ -51,6 +51,7 @@ const Actions = () => {
 
             setImages(products);
             setUploadDialog(true);
+            fileRef.current.value = '';
         }
     };
 

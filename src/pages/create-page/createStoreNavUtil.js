@@ -5,7 +5,7 @@ export const buttonTextByPathname = Object.freeze({
     // '/create/design/materials': 'NEXT',
     // '/create/brand-elements': 'NEXT',
     // '/create/product-data': 'NEXT',
-    '/create/product-placement': 'DONE',
+    '/create/product-placement': 'PUBLISH',
     // '/create/content-interactions': 'NEXT',
     // '/create/submit': 'SUBMIT',
 });

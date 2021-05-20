@@ -21,7 +21,7 @@ const initialState = {
     isLoading: true,
     products: [],
     folders: [],
-    selectedFolder: {},
+    selectedFolder: { label: GENERAL_LABEL },
     mode: PRODUCT_TAGGING,
 };
 

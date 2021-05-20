@@ -17,7 +17,7 @@ import ResetUserPasswordPage from './pages/auth/ResetUserPasswordPage';
 // Only needs to import CSS once at <App /> level.
 // All imports for styling should happen in main.scss level from here on
 import './main.scss';
-import AdminPage from './pages/admin-pages/Admin';
+import AdminPage from './pages/admin-page/Admin';
 
 const App = () => (
     <div className="app-container flex flex-column flex-1">

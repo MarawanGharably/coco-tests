@@ -5,11 +5,14 @@ import NavBar from '../../components/nav-bar/NavBar';
 import NavBarItem from '../../components/nav-bar/NavBarItem';
 import CreateUser from './CreateUser';
 import PoliciesPage from './PoliciesPage';
+import EditUserStoresPage from './EditUserStoresPage';
 
 const AdminPage = () => {
-    const pathPrefix = '/admin/';
-    const policiesPath = `${pathPrefix}policies`;
-    const usersPath = `${pathPrefix}users`;
+    const pathPrefix = '/admin';
+    const policiesPath = `${pathPrefix}/policies`;
+    const usersPath = `${pathPrefix}/users`;
+    const editUserStoresPath = `${pathPrefix}/editUserStores`;
+
     return (
         <>
             <BodyWrapper>
@@ -23,6 +26,10 @@ const AdminPage = () => {
                             name="CREATE USERS"
                             pathName={usersPath}
                         />
+                        <NavBarItem
+                            name="EDIT USER STORES"
+                            pathName={editUserStoresPath}
+                        />
                     </NavBar>
                     <Switch>
                         <Route exact path="/admin">
@@ -35,6 +42,10 @@ const AdminPage = () => {
                         <Route
                             path={usersPath}
                             render={() => <CreateUser />}
+                        />
+                        <Route
+                            path={editUserStoresPath}
+                            render={() => <EditUserStoresPage />}
                         />
                     </Switch>
                 </div>

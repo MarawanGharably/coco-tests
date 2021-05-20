@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 import BodyWrapper from '../../layouts/body-wrapper/BodyWrapper';
 import Footer from '../../layouts/footer/Footer';
-import Page from '../../layouts/page-template/Page';
 // import BrandElementsPage from './brand-elements-page/BrandElementsPage';
 import ProductPlacementPage from './product-placement-page/ProductPlacementPage';
 // import ProductDataPage from './product-data-page/ProductDataPage';
@@ -19,22 +18,16 @@ import Toast from '../../components/toast/Toast';
 import { useHomePageDataStore } from '../../data-store/home-page-data-store/HomePageDataStore';
 import { apiPublishSceneData } from '../../utils/apiUtils';
 
-const PlaceHolderPage = ({ name }) => (
-    <Page pageTitle="Placeholder" pageSubTitle="Placeholder">
-        <h3>{`O Hai Mark: ${name}`}</h3>
-    </Page>
-);
-
 const CreatePage = () => {
     const [{ selectedStoreId }] = useHomePageDataStore();
     const [message, setMessage] = useState({});
-    const pathPrefix = '/create/';
-    // const designPath = `${pathPrefix}design`;
-    // const elementsPath = `${pathPrefix}brand-elements`;
-    // const productsPath = `${pathPrefix}product-data`;
-    const placementPath = `${pathPrefix}product-placement`;
-    // const interactionPath = `${pathPrefix}content-interactions`;
-    // const submitPath = `${pathPrefix}submit`;
+    const pathPrefix = '/create';
+    // const designPath = `${pathPrefix}/design`;
+    // const elementsPath = `${pathPrefix}/brand-elements`;
+    // const productsPath = `${pathPrefix}/product-data`;
+    const placementPath = `${pathPrefix}/product-placement`;
+    // const interactionPath = `${pathPrefix}/content-interactions`;
+    // const submitPath = `${pathPrefix}/submit`;
 
     const publishSceneData = async () => {
         try {
@@ -44,7 +37,7 @@ const CreatePage = () => {
                 title: 'Store Published successfully',
                 backgroundColor: '#5cb85c',
             });
-        } catch(error) {
+        } catch (error) {
             setMessage({
                 title: 'An error occurred while publishing store',
                 backgroundColor: '#d9534f',
@@ -162,14 +155,6 @@ const CreatePage = () => {
             </FooterNavContextComponent>
         </>
     );
-};
-
-PlaceHolderPage.propTypes = {
-    name: PropTypes.string,
-};
-
-PlaceHolderPage.defaultProps = {
-    name: '',
 };
 
 CreatePage.propTypes = {

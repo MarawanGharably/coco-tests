@@ -19,7 +19,7 @@ const OriginUrlPrefixDict = {
 export const S3Link = 'https://s3.amazonaws.com/';
 
 export function getCurrentBucket() {
-    if (['localhost', '0.0.0.0', 'ardentpeak.org', 'create.beta.shopobsess.co'].includes(window.location.hostname)) {
+    if (['localhost', '0.0.0.0', 'ardentpeak.org'].includes(window.location.hostname)) {
         return S3Bucket.DEV;
     }
     return S3Bucket.BETA;

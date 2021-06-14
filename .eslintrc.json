@@ -2,10 +2,12 @@
     "env": {
         "browser": true,
         "es6": true,
-        "jest/globals": true
+        "jest/globals": true,
+        "es2021": true
     },
     "extends": [
         "plugin:react/recommended",
+        "eslint:recommended",
         "airbnb"
     ],
     "globals": {
@@ -25,7 +27,8 @@
         "react",
         "react-hooks",
         "jest",
-        "emotion"
+        "emotion",
+        "prettier"
     ],
     "rules": {
         "no-console": [
@@ -64,11 +67,25 @@
         "no-restricted-imports": "off",
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
-        "arrow-parens": ["off"],
-        "keyword-spacing": ["off"],
-        "spaced-comment": ["off"],
-        "object-curly-newline": ["off"],
-        "arrow-body-style": ["off"],
+        "arrow-parens": [
+            "off"
+        ],
+        "keyword-spacing": [
+            "off"
+        ],
+        "spaced-comment": [
+            "off"
+        ],
+        "object-curly-newline": [
+            "off"
+        ],
+        "arrow-body-style": [
+            "off"
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
         "no-multiple-empty-lines": [
             2,
             {

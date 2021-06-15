@@ -80,10 +80,10 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
         //     `${baseUrl}/1k_left.jpg`,
         // ];
 
-        const loadOrder = this.buildLODUrls(url)
+        const loadOrder = this.buildLODUrls(url) || [];
 
         this.loader = this.setupTextureLoader()
-
+        
         const meshMaterials = loadOrder.map((img) => {
             const texture = this.loader.load(img)
             texture.minFilter = THREE.LinearMipmapNearestFilter

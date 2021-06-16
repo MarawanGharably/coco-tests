@@ -21,7 +21,7 @@ export const resetPassword = (username, oldPassword, newPassword) => (dispatch) 
  * @returns {function(*): Promise<AxiosResponse<any>>}
  */
 export const resetPasswordConfirmCode = (email, code, password) => {
-    if (!email || !code || !password) return false;
+    if (!email || !code || !password) return Promise.reject(new Error(false));
 
     return axiosApi
         .post(`${API_URL}/auth/reset-password-confirm-code`, {

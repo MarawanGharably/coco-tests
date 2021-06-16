@@ -1,40 +1,36 @@
-// import Cookies from 'universal-cookie';
-// const cookies = new Cookies();
-// const access_token_c= cookies.get('access_token');
-// const refresh_token_c= cookies.get('refresh_token');
-
-// TODO: store.isAuthenticated = true even if no cookie present
+// TODO: #1 request expiration date to be sent from backend. Currently hardcoded
+// TODO: #2 validation process could be improved if server generated cookies will be created with same host as front-end app running.
 
 import { LOGGED_IN, LOGGED_OUT } from '../types';
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
+const AUTH_COOKIE = 'auth_timestamp';
+const authCookie = cookies.get(AUTH_COOKIE);
 
-const LOCAL_STORAGE_LOGGED_IN_TIME_STAMP = 'LOCAL_STORAGE_LOGGED_IN_TIME_STAMP';
-const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
-const tenYearsInPast = new Date();
-tenYearsInPast.setFullYear(tenYearsInPast.getFullYear() - 10);
-
-const now = new Date();
-const timeStampString = localStorage.getItem(LOCAL_STORAGE_LOGGED_IN_TIME_STAMP);
-const timeStamp = new Date(timeStampString);
-// Not all days have 24hrs (day light savings),
-// but we don't care because we only need to loosely compare the time.
-const elapsedDays = (now - timeStamp) / MS_PER_DAY;
 
 const initialState = {
-    isAuthenticated: elapsedDays > 0 && elapsedDays < 1, // 1 day login persistence
+    isAuthenticated: authCookie ? true : false, // session exist while cookie exist
 };
+
 
 export default function (state = initialState, action) {
     switch (action.type) {
         case LOGGED_IN:
-            // It's okay if client time isn't consistent,
-            // because we're using this for the same client.
-            localStorage.setItem(LOCAL_STORAGE_LOGGED_IN_TIME_STAMP, new Date().toISOString());
+            const expires =  new Date();
+            expires.setHours(expires.getHours() + 24); //add 24 hours
+
+            //second parameter exist just for better validation purpose as empty string coerced to false
+            cookies.set(AUTH_COOKIE, expires.toISOString(), {
+                path: '/',
+                expires,
+                domain:window.location.hostname //create a cookie per domain/host
+            });
             return {
                 isAuthenticated: true,
             };
         case LOGGED_OUT:
-            localStorage.setItem(LOCAL_STORAGE_LOGGED_IN_TIME_STAMP, tenYearsInPast.toISOString());
+            cookies.remove(AUTH_COOKIE);
             return {
                 isAuthenticated: false,
             };

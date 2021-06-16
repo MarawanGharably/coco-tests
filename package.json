@@ -107,6 +107,7 @@
     "redux-form": "^8.3.7",
     "redux-thunk": "^2.3.0",
     "three": "^0.113.2",
+    "universal-cookie": "^4.0.4",
     "uuid": "^8.3.0"
   }
 }

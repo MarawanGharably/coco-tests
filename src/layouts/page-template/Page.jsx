@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import PageTitle from '../../components/page-title/PageTitle';
 
+//TODO: remove and use Layout
 const Page = ({ children, pageTitle, pageSubTitle }) => (
     <section className="flex flex-center full-width">
         <div className="flex flex-column flex-vertical-center full-width full-height">

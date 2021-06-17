@@ -1,11 +1,10 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-
 import PrivateRoute from './components/route/PrivateRoute';
 import Header from './layouts/Header';
 import { HomePageDataStore } from './data-store/home-page-data-store/HomePageDataStore';
 import { EditorDataStore } from './data-store/editor-data-store/EditorDataStore';
-import HomePage from './pages/home-page/HomePage';
+import HomePage from './pages/HomePage';
 import CreatePage from './pages/create-page/CreatePage';
 import RegisterPage from './pages/auth/RegisterPage';
 import { ProfilePage, ContextProvider as ProfileContextProvider } from './pages/profile-page/ProfilePage';
@@ -14,15 +13,13 @@ import LoginPage from './pages/auth/LoginPage';
 import ResetUserPasswordWithParamsPage from './pages/auth/ResetUserPasswordWithParamsPage';
 import ResetUserPasswordPage from './pages/auth/ResetUserPasswordPage';
 
-// Only needs to import CSS once at <App /> level.
-// All imports for styling should happen in main.scss level from here on
+// Global css/scss imports
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './main.scss';
 
 import AdminPage from './pages/admin-page/Admin';
 
 const App = () => (
-    <div className="app-container flex flex-column flex-1">
         <HomePageDataStore>
             <Header />
             <Switch>
@@ -30,7 +27,7 @@ const App = () => (
                 <Route path="/reset-password" render={() => <ResetUserPasswordPage />} />
                 <Route path="/login" render={() => <LoginPage />} />
                 <Route path="/signup" render={() => <RegisterPage />} />
-                <Route path="/admin" render={() => <AdminPage />} />
+                <PrivateRoute path="/admin" render={() => <AdminPage />} />
                 <PrivateRoute path="/" exact render={() => <HomePage />} />
                 <PrivateRoute
                     path="/create"
@@ -51,7 +48,6 @@ const App = () => (
                 <PrivateRoute path="/404" exact render={() => <ErrorPage statusCode="404" />} />
             </Switch>
         </HomePageDataStore>
-    </div>
 );
 
 export default App;

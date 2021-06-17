@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import PrivateRoute from './components/route/PrivateRoute';
-import Header from './layouts/header/Header';
+import Header from './layouts/Header';
 import { HomePageDataStore } from './data-store/home-page-data-store/HomePageDataStore';
 import { EditorDataStore } from './data-store/editor-data-store/EditorDataStore';
 import HomePage from './pages/home-page/HomePage';
@@ -16,7 +16,9 @@ import ResetUserPasswordPage from './pages/auth/ResetUserPasswordPage';
 
 // Only needs to import CSS once at <App /> level.
 // All imports for styling should happen in main.scss level from here on
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './main.scss';
+
 import AdminPage from './pages/admin-page/Admin';
 
 const App = () => (

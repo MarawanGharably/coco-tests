@@ -12,12 +12,9 @@
 body {
     min-height: 100%;
     touch-action: none;
-    position: fixed;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-    min-width: 320px;
-    background: #fff;
     font-family: 'Raleway', sans-serif;
     font-size: 10px; // Allows us to use EM in units of 10 e.g 1em = 10px
     font-smoothing: antialiased;
@@ -33,7 +30,33 @@ button {
 }
 
 
-
 @media only screen and (max-width: 500px) {
     .hide-on-xs{ display:none; }
 }
+
+@media (min-width: 576px){
+    .container, .container-sm {
+        max-width: 660px;
+    }
+}
+
+@media (min-width: 768px){
+    .container, .container-md, .container-sm {
+        max-width: 900px;
+    }
+}
+
+@media (min-width: 992px){
+    .container, .container-lg, .container-md, .container-sm {
+        max-width: 1025px;
+        padding: 0 4em;
+    }
+}
+
+@media (min-width: 1200px){
+    .container, .container-lg, .container-md, .container-sm, .container-xl {
+        max-width: 1240px;
+    }
+}
+
+

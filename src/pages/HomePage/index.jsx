@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-
-import Page from '../../layouts/page-template/Page';
-import BodyWrapper from '../../layouts/body-wrapper/BodyWrapper';
-import Footer from '../../layouts/footer/Footer';
 import Loader from '../../components/loader/Loader';
 import { apiGetClientStores } from '../../utils/apiUtils';
-import HomePageStoreItem from './HomePageStoreItem';
 import { useHomePageDataStore, HomePageActionEnums, sessionStorageKey } from '../../data-store/home-page-data-store/HomePageDataStore';
-import { getStoreThumbnails, homepageThumbnailReducer } from './homepageUtil';
-import './_home-page.scss';
+import { getStoreThumbnails } from './homepageUtil';
+import Layout from '../../layouts/Layout';
+import StoresList from "./StoresList";
+
+//TODO: remove Page, BodyWrapper
 
 const HomePage = () => {
     const [loading, setLoading] = useState(true);
@@ -59,46 +57,24 @@ const HomePage = () => {
         return <Loader />;
     }
 
-    const renderStoresList = () => {
-        const { storeData, storeThumbnails } = state;
-        let storesList;
-        if (storeData && storeThumbnails.length > 0) {
-            const thumbnailUrlMap = homepageThumbnailReducer(storeThumbnails);
-
-            storesList = storeData.map((storeInfo) => (
-                <HomePageStoreItem
-                    key={storeInfo._id.$oid} // eslint-disable-line
-                    storeInfo={storeInfo}
-                    handleEditStore={handleEditStore}
-                    thumbnailUrl={thumbnailUrlMap[storeInfo._id.$oid]} // eslint-disable-line
-                />
-            ));
-        }
-        return storesList;
-    };
-
-
-    return (
-        <>
-            <BodyWrapper>
-                <Page pageTitle="Your Stores">
+    return (<Layout title="Your Stores">
                     {
                         state.storeData
-                            ? (
-                                <section className="flex home-page-wrapper">
-                                    {renderStoresList()}
-                                </section>
-                            ) : (
+                            ? (<StoresList
+                                        storeData={state.storeData}
+                                        storeThumbnails={state.storeThumbnails}
+                                        handleEditStore={handleEditStore}
+                                    />)
+                            : (
                                 <header className="page-sub-title">
                                     There are no stores for this client
                                 </header>
                             )
                     }
-                </Page>
-            </BodyWrapper>
-            <Footer hasSubmitButton={false} />
-        </>
-    );
+                </Layout>);
 };
+
+
+
 
 export default HomePage;

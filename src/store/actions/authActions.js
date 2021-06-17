@@ -59,9 +59,10 @@ export const logIn = (email, password) => (dispatch) => {
 export const logOut = () => (dispatch) => {
     return axiosApi
         .get(`${API_URL}/auth/logout`)
-        .then((res) => {
+        .then((res) => res)
+        .catch((err) => err)
+        .finally(()=>{
+            //remove session state in any response condition
             dispatch({ type: types.LOGGED_OUT, payload: false });
-            return res;
-        })
-        .catch((err) => err);
+        });
 };

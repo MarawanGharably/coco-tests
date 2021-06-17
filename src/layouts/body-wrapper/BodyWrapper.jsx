@@ -1,5 +1,5 @@
 import React from 'react';
-
+//TODO: remove and replace by Layout
 // Wrapper that will be in charge of rendering main bulk of content.
 // Will probably be rendering output of react router here
 const BodyWrapper = ({ children }) => (

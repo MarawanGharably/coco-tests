@@ -1,8 +1,8 @@
 // COCO CMS Frontend scss
 // ******************************************************************************* //
 // Import Modules here
-@import "library";
-@import 'normalize';
+@import "assets/scss/library";
+@import 'assets/scss/normalize';
 @import "layouts/layouts";
 @import "components/components";
 @import "pages/pages";
@@ -30,4 +30,10 @@ button {
 
 * {
     box-sizing: border-box;
+}
+
+
+
+@media only screen and (max-width: 500px) {
+    .hide-on-xs{ display:none; }
 }

@@ -19,30 +19,34 @@ const title = {
 
 const ModeSelector = () => {
     const { optionSelected } = useContext(RadioSelectionContext);
-    const [{ mode }, dispatch] = useProductLibrary();
+    const [{ mode, isEnabled }, dispatch] = useProductLibrary();
 
     useEffect(() => {
         dispatch({
             type: SET_MODE,
-            payload: optionSelected,
+            payload: optionSelected || PRODUCT_TAGGING,
         });
     }, [optionSelected, dispatch]);
 
+    const selector = () => (
+        <div className="radio-container">
+            <Radio
+                formField="mode"
+                value={PRODUCT_TAGGING}
+                isLabelShowing
+                isDefaultSelected
+            />
+            <Radio
+                formField="mode"
+                value={PRODUCT_PLACEMENT}
+                isLabelShowing
+            />
+        </div>
+    );
+
     return (
         <>
-            <div className="radio-container">
-                <Radio
-                    formField="mode"
-                    value={PRODUCT_TAGGING}
-                    isLabelShowing
-                    isDefaultSelected
-                />
-                <Radio
-                    formField="mode"
-                    value={PRODUCT_PLACEMENT}
-                    isLabelShowing
-                />
-            </div>
+            {isEnabled && selector()}
 
             <div className="title">{title[mode]}</div>
         </>

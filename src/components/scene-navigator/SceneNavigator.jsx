@@ -17,6 +17,7 @@ const SceneNavigator = () => {
     useEffect(() => {
         const sessionStorageStoreId = sessionStorage.getItem(sessionStorageKey.STORE_ID);
         const storeId = homePageDataStore.selectedStoreId || sessionStorageStoreId;
+        let mounted = true;
 
         apiGetAllScenesData(storeId)
             .then((scenesDataResponse) => {
@@ -26,8 +27,15 @@ const SceneNavigator = () => {
                         payload: { sceneData: scenesDataResponse },
                     });
                 }
-                setLoading(false);
+
+                if (mounted) {
+                    setLoading(false);
+                }
             });
+
+        return () => {
+            mounted = false;
+        };
     }, []); //eslint-disable-line
 
     const sceneClickHandler = (sceneId) => {

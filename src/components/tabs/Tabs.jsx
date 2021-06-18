@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Tab from './tab/Tab';
@@ -9,7 +9,15 @@ import {
 } from './styles';
 
 const Tabs = ({ children }) => {
-    const [active, setActive] = useState(children[0].props.label);
+    const [active, setActive] = useState('');
+
+    useEffect(() => {
+        const tabs = React.Children.toArray(children);
+        const activeTab = tabs.find((child) => child.props.active);
+        const activeLabel = activeTab ? activeTab.props.label : tabs[0].props.label;
+
+        setActive(activeLabel);
+    }, []);
 
     const onTabClick = (label) => {
         setActive(label);

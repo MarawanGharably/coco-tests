@@ -4,6 +4,7 @@ import { apiAdminGetAllUserAccounts, apiAdminGetAllStorePolicies, apiAdminAddUse
 import Page from '../../layouts/page-template/Page';
 import PageRow from '../../components/page-row/PageRow';
 import PageItem from '../../components/page-item/PageItem';
+import Checkbox from '../../components/checkbox/Checkbox';
 import SubmitButton from '../../components/submit-button/SubmitButton';
 
 const EditUserStoresPage = () => {
@@ -11,6 +12,7 @@ const EditUserStoresPage = () => {
     const [stores, setStores] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [selectedStore, setSelectedStore] = useState(null);
+    const [hasProductLibrary, setProductLibrary] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState('');
 
@@ -70,6 +72,12 @@ const EditUserStoresPage = () => {
         getPolicies();
     }, []); // eslint-disable-line
 
+    const handleProductLibraryChange = (e) => {
+        const { checked } = e.target;
+
+        setProductLibrary(checked);
+    };
+
     const onClickAddUserToStore = () => {
         if (selectedStore && selectedUser) {
             setSubmitting(true);
@@ -78,7 +86,9 @@ const EditUserStoresPage = () => {
             const userEmail = selectedUser.label;
             const storeName = selectedStore.name;
 
-            apiAdminAddUserToStorePolicy({ username: userId, group_name: policyId })
+            apiAdminAddUserToStorePolicy({
+                username: userId, group_name: policyId, product_library_enabled: hasProductLibrary,
+            })
                 .then(() => {
                     setError({ message: `${userEmail} added to ${storeName}` });
 
@@ -111,6 +121,16 @@ const EditUserStoresPage = () => {
                         placeholder="Select a Store"
                         options={stores}
                         onChange={(value) => setSelectedStore(value)}
+                    />
+                </PageItem>
+            </PageRow>
+            <PageRow width="auto">
+                <PageItem>
+                    <Checkbox
+                        name="has-product-library"
+                        label="Products Library Enabled"
+                        value={hasProductLibrary}
+                        handleChange={handleProductLibraryChange}
                     />
                 </PageItem>
             </PageRow>

@@ -86,7 +86,7 @@ export const ThreeEditor = ({ children }) => {
     const [UIState, UIDispatch] = useUIManager();
     const [dataState] = useDataManager();
     const [{ currentSceneId }] = useEditorDataStore();
-    const [{ products, mode }] = useProductLibrary();
+    const [{ products, mode, isEnabled }] = useProductLibrary();
     const { updateList } = state;
 
     // useRef used to prevent ThreeEditor from losing variable references.
@@ -311,7 +311,7 @@ export const ThreeEditor = ({ children }) => {
             if (object.hotspot_type === 'product_image') {
                 const product = products.find((p) => p.id === object.image_id);
 
-                if (!product) return false;
+                if (!product || !isEnabled) return false;
 
                 dispatch({
                     type: SET_LOADING,

@@ -11,6 +11,7 @@ import {
     DELETE_PRODUCT,
     DELETE_FOLDER,
     SET_MODE,
+    SET_ENABLED,
 } from './productLibraryActionEnums';
 
 import {
@@ -23,6 +24,7 @@ const initialState = {
     folders: [],
     selectedFolder: { label: GENERAL_LABEL },
     mode: PRODUCT_TAGGING,
+    isEnabled: false,
 };
 
 const StateContext = createContext(initialState);
@@ -68,6 +70,11 @@ const ProductLibraryReducer = (state, action) => {
                 ...state,
                 mode: payload,
             });
+        case SET_ENABLED:
+            return ({
+                ...state,
+                isEnabled: payload,
+            });
         default:
             console.error(`Action of type ${type} not supported!`);
             return state;
@@ -77,8 +84,7 @@ const ProductLibraryReducer = (state, action) => {
 const ProductLibraryStore = ({ children }) => {
     const [state, dispatch] = useReducer(ProductLibraryReducer, initialState);
     const { getProducts } = useAPI();
-    const [storeState] = useHomePageDataStore();
-    const { selectedStoreId } = storeState;
+    const [{ storeData, selectedStoreId }] = useHomePageDataStore();
 
     // After selectedStoreId is present get products from api
     useEffect(() => {
@@ -86,6 +92,17 @@ const ProductLibraryStore = ({ children }) => {
             getProducts(dispatch);
         }
     }, [selectedStoreId]);
+
+    useEffect(() => {
+        if (storeData && storeData.length) {
+            const { coco_features } = storeData.find((store) => store._id.$oid === selectedStoreId); //eslint-disable-line
+
+            dispatch({
+                type: SET_ENABLED,
+                payload: coco_features.product_library_enabled || false,
+            });
+        }
+    }, [selectedStoreId, storeData]);
 
     return (
         <StateContext.Provider value={state}>

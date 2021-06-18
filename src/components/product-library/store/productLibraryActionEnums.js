@@ -4,6 +4,7 @@ export const SET_SELECTED_FOLDER = 'SET_SELECTED_FOLDER';
 export const DELETE_PRODUCT = 'DELETE_PRODUCT';
 export const DELETE_FOLDER = 'DELETE_FOLDER';
 export const SET_MODE = 'SET_MODE';
+export const SET_ENABLED = 'SET_ENABLED';
 
 export default {
     SET_LOADING,
@@ -12,4 +13,5 @@ export default {
     DELETE_PRODUCT,
     DELETE_FOLDER,
     SET_MODE,
+    SET_ENABLED,
 };

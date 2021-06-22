@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Input from '../input/Input';
-import { validatePassword } from './utils/validate';
+import Input from './Input';
+import { validatePassword } from '../../utils/form-input-validate';
 
 const PasswordInput = ({ value, handleChange, validate }) => (
     <Input

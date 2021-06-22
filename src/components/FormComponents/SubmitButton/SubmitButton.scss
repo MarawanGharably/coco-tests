@@ -1,0 +1,12 @@
+.submitButton {
+    .spinner {
+        &.active {
+            display: inline-block;
+        }
+
+        &.hidden {
+            animation: bubbledown 2s linear 0.5s 1 normal forwards;
+            display: none;
+        }
+    }
+}

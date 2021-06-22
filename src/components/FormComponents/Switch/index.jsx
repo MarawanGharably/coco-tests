@@ -1,11 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import {
-    Container,
-    Input,
-    Label,
-} from './styles';
+import { Container,Input, Label} from './styles';
 
 const Switch = ({
     name, label, value, disabled, handleChange, className,

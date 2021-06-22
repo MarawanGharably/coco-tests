@@ -1,10 +1,9 @@
 import React from 'react';
 import ColorSelector from '../../../components/color-selector/ColorSelector';
-import TextInput from '../../../components/text-input/TextInput';
 import Page from '../../../layouts/page-template/Page';
 import PageRow from '../../../components/page-row/PageRow';
 import PageItem from '../../../components/page-item/PageItem';
-import FileUpload from '../../../components/file-upload/FileUpload';
+import {FileUpload, TextInput} from '../../../components/FormComponents';
 import formField from '../../../utils/formField';
 
 const BrandElementsPage = () => (

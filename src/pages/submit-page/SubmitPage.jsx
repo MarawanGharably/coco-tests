@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Page from '../../layouts/page-template/Page';
 import PageRow from '../../components/page-row/PageRow';
 import PageItem from '../../components/page-item/PageItem';
-import SubmitButton from '../../components/submit-button/SubmitButton';
+import SubmitButton from '../../components/FormComponents/SubmitButton';
 
 const SubmitPage = () => {
     const [submitting, setSubmitting] = useState(false); // eslint-disable-line

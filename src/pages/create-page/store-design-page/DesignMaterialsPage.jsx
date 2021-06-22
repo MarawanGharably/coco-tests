@@ -2,8 +2,8 @@ import React from 'react';
 import Page from '../../../layouts/page-template/Page';
 import PageRow from '../../../components/page-row/PageRow';
 import PageItem from '../../../components/page-item/PageItem';
-import RadioGroup from '../../../components/radio/RadioGroup';
-import Radio from '../../../components/radio/Radio';
+import RadioGroup from '../../../components/FormComponents/RadioGroup';
+import Radio from '../../../components/FormComponents/Radio';
 import formField from '../../../utils/formField';
 import './_store-design.scss';
 

@@ -4,8 +4,8 @@ import { css } from '@emotion/react';
 import debounce from 'lodash.debounce';
 
 import Modal from '../modal/Modal';
-import SubmitButton from '../submit-button/SubmitButton';
-import TextInput from '../text-input/TextInput';
+import SubmitButton from '../FormComponents/SubmitButton';
+import TextInput from '../FormComponents/TextInput';
 import FancyButton from '../fancy-button/FancyButton';
 import { useUIManager } from '../../three-js/ui-manager/UIManager';
 import { useEditorDataStore } from '../../data-store/editor-data-store/EditorDataStore';

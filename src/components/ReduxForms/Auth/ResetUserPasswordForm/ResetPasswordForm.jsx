@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
 import { Input } from '../../_formFields';
-import SubmitButton from '../../../submit-button/SubmitButton';
+import SubmitButton from '../../../FormComponents/SubmitButton';
 import PageRow from '../../../page-row/PageRow';
 import PageItem from '../../../page-item/PageItem';
 

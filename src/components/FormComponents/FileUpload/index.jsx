@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-// formField is required to accurately assign file uploads to its respective input id
-// without formField, files will be uploaded only to the first input on the page.
+// formField is required to accurately assign file uploads to its respective Input id
+// without formField, files will be uploaded only to the first Input on the page.
 // formField should match API shape
 const FileUpload = ({ formField, isMultipleFiles }) => {
     const [fileName, setFileName] = useState('');

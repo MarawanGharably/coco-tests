@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
-import RadioGroup, { RadioSelectionContext } from '../radio/RadioGroup';
+import RadioGroup, { RadioSelectionContext } from '../FormComponents/RadioGroup';
 import { useProductLibrary } from '../product-library/store/ProductLibraryStore';
-import Radio from '../radio/Radio';
+import Radio from '../FormComponents/Radio';
 
 import {
     SET_MODE,

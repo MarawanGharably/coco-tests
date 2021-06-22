@@ -4,8 +4,9 @@ import { apiAdminGetAllUserAccounts, apiAdminGetAllStorePolicies, apiAdminAddUse
 import Page from '../../layouts/page-template/Page';
 import PageRow from '../../components/page-row/PageRow';
 import PageItem from '../../components/page-item/PageItem';
-import Checkbox from '../../components/checkbox/Checkbox';
-import SubmitButton from '../../components/submit-button/SubmitButton';
+import {Checkbox, SubmitButton} from '../../components/FormComponents';
+
+
 
 const EditUserStoresPage = () => {
     const [users, setUsers] = useState([]);

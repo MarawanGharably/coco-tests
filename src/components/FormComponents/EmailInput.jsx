@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Input from '../input/Input';
-import { validateEmail } from './utils/validate';
+import Input from './Input';
+import { validateEmail } from '../../utils/form-input-validate';
 
 const EmailInput = ({ value, handleChange, validate }) => (
     <Input

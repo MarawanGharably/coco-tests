@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Input from '../input/Input';
+import Input from './Input';
 
 // formField is required and should match API shape
 const TextInput = ({

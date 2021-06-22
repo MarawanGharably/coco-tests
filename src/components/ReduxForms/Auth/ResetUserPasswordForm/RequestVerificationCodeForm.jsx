@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Field, reduxForm } from 'redux-form';
 import { Input } from '../../_formFields';
-import SubmitButton from '../../../submit-button/SubmitButton';
+import SubmitButton from '../../../FormComponents/SubmitButton';
 import { isValidEmail } from '../../../../utils/validation';
 import PageRow from '../../../page-row/PageRow';
 import PageItem from '../../../page-item/PageItem';

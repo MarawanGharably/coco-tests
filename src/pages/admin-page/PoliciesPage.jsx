@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import { apiAdminCreateStorePolicy, apiGetAllCMSStores } from '../../utils/apiUtils';
-import SubmitButton from '../../components/submit-button/SubmitButton';
-import Page from '../../layouts/page-template/Page';
-import PageRow from '../../components/page-row/PageRow';
-import PageItem from '../../components/page-item/PageItem';
+import SubmitButton from '../../components/FormComponents/SubmitButton';
+import Layout from "../../layouts/Layout";
+import { Row } from 'react-bootstrap';
 
 const PoliciesPage = () => {
     const [stores, setStores] = useState([]);
@@ -62,36 +61,28 @@ const PoliciesPage = () => {
     };
 
     return (
-        <Page
-            pageTitle="Create Store Policy"
-            pageSubTitle="Select a Store To Create a New Policy"
-        >
-            <PageRow width="auto">
-                <PageItem>
+        <Layout title="Create Store Policy" subTitle="Select a Store To Create a New Policy" >
+            <Row className='justify-content-center mt-4'>
                     <Select
                         className="select"
                         placeholder="Select a Store"
                         options={stores}
                         onChange={(value) => onStoreSelected(value)}
                     />
-                </PageItem>
-            </PageRow>
+            </Row>
             {error.length > 0 && (
-                <PageRow width="auto">
-                    <PageItem>
-                        <div className="error">{error}</div>
-                    </PageItem>
-                </PageRow>
+                <Row>
+                    <div className="error">{error}</div>
+                </Row>
             )}
-            <PageRow width="auto">
+            <Row className='justify-content-center mt-4'>
                 <SubmitButton
                     buttonText="CREATE"
                     submitting={submitting}
                     onClick={onClickCreatePolicy}
                 />
-            </PageRow>
-        </Page>
-    );
+            </Row>
+        </Layout>);
 };
 
 export default PoliciesPage;

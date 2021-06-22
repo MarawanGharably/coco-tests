@@ -1,14 +1,12 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-
-import SubmitButton from '../../components/submit-button/SubmitButton';
+import SubmitButton from '../../components/FormComponents/SubmitButton';
 import { FooterNavContext } from '../../pages/create-page/FooterNavContextComponent';
+import './_footer.scss';
 
 const Footer = ({ hasSubmitButton, submitting, onSubmitClicked, buttonText }) => {
     const FooterContextValues = useContext(FooterNavContext);
-    const {
-        currentPath, text, goToNextPage,
-    } = FooterContextValues;
+    const { currentPath, text, goToNextPage } = FooterContextValues;
 
     let isSubmitPage = false;
     if (currentPath === '/create/submit') {
@@ -17,7 +15,7 @@ const Footer = ({ hasSubmitButton, submitting, onSubmitClicked, buttonText }) =>
 
 
     return (
-        <footer className="footer-container full-width flex flex-center">
+        <footer className="footer-container full-width flex">
             {
                 hasSubmitButton && !isSubmitPage && (
                     <div className="footer-button-container">
@@ -25,12 +23,12 @@ const Footer = ({ hasSubmitButton, submitting, onSubmitClicked, buttonText }) =>
                             buttonText={buttonText || text}
                             submitting={submitting}
                             onClick={onSubmitClicked || goToNextPage}
+                            extraClass='float-end'
                         />
-                    </div>
+                     </div>
                 )
             }
         </footer>
-
     );
 };
 

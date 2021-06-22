@@ -4,7 +4,7 @@ import React, {
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import { SketchPicker } from 'react-color';
-import Input from '../input/Input';
+import Input from '../FormComponents/Input';
 
 // formField is required and should match API shape
 const ColorSelector = ({ labelTitle, formField }) => {

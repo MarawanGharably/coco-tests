@@ -2,7 +2,7 @@ import React from 'react';
 import Page from '../../../layouts/page-template/Page';
 import PageRow from '../../../components/page-row/PageRow';
 import PageItem from '../../../components/page-item/PageItem';
-import FileUpload from '../../../components/file-upload/FileUpload';
+import FileUpload from '../../../components/FormComponents/FileUpload';
 import formField from '../../../utils/formField';
 
 const ProductDataPage = () => {

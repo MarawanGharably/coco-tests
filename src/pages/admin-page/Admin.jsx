@@ -1,11 +1,11 @@
 import { Redirect, Route, Switch } from 'react-router-dom';
 import React from 'react';
-import BodyWrapper from '../../layouts/body-wrapper/BodyWrapper';
 import NavBar from '../../components/nav-bar/NavBar';
 import NavBarItem from '../../components/nav-bar/NavBarItem';
 import CreateUser from './CreateUser';
 import PoliciesPage from './PoliciesPage';
 import EditUserStoresPage from './EditUserStoresPage';
+import Layout from "../../layouts/Layout";
 
 const AdminPage = () => {
     const pathPrefix = '/admin';
@@ -14,8 +14,7 @@ const AdminPage = () => {
     const editUserStoresPath = `${pathPrefix}/editUserStores`;
 
     return (
-        <>
-            <BodyWrapper>
+            <Layout fullWidth={true}>
                 <div id="admin-page" className="flex full-width">
                     <NavBar>
                         <NavBarItem
@@ -49,8 +48,7 @@ const AdminPage = () => {
                         />
                     </Switch>
                 </div>
-            </BodyWrapper>
-        </>
+            </Layout>
     );
 };
 

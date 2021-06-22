@@ -36,7 +36,7 @@ const Input = ({
         }
     }, [focusOnMount]);
 
-    // Returns an input that prioritizes text/onChange handlers from props.
+    // Returns an Input that prioritizes text/onChange handlers from props.
     // If no props are passed down, we will use the in-built onChange handler
     return (
         <>

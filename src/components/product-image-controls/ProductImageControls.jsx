@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import FancyButton from '../fancy-button/FancyButton';
 import RangeInput from './range-input/RangeInput';
-import Input from '../input/Input';
+import Input from '../FormComponents/Input';
 
 import useAPI from './hooks/useAPI';
 import { useUIManager } from '../../three-js/ui-manager/UIManager';

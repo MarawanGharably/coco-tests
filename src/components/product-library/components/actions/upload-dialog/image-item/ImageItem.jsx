@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Checkbox from '../../../../../checkbox/Checkbox';
+import Checkbox from '../../../../../FormComponents/Checkbox';
 import { useProductLibrary } from '../../../../store/ProductLibraryStore';
 
 import {

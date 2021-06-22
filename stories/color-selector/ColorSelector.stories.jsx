@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import { withKnobs, text } from '@storybook/addon-knobs';
 import { SketchPicker } from 'react-color'
-import Input from '../../src/components/input/Input';
+import Input from '../../src/components/FormComponents/Input';
 
 import '../../src/main.scss'
 

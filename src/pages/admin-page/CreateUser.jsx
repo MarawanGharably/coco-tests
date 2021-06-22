@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
-import EmailInput from '../../components/validation-input/EmailInput';
-import SubmitButton from '../../components/submit-button/SubmitButton';
-import Input from '../../components/input/Input';
+import { Row, Col } from 'react-bootstrap';
+import {SubmitButton, Input, EmailInput} from '../../components/FormComponents';
 import { apiAdminGetAllStorePolicies, apiAdminCreateUser } from '../../utils/apiUtils';
-import Page from '../../layouts/page-template/Page';
-import PageRow from '../../components/page-row/PageRow';
-import PageItem from '../../components/page-item/PageItem';
+import Layout from "../../layouts/Layout";
 
 const CreateUser = () => {
     const [submitting, setSubmitting] = useState(false);
@@ -70,31 +67,20 @@ const CreateUser = () => {
         setSelectedPolicies(values.map((item) => item.value));
     };
 
-    return (
-
-        <Page
-            pageTitle="Create User"
-            pageSubTitle="Create User and Add Stores"
-        >
-            <PageRow width="35em">
-                <PageItem>
+    return (<Layout title="Create User" subTitle="Create User and Add Stores">
+        <Row className='justify-content-center mt-4' >
+            <Col xs={11} lg={6} >
+                <Row className='flex-column mt-4' >
                     <Input
                         labelTitle="Name"
                         value={name}
                         handleChange={onNameChange}
                     />
-                </PageItem>
-            </PageRow>
-            <PageRow width="35em">
-                <PageItem>
-                    <EmailInput
-                        value={email}
-                        handleChange={onEmailInputChange}
-                    />
-                </PageItem>
-            </PageRow>
-            <PageRow width="auto">
-                <PageItem>
+                </Row>
+                <Row className='flex-column mt-4'>
+                    <EmailInput value={email} handleChange={onEmailInputChange} />
+                </Row>
+                <Row width="auto" className='justify-content-center mt-4'>
                     <Select
                         className="select"
                         isMulti
@@ -102,24 +88,23 @@ const CreateUser = () => {
                         options={policies}
                         onChange={(value) => onPoliciesSelected(value)}
                     />
-                </PageItem>
-            </PageRow>
-            {error.length > 0 && (
-                <PageRow width="auto">
-                    <PageItem>
+                </Row>
+                {error.length > 0 && (
+                    <Row className='justify-content-center mt-4' >
                         <div className="error">{error}</div>
-                    </PageItem>
-                </PageRow>
-            )}
-            <PageRow width="auto">
-                <SubmitButton
-                    buttonText="CREATE"
-                    className="flex flex-vertical-center flex-grow"
-                    submitting={submitting}
-                    onClick={onRegisterClicked}
-                />
-            </PageRow>
-        </Page>
+                    </Row>
+                )}
+                <Row className='justify-content-center mt-4'>
+                    <SubmitButton
+                        buttonText="CREATE"
+                        className="flex flex-vertical-center flex-grow"
+                        submitting={submitting}
+                        onClick={onRegisterClicked}
+                    />
+                </Row>
+            </Col>
+        </Row>
+        </Layout>
     );
 };
 

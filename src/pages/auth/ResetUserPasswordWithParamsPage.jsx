@@ -4,8 +4,8 @@ import { useHistory } from 'react-router-dom';
 import Page from '../../layouts/page-template/Page';
 import PageRow from '../../components/page-row/PageRow';
 import PageItem from '../../components/page-item/PageItem';
-import PasswordInput from '../../components/validation-input/PasswordInput';
-import SubmitButton from '../../components/submit-button/SubmitButton';
+import PasswordInput from '../../components/FormComponents/PasswordInput';
+import SubmitButton from '../../components/FormComponents/SubmitButton';
 import { getUrlQueryParams } from '../../utils/urlHelper';
 
 // Redux Actions
@@ -45,7 +45,7 @@ const ResetUserPasswordWithParamsPage = () => {
                     history.push('/');
                 } else if (statusCode === 400) {
 					console.error('Bad request'); // eslint-disable-line
-                    setErrorMessage('Invalid password, please input a valid password.');
+                    setErrorMessage('Invalid password, please Input a valid password.');
                     setSubmitting(false);
                 } else if (statusCode === 403) {
 					console.log('Already set password'); // eslint-disable-line

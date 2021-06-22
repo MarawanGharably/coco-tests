@@ -1,7 +1,7 @@
 import React from 'react';
 import Page from '../../layouts/page-template/Page';
 import PageRow from '../../components/page-row/PageRow';
-import LogInForm from '../../components/Forms/Auth/LogInForm';
+import LogInForm from '../../components/ReduxForms/Auth/LogInForm';
 
 const LoginPage = () => (
     <Page pageTitle="Login" pageSubTitle="Welcome back">

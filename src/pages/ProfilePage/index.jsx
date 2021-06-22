@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import Page from '../../layouts/page-template/Page';
-import PageRow from '../../components/page-row/PageRow';
-import PageItem from '../../components/page-item/PageItem';
-import TextInput from '../../components/text-input/TextInput';
-import { getKeyValueDataStore } from '../../data-store/KeyValueDataStoreFactory';
+import TextInput from '../../components/FormComponents/TextInput';
 import Footer from '../../layouts/footer/Footer';
-import BodyWrapper from '../../layouts/body-wrapper/BodyWrapper';
+import { getKeyValueDataStore } from '../../data-store/KeyValueDataStoreFactory';
 import { apiGetProfile, apiSubmitProfile } from '../../utils/apiUtils';
+import Layout from "../../layouts/Layout";
+import { Row, Col } from 'react-bootstrap';
 
+
+//TODO: refactor to redux-form & redux-form fields
 
 const { Action, ContextProvider, useDataStore } = getKeyValueDataStore({
     brandName: '',
@@ -99,38 +99,39 @@ const ProfilePage = () => {
 
     return (
         <>
-            <BodyWrapper>
-                <Page pageTitle="Create Your Profile" pageSubTitle="Let's get to know each other">
-                    <PageRow width="25%" column>
-                        <PageItem>
-                            <TextInput formField="brandName" title="Brand Name" id="brand_name" value={state.brandName} handleChange={onTextInputChange} />
-                        </PageItem>
-                        <PageItem>
-                            <TextInput formField="brandWebsite" title="Brand Website" id="brand_website" value={state.brandWebsite} handleChange={onTextInputChange} />
-                        </PageItem>
-                        <PageItem>
-                            <TextInput formField="brandProductCategory" title="Brand Product Category" id="brand_product_category" value={state.brandProductCategory} handleChange={onTextInputChange} />
-                        </PageItem>
-                        <PageItem>
-                            <TextInput formField="brandInstagram" title="Brand Instagram" id="brand_instagram" value={state.brandInstagram} handleChange={onTextInputChange} />
-                        </PageItem>
-                        <PageItem>
-                            <TextInput formField="name" title="Your Name" id="account_owner" value={state.name} handleChange={onTextInputChange} />
-                        </PageItem>
-                        <PageItem>
-                            <TextInput formField="position" title="Your Position" id="owner_position" value={state.position} handleChange={onTextInputChange} />
-                        </PageItem>
-                    </PageRow>
+        <Layout title='Create Your Profile' subTitle={`Let's get to know each other`}  >
+                    <Row className="justify-content-center">
+                        <Col xs={11} sm={6}  >
+                            <Row className='flex-column mb-4' >
+                                <TextInput formField="brandName" title="Brand Name" id="brand_name" value={state.brandName} handleChange={onTextInputChange} />
+                            </Row>
+                            <Row className='flex-column mb-4' >
+                                <TextInput formField="brandWebsite" title="Brand Website" id="brand_website" value={state.brandWebsite} handleChange={onTextInputChange} />
+                            </Row>
+                            <Row className='flex-column mb-4' >
+                                <TextInput formField="brandProductCategory" title="Brand Product Category" id="brand_product_category" value={state.brandProductCategory} handleChange={onTextInputChange} />
+                            </Row>
+                            <Row className='flex-column mb-4' >
+                                <TextInput formField="brandInstagram" title="Brand Instagram" id="brand_instagram" value={state.brandInstagram} handleChange={onTextInputChange} />
+                            </Row>
+                            <Row className='flex-column mb-4' >
+                                <TextInput formField="name" title="Your Name" id="account_owner" value={state.name} handleChange={onTextInputChange} />
+                            </Row>
+                            <Row className='flex-column mb-4' >
+                                <TextInput formField="position" title="Your Position" id="owner_position" value={state.position} handleChange={onTextInputChange} />
+                            </Row>
+                        </Col>
+                    </Row>
                     <h1 style={{ textAlign: 'center' }}>
                         {statusMessage}
                     </h1>
-                </Page>
-            </BodyWrapper>
-            <Footer
-                submitting={submitting}
-                onSubmitClicked={submit}
-            />
-        </>
+
+        </Layout>
+        <Footer
+            submitting={submitting}
+            onSubmitClicked={submit}
+        />
+    </>
     );
 };
 

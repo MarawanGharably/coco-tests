@@ -1,8 +1,10 @@
 import React from 'react';
 import { css } from '@emotion/react';
 import PropTypes from 'prop-types';
-
 import InfoHover from '../info-hover/InfoHover';
+
+
+//TODO: replace by bootstrap Row
 
 // PageRow semantically styles a row of components on a page.
 // It takes in PageItem(s) as children and distributes them evenly.

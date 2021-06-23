@@ -1,33 +1,60 @@
 import React, { useState } from 'react';
+import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import FancyButton from '../../../../../fancy-button/FancyButton';
-import useAPI from '../../../../hooks/useAPI';
-import { useProductLibrary } from '../../../../store/ProductLibraryStore';
-import { GENERAL_LABEL } from '../../../../store/productLibraryLabelEnums';
+import { GENERAL_LABEL } from '../../../../../../store/types/productLibrary';
+import { createHotspotProduct } from "../../../../../../APImethods";
+import { setSelectedFolder } from "../../../../../../store/actions/productLibraryActions";
+import {useHomePageDataStore} from "../../../../../../data-store/home-page-data-store/HomePageDataStore";
+import {Container,Select, buttonStyle } from './styles';
 
-import {
-    Container,
-    Select,
-    buttonStyle,
-} from './styles';
 
-const UploadFooter = ({ images, closeDialog }) => {
-    const { createProduct } = useAPI();
-    const [{ isLoading, folders, selectedFolder }, dispatch] = useProductLibrary();
+const UploadFooter = ({productLibrary, images, closeDialog}) => {
+    const { isLoading, folders, selectedFolder } =  productLibrary;
+    const [{ selectedStoreId }] = useHomePageDataStore();
     const [folder, setFolder] = useState(selectedFolder);
     const generalOption = { label: GENERAL_LABEL };
     const buttonText = isLoading ? 'Uploading...' : 'Upload';
+    const dispatch = useDispatch();
+
+
 
     const handleFolderChange = (selected) => {
         setFolder(selected);
     };
 
+    const parsePostData = (images) => {
+        const folderId = folder.id || 0;
+        const folderName = folder.label === GENERAL_LABEL ? '' : folder.label;
+
+        return {
+            file_upload: images.map((image) => ({
+                content: image.content,
+                filename: image.filename,
+                remove_background: image.remove_background,
+                folder_id: folderId,
+                folder_name: folderName,
+            })),
+        };
+    };
+
     const handleUpload = () => {
         if (isLoading) return;
 
-        createProduct({
-            dispatch, images, folder, closeDialog,
-        });
+        const postData = parsePostData(images);
+        const defaultFolder = { label: GENERAL_LABEL };
+        dispatch(createHotspotProduct(selectedStoreId, postData))
+            .then(res=>{
+                const { folders } = res;
+                const productFolder = folders.find(({ label }) => label === folder.label);
+                const selectedFolder = productFolder || defaultFolder;
+
+                dispatch(setSelectedFolder(selectedFolder));
+            })
+            .catch(err=>{})
+            .finally(()=>{
+                closeDialog();
+            });
     };
 
     return (
@@ -56,4 +83,10 @@ UploadFooter.propTypes = {
     closeDialog: PropTypes.func.isRequired,
 };
 
-export default UploadFooter;
+const mapStateToProps = ({ productLibrary }) => {
+    return { productLibrary  };
+};
+  
+export default connect(
+    mapStateToProps,
+)(UploadFooter);

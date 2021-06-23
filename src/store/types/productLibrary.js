@@ -1,3 +1,4 @@
+// Action Types
 export const SET_LOADING = 'SET_LOADING';
 export const SET_PRODUCTS = 'SET_PRODUCTS';
 export const SET_SELECTED_FOLDER = 'SET_SELECTED_FOLDER';
@@ -6,12 +7,7 @@ export const DELETE_FOLDER = 'DELETE_FOLDER';
 export const SET_MODE = 'SET_MODE';
 export const SET_ENABLED = 'SET_ENABLED';
 
-export default {
-    SET_LOADING,
-    SET_PRODUCTS,
-    SET_SELECTED_FOLDER,
-    DELETE_PRODUCT,
-    DELETE_FOLDER,
-    SET_MODE,
-    SET_ENABLED,
-};
+// Enums
+export const PRODUCT_TAGGING = 'Product tagging';
+export const PRODUCT_PLACEMENT = 'Product placement';
+export const GENERAL_LABEL = 'General';

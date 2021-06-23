@@ -1,66 +1,57 @@
 import React, { useContext, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { setMode as setModeAction } from '../../store/actions/productLibraryActions';
+import Selector from './selector/Selector';
 import RadioGroup, { RadioSelectionContext } from '../FormComponents/RadioGroup';
-import { useProductLibrary } from '../product-library/store/ProductLibraryStore';
-import Radio from '../FormComponents/Radio';
 
-import {
-    SET_MODE,
-} from '../product-library/store/productLibraryActionEnums';
 
-import {
-    PRODUCT_TAGGING,
-    PRODUCT_PLACEMENT,
-} from './modeOptions';
+import { PRODUCT_TAGGING, PRODUCT_PLACEMENT } from '../../store/types/productLibrary';
 
 const title = {
     [PRODUCT_TAGGING]: 'Click on 360 image to place hotspot and enter SKU ID',
     [PRODUCT_PLACEMENT]: 'Select the “Products” tab, add/delete products and drag them inside the 360 image to apply on the scene',
 };
 
-const ModeSelector = () => {
+const ModeSelector = ({ setMode, productLibrary }) => {
     const { optionSelected } = useContext(RadioSelectionContext);
-    const [{ mode, isEnabled }, dispatch] = useProductLibrary();
+    const { mode, isEnabled } = productLibrary;
 
     useEffect(() => {
-        dispatch({
-            type: SET_MODE,
-            payload: optionSelected || PRODUCT_TAGGING,
-        });
-    }, [optionSelected, dispatch]);
-
-    const selector = () => (
-        <div className="radio-container">
-            <Radio
-                formField="mode"
-                value={PRODUCT_TAGGING}
-                isLabelShowing
-                isDefaultSelected
-            />
-            <Radio
-                formField="mode"
-                value={PRODUCT_PLACEMENT}
-                isLabelShowing
-            />
-        </div>
-    );
+        if (optionSelected) {
+            setMode(optionSelected);
+        }
+    }, [optionSelected, setMode]);
 
     return (
         <>
-            {isEnabled && selector()}
+            {isEnabled && <Selector />}
 
             <div className="title">{title[mode]}</div>
         </>
     );
 };
 
-const withRadioGroup = (Component) => () => (
+ModeSelector.propTypes = {
+    setMode: PropTypes.func.isRequired,
+    productLibrary: PropTypes.shape({
+        mode: PropTypes.string,
+        isEnabled: PropTypes.bool,
+    }).isRequired,
+};
+
+const withRadioGroup = (Component) => (props) => (
     <div className="mode-selector">
         <RadioGroup>
-            <Component />
+            <Component {...props /* eslint-disable-line */} />
         </RadioGroup>
     </div>
 );
 
 const ModeWithRadio = withRadioGroup(ModeSelector);
 
-export default ModeWithRadio;
+const mapStateToProps = ({ productLibrary }) => {
+    return { productLibrary };
+};
+
+export default connect(mapStateToProps, { setMode: setModeAction })(ModeWithRadio);

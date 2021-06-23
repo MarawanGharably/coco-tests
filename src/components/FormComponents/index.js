@@ -5,3 +5,4 @@ export { default as Checkbox } from './Checkbox';
 export { default as Switch } from './Switch';
 export { default as FileUpload } from './FileUpload';
 export { default as SubmitButton } from './SubmitButton';
+export { default as Radio } from './Radio';

@@ -1,21 +1,20 @@
 import React, { useRef, useState } from 'react';
+import { connect } from 'react-redux';
 import { v1 as uuid } from 'uuid';
 import FileInput from './file-input/FileInput';
 import FancyButton from '../../../fancy-button/FancyButton';
 import UploadDialog from './upload-dialog/UploadDialog';
 import ConfirmationDialog from '../../../confirmation-dialog/ConfirmationDialog';
-import useApi from '../../hooks/useAPI';
-import { useProductLibrary } from '../../store/ProductLibraryStore';
+
 
 import {
     Container,
     buttonStyle,
     deleteButtonStyle,
 } from './styles';
+import {deleteHotspotProductFolder} from "../../../../APImethods";
 
-const Actions = () => {
-    const { deleteFolder } = useApi();
-    const [{ selectedFolder }, dispatch] = useProductLibrary();
+const Actions = ({ selectedFolder }) => {
     const [isUploadDialogOpen, setUploadDialog] = useState(false);
     const [isDeleteDialogOpen, setDeleteDialog] = useState(false);
     const [images, setImages] = useState([]);
@@ -73,7 +72,7 @@ const Actions = () => {
     };
 
     const handleFolderDelete = () => {
-        deleteFolder(dispatch, selectedFolder.id);
+        deleteHotspotProductFolder(selectedFolder.id);
         closeDeleteDialog();
     };
 
@@ -114,4 +113,13 @@ const Actions = () => {
     );
 };
 
-export default Actions;
+const mapStateToProps = (state) => {
+    const { selectedFolder } = state.productLibrary;
+
+    return { selectedFolder };
+};
+
+export default connect(
+    mapStateToProps,
+)(Actions);
+

@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Checkbox from '../../../../../FormComponents/Checkbox';
-import { useProductLibrary } from '../../../../store/ProductLibraryStore';
+
 
 import {
     Container,
     Image,
 } from './styles';
 
-const ImageItem = ({ id, src, updateImage }) => {
-    const [{ isLoading }] = useProductLibrary();
+const ImageItem = ({ isLoading, id, src, updateImage }) => {
     const [hasBackground, setBackground] = useState(false);
 
     const handleBackgroundChange = (e) => {
@@ -42,4 +42,12 @@ ImageItem.propTypes = {
     updateImage: PropTypes.func.isRequired,
 };
 
-export default ImageItem;
+const mapStateToProps = (state) => {
+    const { isLoading } = state.productLibrary;
+
+    return { isLoading };
+};
+
+export default connect(
+    mapStateToProps,
+)(ImageItem);

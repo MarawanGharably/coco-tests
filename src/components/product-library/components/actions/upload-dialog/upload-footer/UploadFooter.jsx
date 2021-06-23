@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import FancyButton from '../../../../../fancy-button/FancyButton';
 import { GENERAL_LABEL } from '../../../../../../store/types/productLibrary';
 import { createHotspotProduct } from "../../../../../../APImethods";
 import { setSelectedFolder } from "../../../../../../store/actions/productLibraryActions";
-import {useHomePageDataStore} from "../../../../../../data-store/home-page-data-store/HomePageDataStore";
 import {Container,Select, buttonStyle } from './styles';
 
 
 const UploadFooter = ({productLibrary, images, closeDialog}) => {
     const { isLoading, folders, selectedFolder } =  productLibrary;
-    const [{ selectedStoreId }] = useHomePageDataStore();
+    const HomePageStore = useSelector(store => store['HomePageStore']);
+    const {selectedStoreId} = HomePageStore;
+
     const [folder, setFolder] = useState(selectedFolder);
     const generalOption = { label: GENERAL_LABEL };
     const buttonText = isLoading ? 'Uploading...' : 'Upload';
     const dispatch = useDispatch();
-
 
 
     const handleFolderChange = (selected) => {

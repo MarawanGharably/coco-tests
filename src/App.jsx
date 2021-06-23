@@ -2,7 +2,6 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import PrivateRoute from './components/route/PrivateRoute';
 import Header from './layouts/Header';
-import { HomePageDataStore } from './data-store/home-page-data-store/HomePageDataStore';
 import { EditorDataStore } from './data-store/editor-data-store/EditorDataStore';
 import HomePage from './pages/HomePage';
 import CreatePage from './pages/create-page/CreatePage';
@@ -20,7 +19,7 @@ import './main.scss';
 import AdminPage from './pages/admin-page/Admin';
 
 const App = () => (
-        <HomePageDataStore>
+        <>
             <Header />
             <Switch>
                 <Route path="/password" render={() => <ResetUserPasswordWithParamsPage />} />
@@ -47,7 +46,7 @@ const App = () => (
                 />
                 <PrivateRoute path="/404" exact render={() => <ErrorPage statusCode="404" />} />
             </Switch>
-        </HomePageDataStore>
+        </>
 );
 
 export default App;

@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import Loader from '../loader/Loader';
 import SceneSideBarItem from '../right-side-bar/SceneSideBarItem';
 import { useEditorDataStore, EditorActionEnums } from '../../data-store/editor-data-store/EditorDataStore';
-import { useHomePageDataStore, sessionStorageKey } from '../../data-store/home-page-data-store/HomePageDataStore';
 import { apiGetAllScenesData } from '../../utils/apiUtils';
 import { formURL } from '../../utils/urlHelper';
 import RightSideBar from '../right-side-bar/RightSideBar';
+import { SESSION_STORE_ID } from '../../_keys.json';
 
 const SceneNavigator = () => {
     const [loading, setLoading] = useState(true);
-
-
-    const [homePageDataStore] = useHomePageDataStore();
     const [editorDataStore, editorDataStoreDispatch] = useEditorDataStore();
+    const HomePageStore = useSelector(state => state['HomePageStore']);
+    const { selectedStoreId } = HomePageStore;
 
     useEffect(() => {
-        const sessionStorageStoreId = sessionStorage.getItem(sessionStorageKey.STORE_ID);
-        const storeId = homePageDataStore.selectedStoreId || sessionStorageStoreId;
+        const sessionStorageStoreId = sessionStorage.getItem(SESSION_STORE_ID);
+        const storeId =  selectedStoreId || sessionStorageStoreId;
         let mounted = true;
 
         apiGetAllScenesData(storeId)

@@ -4,11 +4,10 @@ import { connect } from 'react-redux';
 import { Navbar, Nav } from 'react-bootstrap';
 import Logo from './Logo';
 import UserHeaderMenu from './UserHeaderMenu';
-import { useHomePageDataStore } from '../../data-store/home-page-data-store/HomePageDataStore';
 import './header.scss';
 
-const Header = ({ session }) => {
-    const [state] = useHomePageDataStore();
+const Header = ({ session, HomePageStore }) => {
+    const {pageHeaderTitle} = HomePageStore;
 
     return (
         <Navbar bg="light" expand="lg">
@@ -17,7 +16,7 @@ const Header = ({ session }) => {
             </Navbar.Brand>
 
             <Nav className="nav-center justify-content-center">
-                <Navbar.Text className="pageTitle hide-on-xs">{state.pageHeaderTitle}</Navbar.Text>
+                <Navbar.Text className="pageTitle hide-on-xs">{pageHeaderTitle}</Navbar.Text>
             </Nav>
 
             {session && session.isAuthenticated && <UserHeaderMenu />}
@@ -30,8 +29,8 @@ Header.propTypes = {
     session: PropTypes.InstanceOf(PropTypes.Object).isRequired,
 };
 
-const mapStateToProps = ({ session }) => ({
-    session,
+const mapStateToProps = ({ session, HomePageStore }) => ({
+    session, HomePageStore
 });
 
 export default connect(mapStateToProps, {})(Header);

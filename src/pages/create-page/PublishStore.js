@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { useHomePageDataStore } from '../../data-store/home-page-data-store/HomePageDataStore';
+import { useSelector } from 'react-redux';
 import { apiPublishSceneData } from '../../utils/apiUtils';
 
 const PublishStore = () => {
-    const [{ selectedStoreId }] = useHomePageDataStore();
+    const HomePageStore = useSelector(state => state['HomePageStore']);
+    const { selectedStoreId } = HomePageStore;
     const [isLoading, setLoading] = useState(false);
     const [message, setMessage] = useState({});
 

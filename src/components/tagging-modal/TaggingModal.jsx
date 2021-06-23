@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { css } from '@emotion/react';
 import debounce from 'lodash.debounce';
@@ -9,7 +10,6 @@ import TextInput from '../FormComponents/TextInput';
 import FancyButton from '../fancy-button/FancyButton';
 import { useUIManager } from '../../three-js/ui-manager/UIManager';
 import { useEditorDataStore } from '../../data-store/editor-data-store/EditorDataStore';
-import { useHomePageDataStore } from '../../data-store/home-page-data-store/HomePageDataStore';
 import { apiCreateHotspotByType, apiUpdateHotspotByType, apiDeleteHotspotByType } from '../../utils/apiUtils';
 
 const taggingButtonStyle = css`
@@ -34,10 +34,12 @@ const TaggingModal = ({
     const [SKU, setSKU] = useState(productSKU);
     const [UIState] = useUIManager();
     const [editorState] = useEditorDataStore();
-    const [storeState] = useHomePageDataStore();
+    const HomePageStore = useSelector(state => state['HomePageStore']);
+    const { selectedStoreId } = HomePageStore;
+
     const hotspotType = 'product';
 
-    const { selectedStoreId } = storeState;
+
     const { currentSceneId } = editorState;
 
     useEffect(() => {

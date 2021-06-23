@@ -1,15 +1,28 @@
-import {homepageThumbnailReducer} from "./homepageUtil";
+import React from "react";
 import {Col, Row} from "react-bootstrap";
 import StoreThumbnail from "./StoreThumbnail";
-import React from "react";
 
-export default function StoresList({storeData, storeThumbnails, handleEditStore}){
-    if(!storeData && storeThumbnails) return false;
+
+export default function StoresList({stores, storeThumbnails, handleEditStore}){
+    if(!stores && storeThumbnails) return false;
+
+    // turn storeThumbnail array into a map
+     const homepageThumbnailReducer = (storeThumbnails) => {
+        const thumbnailMap = {};
+        // eslint-disable-next-line
+        for (const storeThumbnailInfo of storeThumbnails) {
+            if (storeThumbnailInfo && storeThumbnailInfo.thumbnailUrl) {
+                const { storeId } = storeThumbnailInfo;
+                thumbnailMap[storeId] = storeThumbnailInfo.thumbnailUrl;
+            }
+        }
+        return thumbnailMap;
+    };
 
     const thumbnailUrlMap = homepageThumbnailReducer(storeThumbnails);
 
     return(<Row xs={1} sm={2}  md={4}  lg={5} className="storeRecordsList g-4">
-        {storeData.map((storeInfo, idx) => (
+        {stores.map((storeInfo, idx) => (
             <Col className='mb-4' key={idx}>
                 <StoreThumbnail
                     key={storeInfo._id.$oid}

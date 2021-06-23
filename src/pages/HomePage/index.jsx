@@ -1,55 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../../components/loader/Loader';
-import { apiGetClientStores } from '../../utils/apiUtils';
-import { useHomePageDataStore, HomePageActionEnums, sessionStorageKey } from '../../data-store/home-page-data-store/HomePageDataStore';
-import { getStoreThumbnails } from './homepageUtil';
 import Layout from '../../layouts/Layout';
 import StoresList from "./StoresList";
+import { setStoreData, setSelectedStoreID } from '../../store/actions/homePageActions';
+import {getStores, getStoreThumbnails} from '../../APImethods/StoreAPI';
+import { SESSION_STORE_ID } from '../../_keys.json';
 
 //TODO: remove Page, BodyWrapper
 
 const HomePage = () => {
     const [loading, setLoading] = useState(true);
-    const [state, dispatch] = useHomePageDataStore();
+    const HomePageStore = useSelector(store => store['HomePageStore']);
+    const dispatch = useDispatch();
     const history = useHistory();
 
     // always clear session store id on homepage
-    sessionStorage.removeItem(sessionStorageKey.STORE_ID);
+    sessionStorage.removeItem(SESSION_STORE_ID);
 
     useEffect(() => {
-        apiGetClientStores()
+        getStores()
             .then((clientStoreDataResponse) => {
                 getStoreThumbnails(clientStoreDataResponse)
                     .then((storeThumbnailsResponse) => {
-                        dispatch({
-                            type: HomePageActionEnums.SET_STORE_THUMBNAILS,
-                            payload: { storeThumbnails: storeThumbnailsResponse },
-                        });
-                        dispatch({
-                            type: HomePageActionEnums.SET_STORE_DATA,
-                            payload: { storeData: clientStoreDataResponse },
-                        });
                         setLoading(false);
+                        dispatch(setStoreData({
+                            storeThumbnails:storeThumbnailsResponse,
+                            stores:clientStoreDataResponse,
+                        }));
+
                     }).catch((err) => console.error(err));
             }).catch((err) => console.error(err));
 
-        dispatch({
-            type: HomePageActionEnums.SET_PAGE_HEADER_TITLE,
-            payload: { pageHeaderTitle: '' },
-        });
-    }, [dispatch, history]);
+        dispatch(setStoreData({pageHeaderTitle:''}));
+    }, [history]);
 
-    const setSessionStorageStoreId = (storeId) => {
-        sessionStorage.setItem(sessionStorageKey.STORE_ID, storeId);
-    };
 
     const handleEditStore = (storeId) => {
-        dispatch({
-            type: HomePageActionEnums.SET_SELECTED_STORE_ID,
-            payload: { selectedStoreId: storeId },
-        });
-        setSessionStorageStoreId(storeId);
+        dispatch(setSelectedStoreID(storeId));
+
         history.push('/create');
     };
 
@@ -59,10 +49,10 @@ const HomePage = () => {
 
     return (<Layout title="Your Stores">
                     {
-                        state.storeData
+                        HomePageStore.stores
                             ? (<StoresList
-                                        storeData={state.storeData}
-                                        storeThumbnails={state.storeThumbnails}
+                                        stores={HomePageStore.stores}
+                                        storeThumbnails={HomePageStore.storeThumbnails}
                                         handleEditStore={handleEditStore}
                                     />)
                             : (

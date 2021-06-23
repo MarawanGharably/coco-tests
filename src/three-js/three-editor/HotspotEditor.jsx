@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { ThreeEditor } from './ThreeEditor';
 import BackgroundCube from '../three-background/BackgroundCube';
 import { CollisionManager } from '../collision-manager/CollisionManager';
@@ -6,15 +7,13 @@ import ColliderSphere from '../three-background/ColliderSphere';
 import { UIManager } from '../ui-manager/UIManager';
 import { DataManager } from '../data-manager/DataManager';
 import { useEditorDataStore } from '../../data-store/editor-data-store/EditorDataStore';
-import { useHomePageDataStore } from '../../data-store/home-page-data-store/HomePageDataStore';
-
 
 const HotspotEditor = () => {
     const [editorState] = useEditorDataStore();
-    const [storeState] = useHomePageDataStore();
-
     const { currentSceneId } = editorState;
-    const { selectedStoreId } = storeState;
+    const HomePageStore = useSelector(state => state['HomePageStore']);
+    const { selectedStoreId } = HomePageStore;
+
 
     return (
         <DataManager hotspotTypes={['product', 'product_image']} sceneId={currentSceneId} storeId={selectedStoreId}>

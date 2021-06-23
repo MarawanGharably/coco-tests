@@ -5,7 +5,6 @@ import React, {
 import PropTypes from 'prop-types';
 
 import { apiGetHotspotsByType, apiUpdateHotspotByType } from '../../utils/apiUtils'; // eslint-disable-line
-import { useHomePageDataStore } from '../../data-store/home-page-data-store/HomePageDataStore'; // eslint-disable-line
 
 const initialState = {
     loading: false,
@@ -103,7 +102,7 @@ export const DataManager = ({
 }) => {
     const [state, dispatch] = useReducer(dataManagerReducer, initialState);
 
-    // const [storeState] = useHomePageDataStore();
+
 
     // const updateColliderTransformByRoom = () => {
     //     state.roomObjectData.forEach((object) => {

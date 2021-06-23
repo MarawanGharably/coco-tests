@@ -9,7 +9,12 @@ const handleErrorResponses = (resolve, reject, response) => {
     }
 };
 
-
+/**
+ *
+ * WARNING:
+ * use APImethods folder for new methods
+ *
+ */
 const handleResponse = (resolve, reject, response) => {
     switch (response.status) {
         case 200: {
@@ -125,10 +130,6 @@ export const apiCreateHotspotByType = (type, storeId, payload) => makePOSTReques
 export const apiUpdateHotspotByType = (type, storeId, hotspotId, payload) => makePUTRequest(`${URLS.CMS_HOTSPOT_URL}/${type}/${hotspotId}`, payload, storeId);
 export const apiDeleteHotspotByType = (type, storeId, hotspotId) => makeDELETERequest(`${URLS.CMS_HOTSPOT_URL}/${type}/${hotspotId}`, storeId);
 
-
-
-// HOMEPAGE APIs
-export const apiGetClientStores = () => makeGETRequest(URLS.GET_ALL_STORES_URL);
 
 // PRODCT PLACEMENT PAGE APIs
 export const apiGetAllScenesData = (storeId) => makeGETRequest(URLS.GET_ALL_SCENES_DATA(storeId), storeId) // eslint-disable-line

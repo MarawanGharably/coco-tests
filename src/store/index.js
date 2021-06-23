@@ -8,9 +8,8 @@ const middlewareEnhancer = applyMiddleware(...middlewares);
 const enhancers = [middlewareEnhancer];
 const composedEnhancers = process.env.NODE_ENV === 'development' ? composeWithDevTools(...enhancers) : compose(...enhancers);
 
-const initializeStore = () => createStore(appReducer, undefined, composedEnhancers);
 
-export default initializeStore;
+export default createStore(appReducer, undefined, composedEnhancers);
 
 /* eslint-disable */
 if(process.env.NODE_ENV === 'production'){

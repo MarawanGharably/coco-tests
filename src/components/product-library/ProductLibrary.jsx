@@ -13,4 +13,4 @@ const ProductLibrary = () => (
     </Container>
 );
 
-export default ProductLibrary;
+export default ProductLibrary

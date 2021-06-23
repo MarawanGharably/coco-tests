@@ -1,6 +1,7 @@
 import React, {
     useState, useEffect, useRef, createContext, useReducer, useContext,
 } from 'react';
+import { useSelector } from "react-redux";
 import * as THREE from 'three';
 
 import OrbitControls from '../three-controls/OrbitControls';
@@ -13,7 +14,6 @@ import { useUIManager, UIManagerEnums } from '../ui-manager/UIManager';
 import TaggingModal from '../../components/tagging-modal/TaggingModal';
 import { useEditorDataStore } from '../../data-store/editor-data-store/EditorDataStore';
 import { useDataManager } from '../data-manager/DataManager';
-import { useProductLibrary } from '../../components/product-library/store/ProductLibraryStore';
 import ProductImageControls from '../../components/product-image-controls/ProductImageControls';
 import LoadingScreen from '../../components/loading-screen/LoadingScreen';
 import ThreeLoadingManager from '../three-loading-manager/three-loading-manager';
@@ -86,7 +86,7 @@ export const ThreeEditor = ({ children }) => {
     const [UIState, UIDispatch] = useUIManager();
     const [dataState] = useDataManager();
     const [{ currentSceneId }] = useEditorDataStore();
-    const [{ products, mode, isEnabled }] = useProductLibrary();
+    const { products, mode, isEnabled } = useSelector(state => state.productLibrary);
     const { updateList } = state;
 
     // useRef used to prevent ThreeEditor from losing variable references.
@@ -343,7 +343,7 @@ export const ThreeEditor = ({ children }) => {
         };
 
         const setNewRoomObjectData = () => {
-            if (dataState.roomObjectData && products.length) {
+            if (dataState.roomObjectData && products) {
                 dataState.roomObjectData.forEach((object) => {
                     const marker = renderMarker(object);
 
@@ -359,7 +359,7 @@ export const ThreeEditor = ({ children }) => {
 
         resetRoomObjects();
         setNewRoomObjectData();
-    }, [currentSceneId, dataState]); // eslint-disable-line
+    }, [currentSceneId, dataState, products]); // eslint-disable-line
 
     useEffect(() => {
         const hasProductImage = (collider) => {

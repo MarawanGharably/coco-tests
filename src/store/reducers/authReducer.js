@@ -1,7 +1,7 @@
 // TODO: #1 request expiration date to be sent from backend. Currently hardcoded
 // TODO: #2 validation process could be improved if server generated cookies will be created with same host as front-end app running.
 
-import { LOGGED_IN, LOGGED_OUT } from '../types';
+import { LOGGED_IN, LOGGED_OUT } from '../types/auth';
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 const AUTH_COOKIE = 'auth_timestamp';

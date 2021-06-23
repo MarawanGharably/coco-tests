@@ -1,5 +1,6 @@
-import * as types from '../types';
+import * as types from '../types/auth';
 import axiosApi from '../../utils/axiosApi';
+
 export const { API_URL } = process.env;
 
 export const resetPassword = (username, oldPassword, newPassword) => (dispatch) => {

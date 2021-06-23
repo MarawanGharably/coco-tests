@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const FileInput = ({
-    fileRef, name, hidden, multiple, handleChange,
-}) => (
+const FileInput = ({fileRef, name, hidden, multiple, handleChange}) => (
     <input
         ref={fileRef}
         name={name}

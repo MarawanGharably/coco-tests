@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { connect, useDispatch } from 'react-redux';
 import FancyButton from '../../../../fancy-button/FancyButton';
-import useAPI from '../../../hooks/useAPI';
-import { useProductLibrary } from '../../../store/ProductLibraryStore';
 import ConfirmationDialog from '../../../../confirmation-dialog/ConfirmationDialog';
+import { deleteHotspotProduct } from '../../../../../APImethods/HotspotsAPI';
 
 import {
     Container,
@@ -15,10 +15,10 @@ import {
     PRODUCT_PLACEMENT,
 } from '../../../../mode-selector/modeOptions';
 
-const Product = ({ id, imageUrl, folderId }) => {
-    const { deleteProduct } = useAPI();
-    const [{ mode }, dispatch] = useProductLibrary();
+const Product = ({ mode, id, imageUrl, folderId }) => {
+    const dispatch = useDispatch();
     const [isDialogOpen, setDialogOpen] = useState(false);
+    const selectedStoreId = sessionStorage.getItem('STORE_ID');
 
     const draggable = mode === PRODUCT_PLACEMENT;
 
@@ -46,7 +46,7 @@ const Product = ({ id, imageUrl, folderId }) => {
     };
 
     const handleDelete = () => {
-        deleteProduct(dispatch, id);
+        dispatch(deleteHotspotProduct(selectedStoreId, id))
     };
 
     const openDialog = () => {
@@ -88,4 +88,12 @@ Product.propTypes = {
     folderId: PropTypes.string.isRequired,
 };
 
-export default Product;
+const mapStateToProps = (state) => {
+    const { mode } = state.productLibrary;
+
+    return { mode };
+};
+  
+export default connect(
+    mapStateToProps,
+)(Product);

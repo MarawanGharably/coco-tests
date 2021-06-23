@@ -1,13 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import SceneNavigator from '../../../components/scene-navigator/SceneNavigator';
 import ProductLibrary from '../../../components/product-library/ProductLibrary';
 import Tabs from '../../../components/tabs/Tabs';
 import TabContent from '../../../components/tabs/tab-content/TabContent';
-import { useProductLibrary } from '../../../components/product-library/store/ProductLibraryStore';
 
-const ProductPlacementSidebar = () => {
-    const [{ isEnabled }] = useProductLibrary();
-
+const ProductPlacementSidebar = ({ isEnabled }) => {
     const getTabs = () => (
         <Tabs>
             <TabContent label="Scenes" active>
@@ -22,4 +20,12 @@ const ProductPlacementSidebar = () => {
     return isEnabled ? getTabs() : <SceneNavigator />;
 };
 
-export default ProductPlacementSidebar;
+const mapStateToProps = (state) => {
+    const { isEnabled } = state.productLibrary;
+
+    return { isEnabled };
+};
+  
+export default connect(
+    mapStateToProps,
+)(ProductPlacementSidebar);

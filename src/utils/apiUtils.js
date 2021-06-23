@@ -125,19 +125,7 @@ export const apiCreateHotspotByType = (type, storeId, payload) => makePOSTReques
 export const apiUpdateHotspotByType = (type, storeId, hotspotId, payload) => makePUTRequest(`${URLS.CMS_HOTSPOT_URL}/${type}/${hotspotId}`, payload, storeId);
 export const apiDeleteHotspotByType = (type, storeId, hotspotId) => makeDELETERequest(`${URLS.CMS_HOTSPOT_URL}/${type}/${hotspotId}`, storeId);
 
-// PRODUCT_LIBRARY_APIs
-export const apiGetProducts = (storeId) => makeGETRequest(
-    URLS.GET_PRODUCT_LIBRARY_URL(storeId), storeId,
-);
-export const apiCreateProduct = (storeId, payload) => makePOSTRequest(
-    URLS.GET_PRODUCT_LIBRARY_URL(storeId), payload, storeId,
-);
-export const apiDeleteProduct = (storeId, productId) => makeDELETERequest(
-    `${URLS.GET_PRODUCT_LIBRARY_URL(storeId)}/${productId}`, storeId,
-);
-export const apiDeleteFolder = (storeId, folderId) => makeDELETERequest(
-    `${URLS.GET_PRODUCT_LIBRARY_URL(storeId)}/folders/${folderId}`, storeId,
-);
+
 
 // HOMEPAGE APIs
 export const apiGetClientStores = () => makeGETRequest(URLS.GET_ALL_STORES_URL);
@@ -145,3 +133,4 @@ export const apiGetClientStores = () => makeGETRequest(URLS.GET_ALL_STORES_URL);
 // PRODCT PLACEMENT PAGE APIs
 export const apiGetAllScenesData = (storeId) => makeGETRequest(URLS.GET_ALL_SCENES_DATA(storeId), storeId) // eslint-disable-line
 export const apiPublishSceneData = (storeId) => makePOSTRequest(`${URLS.PUBLISH_SCENE_DATA}/${storeId}`, {}, storeId);
+

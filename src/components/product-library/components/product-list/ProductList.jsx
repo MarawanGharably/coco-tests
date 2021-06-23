@@ -1,8 +1,9 @@
 import React from 'react';
-import Product from './product/Product';
-import { useProductLibrary } from '../../store/ProductLibraryStore';
-import { SET_SELECTED_FOLDER } from '../../store/productLibraryActionEnums';
-import { GENERAL_LABEL } from '../../store/productLibraryLabelEnums';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import List from './list/List';
+import { setSelectedFolder } from '../../../../store/actions/productLibraryActions';
+import { GENERAL_LABEL } from '../../../../store/types/productLibrary';
 
 import {
     Title,
@@ -10,30 +11,13 @@ import {
     RightSideBar,
 } from './styles';
 
-const ProductList = () => {
-    const [{ products, folders, selectedFolder }, dispatch] = useProductLibrary();
+const ProductList = ({ productLibrary, setSelectedFolder }) => {
+    const { products, folders, selectedFolder } = productLibrary;
     const defaultOption = { label: GENERAL_LABEL };
     const selectedOption = selectedFolder || defaultOption;
 
-    const filterFolders = ({ folderId }) => {
-        if (!selectedFolder) return true;
-
-        return !selectedFolder.id || folderId === selectedFolder.id;
-    };
-
-    const renderList = () => (
-        products
-            .filter(filterFolders)
-            .map(({ id, imageUrl, folderId }) => (
-                <Product key={id} id={id} imageUrl={imageUrl} folderId={folderId} />
-            ))
-    );
-
     const handleFolderChange = (selected) => {
-        dispatch({
-            type: SET_SELECTED_FOLDER,
-            payload: selected,
-        });
+        setSelectedFolder(selected);
     };
 
     return (
@@ -45,10 +29,21 @@ const ProductList = () => {
                 onChange={handleFolderChange}
             />
             <RightSideBar cols="1" rowHeight="20em">
-                {renderList()}
+                <List products={products} selectedFolder={selectedFolder} />
             </RightSideBar>
         </>
     );
 };
 
-export default ProductList;
+ProductList.propTypes = {
+    setSelectedFolder: PropTypes.func.isRequired,
+    products: PropTypes.arrayOf(PropTypes.object).isRequired,
+    folders: PropTypes.arrayOf(PropTypes.object).isRequired,
+    selectedFolder: PropTypes.string.isRequired,
+};
+
+const mapStateToProps = ({ productLibrary }) => {
+    return { productLibrary };
+};
+
+export default connect( mapStateToProps,{ setSelectedFolder })(ProductList);

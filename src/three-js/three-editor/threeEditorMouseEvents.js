@@ -45,6 +45,8 @@ export const threeEditorMouseEvents = (
     };
 
     const dragReleaseProductHotspotAutoSave = async (object) => {
+        if (!object) return;
+
         const currentProductMarker = object.owner;
         const { colliderTransform, visualTransform } = currentProductMarker.getTransforms();
         const {

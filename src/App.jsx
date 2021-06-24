@@ -6,7 +6,7 @@ import { EditorDataStore } from './data-store/editor-data-store/EditorDataStore'
 import HomePage from './pages/HomePage';
 import CreatePage from './pages/create-page/CreatePage';
 import RegisterPage from './pages/auth/RegisterPage';
-import { ProfilePage, ContextProvider as ProfileContextProvider } from './pages/ProfilePage';
+import ProfilePage from './pages/ProfilePage';
 import ErrorPage from './pages/error-page/ErrorPage';
 import LoginPage from './pages/auth/LoginPage';
 import ResetUserPasswordWithParamsPage from './pages/auth/ResetUserPasswordWithParamsPage';
@@ -36,14 +36,7 @@ const App = () => (
                         </EditorDataStore>
                     )}
                 />
-                <PrivateRoute
-                    path="/profile"
-                    render={() => (
-                        <ProfileContextProvider>
-                            <ProfilePage />
-                        </ProfileContextProvider>
-                    )}
-                />
+                <PrivateRoute path="/profile" render={() => (<ProfilePage />)} />
                 <PrivateRoute path="/404" exact render={() => <ErrorPage statusCode="404" />} />
             </Switch>
         </>

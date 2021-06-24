@@ -1,12 +1,28 @@
-import { createStore, applyMiddleware, compose } from 'redux';
+import {createStore, applyMiddleware, compose, combineReducers} from 'redux';
+import {reducer as formReducer} from "redux-form";
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
-import appReducer from './reducers/index';
+
+/**  Reducers **/
+import authReducer from "./reducers/authReducer";
+import productLibraryReducer from "./reducers/productLibraryReducer";
+import HomePageReducer from "./reducers/HomePageReducer";
+import KWReducer from "./reducers/KWReducer";
+
+const appReducer = combineReducers({
+    form: formReducer,
+    session: authReducer,
+    productLibrary: productLibraryReducer,
+    HomePageStore: HomePageReducer,
+    KW: KWReducer,
+});
+
 
 const middlewares = [thunk];
 const middlewareEnhancer = applyMiddleware(...middlewares);
 const enhancers = [middlewareEnhancer];
 const composedEnhancers = process.env.NODE_ENV === 'development' ? composeWithDevTools(...enhancers) : compose(...enhancers);
+
 
 
 export default createStore(appReducer, undefined, composedEnhancers);

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import List from './list/List';
-import { setSelectedFolder } from '../../../../store/actions/productLibraryActions';
+import { setSelectedFolderAction } from '../../../../store/actions/productLibraryActions';
 import { GENERAL_LABEL } from '../../../../store/types/productLibrary';
 
 import {
@@ -11,13 +11,13 @@ import {
     RightSideBar,
 } from './styles';
 
-const ProductList = ({ productLibrary, setSelectedFolder }) => {
+const ProductList = ({ productLibrary, setSelectedFolderAction }) => {
     const { products, folders, selectedFolder } = productLibrary;
     const defaultOption = { label: GENERAL_LABEL };
     const selectedOption = selectedFolder || defaultOption;
 
     const handleFolderChange = (selected) => {
-        setSelectedFolder(selected);
+        setSelectedFolderAction(selected);
     };
 
     return (
@@ -36,14 +36,22 @@ const ProductList = ({ productLibrary, setSelectedFolder }) => {
 };
 
 ProductList.propTypes = {
-    setSelectedFolder: PropTypes.func.isRequired,
-    products: PropTypes.arrayOf(PropTypes.object).isRequired,
-    folders: PropTypes.arrayOf(PropTypes.object).isRequired,
-    selectedFolder: PropTypes.string.isRequired,
+    setSelectedFolderAction: PropTypes.func.isRequired,
+    productLibrary: PropTypes.shape({
+        products: PropTypes.arrayOf(PropTypes.object).isRequired,
+        folders: PropTypes.arrayOf(PropTypes.object).isRequired,
+        selectedFolder: PropTypes.shape({
+            id: PropTypes.number,
+            label: PropTypes.string,
+        }),
+    }).isRequired,
 };
 
 const mapStateToProps = ({ productLibrary }) => {
     return { productLibrary };
 };
 
-export default connect( mapStateToProps,{ setSelectedFolder })(ProductList);
+export default connect(
+    mapStateToProps,
+    { setSelectedFolderAction },
+)(ProductList);

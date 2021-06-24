@@ -1,6 +1,7 @@
 import {
     SET_LOADING,
     SET_PRODUCTS,
+    SET_FOLDERS,
     SET_SELECTED_FOLDER,
     DELETE_PRODUCT,
     DELETE_FOLDER,
@@ -11,7 +12,7 @@ import {
 } from '../types/productLibrary';
 
 const initialState = {
-    isLoading: true,
+    isLoading: false,
     products: [],
     folders: [],
     selectedFolder: { label: GENERAL_LABEL },
@@ -31,10 +32,12 @@ export default function (state = initialState, action) {
         case SET_PRODUCTS:
             return ({
                 ...state,
-                isLoading: false,
-                products: payload.products,
-                folders: payload.folders,
-                // selectedFolder: payload.selectedFolder,
+                products: payload,
+            });
+        case SET_FOLDERS:
+            return ({
+                ...state,
+                folders: payload,
             });
         case SET_SELECTED_FOLDER:
             return ({

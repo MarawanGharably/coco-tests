@@ -1,6 +1,7 @@
 // Action Types
 export const SET_LOADING = 'SET_LOADING';
 export const SET_PRODUCTS = 'SET_PRODUCTS';
+export const SET_FOLDERS = 'SET_FOLDERS';
 export const SET_SELECTED_FOLDER = 'SET_SELECTED_FOLDER';
 export const DELETE_PRODUCT = 'DELETE_PRODUCT';
 export const DELETE_FOLDER = 'DELETE_FOLDER';

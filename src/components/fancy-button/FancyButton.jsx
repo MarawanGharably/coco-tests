@@ -11,7 +11,6 @@ const baseTextCss = css``;
 
 // Fancy button uses emotion's style composition to receive styles from props
 const FancyButton = ({ buttonStyle, textStyle, onClick, type, text, extraClass=''}) => {
-    console.log('>FancyButton', { buttonStyle, textStyle, onClick, type, text, extraClass});
     return(
         // eslint-disable-next-line react/button-has-type
         <Button css={[baseButtonCss, buttonStyle]} aria-label="fancy button" onClick={onClick} type={type}

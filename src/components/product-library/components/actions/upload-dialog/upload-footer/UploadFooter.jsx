@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import FancyButton from '../../../../../fancy-button/FancyButton';
+import { setSelectedFolderAction } from '../../../../../../store/actions/productLibraryActions';
+import { createHotspotProduct } from '../../../../../../APImethods';
 import { GENERAL_LABEL } from '../../../../../../store/types/productLibrary';
-import { createHotspotProduct } from "../../../../../../APImethods";
-import { setSelectedFolder } from "../../../../../../store/actions/productLibraryActions";
-import {Container,Select, buttonStyle } from './styles';
+import FancyButton from '../../../../../fancy-button/FancyButton';
+import { Container, Select, buttonStyle } from './styles';
 
 
-const UploadFooter = ({productLibrary, images, closeDialog}) => {
+
+const UploadFooter = ({ productLibrary, images, closeDialog }) => {
     const { isLoading, folders, selectedFolder } =  productLibrary;
     const HomePageStore = useSelector(store => store['HomePageStore']);
     const {selectedStoreId} = HomePageStore;
 
     const [folder, setFolder] = useState(selectedFolder);
-    const generalOption = { label: GENERAL_LABEL };
+    const defaultFolder = { label: GENERAL_LABEL };
     const buttonText = isLoading ? 'Uploading...' : 'Upload';
     const dispatch = useDispatch();
 
@@ -38,30 +39,32 @@ const UploadFooter = ({productLibrary, images, closeDialog}) => {
         };
     };
 
+    const createProduct = async () => {
+        try {
+            const postData = parsePostData(images);
+            const { folders } = await dispatch(createHotspotProduct(selectedStoreId, postData));
+            const productFolder = folders.find(({ label }) => label === folder.label);
+            const selectedFolder = productFolder || defaultFolder;
+
+            dispatch(setSelectedFolderAction(selectedFolder));
+        } catch (error) {
+            console.error(error);
+        } finally {
+            closeDialog();
+        }
+    };
+
     const handleUpload = () => {
         if (isLoading) return;
 
-        const postData = parsePostData(images);
-        const defaultFolder = { label: GENERAL_LABEL };
-        dispatch(createHotspotProduct(selectedStoreId, postData))
-            .then(res=>{
-                const { folders } = res;
-                const productFolder = folders.find(({ label }) => label === folder.label);
-                const selectedFolder = productFolder || defaultFolder;
-
-                dispatch(setSelectedFolder(selectedFolder));
-            })
-            .catch(err=>{})
-            .finally(()=>{
-                closeDialog();
-            });
+        createProduct();
     };
 
     return (
         <Container>
             <Select
                 placeholder="Select Folder or type to create a new one"
-                options={[generalOption, ...folders]}
+                options={[defaultFolder, ...folders]}
                 value={folder}
                 isDisabled={isLoading}
                 onChange={handleFolderChange}
@@ -76,6 +79,14 @@ const UploadFooter = ({productLibrary, images, closeDialog}) => {
 };
 
 UploadFooter.propTypes = {
+    productLibrary: PropTypes.shape({
+        isLoading: PropTypes.bool,
+        folders: PropTypes.arrayOf(PropTypes.object),
+        selectedFolder: PropTypes.shape({
+            id: PropTypes.number,
+            label: PropTypes.string,
+        }),
+    }).isRequired,
     images: PropTypes.arrayOf(PropTypes.shape({
         content: PropTypes.string,
         filename: PropTypes.string,
@@ -87,6 +98,4 @@ const mapStateToProps = ({ productLibrary }) => {
     return { productLibrary  };
 };
   
-export default connect(
-    mapStateToProps,
-)(UploadFooter);
+export default connect( mapStateToProps)(UploadFooter);

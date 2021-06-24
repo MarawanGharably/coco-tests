@@ -1,20 +1,18 @@
 import React, { useRef, useState } from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { v1 as uuid } from 'uuid';
 import FileInput from './file-input/FileInput';
 import FancyButton from '../../../fancy-button/FancyButton';
 import UploadDialog from './upload-dialog/UploadDialog';
 import ConfirmationDialog from '../../../confirmation-dialog/ConfirmationDialog';
-
-
-import {
-    Container,
-    buttonStyle,
-    deleteButtonStyle,
-} from './styles';
 import {deleteHotspotProductFolder} from "../../../../APImethods";
+import {Container, buttonStyle, deleteButtonStyle} from './styles';
 
 const Actions = ({ selectedFolder }) => {
+    const dispatch = useDispatch();
+    const HomePageStore = useSelector(store => store['HomePageStore']);
+    const {selectedStoreId} = HomePageStore;
+
     const [isUploadDialogOpen, setUploadDialog] = useState(false);
     const [isDeleteDialogOpen, setDeleteDialog] = useState(false);
     const [images, setImages] = useState([]);
@@ -72,7 +70,7 @@ const Actions = ({ selectedFolder }) => {
     };
 
     const handleFolderDelete = () => {
-        deleteHotspotProductFolder(selectedFolder.id);
+        dispatch(deleteHotspotProductFolder(selectedStoreId, selectedFolder.id));
         closeDeleteDialog();
     };
 

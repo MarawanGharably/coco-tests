@@ -52,6 +52,9 @@ export default class ThreeProductMarker extends InteractionObject {
         this.visualObject.matrix.decompose(
             this.visualObject.position, this.visualObject.quaternion, this.visualObject.scale,
         );
+        
+        this.sceneObject.position.clampLength(8, 8);
+        this.visualObject.position.copy(this.sceneObject.position);
     }
 
     setScale = (scale = 0.35) => {

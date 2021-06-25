@@ -8,12 +8,14 @@ import authReducer from "./reducers/authReducer";
 import productLibraryReducer from "./reducers/productLibraryReducer";
 import HomePageReducer from "./reducers/HomePageReducer";
 import KWReducer from "./reducers/KWReducer";
+import SceneEditorReducer from "./reducers/SceneEditorReducer";
 
 const appReducer = combineReducers({
     form: formReducer,
     session: authReducer,
     productLibrary: productLibraryReducer,
     HomePageStore: HomePageReducer,
+    SceneEditor: SceneEditorReducer,
     KW: KWReducer,
 });
 

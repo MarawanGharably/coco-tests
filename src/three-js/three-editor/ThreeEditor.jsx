@@ -12,7 +12,6 @@ import ThreeProductMarker from '../hotspot-marker/ThreeProductMarker';
 import ThreeProductImage from '../hotspot-marker/ThreeProductImage';
 import { useUIManager, UIManagerEnums } from '../ui-manager/UIManager';
 import TaggingModal from '../../components/tagging-modal/TaggingModal';
-import { useEditorDataStore } from '../../data-store/editor-data-store/EditorDataStore';
 import { useDataManager } from '../data-manager/DataManager';
 import ProductImageControls from '../../components/product-image-controls/ProductImageControls';
 import LoadingScreen from '../../components/loading-screen/LoadingScreen';
@@ -36,6 +35,8 @@ const initialState = {
 const ThreeState = createContext(initialState);
 
 const ThreeDispatch = createContext();
+
+//TODO: move all reducers in src/store/reducers!!!
 
 const ThreeEditorReducer = (state, action) => {
     const { type, payload } = action;
@@ -85,8 +86,9 @@ export const ThreeEditor = ({ children }) => {
     const [colliderState, colliderDispatch] = useCollisionManager();
     const [UIState, UIDispatch] = useUIManager();
     const [dataState] = useDataManager();
-    const [{ currentSceneId }] = useEditorDataStore();
     const { products, mode, isEnabled } = useSelector(state => state.productLibrary);
+    const { currentSceneId } = useSelector(state => state['SceneEditor']);
+
     const { updateList } = state;
 
     // useRef used to prevent ThreeEditor from losing variable references.

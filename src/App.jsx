@@ -2,7 +2,6 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import PrivateRoute from './components/route/PrivateRoute';
 import Header from './layouts/Header';
-import { EditorDataStore } from './data-store/editor-data-store/EditorDataStore';
 import HomePage from './pages/HomePage';
 import CreatePage from './pages/create-page/CreatePage';
 import RegisterPage from './pages/auth/RegisterPage';
@@ -28,14 +27,7 @@ const App = () => (
                 <Route path="/signup" render={() => <RegisterPage />} />
                 <PrivateRoute path="/admin" render={() => <AdminPage />} />
                 <PrivateRoute path="/" exact render={() => <HomePage />} />
-                <PrivateRoute
-                    path="/create"
-                    render={() => (
-                        <EditorDataStore>
-                            <CreatePage />
-                        </EditorDataStore>
-                    )}
-                />
+                <PrivateRoute path="/create" render={() => ( <CreatePage />)} />
                 <PrivateRoute path="/profile" render={() => (<ProfilePage />)} />
                 <PrivateRoute path="/404" exact render={() => <ErrorPage statusCode="404" />} />
             </Switch>

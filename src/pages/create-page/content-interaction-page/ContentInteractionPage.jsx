@@ -4,10 +4,10 @@ import PageRow from '../../../components/page-row/PageRow';
 import PageItem from '../../../components/page-item/PageItem';
 import RightSideBar from '../../../components/right-side-bar/RightSideBar';
 import ContentSideBarItem from '../../../components/right-side-bar/ContentSideBarItem';
-import { EditorDataStore } from '../../../data-store/editor-data-store/EditorDataStore';
 
+//TODO: dead code?
 const ContentInteractionPage = () => (
-    <EditorDataStore>
+    <>
         <Page
             pageTitle="Content Interactions"
             pageSubTitle="Choose where you'd like to place each content interaction"
@@ -30,7 +30,7 @@ const ContentInteractionPage = () => (
             <ContentSideBarItem name="Image 2" />
             <ContentSideBarItem name="Video 1" />
         </RightSideBar>
-    </EditorDataStore>
+    </>
 );
 
 export default ContentInteractionPage;

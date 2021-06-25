@@ -1,5 +1,5 @@
 import { LoadingManager } from 'three';
-import { SET_LOADING } from '../three-editor/threeEditorActionEnums';
+import { SET_LOADING } from '../../store/types/ThreeEditorActionTypes';
 
 class ThreeLoadingManager extends LoadingManager {
     setOnLoad(dispatch) {

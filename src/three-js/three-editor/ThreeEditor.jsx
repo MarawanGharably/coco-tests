@@ -1,9 +1,6 @@
-import React, {
-    useState, useEffect, useRef, createContext, useReducer, useContext,
-} from 'react';
+import React, { useState, useEffect, useRef, createContext, useReducer, useContext} from 'react';
 import { useSelector } from "react-redux";
 import * as THREE from 'three';
-
 import OrbitControls from '../three-controls/OrbitControls';
 import { setupRenderer, setupCamera, setupControls } from './setupThreeEditor';
 import { threeEditorMouseEvents } from './threeEditorMouseEvents';
@@ -16,14 +13,8 @@ import { useDataManager } from '../data-manager/DataManager';
 import ProductImageControls from '../../components/product-image-controls/ProductImageControls';
 import LoadingScreen from '../../components/loading-screen/LoadingScreen';
 import ThreeLoadingManager from '../three-loading-manager/three-loading-manager';
-
-import {
-    SET_LOADING,
-    SET_SCENE,
-    SET_UPDATE_LIST,
-    CLEAR_UPDATE_LIST,
-    SET_MAX_RENDER_ORDER,
-} from './threeEditorActionEnums';
+import ThreeEditorReducer from '../../store/reducers/ThreeEditorReducer';
+import {setLoadingAction, setMaxRenderOrderAction, setSceneAction} from "../../store/actions/ThreeEditorActions";
 
 const initialState = {
     isLoading: false,
@@ -33,54 +24,11 @@ const initialState = {
 };
 
 const ThreeState = createContext(initialState);
-
 const ThreeDispatch = createContext();
 
-//TODO: move all reducers in src/store/reducers!!!
-
-const ThreeEditorReducer = (state, action) => {
-    const { type, payload } = action;
-
-    switch (type) {
-        case SET_LOADING:
-            return ({
-                ...state,
-                isLoading: payload,
-            });
-        case SET_SCENE:
-            return (
-                {
-                    ...state,
-                    scene: payload,
-                }
-            );
-        case SET_UPDATE_LIST:
-            return (
-                {
-                    ...state,
-                    updateList: [...state.updateList, ...payload],
-                });
-        case CLEAR_UPDATE_LIST:
-            return (
-                {
-                    ...state,
-                    updateList: [],
-                });
-        case SET_MAX_RENDER_ORDER:
-            return (
-                {
-                    ...state,
-                    maxRenderOrder: payload,
-                });
-        default:
-            console.error(`Action of type ${type} not supported!`);
-            return state;
-    }
-};
 
 export const ThreeEditor = ({ children }) => {
     const [threeReady, setThreeReady] = useState(false);
-
     const [state, dispatch] = useReducer(ThreeEditorReducer, initialState);
 
     const [colliderState, colliderDispatch] = useCollisionManager();
@@ -147,10 +95,7 @@ export const ThreeEditor = ({ children }) => {
 
     const setMaxRenderOrder = (renderOrder) => {
         if (renderOrder >= state.maxRenderOrder) {
-            dispatch({
-                type: SET_MAX_RENDER_ORDER,
-                payload: renderOrder + 1,
-            });
+            dispatch(setMaxRenderOrderAction(renderOrder + 1));
         }
     };
 
@@ -207,10 +152,7 @@ export const ThreeEditor = ({ children }) => {
     };
 
     useEffect(() => {
-        dispatch({
-            type: SET_SCENE,
-            payload: scene,
-        });
+        dispatch(setSceneAction(scene));
 
         const canvasContainer = canvasContainerRef.current;
         const widthMultiplier = 1;
@@ -315,10 +257,8 @@ export const ThreeEditor = ({ children }) => {
 
                 if (!product || !isEnabled) return false;
 
-                dispatch({
-                    type: SET_LOADING,
-                    payload: true,
-                });
+                dispatch(setLoadingAction(true));
+
 
                 return renderProductImageMarker(
                     object.collider_transform,

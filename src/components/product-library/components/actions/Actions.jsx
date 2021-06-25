@@ -10,8 +10,7 @@ import {Container, buttonStyle, deleteButtonStyle} from './styles';
 
 const Actions = ({ selectedFolder }) => {
     const dispatch = useDispatch();
-    const HomePageStore = useSelector(store => store['HomePageStore']);
-    const {selectedStoreId} = HomePageStore;
+    const {selectedStoreId} = useSelector(store => store['HomePageStore']);
 
     const [isUploadDialogOpen, setUploadDialog] = useState(false);
     const [isDeleteDialogOpen, setDeleteDialog] = useState(false);

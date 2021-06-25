@@ -1,0 +1,2 @@
+export const SET_CURRENT_SCENE_ID = 'SET_CURRENT_SCENE_ID';
+export const SET_SCENE_DATA = 'SET_SCENE_DATA';

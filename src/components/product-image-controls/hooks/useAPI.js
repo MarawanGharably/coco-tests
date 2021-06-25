@@ -1,15 +1,13 @@
 import { useSelector } from 'react-redux';
-import { useEditorDataStore } from '../../../data-store/editor-data-store/EditorDataStore';
 import { apiCreateHotspotByType, apiUpdateHotspotByType, apiDeleteHotspotByType } from '../../../utils/apiUtils';
 
 
 const HOTSPOT_TYPE = 'product_image';
 
 const useAPI = ({ getTransforms, dispose, updateState }) => {
-    const [editorState] = useEditorDataStore();
-    const HomePageStore = useSelector(state => state['HomePageStore']);
-    const { selectedStoreId } = HomePageStore;
-    const { currentSceneId } = editorState;
+    const { selectedStoreId }  = useSelector(state => state['HomePageStore']);
+    const { currentSceneId } = useSelector(state => state['SceneEditor']);
+
 
     const parsePostData = ({
         scale, renderOrder, imageId, folderId,

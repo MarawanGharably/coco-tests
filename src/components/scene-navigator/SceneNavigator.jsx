@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Loader from '../loader/Loader';
 import SceneSideBarItem from '../right-side-bar/SceneSideBarItem';
-import { useEditorDataStore, EditorActionEnums } from '../../data-store/editor-data-store/EditorDataStore';
 import { apiGetAllScenesData } from '../../utils/apiUtils';
 import { formURL } from '../../utils/urlHelper';
 import RightSideBar from '../right-side-bar/RightSideBar';
 import { SESSION_STORE_ID } from '../../_keys.json';
+import { setSceneData, setCurrentSceneID } from '../../store/actions/SceneEditorActions';
 
 const SceneNavigator = () => {
+    const dispatch = useDispatch();
     const [loading, setLoading] = useState(true);
-    const [editorDataStore, editorDataStoreDispatch] = useEditorDataStore();
-    const HomePageStore = useSelector(state => state['HomePageStore']);
-    const { selectedStoreId } = HomePageStore;
+    const { selectedStoreId } = useSelector(state => state['HomePageStore']);
+    const { sceneData, currentSceneId } = useSelector(state => state['SceneEditor']);
+
+
 
     useEffect(() => {
         const sessionStorageStoreId = sessionStorage.getItem(SESSION_STORE_ID);
@@ -22,10 +24,8 @@ const SceneNavigator = () => {
         apiGetAllScenesData(storeId)
             .then((scenesDataResponse) => {
                 if (scenesDataResponse.length > 0) {
-                    editorDataStoreDispatch({
-                        type: EditorActionEnums.SET_SCENE_DATA,
-                        payload: { sceneData: scenesDataResponse },
-                    });
+                    dispatch(setSceneData(scenesDataResponse));
+                    dispatch(setCurrentSceneID( scenesDataResponse[0]._id.$oid ));
                 }
 
                 if (mounted) {
@@ -39,14 +39,10 @@ const SceneNavigator = () => {
     }, []); //eslint-disable-line
 
     const sceneClickHandler = (sceneId) => {
-        editorDataStoreDispatch({
-            type: EditorActionEnums.SET_CURRENT_SCENE_ID,
-            payload: { currentSceneId: sceneId },
-        });
+        dispatch(setCurrentSceneID( sceneId ));
     };
 
     const renderScenes = () => {
-        const { sceneData, currentSceneId } = editorDataStore;
         let renderSceneData = null;
 
         if (sceneData) {

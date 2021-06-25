@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import { useThree } from '../three-editor/ThreeEditor';
 import ThreeBackgroundCube from './ThreeBackgroundCube';
 import { useCollisionManager, CollisionManagerActionEnums } from '../collision-manager/CollisionManager';
-import { useEditorDataStore } from '../../data-store/editor-data-store/EditorDataStore';
 import { formURL } from '../../utils/urlHelper';
 
 // SET LOD
@@ -11,9 +11,7 @@ const LOD = 3;
 const BackgroundCube = () => {
     const [state] = useThree();
     const [, colliderDispatch] = useCollisionManager();
-    const [editorState] = useEditorDataStore();
-
-    const { currentSceneId, sceneData } = editorState;
+    const { currentSceneId, sceneData } = useSelector(state => state['SceneEditor']);
 
     const cube = useRef();
 

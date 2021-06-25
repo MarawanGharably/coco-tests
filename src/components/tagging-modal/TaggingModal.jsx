@@ -9,7 +9,6 @@ import SubmitButton from '../FormComponents/SubmitButton';
 import TextInput from '../FormComponents/TextInput';
 import FancyButton from '../fancy-button/FancyButton';
 import { useUIManager } from '../../three-js/ui-manager/UIManager';
-import { useEditorDataStore } from '../../data-store/editor-data-store/EditorDataStore';
 import { apiCreateHotspotByType, apiUpdateHotspotByType, apiDeleteHotspotByType } from '../../utils/apiUtils';
 
 const taggingButtonStyle = css`
@@ -28,19 +27,17 @@ text-decoration: underline;
 color: black;
 `;
 
-const TaggingModal = ({
-    productSKU = '', onClose, updateState, uuid, dispose, getTransforms, id,
-}) => {
+const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, getTransforms, id}) => {
     const [SKU, setSKU] = useState(productSKU);
     const [UIState] = useUIManager();
-    const [editorState] = useEditorDataStore();
-    const HomePageStore = useSelector(state => state['HomePageStore']);
-    const { selectedStoreId } = HomePageStore;
+    const { selectedStoreId } = useSelector(state => state['HomePageStore']);
+    const { currentSceneId }  = useSelector(state => state['SceneEditor']);
+
 
     const hotspotType = 'product';
 
 
-    const { currentSceneId } = editorState;
+
 
     useEffect(() => {
         const currentData = UIState.stateManager.get(uuid);

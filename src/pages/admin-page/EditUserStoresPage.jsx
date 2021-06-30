@@ -120,7 +120,7 @@ const EditUserStoresPage = () => {
                 <Form.Check
                     inline
                     id="has-product-library"
-                    className="has-product-library"
+                    className="has-product-library align-self-center"
                     label="Products Library Enabled"
                     value={hasProductLibrary}
                     onChange={handleProductLibraryChange}

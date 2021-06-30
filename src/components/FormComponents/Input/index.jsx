@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import { css } from '@emotion/react';
 import PropTypes from 'prop-types';
 import useInput from './InputHook';
+import './Input.scss';
 
 const Input = ({
     formField,
@@ -23,12 +23,8 @@ const Input = ({
     const focusInput = () => { inputElement.current.focus(); };
 
     const validateInputType = type === 'email' || type === 'password';
-    const formFocusStyle = validateInputType && css`
-        &:focus-within {
-            color: ${isValid ? 'green' : 'red'};
-            border: ${isValid ? '1px solid green' : '1px solid red'};
-        }
-    `;
+    const formFocusValidationClass = isValid ? 'input-border-container--valid' : 'input-border-container--invalid';
+    const formFocusClasses = validateInputType && formFocusValidationClass; 
 
     useEffect(() => {
         if (focusOnMount) {
@@ -43,8 +39,7 @@ const Input = ({
             <div
                 role="textbox"
                 tabIndex={0}
-                className="input-border-container"
-                css={[formFocusStyle]}
+                className={`input-border-container ${formFocusClasses}`}
                 onFocus={focusInput}
                 onClick={focusInput}
                 onKeyDown={(e) => { if (e.keyCode === 13) { focusInput(); } }}

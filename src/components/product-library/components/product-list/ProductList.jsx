@@ -1,15 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Select from 'react-select';
+import RightSideBar from '../../../right-side-bar/RightSideBar';
 import List from './list/List';
 import { setSelectedFolderAction } from '../../../../store/actions/productLibraryActions';
 import { GENERAL_LABEL } from '../../../../store/types/productLibrary';
-
-import {
-    Title,
-    Select,
-    RightSideBar,
-} from './styles';
+import './ProductList.scss';
 
 const ProductList = ({ productLibrary, setSelectedFolderAction }) => {
     const { products, folders, selectedFolder } = productLibrary;
@@ -22,13 +19,14 @@ const ProductList = ({ productLibrary, setSelectedFolderAction }) => {
 
     return (
         <>
-            <Title>Products</Title>
+            <div className="product-list-title">Products</div>
             <Select
+                className="product-list-select"
                 options={[defaultOption, ...folders]}
                 value={selectedOption}
                 onChange={handleFolderChange}
             />
-            <RightSideBar cols="1" rowHeight="20em">
+            <RightSideBar className="product-list-side-bar" cols="1" rowHeight="20em">
                 <List products={products} selectedFolder={selectedFolder} />
             </RightSideBar>
         </>

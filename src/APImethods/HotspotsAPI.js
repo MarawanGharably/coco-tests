@@ -48,7 +48,6 @@ export const createHotspotProduct = (storeId, data) => (dispatch) => {
             return {
                 products,
                 folders,
-                ...res.data,
             };
         })
         .catch((err) => Promise.reject(err))

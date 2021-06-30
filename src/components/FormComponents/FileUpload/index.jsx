@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import './FileUpload.scss';
 
 // formField is required to accurately assign file uploads to its respective Input id
 // without formField, files will be uploaded only to the first Input on the page.

@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import Select from 'react-select/creatable';
+import { Button } from 'react-bootstrap';
 import { setSelectedFolderAction } from '../../../../../../store/actions/productLibraryActions';
 import { createHotspotProduct } from '../../../../../../APImethods';
 import { GENERAL_LABEL } from '../../../../../../store/types/productLibrary';
-import FancyButton from '../../../../../fancy-button/FancyButton';
-import { Container, Select, buttonStyle } from './styles';
-
+import './UploadFooter.scss';
 
 
 const UploadFooter = ({ productLibrary, images, closeDialog }) => {
-    const { isLoading, folders, selectedFolder } =  productLibrary;
+    const { isLoading, folders, selectedFolder } = productLibrary;
     const HomePageStore = useSelector(store => store['HomePageStore']);
-    const {selectedStoreId} = HomePageStore;
+    const { selectedStoreId } = HomePageStore;
 
     const [folder, setFolder] = useState(selectedFolder);
     const defaultFolder = { label: GENERAL_LABEL };
@@ -24,7 +24,7 @@ const UploadFooter = ({ productLibrary, images, closeDialog }) => {
         setFolder(selected);
     };
 
-    const parsePostData = (images) => {
+    const parsePostData = () => {
         const folderId = folder.id || 0;
         const folderName = folder.label === GENERAL_LABEL ? '' : folder.label;
 
@@ -42,11 +42,11 @@ const UploadFooter = ({ productLibrary, images, closeDialog }) => {
     const createProduct = async () => {
         try {
             const postData = parsePostData(images);
-            const { folders } = await dispatch(createHotspotProduct(selectedStoreId, postData));
-            const productFolder = folders.find(({ label }) => label === folder.label);
-            const selectedFolder = productFolder || defaultFolder;
+            const res = await dispatch(createHotspotProduct(selectedStoreId, postData));
+            const productFolder = res.folders.find(({ label }) => label === folder.label);
+            const selected = productFolder || defaultFolder;
 
-            dispatch(setSelectedFolderAction(selectedFolder));
+            dispatch(setSelectedFolderAction(selected));
         } catch (error) {
             console.error(error);
         } finally {
@@ -61,20 +61,19 @@ const UploadFooter = ({ productLibrary, images, closeDialog }) => {
     };
 
     return (
-        <Container>
+        <>
             <Select
+                className="upload-dialog-footer-select"
                 placeholder="Select Folder or type to create a new one"
                 options={[defaultFolder, ...folders]}
                 value={folder}
                 isDisabled={isLoading}
                 onChange={handleFolderChange}
             />
-            <FancyButton
-                text={buttonText}
-                buttonStyle={buttonStyle}
-                onClick={handleUpload}
-            />
-        </Container>
+            <Button variant="primary" onClick={handleUpload}>
+                {buttonText}
+            </Button>
+        </>
     );
 };
 
@@ -95,7 +94,7 @@ UploadFooter.propTypes = {
 };
 
 const mapStateToProps = ({ productLibrary }) => {
-    return { productLibrary  };
+    return { productLibrary };
 };
-  
-export default connect( mapStateToProps)(UploadFooter);
+
+export default connect(mapStateToProps)(UploadFooter);

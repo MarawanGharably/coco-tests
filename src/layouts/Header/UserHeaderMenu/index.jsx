@@ -1,3 +1,4 @@
+import React from 'react';
 import { NavDropdown, Nav } from 'react-bootstrap';
 import { logOut } from '../../../store/actions';
 import { useDispatch } from 'react-redux';

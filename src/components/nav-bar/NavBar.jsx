@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './NavBar.scss';
 
 const NavBar = ({ children }) => (
     <nav className="nav-bar full-height flex flex-column">

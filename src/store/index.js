@@ -9,6 +9,7 @@ import productLibraryReducer from "./reducers/productLibraryReducer";
 import HomePageReducer from "./reducers/HomePageReducer";
 import KWReducer from "./reducers/KWReducer";
 import SceneEditorReducer from "./reducers/SceneEditorReducer";
+import ToastMessagesReducer from './reducers/ToastMessagesReducer';
 
 
 const appReducer = combineReducers({
@@ -18,6 +19,7 @@ const appReducer = combineReducers({
     HomePageStore: HomePageReducer,
     SceneEditor: SceneEditorReducer,
     KW: KWReducer,
+    toastMessages: ToastMessagesReducer,
 });
 
 

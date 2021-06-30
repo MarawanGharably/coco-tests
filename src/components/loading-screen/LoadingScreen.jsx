@@ -1,11 +1,11 @@
 import React from 'react';
 import Loader from '../loader/Loader';
-import { Container } from './styles';
+import './LoadingScreen.scss';
 
 const LoadingScreen = () => (
-    <Container>
+    <div className="loading-screen">
         <Loader />
-    </Container>
+    </div>
 );
 
 export default LoadingScreen;

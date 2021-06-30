@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { setModeAction } from '../../store/actions/productLibraryActions';
 import Selector from './selector/Selector';
-import RadioGroup, { RadioSelectionContext } from '../FormComponents/RadioGroup';
-
+import RadioGroup, { RadioSelectionContext } from '../FormComponents/Radio/RadioGroup';
 import { PRODUCT_TAGGING, PRODUCT_PLACEMENT } from '../../store/types/productLibrary';
+import './ModeSelector.scss';
 
 const title = {
     [PRODUCT_TAGGING]: 'Click on 360 image to place hotspot and enter SKU ID',

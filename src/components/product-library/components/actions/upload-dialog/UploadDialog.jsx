@@ -1,38 +1,40 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import Modal from '../../../../modal/Modal';
+import { Modal } from 'react-bootstrap';
 import ImageList from './image-list/ImageList';
 import UploadFooter from './upload-footer/UploadFooter';
+import './UploadDialog.scss';
 
-import {
-    Container,
-} from './styles';
+const UploadDialog = ({ show, onHide, images, setImages }) => (
+    <Modal
+        show={show}
+        onHide={onHide}
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        size="xl"
+    >
+        <Modal.Header closeButton>
+            <Modal.Title className="text-center">Upload Images</Modal.Title>
+        </Modal.Header>
 
-const UploadDialog = ({ onClose, images: initialImages }) => {
-    const [images, setImages] = useState(initialImages);
+        <Modal.Body>
+            <ImageList images={images} setImages={setImages} />
+        </Modal.Body>
 
-    return (
-        <Modal onClose={onClose}>
-            <Container>
-                <ImageList images={images} setImages={setImages} />
-                <UploadFooter images={images} closeDialog={onClose} />
-            </Container>
-        </Modal>
-    );
-};
+        <Modal.Footer className="upload-dialog-footer-container">
+            <UploadFooter images={images} closeDialog={onHide} />
+        </Modal.Footer>
+    </Modal>
+);
 
 UploadDialog.propTypes = {
-    onClose: PropTypes.func.isRequired,
+    show: PropTypes.bool.isRequired,
+    onHide: PropTypes.func.isRequired,
     images: PropTypes.arrayOf(PropTypes.shape({
         content: PropTypes.string,
         filename: PropTypes.string,
     })).isRequired,
+    setImages: PropTypes.func.isRequired,
 };
 
-const withOpen = (Component) => (props) => (
-    props.isOpen && <Component {...props} /> //eslint-disable-line
-);
-
-const DialogWithOpen = withOpen(UploadDialog);
-
-export default DialogWithOpen;
+export default UploadDialog;

@@ -1,0 +1,29 @@
+.product-library-container {
+    display: flex;
+    flex-direction: column;
+    height: 74.5vh;
+}
+
+#drag-overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 2em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    background-image: repeating-linear-gradient(0deg, #fff, #fff 10px, transparent 10px, transparent 23px, #fff 23px), repeating-linear-gradient(90deg, #fff, #fff 10px, transparent 10px, transparent 23px, #fff 23px), repeating-linear-gradient(180deg, #fff, #fff 10px, transparent 10px, transparent 23px, #fff 23px), repeating-linear-gradient(270deg, #fff, #fff 10px, transparent 10px, transparent 23px, #fff 23px);
+    background-size: 4px calc(100% + 23px), calc(100% + 23px) 4px, 4px calc(100% + 23px) , calc(100% + 23px) 4px;
+    background-position: 0 0, 0 0, 100% 0, 0 100%;
+    background-repeat: no-repeat;
+    animation: borderAnimation 1s infinite linear;
+}
+
+@keyframes borderAnimation {
+    from { background-position: 0 0, -23px 0, 100% -23px, 0 100%; }
+    to { background-position: 0 -23px, 0 0, 100% 0, -23px 100%; }
+}

@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ImageItem from '../image-item/ImageItem';
-
-import {
-    Container,
-} from './styles';
+import './ImageList.scss';
 
 const ImageList = ({ images, setImages }) => {
     const updateImage = (image) => {
@@ -20,7 +17,7 @@ const ImageList = ({ images, setImages }) => {
     };
 
     return (
-        <Container>
+        <div className="upload-dialog-list">
             {images.map((image) => (
                 <ImageItem
                     key={image.id}
@@ -29,7 +26,7 @@ const ImageList = ({ images, setImages }) => {
                     updateImage={updateImage}
                 />
             ))}
-        </Container>
+        </div>
     );
 };
 

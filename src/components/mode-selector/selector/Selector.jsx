@@ -1,6 +1,7 @@
 import React from 'react';
 import { Radio } from '../../FormComponents'
 import { PRODUCT_TAGGING, PRODUCT_PLACEMENT } from '../../../store/types/productLibrary';
+import './Selector.scss';
 
 const Selector = () => {
     return (

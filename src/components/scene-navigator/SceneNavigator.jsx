@@ -7,6 +7,7 @@ import { formURL } from '../../utils/urlHelper';
 import RightSideBar from '../right-side-bar/RightSideBar';
 import { SESSION_STORE_ID } from '../../_keys.json';
 import { setSceneData, setCurrentSceneID } from '../../store/actions/SceneEditorActions';
+import './SceneNavigator.scss';
 
 const SceneNavigator = () => {
     const dispatch = useDispatch();

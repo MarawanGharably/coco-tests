@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './SideBarItem.scss';
 
 const ContentSideBarItem = ({ selected, name, thumbnail }) => (
     <div className={`product-item flex flex-center flex-column ${selected ? 'product-item-selected' : 'product-item-border'}`}>

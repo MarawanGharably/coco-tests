@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Container,Input, Label} from './styles';
+import './Switch.scss';
 
 const Switch = ({
     name, label, value, disabled, handleChange, className,
 }) => (
-    <Container className={className}>
-        <Input
+    <div className={`switch-container ${className}`}>
+        <input
+            className="switch-input"
             type="checkbox"
             id={name}
             name={name}
@@ -14,8 +15,8 @@ const Switch = ({
             disabled={disabled}
             onChange={handleChange}
         />
-        <Label htmlFor={name}>{label}</Label>
-    </Container>
+        <label className="switch-label" htmlFor={name}>{label}</label>
+    </div>
 );
 
 Switch.propTypes = {

@@ -1,31 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { css } from '@emotion/react';
 import debounce from 'lodash.debounce';
+import { Modal, Button } from 'react-bootstrap';
 
-import Modal from '../modal/Modal';
-import SubmitButton from '../FormComponents/SubmitButton';
 import TextInput from '../FormComponents/TextInput';
-import FancyButton from '../fancy-button/FancyButton';
 import { useUIManager } from '../../three-js/ui-manager/UIManager';
 import { apiCreateHotspotByType, apiUpdateHotspotByType, apiDeleteHotspotByType } from '../../utils/apiUtils';
-
-const taggingButtonStyle = css`
-width: 10em;
-height: 4em;
-margin: 0 0.5em;
-`;
-
-const deleteButtonStyle = css`
-background: white;
-border: none;
-`;
-
-const deleteTextStyle = css`
-text-decoration: underline;
-color: black;
-`;
+import './TaggingModal.scss';
 
 const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, getTransforms, id}) => {
     const [SKU, setSKU] = useState(productSKU);
@@ -123,17 +105,24 @@ const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, ge
     };
 
     return (
-        <Modal onClose={handleClose}>
-            <div className="flex flex-vertical-center flex-column full-width full-height">
-                <header className="tagging-modal-header">SKU</header>
-                <div style={{ margin: '0 2em 2em' }}>
-                    <TextInput type="text" placeholder="Enter SKU" handleChange={handleChange} value={SKU} focusOnMount />
+        <Modal show onHide={handleClose} centered>
+            <Modal.Header closeButton>
+                <Modal.Title>Product Hotspot</Modal.Title>
+            </Modal.Header>
+            
+            <Modal.Body>
+                <div className="flex flex-vertical-center flex-column full-width full-height">
+                    <header className="tagging-modal-header">SKU</header>
+                    <div className="tagging-modal-input">
+                        <TextInput type="text" placeholder="Enter SKU" handleChange={handleChange} value={SKU} focusOnMount />
+                    </div>
                 </div>
-                <div className="flex">
-                    <SubmitButton buttonText="SAVE" buttonStyle={taggingButtonStyle} onClick={handleSave} />
-                    <FancyButton text="DELETE" buttonStyle={[taggingButtonStyle, deleteButtonStyle]} textStyle={deleteTextStyle} onClick={handleDelete} />
-                </div>
-            </div>
+            </Modal.Body>
+
+            <Modal.Footer>
+                <Button variant="primary" onClick={handleSave}>Save</Button>
+                <Button variant="danger" onClick={handleDelete}>Delete</Button>  
+            </Modal.Footer>
         </Modal>
     );
 };

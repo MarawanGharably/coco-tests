@@ -1,4 +1,9 @@
 .submitButton {
+    .text {
+        margin-right: 0.5em;
+        vertical-align: middle;
+    }
+
     .spinner {
         &.active {
             display: inline-block;

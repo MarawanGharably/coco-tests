@@ -1,12 +1,12 @@
 import React, { useRef, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { v1 as uuid } from 'uuid';
+import { Button } from 'react-bootstrap';
 import FileInput from './file-input/FileInput';
-import FancyButton from '../../../fancy-button/FancyButton';
 import UploadDialog from './upload-dialog/UploadDialog';
 import ConfirmationDialog from '../../../confirmation-dialog/ConfirmationDialog';
-import {deleteHotspotProductFolder} from "../../../../APImethods";
-import {Container, buttonStyle, deleteButtonStyle} from './styles';
+import { deleteHotspotProductFolder } from "../../../../APImethods";
+import './Actions.scss';
 
 const Actions = ({ selectedFolder }) => {
     const dispatch = useDispatch();
@@ -35,6 +35,14 @@ const Actions = ({ selectedFolder }) => {
         });
     };
 
+    const toggleDeleteDialog = () => {
+        setDeleteDialog(!isDeleteDialogOpen);
+    };
+
+    const toggleUploadDialog = () => {
+        setUploadDialog(!isUploadDialogOpen);
+    };
+
     const handleImageChange = async (e) => {
         const files = Array.from(e.target.files);
 
@@ -46,7 +54,7 @@ const Actions = ({ selectedFolder }) => {
             const products = await Promise.all(promises);
 
             setImages(products);
-            setUploadDialog(true);
+            toggleUploadDialog();
             fileRef.current.value = '';
         }
     };
@@ -56,25 +64,13 @@ const Actions = ({ selectedFolder }) => {
         fileRef.current.click();
     };
 
-    const openDeleteDialog = () => {
-        setDeleteDialog(true);
-    };
-
-    const closeUploadDialog = () => {
-        setUploadDialog(false);
-    };
-
-    const closeDeleteDialog = () => {
-        setDeleteDialog(false);
-    };
-
     const handleFolderDelete = () => {
         dispatch(deleteHotspotProductFolder(selectedStoreId, selectedFolder.id));
-        closeDeleteDialog();
+        toggleDeleteDialog();
     };
 
     return (
-        <Container>
+        <div className="product-library-actions">
             <FileInput
                 fileRef={fileRef}
                 name="images"
@@ -82,31 +78,31 @@ const Actions = ({ selectedFolder }) => {
                 multiple
                 handleChange={handleImageChange}
             />
-            <FancyButton
-                text="Add Products"
-                buttonStyle={buttonStyle}
-                onClick={openFileExplorer}
-            />
+            <Button variant="primary" onClick={openFileExplorer}>Add Products</Button>
             { canDelete && (
-                <FancyButton
-                    text="Delete Folder"
-                    buttonStyle={[buttonStyle, deleteButtonStyle]}
-                    onClick={openDeleteDialog}
-                />
+                <Button
+                    className="product-library-actions-delete"
+                    variant="danger"
+                    onClick={toggleDeleteDialog}
+                >
+                    Delete Folder
+                </Button>
             )}
             <ConfirmationDialog
                 title="Are you sure you want to delete this folder?"
                 content="All products inside will be removed"
-                isOpen={isDeleteDialogOpen}
-                onClose={closeDeleteDialog}
-                handleDelete={handleFolderDelete}
+                show={isDeleteDialogOpen}
+                confirmLabel="Delete"
+                onHide={toggleDeleteDialog}
+                onConfirm={handleFolderDelete}
             />
             <UploadDialog
-                isOpen={isUploadDialogOpen}
-                onClose={closeUploadDialog}
+                show={isUploadDialogOpen}
+                onHide={toggleUploadDialog}
                 images={images}
+                setImages={setImages}
             />
-        </Container>
+        </div>
     );
 };
 
@@ -119,4 +115,3 @@ const mapStateToProps = (state) => {
 export default connect(
     mapStateToProps,
 )(Actions);
-

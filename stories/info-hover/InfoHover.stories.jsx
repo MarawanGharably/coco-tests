@@ -1,11 +1,10 @@
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { css } from '@emotion/react';
 import { withKnobs, text } from '@storybook/addon-knobs';
 import { SketchPicker } from 'react-color'
 import Input from '../../src/components/FormComponents/Input';
 
-import '../../src/main.scss'
+import '../../src/components/info-hover/InfoHover.scss';
 
 const InfoHoverIcon = ({ labelId, labelTitle }) => {
     const [showMessage, setShowMessage] = useState(true);

@@ -2,9 +2,9 @@ import React, {
     useState, useEffect, useRef, useCallback,
 } from 'react';
 import PropTypes from 'prop-types';
-import { css } from '@emotion/react';
 import { SketchPicker } from 'react-color';
 import Input from '../FormComponents/Input';
+import './ColorSelector.scss';
 
 // formField is required and should match API shape
 const ColorSelector = ({ labelTitle, formField }) => {
@@ -37,14 +37,14 @@ const ColorSelector = ({ labelTitle, formField }) => {
     };
 
 
-    const previewColor = css`
-        background-color: ${selectedColor};
-    `;
+    const previewColor = {
+        backgroundColor: selectedColor,
+    };
 
     // Immediately returns cleanUp function to remove event listener on unmount
     useEffect(() => () => { document.removeEventListener('click', handleClickOutside); }, [handleClickOutside]);
 
-    const decorator = <button type="button" aria-label="Toggle color picker" onClick={togglePicker} css={previewColor} className="color-selector-preview" />;
+    const decorator = <button type="button" aria-label="Toggle color picker" onClick={togglePicker} style={previewColor} className="color-selector-preview" />;
 
     return (
         <>

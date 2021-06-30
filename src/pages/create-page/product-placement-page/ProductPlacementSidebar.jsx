@@ -1,31 +1,26 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { Tabs, Tab } from 'react-bootstrap';
 import SceneNavigator from '../../../components/scene-navigator/SceneNavigator';
 import ProductLibrary from '../../../components/product-library/ProductLibrary';
-import Tabs from '../../../components/tabs/Tabs';
-import TabContent from '../../../components/tabs/tab-content/TabContent';
 
-const ProductPlacementSidebar = ({ isEnabled }) => {
-    const getTabs = () => (
-        <Tabs>
-            <TabContent label="Scenes" active>
-                <SceneNavigator />
-            </TabContent>
-            <TabContent label="Products">
-                <ProductLibrary />
-            </TabContent>
-        </Tabs>
+const ProductPlacementTabs = () => {
+    const { isEnabled } = useSelector(state => state.productLibrary);
+
+    return (
+        <div className="product-placement-sidebar">
+            <Tabs defaultActiveKey="scenes" id="uncontrolled-tab-example">
+                <Tab className="tab-container" eventKey="scenes" title="Scenes">
+                    <SceneNavigator />
+                </Tab>
+                { isEnabled && (
+                    <Tab className="tab-container" eventKey="products" title="Products">
+                        <ProductLibrary />
+                    </Tab>
+                )}
+            </Tabs>
+        </div>
     );
-
-    return isEnabled ? getTabs() : <SceneNavigator />;
 };
 
-const mapStateToProps = (state) => {
-    const { isEnabled } = state.productLibrary;
-
-    return { isEnabled };
-};
-  
-export default connect(
-    mapStateToProps,
-)(ProductPlacementSidebar);
+export default ProductPlacementTabs;

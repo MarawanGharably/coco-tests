@@ -1,13 +1,8 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Checkbox from '../../../../../FormComponents/Checkbox';
-
-
-import {
-    Container,
-    Image,
-} from './styles';
+import { Form } from 'react-bootstrap';
+import './ImageItem.scss';
 
 const ImageItem = ({ isLoading, id, src, updateImage }) => {
     const [hasBackground, setBackground] = useState(false);
@@ -23,16 +18,19 @@ const ImageItem = ({ isLoading, id, src, updateImage }) => {
     };
 
     return (
-        <Container>
-            <Image src={src} />
-            <Checkbox
-                name={id}
+        <li className="upload-dialog-item-container">
+            <img className="upload-dialog-item-image" src={src} alt="Product" />
+            <Form.Check
+                inline
+                className="upload-dialog-item-checkbox"
+                type="checkbox"
+                id={id}
                 label="Remove Background"
                 value={hasBackground}
                 disabled={isLoading}
-                handleChange={handleBackgroundChange}
+                onChange={handleBackgroundChange}
             />
-        </Container>
+        </li>
     );
 };
 

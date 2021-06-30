@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import './InfoHover.scss';
 
 const InfoHover = ({ title, message }) => {
     const [showMessage, setShowMessage] = useState(false);

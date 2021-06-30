@@ -1,26 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
 import HotspotEditor from '../../../three-js/three-editor/HotspotEditor';
 import ModeSelector from '../../../components/mode-selector/ModeSelector';
 import ProductPlacementSidebar from './ProductPlacementSidebar';
-import {getHotspotProducts, getStoreFlags} from "../../../APImethods";
+import { getHotspotProducts, getStoreFlags } from '../../../APImethods';
 import {
     setEnabledAction,
     setProductsAction,
     setFoldersAction,
     setSelectedFolderAction,
-} from "../../../store/actions/productLibraryActions";
-import {GENERAL_LABEL} from "../../../store/types/productLibrary";
-import {setPageHeaderTitle} from '../../../store/actions';
+} from '../../../store/actions/productLibraryActions';
+import { GENERAL_LABEL } from '../../../store/types/productLibrary';
+import { setPageHeaderTitle } from '../../../store/actions';
 
 
 const ProductPlacementPage = () => {
     const dispatch = useDispatch();
     const HomePageStore = useSelector(store => store['HomePageStore']);
-    const {selectedStoreId} = HomePageStore;
-    const [hasFlags, setHasFlags] = useState(false);
-
+    const { selectedStoreId } = HomePageStore;
     const defaultFolder = { label: GENERAL_LABEL };
 
 
@@ -38,26 +36,22 @@ const ProductPlacementPage = () => {
             console.error(error);
             return false;
         }
-    }
-
-
+    };
 
     const getProductLibrary = async () => {
         const isEnabled = await getIsEnabled();
-        
-        setHasFlags(true);
+
         dispatch(setEnabledAction(isEnabled));
 
 
         if (isEnabled) {
             try {
                 const response = await getHotspotProducts(selectedStoreId);
-                const {products, folders} = response;
-                
+                const { products, folders } = response;
+
                 dispatch(setProductsAction(products));
                 dispatch(setFoldersAction(folders));
                 dispatch(setSelectedFolderAction(defaultFolder));
-
             } catch (error) {
                 console.error(error);
             }
@@ -80,7 +74,7 @@ const ProductPlacementPage = () => {
                 </Col>
                 <Col xs={3}>
                     <div className="product-placement-sidebar">
-                        {hasFlags && <ProductPlacementSidebar />}
+                        <ProductPlacementSidebar />
                     </div>
                 </Col>
             </Row>

@@ -2,8 +2,7 @@
     "env": {
         "browser": true,
         "es6": true,
-        "jest/globals": true,
-        "es2021": true
+        "jest/globals": true
     },
     "extends": [
         "plugin:react/recommended",
@@ -26,9 +25,7 @@
     "plugins": [
         "react",
         "react-hooks",
-        "jest",
-        "emotion",
-        "prettier"
+        "jest"
     ],
     "rules": {
         "no-console": [

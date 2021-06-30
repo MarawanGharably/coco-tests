@@ -1,11 +1,10 @@
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { css } from '@emotion/react';
 import { withKnobs, text } from '@storybook/addon-knobs';
 import { SketchPicker } from 'react-color'
 import Input from '../../src/components/FormComponents/Input';
 
-import '../../src/main.scss'
+import '../../src/components/color-selector/ColorSelector.scss';
 
 const ColorSelector = ({ labelId, labelTitle }) => {
     const [selectedColor, setSelectedColor] = useState('#000');
@@ -32,11 +31,11 @@ const ColorSelector = ({ labelId, labelTitle }) => {
         }
     }
 
-    const previewColor = css`
-        background-color: ${selectedColor};
-    `;
+    const previewColor = {
+        backgroundColor: selectedColor,
+    };
 
-    const decorator = <button type="button" aria-label="Toggle color picker" onClick={togglePicker} css={previewColor} className="color-selector-preview" />;
+    const decorator = <button type="button" aria-label="Toggle color picker" onClick={togglePicker} style={previewColor} className="color-selector-preview" />;
 
 return (
     <div>
@@ -70,8 +69,8 @@ export default {
 // stories: each function is a state (aka 'story') - export when you want to render to storybook and to pass props or styles
 export const ColorSelectorTest = () => {
     return (
-        <div css={css`display:flex;`}>
-            <div css={css`margin: 0 50px 0 0;`}>
+        <div style={{ display: 'flex' }}>
+            <div style={{ margin: '0 50px 0 0' }}>
             <ColorSelector labelId='primary-color' labelTitle='primary'/>
             </div>
             <ColorSelector labelId='secondary-color' labelTitle='secondary'/>

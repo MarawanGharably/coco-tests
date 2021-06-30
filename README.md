@@ -33,12 +33,8 @@ Update versions within:
   * package.json
   * gitlab-ci.yml
 
-## CSS & CSS-in-JS
-COCO CMS adopts Emotion for CSS-in-JS as a solution and alternative to inline styles for use cases that require receiving external resources or receiving data. It also works well in cases where animation is procedurally generated from data or changes in state. Aside from dynamic renders in styling, SCSS should be used as a base for styling the frontend because of it's scalability and stability.
-* Emotion - [API](https://emotion.sh/docs/emotion#api)
-  * The css function provided by Emotion accepts styles as a template literal, object, or array of objects and returns an object containing the computed name and flattened styles
-  * In order to use the css function, babel extends React's native jsx to accept the css prop
-  * Additional features are referenced in Emotion's API documentation
+## CSS
+SCSS should be used as a base for styling the frontend because of it's scalability and stability.
 
 ## Jest
 I'll write this part once I make a few more tests

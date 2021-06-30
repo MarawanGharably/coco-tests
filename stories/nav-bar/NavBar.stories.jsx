@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { css } from '@emotion/react';
 import { withKnobs, text } from '@storybook/addon-knobs';
 import { BrowserRouter as Router, Switch, Route, Link, Redirect, useParams } from 'react-router-dom';
 
@@ -72,7 +71,7 @@ export default {
 // stories: each function is a state (aka 'story') - export when you want to render to storybook and to pass props or styles
 export const NavBarTest = () => {
     return (
-        <div css={css`display:flex;`}>
+        <div style={{ display: 'flex' }}>
             <Router>
                 <NavBar/>
                 <Switch>

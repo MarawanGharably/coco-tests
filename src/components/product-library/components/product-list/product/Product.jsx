@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Button } from 'react-bootstrap';
 import { connect, useDispatch } from 'react-redux';
-import FancyButton from '../../../../fancy-button/FancyButton';
 import ConfirmationDialog from '../../../../confirmation-dialog/ConfirmationDialog';
 import { deleteHotspotProduct } from '../../../../../APImethods/HotspotsAPI';
-
-import {
-    Container,
-    Image,
-    deleteButtonStyle,
-} from './styles';
+import './Product.scss';
 
 import {
     PRODUCT_PLACEMENT,
@@ -58,27 +53,31 @@ const Product = ({ mode, id, imageUrl, folderId }) => {
     };
 
     return (
-        <Container full-width full-height>
-            <Image
+        <div className="product-list-item">
+            <img
+                className="product-list-item-image"
                 src={imageUrl}
                 alt="black coat"
                 draggable={draggable}
                 onDragStart={onDragStart}
                 onDragEnd={onDragEnd}
             />
-            <FancyButton
-                text="DELETE"
-                buttonStyle={deleteButtonStyle}
+            <Button
+                variant="danger"
+                className="product-list-item-delete"
                 onClick={openDialog}
-            />
+            >
+                Delete
+            </Button>
             <ConfirmationDialog
                 title="Are you sure you want to delete this product?"
                 content="It will be removed from all scenes"
-                isOpen={isDialogOpen}
-                onClose={closeDialog}
-                handleDelete={handleDelete}
+                show={isDialogOpen}
+                confirmLabel="Delete"
+                onHide={closeDialog}
+                onConfirm={handleDelete}
             />
-        </Container>
+        </div>
     );
 };
 

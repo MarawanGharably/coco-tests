@@ -3,11 +3,6 @@ module.exports = {
     presets: [
         '@babel/preset-env',
         '@babel/preset-react',
-        ['@emotion/babel-preset-css-prop',
-            {
-                sourceMap: true,
-            },
-        ],
     ],
     // plugins are applied from top to bottom
     plugins: [

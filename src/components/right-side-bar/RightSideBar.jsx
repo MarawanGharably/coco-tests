@@ -1,19 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { css } from '@emotion/react';
+import './RightSideBar.scss';
 
 const RightSideBar = ({
     cols, rowHeight, children, title, className,
 }) => {
-    const colsAndHeightCss = css`
-        grid-template-columns: repeat(${cols}, 1fr);
-        grid-auto-rows: ${rowHeight};
-    `;
+    const colsAndHeightStyles = {
+        gridTemplateColumns: `repeat(${cols}, 1fr)`,
+        gridAutoRows: rowHeight,
+    };
 
     return (
         <div className={`side-bar-container ${className}`}>
             {title && <div className="side-bar-container-title">{title}</div>}
-            <aside className="right-side-bar" css={[colsAndHeightCss]}>
+            <aside className="right-side-bar" style={colsAndHeightStyles}>
                 {children}
             </aside>
         </div>

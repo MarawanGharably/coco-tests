@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Spinner } from 'react-bootstrap';
 import './SubmitButton.scss';
@@ -5,7 +6,7 @@ import './SubmitButton.scss';
 const SubmitButton = ({ buttonText = '', submitting, onClick, extraClass='' }) => {
     return (
         <Button type="submit" className={`submitButton ${extraClass}`} onClick={onClick}>
-            {buttonText}
+            <span className="text">{buttonText}</span>
             <Spinner
                 as="span"
                 animation="border"

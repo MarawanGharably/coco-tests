@@ -1,0 +1,39 @@
+.product-image-controls {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1.5em 2em 2em 2em;
+    border-bottom-left-radius: 2em;
+    color: #fff;
+    background-color: rgba(0,0,0,.6);
+
+    div[role="textbox"] {
+        border: 0.1em solid #fff;
+    }
+
+    .input-label, .input-field {
+        color: #fff;
+    }
+
+    &-actions {
+        margin-top: 1em;
+        display: flex;
+        align-items: center;
+
+        .btn {
+            margin-right: 0.5em;
+        }
+    }
+}
+
+.product-image-controls-form {
+    max-width: 250px;
+  
+    &-label {
+        font-size: 1rem;
+    }
+
+    &-range {
+        align-items: center;
+    }
+}

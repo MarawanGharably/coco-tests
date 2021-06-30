@@ -1,41 +1,32 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { apiPublishSceneData } from '../../utils/apiUtils';
+import { showMessage } from '../../store/actions/toastActions';
+import { SUCCESS, DANGER } from '../../store/types/toast';
 
 const PublishStore = () => {
     const HomePageStore = useSelector(state => state['HomePageStore']);
+    const dispatch = useDispatch();
     const { selectedStoreId } = HomePageStore;
     const [isLoading, setLoading] = useState(false);
-    const [message, setMessage] = useState({});
-
-    const clearMessage = () => {
-        setMessage({});
-    };
 
     const publishSceneData = async () => {
         try {
             setLoading(true);
             await apiPublishSceneData(selectedStoreId);
 
-            setMessage({
-                title: 'Store Published successfully',
-                backgroundColor: '#5cb85c',
-            });
-            setLoading(false);
+            dispatch(showMessage('Store Published successfully', SUCCESS));
         } catch(error) {
-            setMessage({
-                title: 'An error occurred while publishing store',
-                backgroundColor: '#d9534f',
-            });
-            setLoading(false);
+            dispatch(showMessage('An error occurred while publishing store', DANGER));
+
             console.error(error);
+        } finally {
+            setLoading(false);
         }
     };
 
     return {
-        message,
         isLoading,
-        clearMessage,
         publishSceneData,
     };
 };

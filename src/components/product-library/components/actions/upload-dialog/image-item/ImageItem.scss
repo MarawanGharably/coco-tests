@@ -1,0 +1,18 @@
+.upload-dialog-item {
+    &-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    &-image {
+        margin: auto;
+        max-width: 90%;
+        max-height: 14em;
+        object-fit: scale-down;
+    }
+
+    &-checkbox {
+        font-size: 0.8rem;   
+    }
+}

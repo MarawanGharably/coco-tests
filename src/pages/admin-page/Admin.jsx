@@ -1,7 +1,7 @@
 import { Redirect, Route, Switch } from 'react-router-dom';
 import React from 'react';
 import NavBar from '../../components/nav-bar/NavBar';
-import NavBarItem from '../../components/nav-bar/NavBarItem';
+import NavBarItem from '../../components/nav-bar/NavBarItem/NavBarItem';
 import CreateUser from './CreateUser';
 import PoliciesPage from './PoliciesPage';
 import EditUserStoresPage from './EditUserStoresPage';

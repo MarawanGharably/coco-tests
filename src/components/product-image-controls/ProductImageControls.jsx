@@ -1,20 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { Button } from 'react-bootstrap';
 
-import FancyButton from '../fancy-button/FancyButton';
-import RangeInput from './range-input/RangeInput';
-import Input from '../FormComponents/Input';
+import Form from './form/Form';
 
 import useAPI from './hooks/useAPI';
 import { useUIManager } from '../../three-js/ui-manager/UIManager';
-
-import {
-    productControlsStyle,
-    buttonStyle,
-    deleteButtonStyle,
-    flexStyle,
-    buttonsContainerStyle,
-} from './styles';
+import './ProductImageControls.scss';
 
 const ProductImageControls = ({
     id: currentId,
@@ -32,7 +24,7 @@ const ProductImageControls = ({
 }) => {
     const [id, setId] = useState(currentId);
     const [size, setSize] = useState(scale);
-    const [order, setOrder] = useState();
+    const [order, setOrder] = useState(renderOrder);
     const { handleHotspotChange, deleteHotspot } = useAPI({
         getTransforms, dispose, updateState,
     });
@@ -115,18 +107,16 @@ const ProductImageControls = ({
     };
 
     return (
-        <div css={productControlsStyle}>
-            <Input labelTitle="Order" type="number" formField="render-order" value={order} handleChange={handleOrderChange} />
-            <RangeInput
-                handleChange={handleSizeChange}
-                value={size}
-                min={0.01}
-                max={10}
-                step={0.01}
+        <div className="product-image-controls">
+            <Form
+                order={order}
+                handleOrderChange={handleOrderChange}
+                size={size}
+                handleSizeChange={handleSizeChange}
             />
-            <div css={[flexStyle, buttonsContainerStyle]}>
-                <FancyButton text="CLOSE" buttonStyle={buttonStyle} onClick={onClose} />
-                <FancyButton text="DELETE" buttonStyle={[buttonStyle, deleteButtonStyle]} onClick={handleDelete} />
+            <div className="product-image-controls-actions">
+                <Button variant="primary" onClick={onClose}>Close</Button>
+                <Button variant="danger" onClick={handleDelete}>Delete</Button>
             </div>
         </div>
     );

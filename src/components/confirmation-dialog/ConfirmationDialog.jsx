@@ -1,58 +1,42 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Modal from '../modal/Modal';
-import FancyButton from '../fancy-button/FancyButton';
-import {
-    Container,
-    Title,
-    Content,
-    Actions,
-    buttonStyle,
-    cancelButtonStyle,
-    cancelTextStyle,
-} from './styles';
+import { Modal, Button } from 'react-bootstrap';
+import './ConfirmationDialog.scss';
 
-const DeleteDialog = ({
-    title, content, onClose, handleDelete,
+const ConfirmationDialog = ({
+    title, content, show, confirmLabel, closeLabel, onHide, onConfirm,
 }) => (
-    <Modal onClose={onClose}>
-        <Container>
-            <Title>{title}</Title>
-            <Content>{content}</Content>
+    <Modal show={show} onHide={onHide} aria-labelledby="contained-modal-title-vcenter" centered>
+        <Modal.Header closeButton>
+            <Modal.Title className="text-center">{title}</Modal.Title>
+        </Modal.Header>
 
-            <Actions>
-                <FancyButton
-                    text="YES"
-                    buttonStyle={buttonStyle}
-                    onClick={handleDelete}
-                />
-                <FancyButton
-                    text="CANCEL"
-                    buttonStyle={[buttonStyle, cancelButtonStyle]}
-                    textStyle={cancelTextStyle}
-                    onClick={onClose}
-                />
-            </Actions>
-        </Container>
+        <Modal.Body>
+            <p className="confirmation-dialog-body text-center">{content}</p>
+        </Modal.Body>
+
+        <Modal.Footer>
+            <Button variant="secondary" onClick={onHide}>{closeLabel}</Button>
+            <Button variant="danger" onClick={onConfirm}>{confirmLabel}</Button>
+        </Modal.Footer>
     </Modal>
 );
 
-DeleteDialog.propTypes = {
+ConfirmationDialog.propTypes = {
     title: PropTypes.string,
     content: PropTypes.string,
-    onClose: PropTypes.func.isRequired,
-    handleDelete: PropTypes.func.isRequired,
+    show: PropTypes.bool.isRequired,
+    confirmLabel: PropTypes.string,
+    closeLabel: PropTypes.string,
+    onHide: PropTypes.func.isRequired,
+    onConfirm: PropTypes.func.isRequired,
 };
 
-DeleteDialog.defaultProps = {
+ConfirmationDialog.defaultProps = {
     title: '',
     content: '',
+    confirmLabel: 'Yes',
+    closeLabel: 'Close',
 };
 
-const withOpen = (Component) => (props) => (
-    props.isOpen && <Component {...props} /> //eslint-disable-line
-);
-
-const DialogWithOpen = withOpen(DeleteDialog);
-
-export default DialogWithOpen;
+export default ConfirmationDialog;

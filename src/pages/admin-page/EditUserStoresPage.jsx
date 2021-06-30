@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Row } from 'react-bootstrap';
 import Select from 'react-select';
+import { Form } from 'react-bootstrap';
 import { apiAdminGetAllUserAccounts, apiAdminGetAllStorePolicies, apiAdminAddUserToStorePolicy } from '../../utils/apiUtils';
-import {Checkbox, SubmitButton} from '../../components/FormComponents';
+import { SubmitButton} from '../../components/FormComponents';
 import Layout from "../../layouts/Layout";
+
 
 
 const EditUserStoresPage = () => {
@@ -115,12 +117,13 @@ const EditUserStoresPage = () => {
                     onChange={(value) => setSelectedStore(value)}
                 />
 
-                <Checkbox
-                    name="has-product-library"
-                    className='align-self-center'
+                <Form.Check
+                    inline
+                    id="has-product-library"
+                    className="has-product-library"
                     label="Products Library Enabled"
                     value={hasProductLibrary}
-                    handleChange={handleProductLibraryChange}
+                    onChange={handleProductLibraryChange}
                 />
             </Row>
 

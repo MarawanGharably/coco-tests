@@ -1,16 +1,13 @@
 import React from 'react';
 import ProductList from './components/product-list/ProductList';
 import Actions from './components/actions/Actions';
-
-import {
-    Container,
-} from './styles';
+import './ProductLibrary.scss';
 
 const ProductLibrary = () => (
-    <Container>
+    <div className="product-library-container">
         <ProductList />
         <Actions />
-    </Container>
+    </div>
 );
 
-export default ProductLibrary
+export default ProductLibrary;

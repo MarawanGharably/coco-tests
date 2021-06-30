@@ -7,14 +7,14 @@ import PoliciesPage from './PoliciesPage';
 import EditUserStoresPage from './EditUserStoresPage';
 import Layout from "../../layouts/Layout";
 
-const AdminPage = () => {
+export default function AdminPage(){
     const pathPrefix = '/admin';
     const policiesPath = `${pathPrefix}/policies`;
     const usersPath = `${pathPrefix}/users`;
     const editUserStoresPath = `${pathPrefix}/editUserStores`;
 
     return (
-            <Layout fullWidth={true}>
+            <Layout fluid='xl'>
                 <div id="admin-page" className="flex full-width">
                     <NavBar>
                         <NavBarItem
@@ -52,4 +52,4 @@ const AdminPage = () => {
     );
 };
 
-export default AdminPage;
+

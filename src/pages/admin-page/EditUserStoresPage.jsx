@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { Row } from 'react-bootstrap';
 import Select from 'react-select';
 import { apiAdminGetAllUserAccounts, apiAdminGetAllStorePolicies, apiAdminAddUserToStorePolicy } from '../../utils/apiUtils';
-import Page from '../../layouts/page-template/Page';
-import PageRow from '../../components/page-row/PageRow';
-import PageItem from '../../components/page-item/PageItem';
 import {Checkbox, SubmitButton} from '../../components/FormComponents';
-
+import Layout from "../../layouts/Layout";
 
 
 const EditUserStoresPage = () => {
@@ -101,55 +99,46 @@ const EditUserStoresPage = () => {
     };
 
     return (
-        <Page
-            pageTitle="Edit User Stores"
-            pageSubTitle="Add Stores to Users"
-        >
-            <PageRow width="auto">
-                <PageItem>
-                    <Select
-                        className="select"
-                        placeholder="Select a User"
-                        options={users}
-                        onChange={(value) => setSelectedUser(value)}
-                    />
-                </PageItem>
-            </PageRow>
-            <PageRow width="auto">
-                <PageItem>
-                    <Select
-                        className="select"
-                        placeholder="Select a Store"
-                        options={stores}
-                        onChange={(value) => setSelectedStore(value)}
-                    />
-                </PageItem>
-            </PageRow>
-            <PageRow width="auto">
-                <PageItem>
-                    <Checkbox
-                        name="has-product-library"
-                        label="Products Library Enabled"
-                        value={hasProductLibrary}
-                        handleChange={handleProductLibraryChange}
-                    />
-                </PageItem>
-            </PageRow>
+        <Layout title="Edit User Stores" subTitle="Add Stores to Users" >
+            <Row className='justify-content-center flex-column my-5'>
+                <Select
+                    className="select align-self-center"
+                    placeholder="Select a User"
+                    options={users}
+                    onChange={(value) => setSelectedUser(value)}
+                />
+
+                <Select
+                    className="select align-self-center"
+                    placeholder="Select a Store"
+                    options={stores}
+                    onChange={(value) => setSelectedStore(value)}
+                />
+
+                <Checkbox
+                    name="has-product-library"
+                    className='align-self-center'
+                    label="Products Library Enabled"
+                    value={hasProductLibrary}
+                    handleChange={handleProductLibraryChange}
+                />
+            </Row>
+
+
             {(error?.message) && (
-                <PageRow width="auto">
-                    <PageItem>
-                        <div className="error">{error.message}</div>
-                    </PageItem>
-                </PageRow>
+                <Row className='my-5'>
+                    <div className="error">{error.message}</div>
+                </Row>
             )}
-            <PageRow width="auto">
+
+            <Row className='justify-content-center'>
                 <SubmitButton
                     buttonText="SUBMIT"
                     submitting={submitting}
                     onClick={onClickAddUserToStore}
                 />
-            </PageRow>
-        </Page>
+            </Row>
+        </Layout>
     );
 };
 

@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { Field, reduxForm } from 'redux-form';
 import { Input } from '../_formFields';
 import SubmitButton from '../../FormComponents/SubmitButton';
-import { isValidEmail, isValidPassword } from '../../../utils/validation';
+import { isValidEmail } from '../../../utils/validation';
 
 // Actions
 import { logIn } from '../../../store/actions';

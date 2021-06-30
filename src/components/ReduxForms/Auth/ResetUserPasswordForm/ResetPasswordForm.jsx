@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
+import { Row } from 'react-bootstrap';
 import { Input } from '../../_formFields';
 import SubmitButton from '../../../FormComponents/SubmitButton';
-import PageRow from '../../../page-row/PageRow';
-import PageItem from '../../../page-item/PageItem';
+
 
 // Actions
 import { resetPasswordConfirmCode } from '../../../../store/actions';
@@ -47,25 +47,22 @@ class ResetPasswordForm extends Component {
         const { verificationCodeStatus, handleSubmit } = this.props;
 
         return (
-            <form onSubmit={handleSubmit(this.handleSubmit)} style={{ width: '100%' }}>
+            <form onSubmit={handleSubmit(this.handleSubmit)}   className='d-flex flex-column'>
                 <p style={{ fontSize: '2em', textAlign: 'center' }}>
                     Your Verification Code was sent on &nbsp;
                     {verificationCodeStatus.Destination}
                 </p>
                 <p style={{ fontSize: '2em', textAlign: 'center' }}>Please, insert your code to continue</p>
 
-                <Field name="code" label="Verification Code" component={Input} placeholder="" />
+                <Field name="code" label="Verification Code" component={Input} />
                 <Field name="new_password" type="password" label="New Password" component={Input} />
 
-                <PageRow width="100%">
-                    <PageItem>
-                        <SubmitButton submitting={submitting} />
-                    </PageItem>
-                </PageRow>
+                <SubmitButton submitting={submitting} extraClass='align-self-center'/>
 
-                <div className="flex flex-center page-row">
-                    <h1 style={{ textAlign: 'center' }}>{errorMessage}</h1>
-                </div>
+                <Row className='justify-content-center'>
+                    <h1>{errorMessage}</h1>
+                </Row>
+
             </form>
         );
     }
@@ -93,5 +90,7 @@ ResetPasswordForm.defaultProps = {
 
 export default reduxForm({
     form: 'ResetPasswordForm',
+    destroyOnUnmount: true,
+    enableReinitialize:false,
     validate,
 })(ResetPasswordForm);

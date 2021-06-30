@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import { Field, reduxForm } from 'redux-form';
 import { Input } from '../../_formFields';
 import SubmitButton from '../../../FormComponents/SubmitButton';
 import { isValidEmail } from '../../../../utils/validation';
-import PageRow from '../../../page-row/PageRow';
-import PageItem from '../../../page-item/PageItem';
+
 
 // Actions
 import { resetPasswordByEmail } from '../../../../store/actions';
@@ -46,20 +44,13 @@ class RequestVerificationCodeForm extends Component {
         const { handleSubmit } = this.props;
 
         return (
-            <form onSubmit={handleSubmit(this.handleSubmit)} style={{ width: '100%' }}>
-                <Field name="email" type="email" label="Email" component={Input} placeholder="email" extraClass="" />
+            <form onSubmit={handleSubmit(this.handleSubmit)}   className='d-flex flex-column'>
+                <Field name="email" type="email" label="Email" component={Input} placeholder="email" />
 
-                <PageRow width="100%">
-                    <div>
-                        <PageItem>
-                            <SubmitButton submitting={submitting} />
-                        </PageItem>
-                    </div>
-                </PageRow>
+                <SubmitButton submitting={submitting} extraClass='align-self-center' />
 
                 {/* Error Messages */}
-                {error && (<ErrorMessage error={error}/>)}
-
+                <ErrorMessage error={error}/>
             </form>
         );
     }

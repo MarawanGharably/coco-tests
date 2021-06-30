@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import TextInput from '../../components/FormComponents/TextInput';
 import Footer from '../../layouts/footer/Footer';
-import { apiGetProfile, apiSubmitProfile } from '../../utils/apiUtils';
+import { apiSubmitProfile } from '../../utils/apiUtils';
 import Layout from "../../layouts/Layout";
 import { Row, Col } from 'react-bootstrap';
 import { setKW } from '../../store/actions/kwActions';

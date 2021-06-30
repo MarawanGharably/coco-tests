@@ -1,9 +1,9 @@
 import React from 'react';
 import PropType from 'prop-types';
-import Page from '../../layouts/page-template/Page';
+import Layout from "../../layouts/Layout";
 
 const ErrorPage = ({ statusCode }) => (
-    <Page pageTitle={`ERROR: ${statusCode}`} pageSubTitle="An error has occurred. Contact us @ contact@obsessvr.com" />
+    <Layout title={`ERROR: ${statusCode}`} subTitle="An error has occurred. Contact us @ contact@obsessvr.com" />
 );
 
 ErrorPage.propTypes = {

@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import Page from '../../layouts/page-template/Page';
-import PageRow from '../../components/page-row/PageRow';
-import PageItem from '../../components/page-item/PageItem';
+import { Row, Col } from 'react-bootstrap';
 import PasswordInput from '../../components/FormComponents/PasswordInput';
 import SubmitButton from '../../components/FormComponents/SubmitButton';
 import { getUrlQueryParams } from '../../utils/urlHelper';
-
+import Layout from "../../layouts/Layout";
 // Redux Actions
 import { resetPassword } from '../../store/actions';
 
@@ -63,24 +61,22 @@ const ResetUserPasswordWithParamsPage = () => {
             });
     };
 
-    const width = '50em';
 
     return (
-        <Page pageTitle="Set Your Password" pageSubTitle="Let's make it official">
-            <PageRow width={width}>
-                <PageItem>
-                    <PasswordInput value={newPassword} handleChange={onNewPasswordInputChange} />
-                </PageItem>
-            </PageRow>
-            <PageRow width={width}>
-                <div>
-                    <PageItem>
+        <Layout title="Set Your Password" subTitle="Let's make it official">
+            <Row className="justify-content-center mt-5">
+                <Col xs={11} sm={6}  >
+                    <Row className='flex-column mb-4' >
+                        <PasswordInput value={newPassword} handleChange={onNewPasswordInputChange} />
+                    </Row>
+                    <Row className='mb-4 justify-content-center' >
                         <SubmitButton submitting={submitting} onClick={submitPassword} />
-                    </PageItem>
-                </div>
-            </PageRow>
-            <h1 style={{ textAlign: 'center' }}>{errorMessage}</h1>
-        </Page>
+                    </Row>
+                </Col>
+            </Row>
+
+            <h1 className='align-self-center'>{errorMessage}</h1>
+        </Layout>
     );
 };
 

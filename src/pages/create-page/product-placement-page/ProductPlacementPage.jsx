@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Page from '../../../layouts/page-template/Page';
-import PageRow from '../../../components/page-row/PageRow';
+import { Row, Col } from 'react-bootstrap';
 import HotspotEditor from '../../../three-js/three-editor/HotspotEditor';
 import ModeSelector from '../../../components/mode-selector/ModeSelector';
 import ProductPlacementSidebar from './ProductPlacementSidebar';
@@ -72,19 +71,19 @@ const ProductPlacementPage = () => {
     }, [selectedStoreId]);
 
     return (
-        <div className="product-placement-page flex full-width">
-            <Page>
-                <ModeSelector />
-                <PageRow width="95%">
+            <Row >
+                <Col xs={9}>
+                    <ModeSelector />
                     <div id="three-editor-container" className="full-width">
                         <HotspotEditor />
                     </div>
-                </PageRow>
-            </Page>
-            <div className="product-placement-sidebar">
-                {hasFlags && <ProductPlacementSidebar />}
-            </div>
-        </div>
+                </Col>
+                <Col xs={3}>
+                    <div className="product-placement-sidebar">
+                        {hasFlags && <ProductPlacementSidebar />}
+                    </div>
+                </Col>
+            </Row>
     );
 };
 

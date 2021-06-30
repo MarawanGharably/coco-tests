@@ -14,9 +14,9 @@ const CreatePage = () => {
     const pathPrefix = '/create';
     const placementPath = `${pathPrefix}/product-placement`;
 
-    return (
-        <Layout fullWidth={true}>
-                <div id="create-store-page" className="flex full-width">
+    return (<>
+        <Layout fluid={'xl'}>
+                <div id="create-store-page" >
                     <Switch>
                         <Route exact path="/create">
                             <Redirect to={`${placementPath}`} />
@@ -28,7 +28,7 @@ const CreatePage = () => {
                     </Switch>
                 </div>
                 {isLoading && <LoadingScreen />}
-
+        </Layout>
             <FooterNavContextComponent>
                 <Toast
                     close={clearMessage}
@@ -39,7 +39,7 @@ const CreatePage = () => {
                 </Toast>
                 <Footer onSubmitClicked={publishSceneData} />
             </FooterNavContextComponent>
-        </Layout>
+        </>
     );
 };
 

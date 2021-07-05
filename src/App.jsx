@@ -5,7 +5,6 @@ import Header from './layouts/Header';
 import ToastMessages from './components/toast-messages/ToastMessages';
 import HomePage from './pages/HomePage';
 import CreatePage from './pages/create-page/CreatePage';
-import ProfilePage from './pages/ProfilePage';
 import ErrorPage from './pages/error-page/ErrorPage';
 import LoginPage from './pages/auth/LoginPage';
 import ResetUserPasswordWithParamsPage from './pages/auth/ResetUserPasswordWithParamsPage';
@@ -29,7 +28,6 @@ const App = () => (
             <PrivateRoute path="/admin" render={() => <AdminPage />} />
             <PrivateRoute path="/" exact render={() => <HomePage />} />
             <PrivateRoute path="/create" render={() => ( <CreatePage />)} />
-            <PrivateRoute path="/profile" render={() => (<ProfilePage />)} />
             <PrivateRoute path="/404" exact render={() => <ErrorPage statusCode="404" />} />
         </Switch>
     </>

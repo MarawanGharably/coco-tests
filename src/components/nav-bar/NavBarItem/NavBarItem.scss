@@ -38,13 +38,16 @@
     &-link {
         color: black;
         @extend %nav-bar-parent;
+
         &-container {
             margin: 0.5em 0;
         }
-        &-selected {
+
+        &.selected{
             @extend %nav-bar-parent;
             color: $obsess-blue;
         }
+
         &-child {
             @extend %nav-bar-child;
             &-selected {

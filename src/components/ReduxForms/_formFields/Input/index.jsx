@@ -1,25 +1,20 @@
 import React from 'react';
-import './Input.scss';
+import { Form } from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import './Input.scss';
 
-const Input = ({ input = {}, type = 'text', label = '', placeholder = '', extraClass = '', isRequired = false, disabled, meta: { touched, error, warning } }) => (
-    <div className={`redix-input-field ${isRequired ? 'required' : ''} ${extraClass}`}>
-        <div className="inputField">
-            <label className="" htmlFor={input.name}>
-                {label}
-            </label>
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <input {...input} type={type} placeholder={placeholder} disabled={disabled} autoComplete="off" />
-        </div>
+const Input = ({ input = {}, type = 'text', label = '',  placeholder = '',  extraClass = '', isRequired = false, disabled, meta: { touched, error, warning }}) => (
+    <Form.Group className="mb-3 input-field" controlId={input.name}>
+        <Form.Label>{label}</Form.Label>
+        <Form.Control {...input} type={type} placeholder={placeholder} readOnly={disabled ? true : false} />
 
-        {touched
-            && (error || warning) && (
+        {touched && (error || warning) && (
             <ul className="form-field-error">
                 {error && <li className="field-error">{error}</li>}
                 {warning && <li className="field-warn">{warning}</li>}
             </ul>
         )}
-    </div>
+    </Form.Group>
 );
 
 Input.defaultProps = {

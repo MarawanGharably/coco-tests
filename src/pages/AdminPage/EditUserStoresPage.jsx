@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Row } from 'react-bootstrap';
 import Select from 'react-select';
 import { Form } from 'react-bootstrap';
-import { apiAdminGetAllUserAccounts, apiAdminGetAllStorePolicies, apiAdminAddUserToStorePolicy } from '../../utils/apiUtils';
+import { apiAdminGetAllStorePolicies, apiAdminAddUserToStorePolicy } from '../../utils/apiUtils';
 import { SubmitButton} from '../../components/FormComponents';
 import Layout from "../../layouts/Layout";
-
+import { getUsers } from '../../APImethods/UsersAPI'
 
 
 const EditUserStoresPage = () => {
@@ -30,23 +30,7 @@ const EditUserStoresPage = () => {
         return [email, subId];
     };
 
-    const getUsers = () => {
-        apiAdminGetAllUserAccounts()
-            .then(response => {
-                setUsers(response.map(option => {
-                    const [email, subId] = parseUserInfo(option.Attributes);
-                    return {
-                        ...option,
-                        label: email,
-                        value: subId,
-                    };
-                }));
-            })
-            .catch(err => {
-                setError(err);
-                setSubmitting(false);
-            });
-    };
+
 
 
     const getPolicies = () => {
@@ -69,7 +53,21 @@ const EditUserStoresPage = () => {
     };
 
     useEffect(() => {
-        getUsers();
+        getUsers()
+            .then(response => {
+                setUsers(response.map(option => {
+                    const [email, subId] = parseUserInfo(option.Attributes);
+                    return {
+                        ...option,
+                        label: email,
+                        value: subId,
+                    };
+                }));
+            })
+            .catch(err => {
+                setError(err);
+                setSubmitting(false);
+            });
         getPolicies();
     }, []); // eslint-disable-line
 

@@ -2,7 +2,7 @@
     margin: 0 1em;
     
     .nav-tabs {
-        font-size: 1rem;
+        font-size: 0.8rem;
     }
     
     .tab-content {
@@ -10,4 +10,9 @@
         border: 1px solid;
         border-color: #fff #dee2e6 #dee2e6 #dee2e6;
     }
+}
+
+#three-editor-container {
+    height: 70vh;
+    position: relative;
 }

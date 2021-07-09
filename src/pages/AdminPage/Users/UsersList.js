@@ -22,7 +22,7 @@ export default function UsersList() {
             <Row className="justify-content-between">
                 <SearchBox />
 
-                <NavLink to={`/admin/users/create`} style={{ fontSize: '1.5em', fontWeight: '600' }}>
+                <NavLink to={`/admin/users/create`} style={{ fontSize: '1em', fontWeight: '600' }}>
                     Create <i className="fas fa-user"></i>
                 </NavLink>
             </Row>

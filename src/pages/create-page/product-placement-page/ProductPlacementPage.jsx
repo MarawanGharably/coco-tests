@@ -13,7 +13,7 @@ import {
 } from '../../../store/actions/productLibraryActions';
 import { GENERAL_LABEL } from '../../../store/types/productLibrary';
 import { setPageHeaderTitle } from '../../../store/actions';
-
+import './_product-placement-page.scss';
 
 const ProductPlacementPage = () => {
     const dispatch = useDispatch();

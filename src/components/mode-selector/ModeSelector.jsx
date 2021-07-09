@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { setModeAction } from '../../store/actions/productLibraryActions';
 import Selector from './selector/Selector';
-import RadioGroup, { RadioSelectionContext } from '../FormComponents/Radio/RadioGroup';
+import RadioGroup, { RadioSelectionContext } from '../FormComponents/RadioGroup/RadioGroup';
 import { PRODUCT_TAGGING, PRODUCT_PLACEMENT } from '../../store/types/productLibrary';
 import './ModeSelector.scss';
 
@@ -26,7 +26,7 @@ const ModeSelector = ({ setModeAction, productLibrary }) => {
         <>
             {isEnabled && <Selector />}
 
-            <div className="title">{title[mode]}</div>
+            <div className="modeTitle">{title[mode]}</div>
         </>
     );
 };

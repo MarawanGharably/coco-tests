@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
-import { apiAdminCreateStorePolicy, apiGetAllCMSStores } from '../../utils/apiUtils';
+import { apiGetAllCMSStores } from '../../utils/apiUtils';
 import SubmitButton from '../../components/FormComponents/SubmitButton';
 import Layout from "../../layouts/Layout";
 import { Row } from 'react-bootstrap';
+
+import { createStorePolicy } from '../../APImethods';
 
 const PoliciesPage = () => {
     const [stores, setStores] = useState([]);
@@ -48,7 +50,7 @@ const PoliciesPage = () => {
             setSubmitting(true);
             // eslint-disable-next-line no-underscore-dangle
             const storeId = selectedStore._id.$oid;
-            apiAdminCreateStorePolicy({ store_id: storeId })
+            createStorePolicy({ store_id: storeId })
                 .then(() => {
                     setError('Success');
                     setSelectedStore(null);

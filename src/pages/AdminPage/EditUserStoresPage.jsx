@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Row } from 'react-bootstrap';
+import { Row, Form } from 'react-bootstrap';
 import Select from 'react-select';
-import { Form } from 'react-bootstrap';
-import { apiAdminGetAllStorePolicies, apiAdminAddUserToStorePolicy } from '../../utils/apiUtils';
 import { SubmitButton} from '../../components/FormComponents';
 import Layout from "../../layouts/Layout";
-import { getUsers } from '../../APImethods/UsersAPI'
+import { getUsers, getPolicies, addUserToStorePolicy } from '../../APImethods'
 
 
 const EditUserStoresPage = () => {
@@ -33,24 +31,6 @@ const EditUserStoresPage = () => {
 
 
 
-    const getPolicies = () => {
-        apiAdminGetAllStorePolicies()
-            .then((response) => {
-                setStores(
-                    response.map((option) => (
-                        {
-                            ...option,
-                            label: option.name,
-                            // eslint-disable-next-line no-underscore-dangle
-                            value: option._id.$oid,
-                        })),
-                );
-            })
-            .catch((err) => {
-                setError(err);
-                setSubmitting(false);
-            });
-    };
 
     useEffect(() => {
         getUsers()
@@ -68,12 +48,28 @@ const EditUserStoresPage = () => {
                 setError(err);
                 setSubmitting(false);
             });
-        getPolicies();
+
+        getPolicies()
+            .then((response) => {
+                setStores(
+                    response.map((option) => (
+                        {
+                            ...option,
+                            label: option.name,
+                            value: option._id.$oid,
+                        })),
+                );
+            })
+            .catch((err) => {
+                setError(err);
+                setSubmitting(false);
+            });
+
     }, []); // eslint-disable-line
+
 
     const handleProductLibraryChange = (e) => {
         const { checked } = e.target;
-
         setProductLibrary(checked);
     };
 
@@ -85,12 +81,13 @@ const EditUserStoresPage = () => {
             const userEmail = selectedUser.label;
             const storeName = selectedStore.name;
 
-            apiAdminAddUserToStorePolicy({
-                username: userId, group_name: policyId, product_library_enabled: hasProductLibrary,
+            addUserToStorePolicy({
+                username: userId,
+                group_name: policyId,
+                product_library_enabled: hasProductLibrary,
             })
                 .then(() => {
                     setError({ message: `${userEmail} added to ${storeName}` });
-
                     setSelectedStore(null);
                 }).catch(err => {
                     setError(err);

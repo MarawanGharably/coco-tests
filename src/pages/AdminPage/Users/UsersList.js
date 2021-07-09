@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 import { Row } from 'react-bootstrap';
 
 export default function UsersList() {
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState();
 
     useEffect(() => {
         getUsers()

@@ -109,10 +109,7 @@ const makeDELETERequest = (_url, storeId = null) => new Promise((resolve, reject
 });
 
 // ADMIN APIs
-export const apiAdminGetAllStorePolicies = () => makeGETRequest(URLS.ADMIN.STORE_ACCESS_POLICIES_API); //eslint-disable-line
 export const apiGetAllCMSStores = () => makeGETRequest(URLS.ADMIN.GET_ALL_CMS_STORES);
-export const apiAdminCreateStorePolicy = (payload) => makePOSTRequest(URLS.ADMIN.STORE_ACCESS_POLICIES_API, payload); //eslint-disable-line
-export const apiAdminAddUserToStorePolicy = (payload) => makePOSTRequest(URLS.ADMIN.ADD_USER_TO_STORE_POLICY, payload); //eslint-disable-line
 
 
 // AUTH APIs

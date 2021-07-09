@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Field, reduxForm, getFormValues } from 'redux-form';
 import { Card, Alert } from 'react-bootstrap';
-import { createUser, getPolicies  } from '../../../APImethods/UsersAPI';
 import { Input, Select } from '../../../components/ReduxForms/_formFields';
 import Layout from "../../../layouts/Layout";
 import {SubmitButton} from "../../../components/FormComponents";
+import { createUser, getPolicies  } from '../../../APImethods';
 
 
 let NewUserForm = ({mode, handleSubmit}) => {

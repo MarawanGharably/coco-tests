@@ -9,7 +9,7 @@ export const createUser = (data) => {
 };
 
 /**
- * get all stores
+ * get list of Users
  */
 export const getUsers = () => {
     return axiosApi
@@ -54,9 +54,4 @@ export const getUser = (userId) => {
         .catch((err) => Promise.reject(err));
 };
 
-export const getPolicies = () => {
-    return axiosApi
-        .get(`${API_URL}/admin/access/policy`)
-        .then((res) => res.data)
-        .catch((err) => Promise.reject(err));
-};
+

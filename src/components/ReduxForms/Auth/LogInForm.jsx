@@ -48,7 +48,7 @@ class LogInForm extends Component {
         const { handleSubmit } = this.props;
 
         return (
-            <form onSubmit={handleSubmit(this.handleSubmit)} style={{ width: '100%' }}>
+            <form onSubmit={handleSubmit(this.handleSubmit)} style={{ width: '100%' }} className='authFormStyling'>
                 <Field name="email" type="email" label="Email" component={Input} placeholder="email" />
                 <Field name="password" type="password" label="Password" component={Input} placeholder="password" />
 

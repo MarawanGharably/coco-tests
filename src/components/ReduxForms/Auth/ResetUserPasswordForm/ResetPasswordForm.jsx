@@ -47,7 +47,7 @@ class ResetPasswordForm extends Component {
         const { verificationCodeStatus, handleSubmit } = this.props;
 
         return (
-            <form onSubmit={handleSubmit(this.handleSubmit)}   className='d-flex flex-column'>
+            <form onSubmit={handleSubmit(this.handleSubmit)}   className='d-flex flex-column authFormStyling'>
                 <p style={{ fontSize: '2em', textAlign: 'center' }}>
                     Your Verification Code was sent on &nbsp;
                     {verificationCodeStatus.Destination}
@@ -57,7 +57,7 @@ class ResetPasswordForm extends Component {
                 <Field name="code" label="Verification Code" component={Input} />
                 <Field name="new_password" type="password" label="New Password" component={Input} />
 
-                <SubmitButton submitting={submitting} extraClass='align-self-center'/>
+                <SubmitButton submitting={submitting} className='align-self-center'/>
 
                 <Row className='justify-content-center'>
                     <h1>{errorMessage}</h1>

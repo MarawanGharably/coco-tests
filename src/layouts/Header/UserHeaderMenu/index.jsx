@@ -24,7 +24,7 @@ const UserHeaderMenu = () => {
 
     return (
         <Nav className="justify-content-end userHeaderMenu">
-            <NavDropdown title={icon} id="userMenu" alignRight>
+            <NavDropdown title={icon} id="userMenu" alignRight={true}>
                 <NavDropdown.Item onClick={logout}>Log Out</NavDropdown.Item>
             </NavDropdown>
         </Nav>

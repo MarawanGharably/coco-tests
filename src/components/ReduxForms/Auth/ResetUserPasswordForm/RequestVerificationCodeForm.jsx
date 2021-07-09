@@ -44,10 +44,10 @@ class RequestVerificationCodeForm extends Component {
         const { handleSubmit } = this.props;
 
         return (
-            <form onSubmit={handleSubmit(this.handleSubmit)}   className='d-flex flex-column'>
+            <form onSubmit={handleSubmit(this.handleSubmit)}   className='d-flex flex-column authFormStyling'>
                 <Field name="email" type="email" label="Email" component={Input} placeholder="email" />
 
-                <SubmitButton submitting={submitting} extraClass='align-self-center' />
+                <SubmitButton submitting={submitting} className='align-self-center' />
 
                 {/* Error Messages */}
                 <ErrorMessage error={error}/>

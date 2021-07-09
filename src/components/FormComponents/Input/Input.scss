@@ -1,32 +1,6 @@
 @import '../../../assets/scss/variables';
 
-.input {
-    &-container {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        margin: 0 10px;
-    }
-    &-label {
-        font-size: 2em;
-        font-weight: 600;
-        text-transform: capitalize;
-        margin: 5px 0 0 0;
-        color: $text-color;
-    }
-    &-field {
-        background-color: transparent;
-        width: 100%;
-        padding: 0;
-        border: 0px;
-        font-size: 2em;
-        margin: 5px 0;
-        color: $text-color;
-        &:focus {
-            outline-width: 0;
-        }
-    }
-}
+
 
 .input-border-container {
     display: flex;
@@ -45,6 +19,34 @@
         &:focus-within {
             color: red;
             border: 1px solid red;
+        }
+    }
+
+    .input {
+        &-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin: 0 10px;
+        }
+        &-label {
+            font-size: 2em;
+            font-weight: 600;
+            text-transform: capitalize;
+            margin: 5px 0 0 0;
+            color: $text-color;
+        }
+        &-field {
+            background-color: transparent;
+            width: 100%;
+            padding: 0;
+            border: 0;
+            font-size: 2em;
+            margin: 5px 0;
+            color: $text-color;
+            &:focus {
+                outline-width: 0;
+            }
         }
     }
 }

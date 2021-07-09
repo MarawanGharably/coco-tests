@@ -9,7 +9,7 @@ import ErrorPage from './pages/error-page/ErrorPage';
 import LoginPage from './pages/auth/LoginPage';
 import ResetUserPasswordWithParamsPage from './pages/auth/ResetUserPasswordWithParamsPage';
 import ResetUserPasswordPage from './pages/auth/ResetUserPasswordPage';
-import AdminPage from './pages/admin-page/Admin';
+import AdminPage from './pages/AdminPage';
 
 // Global css/scss imports
 import 'bootstrap/dist/css/bootstrap.min.css';

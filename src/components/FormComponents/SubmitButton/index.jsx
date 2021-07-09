@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { Button, Spinner } from 'react-bootstrap';
 import './SubmitButton.scss';
 
-const SubmitButton = ({ buttonText = '', submitting, onClick, extraClass='' }) => {
+const SubmitButton = ({ buttonText = '', submitting, onClick, className='' }) => {
     return (
-        <Button type="submit" className={`submitButton ${extraClass}`} onClick={onClick}>
+        <Button type="submit" className={`submitButton ${className}`} onClick={onClick}>
             <span className="text">{buttonText}</span>
             <Spinner
                 as="span"

@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { RadioSelectionContext } from './RadioGroup';
+import { RadioSelectionContext } from '../RadioGroup/RadioGroup';
 import './Radio.scss';
 
 // formField is required and should match API shape

@@ -9,7 +9,7 @@ const StoreThumbnail = ({ storeInfo, handleEditStore, thumbnailUrl }) => {
 
     return (
         <Card style={{ height: '100%' }}>
-            <Card.Img variant="top" alt={name} src={thumbnailUrl} style={{ minHeight: '18em' }} />
+            <Card.Img variant="top" alt={name} src={thumbnailUrl} style={{ minHeight: '12em' }} />
             <Card.Body className="d-flex flex-column">
                 <Card.Title>{name}</Card.Title>
                 <Button onClick={() => handleEditStore(storeId)} variant="primary" className="mt-auto" style={{ width: '100%' }}>

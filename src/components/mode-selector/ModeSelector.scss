@@ -6,12 +6,13 @@
     }
 
     .radio {
-        height: 4em;
+        height: 3em;
         margin: 0 0.5em;
         font-size: 1em;
 
         label, span {
-            font-size: 1.2em;
+            font-size: 1em;
+            margin-bottom: 0;
         }
     }
 
@@ -29,10 +30,10 @@
         }
     }
 
-    .title {
+    .modeTitle {
         flex-basis: 100%;
         text-align: center;
-        font-size: 2em;
+        font-size: 1.6em;
         margin-top: 0.5em;
         color: $obsess-grey;
     }

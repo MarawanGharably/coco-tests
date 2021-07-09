@@ -12,7 +12,7 @@ export const resetPassword = (username, oldPassword, newPassword) => (dispatch) 
             dispatch({ type: types.LOGGED_IN, payload: true });
             return res;
         })
-        .catch((err) => err.response);
+        .catch((err) => Promise.reject(err));
 };
 
 /**

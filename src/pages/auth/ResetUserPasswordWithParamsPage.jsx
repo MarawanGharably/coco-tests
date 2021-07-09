@@ -1,83 +1,72 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { Field, reduxForm } from 'redux-form';
 import { useHistory } from 'react-router-dom';
 import { Row, Col } from 'react-bootstrap';
-import PasswordInput from '../../components/FormComponents/PasswordInput';
 import SubmitButton from '../../components/FormComponents/SubmitButton';
 import { getUrlQueryParams } from '../../utils/urlHelper';
-import Layout from "../../layouts/Layout";
+import Layout from '../../layouts/Layout';
+import { Input } from '../../components/ReduxForms/_formFields';
+
 // Redux Actions
 import { resetPassword } from '../../store/actions';
 
+
 /*
-* Reset user password page
-* Users landing on this page via link format create.shopobsess.com/password?a=username&b=password
+ * Reset user password page
+ * Users landing on this page via link format create.shopobsess.com/password?a=username&b=password
  */
 
-const ResetUserPasswordWithParamsPage = () => {
+let ResetUserPasswordWithParamsPage = (props) => {
+    const history = useHistory();
+    const dispatch = useDispatch();
     const query = getUrlQueryParams(window.location.href);
-    const email = query.a;
-    const password = query.b;
+    const {a: email, b:password} = query;
 
-    const [newPassword, setNewPassword] = useState('');
     const [submitting, setSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const reduxDispatch = useDispatch();
-    const history = useHistory();
 
-    const onNewPasswordInputChange = e => {
-        e.persist();
-        const { value } = e.target;
-        setNewPassword(value);
-    };
 
-    const submitPassword = async () => {
+    const onSubmit = async (values) => {
         setSubmitting(true);
         setErrorMessage('');
-        reduxDispatch(resetPassword(email, password, newPassword))
-            .then(res => {
-				console.log('>>page resetPassword then', res);// eslint-disable-line
-                const statusCode = res.status;
-                if (statusCode === 200) {
-                    // dispatch({ type: AuthAction.LOGGED_IN });
-                    history.push('/');
-                } else if (statusCode === 400) {
-					console.error('Bad request'); // eslint-disable-line
-                    setErrorMessage('Invalid password, please Input a valid password.');
-                    setSubmitting(false);
-                } else if (statusCode === 403) {
-					console.log('Already set password'); // eslint-disable-line
-                    history.push('/login');
-                } else {
-					console.error(res.statusText); // eslint-disable-line
-                    setErrorMessage('Server error, please try again later.');
-                    setSubmitting(false);
-                }
+        dispatch(resetPassword(email, password, values.password))
+            .then((res) => {
+                history.push('/');
             })
-            .catch(err => {
-				console.error('Error', err); // eslint-disable-line
+            .catch((err) => {
+                console.error('Error', err); // eslint-disable-line
                 setSubmitting(false);
-                setErrorMessage('Server error, please try again later.');
+                setErrorMessage(err?.message || 'Server error, please try again later.');
             });
     };
-
 
     return (
         <Layout title="Set Your Password" subTitle="Let's make it official">
             <Row className="justify-content-center mt-5">
-                <Col xs={11} sm={6}  >
-                    <Row className='flex-column mb-4' >
-                        <PasswordInput value={newPassword} handleChange={onNewPasswordInputChange} />
-                    </Row>
-                    <Row className='mb-4 justify-content-center' >
-                        <SubmitButton submitting={submitting} onClick={submitPassword} />
-                    </Row>
+                <Col xs={11} sm={6}>
+                    <form onSubmit={props.handleSubmit(onSubmit)} style={{ width: '100%' }} className="authFormStyling">
+                        <Field name="password" type="password" label="Password" component={Input} placeholder="password" />
+
+                        <Row className="mb-4 justify-content-center">
+                            <SubmitButton submitting={submitting} />
+                        </Row>
+                    </form>
+
+                    <h1 className="align-self-center">{errorMessage}</h1>
                 </Col>
             </Row>
-
-            <h1 className='align-self-center'>{errorMessage}</h1>
         </Layout>
     );
 };
 
-export default ResetUserPasswordWithParamsPage;
+const validate = (values) => {
+    const errors = {};
+    if (!values.password) errors.password = 'Password cannot be empty';
+    return errors;
+};
+
+export default reduxForm({
+    form: 'ResetUserPassword',
+    validate,
+})(ResetUserPasswordWithParamsPage);

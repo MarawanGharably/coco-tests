@@ -1,25 +1,42 @@
-@import '../../../assets/scss/variables';
+@import '../../assets/scss/variables';
+
 
 %nav-bar-parent {
     text-decoration: none;
     font-weight: 600;
-    font-size: 1.6em;
+    font-size: 1em;
     margin: 1em 0;
     text-transform: uppercase;
 }
 
 %nav-bar-child {
     text-decoration: none;
-    font-size: 1.6em;
+    font-size: 0.7em;
     color: black;
     text-transform: capitalize;
 }
 
+
 .nav-bar {
+    border-right: 1px solid $obsess-grey;
+    padding: 0 2.8em;
+    
+    &-container {
+        letter-spacing: 0.8px;
+        padding: 0;
+        margin: 0;
+        width: 14em;
+
+        & ul {
+            padding: 0;
+            margin: 0 1.5em 0;
+        }
+    }
+
     &-item {
         &-container {
             list-style: none;
-            margin: 2em 0;
+            margin: 1em 0;
         }
         &-child-container {
             list-style: none;
@@ -28,7 +45,7 @@
             overflow-y: hidden;
             transition: max-height 400ms ease;
             max-height: 0;
-        
+
             &--show {
                 max-height: 100px;
             }
@@ -57,10 +74,12 @@
         }
     }
 
+
     &-section-break {
         width: 100%;
         border-width: 0.5px;
         border-color: #B9B9B9;
         border-style: solid;
     }
+
 }

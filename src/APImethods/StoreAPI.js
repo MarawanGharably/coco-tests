@@ -33,10 +33,16 @@ export const getUserStores=()=>{
 /**
  * get single store data
  */
-export const getStore=(storeId)=>{}
+export const getStore=(storeId)=>{
+    if(!storeId) return Promise.reject(Error('storeId is required parameter'));
+    return axiosApi
+        .get(`${API_URL}/stores/${storeId}`)
+        .then((res) => res.data)
+        .catch((err) => Promise.reject(err));
+}
 
 
-const OBSESS_GREY_LOGO = 'https://cdn.obsess-vr.com/obsess-logo-636466.png';
+
 
 export const getStoreFlags=(storeId)=>{
     if(!storeId) return Promise.reject('Missed required parameter');
@@ -64,7 +70,11 @@ const getStoreScenes = (storeId) => {
         .catch((err) => Promise.reject(err));
 };
 
+
+
 const getFirstSceneImageUrl = (storeId) => {
+    const OBSESS_GREY_LOGO = 'https://cdn.obsess-vr.com/obsess-logo-636466.png';
+
     return getStoreScenes(storeId)
         .then((res) => {
             const firstObj = res[0] || false;

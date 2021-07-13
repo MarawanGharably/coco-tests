@@ -6,6 +6,8 @@ import EditUserStoresPage from './EditUserStoresPage';
 import UsersPage from './Users';
 import StoresPage from './Stores';
 import Layout from "../../layouts/Layout";
+import './_admin-page.scss';
+
 
 export default function AdminPage(){
     const history  = useHistory();

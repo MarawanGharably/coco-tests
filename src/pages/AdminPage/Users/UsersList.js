@@ -1,21 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { getUsers } from '../../../APImethods/UsersAPI';
+import React from 'react';
 import RecordsList from '../../../HOC/RecordsList';
 import { NavLink } from 'react-router-dom';
 import { Row } from 'react-bootstrap';
+import { getUsers } from '../../../APImethods/UsersAPI';
+
 
 export default function UsersList() {
-    const [users, setUsers] = useState();
-
-    useEffect(() => {
-        getUsers()
-            .then((res) => {
-                setUsers(res);
-                console.log('>>Users', res);
-            })
-            .catch();
-    }, []);
-
     return (
         <>
             <h1>Users</h1>
@@ -31,7 +21,6 @@ export default function UsersList() {
                 fetchRecordsFN={getUsers}
                 className="my-4"
                 headers={['#', 'User Name', 'Email', '']}
-                records={users}
                 ItemComponent={UserListItem}
             />
         </>

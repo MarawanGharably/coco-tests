@@ -4,13 +4,31 @@ const { API_URL } = process.env;
 
 /**
  * get all stores
+ * old:apiGetAllCMSStores =>cms/stores
+ * old:/client/users/stores
  */
 export const getStores=()=>{
     return axiosApi
-        .get(`${API_URL}/client/users/stores`)
+        //api endpoint used at main page
+        // .get(`${API_URL}/client/users/stores`)
+        .get(`${API_URL}/stores`)
         .then((res) => res.data)
         .catch((err) => Promise.reject(err));
 }
+
+
+/**
+ * get stores in a user access group
+ */
+export const getUserStores=()=>{
+    return axiosApi
+        //api endpoint used at main page
+        // OLD route: .get(`${API_URL}/client/users/stores`)
+        .get(`${API_URL}/stores/users-stores`)
+        .then((res) => res.data)
+        .catch((err) => Promise.reject(err));
+}
+
 
 /**
  * get single store data

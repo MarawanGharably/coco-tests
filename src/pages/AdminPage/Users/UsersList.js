@@ -27,7 +27,13 @@ export default function UsersList() {
                 </NavLink>
             </Row>
 
-            <RecordsList className="my-4" headers={['#', 'User Name', 'Email', '']} records={users} ItemComponent={UserListItem} />
+            <RecordsList
+                fetchRecordsFN={getUsers}
+                className="my-4"
+                headers={['#', 'User Name', 'Email', '']}
+                records={users}
+                ItemComponent={UserListItem}
+            />
         </>
     );
 }

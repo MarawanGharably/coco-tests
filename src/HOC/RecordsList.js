@@ -1,7 +1,14 @@
 import { Table } from 'react-bootstrap';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
-export default function RecordsList({ headers = [], records, ItemComponent, className='' }) {
+export default function RecordsList({ headers = [], fetchRecordsFN, records, ItemComponent, className='' }) {
+    // const [data, setData] = useState();
+
+    // useEffect(()=>{
+        // fetchRecordsFN && fetchRecordsFN().then().catch()
+    // });
+
+
     return (
         <Table className={className}>
             <thead>

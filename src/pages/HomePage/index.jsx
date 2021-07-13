@@ -3,16 +3,16 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../../components/loader/Loader';
 import Layout from '../../layouts/Layout';
-import StoresList from "./StoresList";
+import StoresList from './StoresList';
 import { setStoreData, setSelectedStoreID } from '../../store/actions/homePageActions';
-import {getUserStores, getStoreThumbnails} from '../../APImethods/StoreAPI';
+import { getUserStores, getStoreThumbnails } from '../../APImethods/StoreAPI';
 import { SESSION_STORE_ID } from '../../_keys.json';
 
 //TODO: remove Page, BodyWrapper
 
 const HomePage = () => {
     const [loading, setLoading] = useState(true);
-    const HomePageStore = useSelector(store => store['HomePageStore']);
+    const HomePageStore = useSelector(store => store.HomePageStore);
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -22,18 +22,12 @@ const HomePage = () => {
     useEffect(() => {
         getUserStores()
             .then((clientStoreDataResponse) => {
-                getStoreThumbnails(clientStoreDataResponse)
-                    .then((storeThumbnailsResponse) => {
-                        setLoading(false);
-                        dispatch(setStoreData({
-                            storeThumbnails:storeThumbnailsResponse,
-                            stores:clientStoreDataResponse,
-                        }));
-
-                    }).catch((err) => console.error(err));
+                setLoading(false);
+                dispatch(setStoreData({
+                    stores: clientStoreDataResponse,
+                }));
             }).catch((err) => console.error(err));
-
-        dispatch(setStoreData({pageHeaderTitle:''}));
+        dispatch(setStoreData({ pageHeaderTitle: '' }));
     }, [history]);
 
 
@@ -47,21 +41,24 @@ const HomePage = () => {
         return <Loader />;
     }
 
-    return (<Layout title="Your Stores">
-                    {
-                        HomePageStore.stores
-                            ? (<StoresList
-                                        stores={HomePageStore.stores}
-                                        storeThumbnails={HomePageStore.storeThumbnails}
-                                        handleEditStore={handleEditStore}
-                                    />)
-                            : (
-                                <header className="page-sub-title">
-                                    There are no stores for this client
-                                </header>
-                            )
-                    }
-                </Layout>);
+    return (
+        <Layout title="Your Stores">
+            {
+                HomePageStore.stores
+                    ? (
+                        <StoresList
+                            stores={HomePageStore.stores}
+                            handleEditStore={handleEditStore}
+                        />
+                    )
+                    : (
+                        <header className="page-sub-title">
+                            There are no stores for this client
+                        </header>
+                    )
+            }
+        </Layout>
+    );
 };
 
 

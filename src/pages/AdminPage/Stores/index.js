@@ -1,20 +1,22 @@
-import React from "react";
-import Layout from '../../../layouts/Layout';
-import {Route, Switch} from "react-router-dom";
+import React from 'react';
+import StoresList from './StoresList';
+import StoreForm from './StoreForm';
+import { Route, Switch } from 'react-router-dom';
+import Layout from "../../../layouts/Layout";
 
-
-export default function StoresPage(){
-    return(<Layout>
-        <Switch>
-            <Route exact path={'/admin/stores'}>
-                {/*<StoressList />*/}
-            </Route>
-            <Route path={`/admin/stores/create`}>
+export default function StoresPage() {
+    return (<Layout>
+            <Switch>
+                <Route exact path={'/admin/stores'}>
+                    <StoresList />
+                </Route>
+                {/*<Route path={`/admin/stores/create`}>*/}
                 {/*<NewStoreForm mode="create" />*/}
-            </Route>
-            <Route path={`/admin/stores/:storeId`}>
-                {/*<Form />*/}
-            </Route>
-        </Switch>
-    </Layout>)
+                {/*</Route>*/}
+                <Route path={`/admin/stores/:storeId`}>
+                    <StoreForm />
+                </Route>
+            </Switch>
+    </Layout>
+    );
 }

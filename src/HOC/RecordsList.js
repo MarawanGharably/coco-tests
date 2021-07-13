@@ -1,12 +1,17 @@
 import { Table } from 'react-bootstrap';
 import React, {useEffect, useState} from 'react';
 
-export default function RecordsList({ headers = [], fetchRecordsFN, records, ItemComponent, className='' }) {
-    // const [data, setData] = useState();
+export default function RecordsList({ headers = [], fetchRecordsFN, ItemComponent, className='' }) {
+    const [records, setRecords] = useState();
 
-    // useEffect(()=>{
-        // fetchRecordsFN && fetchRecordsFN().then().catch()
-    // });
+    useEffect(()=>{
+        fetchRecordsFN && fetchRecordsFN()
+            .then(res=>{
+                setRecords(res);
+            }).catch(err=>{
+
+            })
+    }, []);
 
 
     return (

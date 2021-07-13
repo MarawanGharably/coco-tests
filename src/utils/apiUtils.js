@@ -108,8 +108,6 @@ const makeDELETERequest = (_url, storeId = null) => new Promise((resolve, reject
     });
 });
 
-// ADMIN APIs
-export const apiGetAllCMSStores = () => makeGETRequest(URLS.ADMIN.GET_ALL_CMS_STORES);
 
 
 // AUTH APIs

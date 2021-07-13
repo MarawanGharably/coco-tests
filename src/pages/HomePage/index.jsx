@@ -5,7 +5,7 @@ import Loader from '../../components/loader/Loader';
 import Layout from '../../layouts/Layout';
 import StoresList from "./StoresList";
 import { setStoreData, setSelectedStoreID } from '../../store/actions/homePageActions';
-import {getStores, getStoreThumbnails} from '../../APImethods/StoreAPI';
+import {getUserStores, getStoreThumbnails} from '../../APImethods/StoreAPI';
 import { SESSION_STORE_ID } from '../../_keys.json';
 
 //TODO: remove Page, BodyWrapper
@@ -20,7 +20,7 @@ const HomePage = () => {
     sessionStorage.removeItem(SESSION_STORE_ID);
 
     useEffect(() => {
-        getStores()
+        getUserStores()
             .then((clientStoreDataResponse) => {
                 getStoreThumbnails(clientStoreDataResponse)
                     .then((storeThumbnailsResponse) => {

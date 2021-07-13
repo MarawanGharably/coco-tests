@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
-import { apiGetAllCMSStores } from '../../utils/apiUtils';
 import SubmitButton from '../../components/FormComponents/SubmitButton';
 import Layout from "../../layouts/Layout";
 import { Row } from 'react-bootstrap';
 
-import { createStorePolicy } from '../../APImethods';
+import { createStorePolicy, getStores } from '../../APImethods';
 
 const PoliciesPage = () => {
     const [stores, setStores] = useState([]);
@@ -14,7 +13,7 @@ const PoliciesPage = () => {
     const [error, setError] = useState('');
 
     const getPolicies = () => {
-        apiGetAllCMSStores()
+        getStores()
             .then((response) => {
                 setStores(
                     response.map((option) => (

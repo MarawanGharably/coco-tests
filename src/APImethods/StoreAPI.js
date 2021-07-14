@@ -41,6 +41,18 @@ export const getStore=(storeId)=>{
         .catch((err) => Promise.reject(err));
 }
 
+/**
+ * Update store data
+ */
+export const updateStore=(storeId, data)=>{
+    if(!storeId) return Promise.reject(Error('storeId is required parameter'));
+
+    return axiosApi
+        .put(`${API_URL}/stores/${storeId}`, data)
+        .then((res) => res.data)
+        .catch((err) => Promise.reject(err));
+}
+
 
 
 

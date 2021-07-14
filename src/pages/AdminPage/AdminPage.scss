@@ -1,11 +1,11 @@
+#admin-page{
+  h1{ margin-top: 0;}
+}
+
 .select {
   min-width: 23em;
   margin-bottom: 1em;
 }
-
-h1{ margin-top: 0;}
-.title { font-size: 18px;}
-
 
 .error {
   font-size: 14px;
@@ -13,8 +13,4 @@ h1{ margin-top: 0;}
   background: red;
   color: white;
   border-radius: 5px;
-}
-
-.has-product-library {
-  font-size: 0.8rem;
 }

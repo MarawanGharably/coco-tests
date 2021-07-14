@@ -20,19 +20,17 @@ let UserForm = (props) => {
     const handleSubmit = (values) => {};
 
     return (
-        <div>
+        <form onSubmit={handleSubmit(handleSubmit)}>
             <h1>User</h1>
-            <form onSubmit={handleSubmit(handleSubmit)} style={{ width: '100%' }}>
-                <Card className='my-4'>
-                    <Card.Header>General</Card.Header>
-                    <Card.Body>
-                        <Field name="given_name" label="User Name" component={Input} disabled />
-                        <Field name="email" label="email" type="email" component={Input} disabled />
-                        <Field name="UserStatus" label="UserStatus" component={Input} disabled />
-                    </Card.Body>
-                </Card>
-            </form>
-        </div>
+            <Card className="my-4">
+                <Card.Header>General</Card.Header>
+                <Card.Body>
+                    <Field name="given_name" label="User Name" component={Input} disabled />
+                    <Field name="email" label="email" type="email" component={Input} disabled />
+                    <Field name="UserStatus" label="UserStatus" component={Input} disabled />
+                </Card.Body>
+            </Card>
+        </form>
     );
 };
 
@@ -47,8 +45,8 @@ UserForm = reduxForm({
     validate,
 })(UserForm);
 
-const mapStateToProps = (state) =>({
-    formValues: getFormValues('UserForm')(state)
+const mapStateToProps = (state) => ({
+    formValues: getFormValues('UserForm')(state),
 });
 
 export default connect(mapStateToProps, {})(UserForm);

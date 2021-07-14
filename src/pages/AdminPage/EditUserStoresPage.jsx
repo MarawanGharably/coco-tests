@@ -11,7 +11,6 @@ const EditUserStoresPage = () => {
     const [stores, setStores] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [selectedStore, setSelectedStore] = useState(null);
-    const [hasProductLibrary, setProductLibrary] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState('');
 
@@ -68,10 +67,6 @@ const EditUserStoresPage = () => {
     }, []); // eslint-disable-line
 
 
-    const handleProductLibraryChange = (e) => {
-        const { checked } = e.target;
-        setProductLibrary(checked);
-    };
 
     const onClickAddUserToStore = () => {
         if (selectedStore && selectedUser) {
@@ -84,7 +79,6 @@ const EditUserStoresPage = () => {
             addUserToStorePolicy({
                 username: userId,
                 group_name: policyId,
-                product_library_enabled: hasProductLibrary,
             })
                 .then(() => {
                     setError({ message: `${userEmail} added to ${storeName}` });
@@ -112,14 +106,6 @@ const EditUserStoresPage = () => {
                     onChange={(value) => setSelectedStore(value)}
                 />
 
-                <Form.Check
-                    inline
-                    id="has-product-library"
-                    className="has-product-library align-self-center"
-                    label="Products Library Enabled"
-                    value={hasProductLibrary}
-                    onChange={handleProductLibraryChange}
-                />
             </Row>
 
 

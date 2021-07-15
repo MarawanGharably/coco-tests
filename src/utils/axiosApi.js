@@ -10,14 +10,20 @@ const instance = axios.create({
     },
 });
 
-// const handleSuccess = () => {
-//     console.log('Axios OK');
-// };
+const handleSuccess = (response) => {
+    return response;
+};
 
-// const handleError = () => {
-//     console.log('Axios ERR');
-// };
+const handleError = (error) => {
+    const statusCode = error.response.status;
+    if([401, 403].includes(statusCode)){
+        window.location.href = '/login';
+    }
 
-// instance.interceptors.response.use(handleSuccess, handleError);
+    return Promise.reject(error);
+};
+
+//Catch response status
+instance.interceptors.response.use(handleSuccess, handleError);
 
 export default instance;

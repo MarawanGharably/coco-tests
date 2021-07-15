@@ -30,7 +30,7 @@ let StoreForm = (props) => {
                 setStatus({ success: true, message: 'Store Updated Successfully' });
             })
             .catch((err) => {
-                setStatus({ error: true, message: err.message || 'Error' });
+                setStatus({ error: true, message: err?.message || 'Error' });
             })
             .finally(() => {
                 setSubmitting(false);

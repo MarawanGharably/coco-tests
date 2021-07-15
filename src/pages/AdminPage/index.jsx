@@ -40,7 +40,6 @@ export default function AdminPage(){
 
 const AdminDashboard=()=>{
     return(<Layout title='Admin Dashboard'>
-        {/*<h1>Admin Dashboard</h1>*/}
         <p></p>
     </Layout>)
 }

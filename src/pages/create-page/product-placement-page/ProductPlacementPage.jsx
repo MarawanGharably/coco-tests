@@ -66,16 +66,14 @@ const ProductPlacementPage = () => {
 
     return (
             <Row >
-                <Col xs={9}>
+                <Col xs={8}  md={9}>
                     <ModeSelector />
                     <div id="three-editor-container" className="full-width">
                         <HotspotEditor />
                     </div>
                 </Col>
-                <Col xs={3}>
-                    <div className="product-placement-sidebar">
-                        <ProductPlacementSidebar />
-                    </div>
+                <Col xs={4} md={3}>
+                    <ProductPlacementSidebar />
                 </Col>
             </Row>
     );

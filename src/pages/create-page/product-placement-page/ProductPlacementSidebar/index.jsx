@@ -1,10 +1,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
-import SceneNavigator from '../../../components/scene-navigator/SceneNavigator';
-import ProductLibrary from '../../../components/product-library/ProductLibrary';
+import SceneNavigator from '../../../../components/scene-navigator/SceneNavigator';
+import ProductLibrary from '../../../../components/product-library/ProductLibrary';
+import './ProductPlacementSidebar.scss';
 
-const ProductPlacementTabs = () => {
+const ProductPlacementSidebar = () => {
     const { isEnabled } = useSelector(state => state.productLibrary);
 
     return (
@@ -23,4 +24,4 @@ const ProductPlacementTabs = () => {
     );
 };
 
-export default ProductPlacementTabs;
+export default ProductPlacementSidebar;

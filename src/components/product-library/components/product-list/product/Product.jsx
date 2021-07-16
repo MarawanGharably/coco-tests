@@ -6,9 +6,7 @@ import ConfirmationDialog from '../../../../confirmation-dialog/ConfirmationDial
 import { deleteHotspotProduct } from '../../../../../APImethods/HotspotsAPI';
 import './Product.scss';
 
-import {
-    PRODUCT_PLACEMENT,
-} from '../../../../mode-selector/modeOptions';
+import { PRODUCT_PLACEMENT } from '../../../../mode-selector/modeOptions';
 
 const Product = ({ mode, id, imageUrl, folderId }) => {
     const dispatch = useDispatch();

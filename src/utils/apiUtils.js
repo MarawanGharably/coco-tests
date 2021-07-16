@@ -113,9 +113,6 @@ const makeDELETERequest = (_url, storeId = null) => new Promise((resolve, reject
 // AUTH APIs
 export const apiUserAuthLogout = () => makeGETRequest(URLS.LOGOUT_URL);
 
-// PROFILE APIs
-export const apiSubmitProfile = (payload) => makePOSTRequest(URLS.PROFILE_URL, payload);
-export const apiGetProfile = () => makeGETRequest(URLS.PROFILE_URL);
 
 // HOTSPOT_APIs
 export const apiGetHotspotsByType = (type, storeId, sceneId) => makeGETRequest(`${URLS.CMS_HOTSPOT_URL}/${type}/${sceneId}`, storeId);

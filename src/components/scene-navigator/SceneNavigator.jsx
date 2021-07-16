@@ -63,7 +63,7 @@ const SceneNavigator = () => {
 
     return (
         <div className="scene-navigator">
-            <RightSideBar cols="1" rowHeight="20em" title="Scenes">
+            <RightSideBar cols="1" rowHeight="15em" title="Scenes">
                 {loading ? <Loader /> : renderScenes()}
             </RightSideBar>
         </div>

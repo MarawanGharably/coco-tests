@@ -27,7 +27,7 @@ const Radio = ({
             onKeyDown={(e) => radioKeyboardHandler(e, value, idx)}
             aria-checked={isSelected}
         >
-            <label className={`radio-label ${isImage && 'radio-label--image'}`} htmlFor={idx}>
+            <label className={`radio-label ${isImage ? 'radio-label--image':''}`} htmlFor={idx}>
                 <span className={`${isImage && 'radio-label-text--image'}`}>{value}</span>
             </label>
             <input tabIndex="-1" type="radio" id={idx} checked={isSelected} />

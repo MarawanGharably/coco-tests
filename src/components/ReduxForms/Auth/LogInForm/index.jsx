@@ -55,7 +55,7 @@ class LogInForm extends Component {
 
                 <section className="login-page-helper-section flex">
                     <div>
-                        Don&apos;t have an account?
+                        Don&apos;t have an account?<br/>
                         <a href="mailto:contact@shopobsess.co"> Send us an email</a>
                     </div>
                     <a href="/reset-password" className="forget-password" style={{ fontWeight: 'normal' }}>
@@ -63,7 +63,7 @@ class LogInForm extends Component {
                     </a>
                 </section>
 
-                <div className="flex flex-center page-row">
+                <div className="flex flex-center page-row mb-4">
                     <SubmitButton submitting={submitting} />
                 </div>
 
@@ -78,14 +78,14 @@ const ErrorMessage = ({ error }) => {
     const { message, error_code } = error;
 
     if (error_code === 'ACCOUNT_NOT_VERIFIED') {
-        return (<h1 style={{ textAlign: 'center' }}>
+        return (<h4 className='text-danger' style={{ textAlign: 'center' }}>
                 Account registration is not completed.
                 <br />
                 Please, verify your email address first.
-            </h1>);
+            </h4>);
     }
 
-    return <h1 style={{ textAlign: 'center' }}>{message}</h1>;
+    return <h4 className='text-danger' style={{ textAlign: 'center' }}>{message}</h4>;
 };
 
 const validate = (values) => {

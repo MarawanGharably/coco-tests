@@ -17,7 +17,7 @@ WORKDIR /coco-cms-workdir/
 # copying to destinations without prefix / will copy into the work directory
 COPY package-lock.json package-lock.json
 COPY package.json package.json
-RUN npm install
+RUN npm ci
 
 # copy test to WORKDIR
 COPY test/ test/
@@ -41,21 +41,32 @@ COPY .eslintrc.json .eslintrc.json
 COPY .eslintignore .eslintignore
 
 # build the application and copy it into the webroot
-RUN if [ ${BUILD_STAGE} = "prod" ] ; then npm run build-prod ; elif [ ${BUILD_STAGE} = "beta" ] ; then npm run build-beta ; elif [ ${BUILD_STAGE} = "feature" ] ; then npm run build-feature ; else npm run build-dev ; fi
+RUN if [ ${BUILD_STAGE} = "prod" ] ; then npm run build-prod ; elif [ ${BUILD_STAGE} = "beta" ] ; then npm run build-beta ; elif [ ${BUILD_STAGE} = "develop" ] ; then npm run build-develop ; elif [ ${BUILD_STAGE} = "feature" ] ; then npm run build-feature ; else npm run build-dev ; fi
+
 # copy built application into the webroot
 RUN mkdir /www && \
     cp -rpv build/* /www
 
 # copy files and folders as needed from the intermediate image
-# this will remove the SSH_PRIVATE_KEY_GITLAB and intermediate tools like ssh and git, and will reduce the final image size
-FROM nginx
-
-RUN rm /etc/nginx/conf.d/default.conf
-# copy the nginx conf
-COPY nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
+# this will remove the SSH_PRIVATE_KEY_GITLAB and intermediate tools like ssh and git which reduces the final image size
+FROM alpine:3.7
 
 # create the www folder and copy the www contents over from the intermediate image
 RUN mkdir /www && \
     chmod -R 755 /www
 
 COPY --from=0 /www /www
+
+## copy files and folders as needed from the intermediate image
+## this will remove the SSH_PRIVATE_KEY_GITLAB and intermediate tools like ssh and git, and will reduce the final image size
+#FROM nginx
+#
+#RUN rm /etc/nginx/conf.d/default.conf
+## copy the nginx conf
+#COPY nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
+#
+## create the www folder and copy the www contents over from the intermediate image
+#RUN mkdir /www && \
+#    chmod -R 755 /www
+#
+#COPY --from=0 /www /www

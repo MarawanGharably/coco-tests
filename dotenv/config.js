@@ -10,7 +10,13 @@ const getEnv = () => {
 const env = getEnv() === "analyze" ? "prod" : getEnv();
 let parsedEnv = null;
 switch (env) {
+    case "local":
+        parsedEnv = dotenv.config({ path: path.resolve(process.cwd(), "dotenv/local.env") }).parsed;
+        break;
     case "dev":
+        parsedEnv = dotenv.config({ path: path.resolve(process.cwd(), "dotenv/dev.env") }).parsed;
+        break;
+    case "develop":
         parsedEnv = dotenv.config({ path: path.resolve(process.cwd(), "dotenv/dev.env") }).parsed;
         break;
     case "feature":

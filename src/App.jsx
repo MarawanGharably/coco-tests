@@ -27,7 +27,7 @@ const App = () => (
             <Route path="/login" render={() => <LoginPage />} />
             <PrivateRoute path="/admin" render={() => <AdminPage />} />
             <PrivateRoute path="/" exact render={() => <HomePage />} />
-            <PrivateRoute path="/create" render={() => ( <CreatePage />)} />
+            <PrivateRoute path="/create" render={() => (<CreatePage />)} />
             <PrivateRoute path="/404" exact render={() => <ErrorPage statusCode="404" />} />
         </Switch>
     </>

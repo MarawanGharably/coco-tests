@@ -56,7 +56,7 @@ class LogInForm extends Component {
                 <section className="login-page-helper-section flex">
                     <div>
                         Don&apos;t have an account?<br/>
-                        <a href="mailto:contact@shopobsess.co"> Send us an email</a>
+                        <a href="mailto:contact@sobsessvr.com"> Send us an email</a>
                     </div>
                     <a href="/reset-password" className="forget-password" style={{ fontWeight: 'normal' }}>
                         Forgot password?

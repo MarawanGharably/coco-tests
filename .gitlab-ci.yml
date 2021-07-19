@@ -125,7 +125,7 @@ deploy:develop:
     DEPLOY_PATH: s3://$COCO_HOSTING_BUCKET/develop/
   environment:
     name: develop
-    url: $SERVICE_DOMAIN_PROD
+    url: https://$SERVICE_DOMAIN_DEVELOP/
   only:
     - develop
   needs:

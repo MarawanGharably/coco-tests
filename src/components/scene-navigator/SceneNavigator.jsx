@@ -40,7 +40,21 @@ const SceneNavigator = () => {
     }, []); //eslint-disable-line
 
     const sceneClickHandler = (sceneId) => {
-        dispatch(setCurrentSceneID( sceneId ));
+        if (sceneId !== currentSceneId) {
+            dispatch(setCurrentSceneID(sceneId));
+        }
+    };
+
+    const thumbnail = (scene) => {
+        if (scene.cube_map_dir) {
+            return `${formURL(scene.cube_map_dir)}1k_front.jpg`;
+        }
+
+        if (scene.flat_scene_url) {
+            return formURL(scene.flat_scene_url);
+        }
+
+        return '';
     };
 
     const renderScenes = () => {
@@ -52,7 +66,7 @@ const SceneNavigator = () => {
                     key={scene._id.$oid} // eslint-disable-line
                     sceneId={scene._id.$oid} // eslint-disable-line
                     sceneName={scene.name}
-                    thumbnail={`${formURL(scene.cube_map_dir)}1k_front.jpg`}
+                    thumbnail={thumbnail(scene)}
                     selected={currentSceneId === scene._id.$oid} // eslint-disable-line
                     sceneClickHandler={sceneClickHandler}
                 />

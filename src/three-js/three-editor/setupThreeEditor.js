@@ -18,14 +18,3 @@ export const setupCamera = (aspectRatio, camera) => {
     camera.rotation.set(0, rotY, 0);
     camera.lookAt(0, 0, 0);
 };
-
-/* eslint-disable */
-export const setupControls = (controls) => {
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-    controls.rotateSpeed = 0.3;
-    controls.maxPolarAngle = Math.PI;
-    controls.enableKeys = false;
-    controls.enableZoom = false;
-    controls.enablePan = false;
-};

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { ThreeEditor } from './ThreeEditor';
-import BackgroundCube from '../three-background/BackgroundCube';
+import Background from '../three-background/Background';
 import { CollisionManager } from '../collision-manager/CollisionManager';
 import ColliderSphere from '../three-background/ColliderSphere';
 import { UIManager } from '../ui-manager/UIManager';
@@ -17,7 +17,7 @@ const HotspotEditor = () => {
                 <UIManager>
                     <ThreeEditor>
                         <ColliderSphere />
-                        <BackgroundCube />
+                        <Background />
                     </ThreeEditor>
                 </UIManager>
             </CollisionManager>

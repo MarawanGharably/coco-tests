@@ -5,14 +5,12 @@ export default class SVGSprite extends THREE.Sprite {
     constructor() {
         const material = new THREE.SpriteMaterial();
         super(material);
-        this.scale.x = 0.35;
-        this.scale.y = 0.35;
-        this.scale.z = 0.35;
 
         this.setSVGString = this.setSVGString.bind(this);
     }
 
     setSVGString(svgString) {
+        this.scale.set(0.45, 0.45, 0.45);
         const drawCanvas = document.createElement('canvas');
         drawCanvas.width = 256;
         drawCanvas.height = 256;

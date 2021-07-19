@@ -2,6 +2,7 @@ import * as THREE from 'three'
 
 import ThreeSceneObject from '../three-base-components/ThreeSceneObject'
 import WireframeHelper from './WireframeHelper'
+import ThreeController from '../three-controls/ThreeController'
 
 const LOD_TO_GRID_SEGMENTS_MAP = Object.freeze({
     1: 2,
@@ -59,6 +60,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
         this.objectWireframe.sceneObject.visible = false
 
         this.loader = this.setupTextureLoader()
+        this.controls = ThreeController.setupRotateControls()
     }
 
     setupTextureLoader = () => {
@@ -169,11 +171,22 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
         /* eslint-enable */
     }
 
+    disposeMaterials() {
+        if (this.sceneObject.material.length) {
+            this.sceneObject.material.forEach((texture) => texture.dispose())
+        } else if (this.sceneObject.material) {
+            this.sceneObject.material.dispose();
+        }
+    }
+
     dispose() {
         super.dispose()
 
-        this.sceneObject.material.forEach((texture) => texture.dispose())
+        this.objectWireframe.dispose()
         this.sceneObject.geometry.dispose()
+        this.disposeMaterials()
+
         this.sceneObject = null
+        this.objectWireframe = null
     }
 }

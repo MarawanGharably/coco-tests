@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, createContext, useReducer, useContext} from 'react';
 import { useSelector } from "react-redux";
 import * as THREE from 'three';
-import OrbitControls from '../three-controls/OrbitControls';
-import { setupRenderer, setupCamera, setupControls } from './setupThreeEditor';
+import ThreeController from '../three-controls/ThreeController';
+import { setupRenderer, setupCamera } from './setupThreeEditor';
 import { threeEditorMouseEvents } from './threeEditorMouseEvents';
 import { useCollisionManager, CollisionManagerActionEnums } from '../collision-manager/CollisionManager';
 import ThreeProductMarker from '../hotspot-marker/ThreeProductMarker';
@@ -15,6 +15,7 @@ import LoadingScreen from '../../components/loading-screen/LoadingScreen';
 import ThreeLoadingManager from '../three-loading-manager/three-loading-manager';
 import ThreeEditorReducer from '../../store/reducers/ThreeEditorReducer';
 import {setLoadingAction, setMaxRenderOrderAction, setSceneAction} from "../../store/actions/ThreeEditorActions";
+import './ThreeEditor.scss';
 
 const initialState = {
     isLoading: false,
@@ -132,9 +133,10 @@ export const ThreeEditor = ({ children }) => {
         });
 
         // Set Position to in front of camera
-        const pos = new THREE.Vector3(0, 0, -8);
+        const pos = new THREE.Vector3(0, 0, -10);
         pos.applyQuaternion(cameraRef.current.quaternion);
         marker.setPosition(pos.x, pos.y, pos.z);
+        marker.lookAt();
         marker.setRenderOrder(state.maxRenderOrder);
 
         // Add Colliders
@@ -161,7 +163,7 @@ export const ThreeEditor = ({ children }) => {
             / (canvasContainer.offsetHeight * heightMultiplier);
         // set new reference for cameraRef.current here
         cameraRef.current = new THREE.PerspectiveCamera(70, aspectRatio, 0.1, 1000);
-        controlsRef.current = new OrbitControls(cameraRef.current, renderer.domElement);
+        controlsRef.current = ThreeController.setupControls(cameraRef.current, renderer);
 
         const windowResizeHandler = () => {
             const currentAspectRatio = (canvasContainer.offsetWidth * widthMultiplier)
@@ -174,7 +176,6 @@ export const ThreeEditor = ({ children }) => {
 
         setupRenderer(rendererRef.current, canvasContainer, widthMultiplier, heightMultiplier);
         setupCamera(aspectRatio, cameraRef.current);
-        setupControls(controlsRef.current);
 
         window.addEventListener('resize', windowResizeHandler);
 
@@ -199,7 +200,7 @@ export const ThreeEditor = ({ children }) => {
             removeThreeEditorMouseEventListeners,
         } = threeEditorMouseEvents(
             renderer,
-            controlsRef.current,
+            controlsRef,
             mouseStartRef,
             mouseRef,
             cameraRef,
@@ -334,10 +335,6 @@ export const ThreeEditor = ({ children }) => {
     return (
         <div
             id="canvas-wrapper"
-            style={{
-                width: '100%',
-                height: '100%',
-            }}
             ref={canvasContainerRef}
             onDragOver={(e) => e.preventDefault()}
             onDrop={addProductImage}

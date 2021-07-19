@@ -14,6 +14,7 @@ export default class ThreeProductImage extends InteractionObject {
             setRenderOrder: this.setRenderOrder.bind(this),
         }, this.dispose);
         this.modalComponentRenderProps = renderProps;
+        this.isFlatBackground = false;
         this.attachComponent(modalComponent);
         this.initVisualObject();
     }
@@ -21,7 +22,10 @@ export default class ThreeProductImage extends InteractionObject {
     initVisualObject() {
         const { imageUrl, renderOrder } = this.modalComponentRenderProps;
 
-        this.setVisualObject(new THREE.Mesh());
+        this.setVisualObject(new THREE.Mesh(
+            new THREE.PlaneGeometry(1, 1),
+            new THREE.MeshBasicMaterial(),
+        ));
         this.setImage(imageUrl);
         this.setRenderOrder(renderOrder);
     }
@@ -30,6 +34,7 @@ export default class ThreeProductImage extends InteractionObject {
         this.scene = scene;
         this.camera = scene.children.find((child) => child.type === 'PerspectiveCamera');
         this.sceneObject.name = 'marker';
+        this.isFlatBackground = this.scene.children.some((child) => child.name === 'flatBackground');
         scene.add(this.sceneObject);
         scene.add(this.visualObject);
     }
@@ -54,13 +59,21 @@ export default class ThreeProductImage extends InteractionObject {
         this.visualObject.scale.set(scale, scale, scale);
     }
 
+    lookAt = (position = this.camera.position) => {
+        this.visualObject.lookAt(position);
+        this.sceneObject.lookAt(position);
+    }
+
     setPosition = (x, y, z) => {
         this.sceneObject.position.set(x, y, z);
-        this.sceneObject.position.clampLength(10, 10);
+
+        if (!this.isFlatBackground) {
+            this.sceneObject.position.clampLength(10, 10);
+            this.lookAt(this.camera.position);
+        }
+
         this.visualObject.position.copy(this.sceneObject.position);
-        this.visualObject.lookAt(this.camera.position);
-        this.sceneObject.lookAt(this.camera.position);
-    }
+    };
 
     renderComponentImmediately = () => {
         this.components.forEach((component) => {
@@ -93,6 +106,7 @@ export default class ThreeProductImage extends InteractionObject {
 
         this.visualObject.geometry = geometry;
         this.visualObject.material = material;
+
         this.sceneObject.geometry = new THREE.BoxGeometry(width, height, 0.001);
         this.setScale(scale);
     }
@@ -105,7 +119,9 @@ export default class ThreeProductImage extends InteractionObject {
             const width = image.width / image.height;
             const height = 1;
 
-            this.setNewGeometry(width, height, texture);
+            if (this.visualObject) {
+                this.setNewGeometry(width, height, texture);
+            }
         });
     }
 
@@ -115,9 +131,10 @@ export default class ThreeProductImage extends InteractionObject {
     }
 
     dispose() {
-        this.removeFromManager();
         this.scene.remove(this.visualObject);
-        this.scene.remove(this.sceneObject);
+        super.dispose();
+
         this.setVisualObject(null);
+        this.sceneObject = null;
     }
 }

@@ -28,6 +28,7 @@ export default class ThreeProductMarker extends InteractionObject {
         // this.attachComponent(hoverCursorComponent);
 
         this.svgSpriteComponent = null;
+        this.isFlatBackground = false;
     }
 
     addToScene = (scene) => {
@@ -35,6 +36,7 @@ export default class ThreeProductMarker extends InteractionObject {
         scene.add(this.sceneObject);
 
         this.sceneObject.name = 'marker';
+        this.isFlatBackground = this.scene.children.some((child) => child.name === 'flatBackground');
         this.svgSpriteComponent = new SVGSpriteComponent(this.visualTransform);
         this.attachComponent(this.svgSpriteComponent);
     }
@@ -52,12 +54,12 @@ export default class ThreeProductMarker extends InteractionObject {
         this.visualObject.matrix.decompose(
             this.visualObject.position, this.visualObject.quaternion, this.visualObject.scale,
         );
-        
-        this.sceneObject.position.clampLength(8, 8);
-        this.visualObject.position.copy(this.sceneObject.position);
+
+        const { x, y, z } = this.sceneObject.position;
+        this.setPosition(x, y, z);
     }
 
-    setScale = (scale = 0.35) => {
+    setScale = (scale = 0.45) => {
         this.sceneObject.scale.x = scale;
         this.sceneObject.scale.y = scale;
         this.sceneObject.scale.z = scale;
@@ -65,7 +67,13 @@ export default class ThreeProductMarker extends InteractionObject {
 
     setPosition = (x, y, z) => {
         this.sceneObject.position.set(x, y, z);
-        this.sceneObject.position.clampLength(8, 8);
+
+        if (this.isFlatBackground) {
+            this.sceneObject.position.x = -10;
+        } else {
+            this.sceneObject.position.clampLength(10, 10);
+        }
+
         this.visualObject.position.copy(this.sceneObject.position);
     }
 

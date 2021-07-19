@@ -96,13 +96,13 @@ const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, ge
         }
     }, 200);
 
-    const handleClose = () => {
+    const handleClose = debounce(() => {
         if (!SKU) {
             dispose();
         } else {
             onClose();
         }
-    };
+    }, 250);
 
     return (
         <Modal show onHide={handleClose} centered>

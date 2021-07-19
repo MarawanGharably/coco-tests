@@ -8,7 +8,7 @@ import {
 
 export const threeEditorMouseEvents = (
     renderer,
-    controls,
+    controlsRef,
     mouseStartRef,
     mouseRef,
     cameraRef,
@@ -93,7 +93,7 @@ export const threeEditorMouseEvents = (
 
         if (marker) {
             isMarkerClicked = true;
-            controls.enabled = false; // eslint-disable-line
+            controlsRef.current.enabled = false; //eslint-disable-line
             focusedObject = marker.object;
             const { point } = marker;
             inverseMatrix.copy(focusedObject.parent.matrixWorld).getInverse(inverseMatrix);
@@ -160,7 +160,7 @@ export const threeEditorMouseEvents = (
     };
 
     const onMouseUp = (e) => {
-        controls.enabled = true; // eslint-disable-line
+        controlsRef.current.enabled = true; //eslint-disable-line
 
         getMousePosition(mouseRef, e);
         const dragDistance = mouseRef.current.distanceTo(mouseStartRef.current);
@@ -205,7 +205,7 @@ export const threeEditorMouseEvents = (
             getMousePosition(mouseRef, e);
             raycasterRef.current.setFromCamera(mouseRef.current, cameraRef.current);
             const intersects = raycasterRef.current.intersectObjects(colliderRef.current);
-            const { point } = intersects[1];
+            const { point } = intersects[0];
             const { x, y, z } = point.sub(offset).applyMatrix4(inverseMatrix);
             focusedObject.owner.setPosition(x, y, z);
         }

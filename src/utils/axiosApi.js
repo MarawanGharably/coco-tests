@@ -18,7 +18,7 @@ const handleError = (error) => {
     const statusCode = error.response.status;
     //401 - unauthorized. Dont use! Could be returned on longin form when bad credentials sent
     if([403].includes(statusCode)){
-        window.location.href = '/login';
+        window.location.href = '/#/login';
     }
 
     return Promise.reject(error);

@@ -1,15 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import reduxStore from './store';
 import App from './App';
 
 ReactDOM.render(
     <Provider store={reduxStore}>
-        <Router>
+        <HashRouter>
             <App />
-        </Router>
+        </HashRouter>
     </Provider>,
-    document.getElementById('obsessvr-webstore-react-embed-root'),
+    document.getElementById('coco-root'),
 );

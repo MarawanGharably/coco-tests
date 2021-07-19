@@ -64,6 +64,10 @@ const config = {
     },
     resolve: {
         extensions: ['*', '.js', '.jsx', '.scss'],
+        mainFields: ['browser', 'main'],
+        alias: {
+            ['~']: path.resolve(__dirname, '../src/')
+        }
     },
 };
 module.exports = config;

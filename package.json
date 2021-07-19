@@ -19,6 +19,7 @@
   },
   "scripts": {
     "start": "webpack-dev-server --config ./webpack/webpack.config.js --env dev --mode development",
+    "start-local": "webpack-dev-server --config ./webpack/webpack.config.js --env local --mode development",
     "pre-commit": "lint-staged",
     "lint": "npx eslint --ext js,jsx .",
     "lint-fix": "npx eslint --ext js,jsx --fix .",
@@ -27,6 +28,7 @@
     "build-storybook": "build-storybook",
     "build-dev": "webpack -p --config ./webpack/webpack.config.js --env dev --progress --display-error-details --mode development",
     "build-feature": "webpack -p --config ./webpack/webpack.config.js --env feature --progress --display-error-details --mode development",
+    "build-develop": "webpack -p --config ./webpack/webpack.config.js --env develop --progress --display-error-details --mode development",
     "build-beta": "webpack -p --config ./webpack/webpack.config.js --env beta --progress --display-error-details --mode development",
     "build-prod": "webpack -p --config ./webpack/webpack.config.js --env prod --progress --display-error-details --mode production"
   },

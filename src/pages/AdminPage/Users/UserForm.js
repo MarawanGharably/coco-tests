@@ -1,27 +1,64 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Field, reduxForm, getFormValues } from 'redux-form';
 import { Card } from 'react-bootstrap';
-import { getUser } from '../../../APImethods/UsersAPI';
-import { Input } from '../../../components/ReduxForms/_formFields';
+import { Input, Select } from '../../../components/ReduxForms/_formFields';
+
+//API methods
+import {getUser, updateUser, getPolicies, getUserAccessGroupsWithData} from '../../../APImethods';
+import {SubmitButton} from "../../../components/FormComponents";
+import SubmitStatusMessage from "../../../components/ReduxForms/SubmitStatusMessage";
 
 let UserForm = (props) => {
     const { userId } = useParams();
+    const [policies, setPolicies] = useState([]);
+    const [submitting, setSubmitting] = useState(false);
+    const [status, setStatus] = useState();
 
     useEffect(() => {
-        getUser(userId)
-            .then((res) => {
-                props.initialize(res);
-            })
-            .catch((err) => {});
+        //1. Fetch User Data
+        getUser(userId).then((res) => {
+            props.initialize(res); //Initialize form Data
+        });
+
+        //2. Fetch User Groups and associated stores
+        getUserAccessGroupsWithData(userId).then((res) => {
+            const values = res?.map((item) => item['access_policy']);
+            props.change('policies', values); //Update form Data
+        });
+
+        //3. Get ALL UserGroups/Policies
+        getPolicies().then((res) => {
+                setPolicies( res.map((option) => ({
+                        label: option.name,
+                        value: option.access_policy,
+                    })));
+            });
     }, []);
 
-    const handleSubmit = (values) => {};
+    const onSubmit = (values) => {
+
+        setSubmitting(true);
+        updateUser(userId, values)
+            .then(res=>{
+                setStatus({ success: true, message: 'Updated Successfully' });
+            }).catch(err=>{
+                setStatus({ error: true, message: err?.message || 'Error' });
+            }).finally(()=>{
+                setSubmitting(false);
+                setTimeout(() => {
+                    setStatus(false);
+                }, 5000);
+            });
+    };
+
 
     return (
-        <form onSubmit={handleSubmit(handleSubmit)}>
+        <form onSubmit={props.handleSubmit(onSubmit)}>
             <h1>User</h1>
+            <SubmitStatusMessage status={status} />
+
             <Card className="my-4">
                 <Card.Header>General</Card.Header>
                 <Card.Body>
@@ -30,13 +67,30 @@ let UserForm = (props) => {
                     <Field name="UserStatus" label="UserStatus" component={Input} disabled />
                 </Card.Body>
             </Card>
+
+            <Card className="my-4">
+                <Card.Header>Access Policies</Card.Header>
+                <Card.Body>
+                    <Field
+                        name="policies"
+                        label="policies"
+                        isMulti={true}
+                        placeholder="Select Store Policies"
+                        options={policies}
+                        component={Select}
+                    />
+                </Card.Body>
+            </Card>
+
+            <SubmitButton buttonText="Update" submitting={submitting} className="float-right" />
         </form>
     );
 };
 
 const validate = (values) => {
     const errors = {};
-    // if (!values.password ) errors.password = 'Password cannot be empty';
+    if (!values.Username ) errors.Username = 'Username cannot be empty';
+    // if (!values.email ) errors.email = 'Email cannot be empty';
     return errors;
 };
 

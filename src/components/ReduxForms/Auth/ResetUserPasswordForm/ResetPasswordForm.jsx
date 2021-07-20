@@ -7,7 +7,7 @@ import SubmitButton from '../../../FormComponents/SubmitButton';
 
 
 // Actions
-import { resetPasswordConfirmCode } from '../../../../store/actions';
+import { resetPasswordConfirmCode } from '../../../../APImethods/AuthAPI';
 
 class ResetPasswordForm extends Component {
     constructor(props) {

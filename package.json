@@ -19,7 +19,7 @@
   },
   "scripts": {
     "start": "webpack-dev-server --config ./webpack/webpack.config.js --env dev --mode development",
-    "start-local": "webpack-dev-server --config ./webpack/webpack.config.js --env local --mode development",
+    "start:local": "webpack-dev-server --config ./webpack/webpack.config.js --env local --mode development",
     "pre-commit": "lint-staged",
     "lint": "npx eslint --ext js,jsx .",
     "lint-fix": "npx eslint --ext js,jsx --fix .",

@@ -1,7 +1,33 @@
-import * as types from '../types/auth';
-import axiosApi from '../../utils/axiosApi';
-
+import * as types from '../store/types/auth';
+import axiosApi from '../utils/axiosApi';
 export const { API_URL } = process.env;
+
+
+export const logIn = (email, password) => (dispatch) => {
+    if (!email || !password) return Promise.reject(new Error('Missed required parameters'));
+    return axiosApi
+        .post(`${API_URL}/auth/login`, {
+            username: email.trim(),
+            password: password.trim(),
+        })
+        .then((res) => {
+            dispatch({ type: types.LOGGED_IN, payload: res.data });
+            return res;
+        })
+        .catch((err) => Promise.reject(err.response));
+};
+
+export const logOut = () => (dispatch) => {
+    return axiosApi
+        .get(`${API_URL}/auth/logout`)
+        .then((res) => res)
+        .catch((err) => err)
+        .finally(()=>{
+            //remove session state in any response condition
+            dispatch({ type: types.LOGGED_OUT, payload: false });
+        });
+};
+
 
 export const resetPassword = (username, oldPassword, newPassword) => (dispatch) => {
     if (!username && !oldPassword && !newPassword) return Promise.reject(new Error({ error: 'Missed required parameters' }));
@@ -43,27 +69,4 @@ export const resetPasswordByEmail = (email) => {
         .catch((err) => Promise.reject(err.response));
 };
 
-export const logIn = (email, password) => (dispatch) => {
-    if (!email || !password) return Promise.reject(new Error('Missed required parameters'));
-    return axiosApi
-        .post(`${API_URL}/auth/login`, {
-            username: email.trim(),
-            password: password.trim(),
-        })
-        .then((res) => {
-            dispatch({ type: types.LOGGED_IN, payload: true });
-            return res;
-        })
-        .catch((err) => Promise.reject(err.response));
-};
 
-export const logOut = () => (dispatch) => {
-    return axiosApi
-        .get(`${API_URL}/auth/logout`)
-        .then((res) => res)
-        .catch((err) => err)
-        .finally(()=>{
-            //remove session state in any response condition
-            dispatch({ type: types.LOGGED_OUT, payload: false });
-        });
-};

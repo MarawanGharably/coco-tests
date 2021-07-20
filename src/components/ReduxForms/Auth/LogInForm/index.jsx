@@ -9,7 +9,7 @@ import { isValidEmail } from '../../../../utils/validation';
 import './LogInForm.scss';
 
 // Actions
-import { logIn } from '../../../../store/actions';
+import { logIn } from '../../../../APImethods/AuthAPI';
 
 class LogInForm extends Component {
     constructor(props) {

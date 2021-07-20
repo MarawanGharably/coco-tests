@@ -9,7 +9,7 @@ import Layout from '../../layouts/Layout';
 import { Input } from '../../components/ReduxForms/_formFields';
 
 // Redux Actions
-import { resetPassword } from '../../store/actions';
+import { resetPassword } from '../../APImethods/AuthAPI';
 
 
 /*

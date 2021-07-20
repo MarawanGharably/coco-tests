@@ -57,7 +57,7 @@ let NewUserForm = ({ mode, handleSubmit }) => {
             <Card className="my-4">
                 <Card.Header>Access Policies</Card.Header>
                 <Card.Body>
-                    <Field name="policies" label="policies" placeholder="Select Store Policies" options={policies} component={Select} />
+                    <Field name="policies" label="policies" placeholder="Select Store Policies" options={policies} component={Select} isMulti/>
                 </Card.Body>
             </Card>
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavDropdown, Nav } from 'react-bootstrap';
-import { logOut } from '../../../store/actions';
+import { logOut } from '../../../APImethods/AuthAPI';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import './UserHeaderMenu.scss';

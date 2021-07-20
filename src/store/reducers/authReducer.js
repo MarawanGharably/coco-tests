@@ -11,6 +11,7 @@ const authCookie = cookies.get(AUTH_COOKIE);
 
 const initialState = {
     isAuthenticated: authCookie ? true : false, // session exist while cookie exist
+    user:null
 };
 
 
@@ -28,6 +29,7 @@ export default function (state = initialState, action) {
             });
             return {
                 isAuthenticated: true,
+                user:action.payload
             };
         case LOGGED_OUT:
             cookies.remove(AUTH_COOKIE);

@@ -1,7 +1,6 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import {Redirect, Route, Switch, useHistory} from 'react-router-dom';
 import NavBar from '../../components/NavBar';
-import EditUserStoresPage from './EditUserStoresPage';
 import UsersPage from './Users';
 import StoresPage from './Stores';
 import UserGroupsPage from './UserGroups';
@@ -13,7 +12,7 @@ export default function AdminPage(){
     const history  = useHistory();
     const { pathname } = history.location;
     const pathPrefix = '/admin';
-    const path = history.location.pathname.replace('/admin','');
+    const path = pathname.replace('/admin','');
 
 
     return (
@@ -21,17 +20,15 @@ export default function AdminPage(){
                 <div id="admin-page" className="flex full-width">
                     <NavBar>
                         <NavBar.Item name="USERS" pathName={`${pathPrefix}/users`} />
-                        <NavBar.Item name="User Groups/Policies" pathName={`${pathPrefix}/user-groups`} />
+                        <NavBar.Item name="Policies/User Groups" pathName={`${pathPrefix}/user-groups`} />
                         <NavBar.Item name="STORES" pathName={`${pathPrefix}/stores`} />
-                        <NavBar.Item name="EDIT USER STORES" pathName={`${pathPrefix}/editUserStores`} />
                     </NavBar>
 
 
                     {path=='' && <AdminDashboard />}
-                    {pathname.includes('/admin/user-groups')  && <UserGroupsPage />}
                     {pathname.includes('/admin/users')  && <UsersPage />}
+                    {pathname.includes('/admin/user-groups')  && <UserGroupsPage />}
                     {pathname.includes('/admin/stores')  && <StoresPage />}
-                    {path=='/editUserStores' && <EditUserStoresPage />}
 
                 </div>
             </Layout>
@@ -39,9 +36,11 @@ export default function AdminPage(){
 };
 
 const AdminDashboard=()=>{
-    return(<Layout title='Admin Dashboard'>
-        <p></p>
-    </Layout>)
+    return(<Switch>
+        <Route exact path="/admin">
+            <Redirect to='/admin/users' />
+        </Route>
+    </Switch>)
 }
 
 

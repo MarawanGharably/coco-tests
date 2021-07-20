@@ -1,8 +1,5 @@
 import axiosApi from '../utils/axiosApi';
 const { API_URL } = process.env;
-
-// const POLICIES_API = `${API_URL}/admin/access/policy`;
-// const POLICIES_API = `${API_URL}/user-groups/access/policy`;
 const POLICIES_API = `${API_URL}/user-groups`;
 
 
@@ -16,6 +13,7 @@ export const getPolicies=()=>{
         .then((res) => res.data)
         .catch((err) => Promise.reject(err));
 }
+
 
 export const getStorePolicy=(storeId)=>{
     if(!storeId) return Promise.reject('storeId - required parameter');
@@ -35,10 +33,31 @@ export const createStorePolicy=(data)=>{
 
 
 
-export const addUserToStorePolicy=(data)=>{
+
+/**
+ * Fetch User access groups
+ * @param userName
+ */
+export const getUserAccessGroups=(userName)=>{
+    if(!userName) return Promise.reject('userName - required parameter');
+
     return axiosApi
-        // .post(`${API_URL}/admin/access/add_user_to_store`, data)
-        .post(`${POLICIES_API}/add_user_to_store`, data)
+        .get(`${POLICIES_API}/get_user_groups/${userName}`)
+        .then((res) => res.data)
+        .catch((err) => Promise.reject(err));
+}
+
+
+
+
+/**
+ * Fetch User Access Groups and associated Stores data
+ */
+export const getUserAccessGroupsWithData= async(userName)=>{
+    if(!userName) return Promise.reject('userName - required parameter');
+
+    return axiosApi
+        .get(`${POLICIES_API}/get_user_groups_with_data/${userName}`)
         .then((res) => res.data)
         .catch((err) => Promise.reject(err));
 }

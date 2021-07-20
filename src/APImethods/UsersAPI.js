@@ -8,6 +8,15 @@ export const createUser = (data) => {
         .catch((err) => Promise.reject(err));
 };
 
+
+export const updateUser = (userName, data) => {
+    console.log('>updateUser', {userName, data} );
+    return axiosApi
+        .put(`${API_URL}/users/${userName}`, data)
+        .then((res) => res.data)
+        .catch((err) => Promise.reject(err));
+};
+
 /**
  * get list of Users
  */

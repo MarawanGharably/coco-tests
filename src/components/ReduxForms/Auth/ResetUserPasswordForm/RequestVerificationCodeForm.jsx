@@ -7,7 +7,7 @@ import { isValidEmail } from '../../../../utils/validation';
 
 
 // Actions
-import { resetPasswordByEmail } from '../../../../store/actions';
+import { resetPasswordByEmail } from '../../../../APImethods/AuthAPI';
 
 class RequestVerificationCodeForm extends Component {
     constructor(props) {

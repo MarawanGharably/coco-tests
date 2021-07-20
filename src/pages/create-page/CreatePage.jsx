@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { Toast } from 'react-bootstrap';
 import Footer from '../../layouts/footer/Footer';
 import ProductPlacementPage from './product-placement-page/ProductPlacementPage';
 import FooterNavContextComponent from './FooterNavContextComponent';

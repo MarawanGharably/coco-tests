@@ -6,6 +6,7 @@ import { Card, Alert } from 'react-bootstrap';
 import { Input, Select } from '../../../components/ReduxForms/_formFields';
 import { SubmitButton } from '../../../components/FormComponents';
 import { createUser, getPolicies } from '../../../APImethods';
+import SubmitStatusMessage from "../../../components/ReduxForms/SubmitStatusMessage";
 
 let NewUserForm = ({ mode, handleSubmit }) => {
     const [submitting, setSubmitting] = useState(false);
@@ -33,7 +34,7 @@ let NewUserForm = ({ mode, handleSubmit }) => {
                 }, 3000);
             })
             .catch((err) => {
-                setStatus({ type: 'error', msg: 'Erorr' });
+                setStatus({ type: 'error', msg: 'Error' });
             })
             .finally(() => {
                 setSubmitting(false);
@@ -57,7 +58,7 @@ let NewUserForm = ({ mode, handleSubmit }) => {
             <Card className="my-4">
                 <Card.Header>Access Policies</Card.Header>
                 <Card.Body>
-                    <Field name="policies" label="policies" placeholder="Select Store Policies" options={policies} component={Select} isMulti/>
+                    <Field name="policies" label="policies" placeholder="Select Store Policies" options={policies} component={Select} isMulti={true}/>
                 </Card.Body>
             </Card>
 

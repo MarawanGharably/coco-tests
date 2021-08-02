@@ -15,7 +15,7 @@ import LoadingScreen from '../../components/loading-screen/LoadingScreen';
 import ThreeLoadingManager from '../three-loading-manager/three-loading-manager';
 import ThreeEditorReducer from '../../store/reducers/ThreeEditorReducer';
 import {setLoadingAction, setMaxRenderOrderAction, setSceneAction} from "../../store/actions/ThreeEditorActions";
-import './ThreeEditor.scss';
+import styles from './ThreeEditor.module.scss';
 
 const initialState = {
     isLoading: false,
@@ -335,6 +335,7 @@ export const ThreeEditor = ({ children }) => {
     return (
         <div
             id="canvas-wrapper"
+            className={styles['canvas-wrapper']}
             ref={canvasContainerRef}
             onDragOver={(e) => e.preventDefault()}
             onDrop={addProductImage}

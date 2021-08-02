@@ -1,6 +1,8 @@
 .DS_STORE
+.next
 node_modules
 build/
+out/
 .vscode/
 run/
 .idea/

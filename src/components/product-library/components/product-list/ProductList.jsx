@@ -6,7 +6,7 @@ import RightSideBar from '../../../right-side-bar/RightSideBar';
 import List from './list/List';
 import { setSelectedFolderAction } from '../../../../store/actions/productLibraryActions';
 import { GENERAL_LABEL } from '../../../../store/types/productLibrary';
-import './ProductList.scss';
+import styles from './ProductList.module.scss';
 
 const ProductList = ({ productLibrary, setSelectedFolderAction }) => {
     const { products, folders, selectedFolder } = productLibrary;
@@ -19,14 +19,14 @@ const ProductList = ({ productLibrary, setSelectedFolderAction }) => {
 
     return (
         <>
-            <div className="product-list-title">Products</div>
+            <div className={styles["product-list-title"]}>Products</div>
             <Select
-                className="product-list-select"
+                className={styles["product-list-select"]}
                 options={[defaultOption, ...folders]}
                 value={selectedOption}
                 onChange={handleFolderChange}
             />
-            <RightSideBar className="product-list-side-bar" cols="1" rowHeight="20em">
+            <RightSideBar className={styles["product-list-side-bar"]} >
                 <List products={products} selectedFolder={selectedFolder} />
             </RightSideBar>
         </>

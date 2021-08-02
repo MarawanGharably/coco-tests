@@ -5,7 +5,7 @@ import {
     withKnobs, text, boolean,
 } from '@storybook/addon-knobs';
 
-import '../../src/components/FormComponents/Radio/Radio.scss';
+import '../../src/components/FormComponents/Radio/Radio.module.scss';
 
 // COMPONENT
 

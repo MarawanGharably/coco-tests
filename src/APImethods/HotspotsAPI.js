@@ -1,5 +1,8 @@
 import axiosApi from '../utils/axiosApi';
-const { API_URL } = process.env;
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
+const { API_URL } = publicRuntimeConfig;
+
 import {
     setProductsAction,
     setFoldersAction,
@@ -87,6 +90,24 @@ export const deleteHotspotProductFolder = (storeId, folderId) => (dispatch) => {
         })
         .catch((err) => Promise.reject(err));
 };
+
+
+//CMS_HOTSPOT_URL:`${API_URL}/cms/hotspots`
+export const apiGetHotspotsByType =(type, storeId, sceneId)=>{
+    if (!storeId || !type || !sceneId) return Promise.reject('Missed required parameter');
+
+    const options = {
+        headers: {
+            'ovr-str-id': storeId,
+            'Access-Control-Allow-Credentials': 'true',
+        },
+    };
+
+    return axiosApi
+        .get(`${API_URL}/cms/hotspots/${type}/${sceneId}`, options)
+        .then((res) => res.data)
+        .catch((err) => Promise.reject(err));
+}
 
 /******************** Utils ******************************/
 const parseProducts = (products) =>

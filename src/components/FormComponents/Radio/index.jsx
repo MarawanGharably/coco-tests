@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { RadioSelectionContext } from '../RadioGroup/RadioGroup';
-import './Radio.scss';
+import styles from './Radio.module.scss';
 
 // formField is required and should match API shape
 const Radio = ({
@@ -26,17 +26,17 @@ const Radio = ({
         <div
             role="radio"
             tabIndex="0"
-            className="radio"
+            className={styles.radio}
             style={isImage ? imageRadioStyle : {}}
             onClick={(e) => radioHandler(e, value, formField)}
             onKeyDown={(e) => radioKeyboardHandler(e, value, formField)}
             aria-checked={value === optionSelected}
         >
-            <label className={`radio-label ${isImage ? 'radio-label--image':''}`} htmlFor={value}>
-                <span className={isImage ? 'radio-label-text--image' :''}>{isLabelShowing ? value : null}</span>
+            <label className={`${styles['radio-label']} ${isImage ? styles['radio-label--image']:''}`} htmlFor={value}>
+                <span className={isImage ? styles['radio-label-text--image'] :''}>{isLabelShowing ? value : null}</span>
             </label>
             <input tabIndex="-1" type="radio" id={value} checked={value === optionSelected} readOnly />
-            <span className="radio-custom-button-selector" />
+            <span className={styles["radio-custom-button-selector"]} />
         </div>
     );
 };

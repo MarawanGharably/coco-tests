@@ -1,12 +1,13 @@
-import { SESSION_STORE_ID } from '../../_keys.json';
+import keys from '../../_keys.json';
 import { SET_STORE_DATA, SET_SELECTED_STORE_ID, SET_PAGE_HEADER_TITLE } from '../types';
 
-const isStorePage = window.location.pathname.includes('/create/');
+// const isStorePage = window ? window?.location?.pathname?.includes('/create/') : false;
 
 const initialState = {
     stores: null,
     storeThumbnails: [],
-    selectedStoreId: isStorePage ? sessionStorage.getItem(SESSION_STORE_ID) : false,
+    // selectedStoreId: isStorePage ? sessionStorage.getItem(SESSION_STORE_ID) : false,
+    selectedStoreId: process.browser   ? sessionStorage.getItem(keys.SESSION_STORE_ID) : false ,
     pageHeaderTitle: '',
 };
 

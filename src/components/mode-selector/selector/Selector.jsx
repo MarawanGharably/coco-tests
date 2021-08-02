@@ -1,11 +1,11 @@
 import React from 'react';
 import { Radio } from '../../FormComponents'
 import { PRODUCT_TAGGING, PRODUCT_PLACEMENT } from '../../../store/types/productLibrary';
-import './Selector.scss';
+import styles from './Selector.module.scss';
 
 const Selector = () => {
     return (
-        <div className="radio-container">
+        <div className={styles['radio-container']}>
             <Radio
                 formField="mode"
                 value={PRODUCT_TAGGING}

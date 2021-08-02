@@ -6,7 +6,7 @@ import Form from './form/Form';
 
 import useAPI from './hooks/useAPI';
 import { useUIManager } from '../../three-js/ui-manager/UIManager';
-import './ProductImageControls.scss';
+import styles from './ProductImageControls.module.scss';
 
 const ProductImageControls = ({
     id: currentId,
@@ -107,14 +107,14 @@ const ProductImageControls = ({
     };
 
     return (
-        <div className="product-image-controls">
+        <div className={styles["product-image-controls"]}>
             <Form
                 order={order}
                 handleOrderChange={handleOrderChange}
                 size={size}
                 handleSizeChange={handleSizeChange}
             />
-            <div className="product-image-controls-actions">
+            <div className={styles["product-image-controls-actions"]}>
                 <Button variant="primary" onClick={onClose}>Close</Button>
                 <Button variant="danger" onClick={handleDelete}>Delete</Button>
             </div>

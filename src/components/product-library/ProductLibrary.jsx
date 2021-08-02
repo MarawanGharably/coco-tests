@@ -1,10 +1,10 @@
 import React from 'react';
 import ProductList from './components/product-list/ProductList';
 import Actions from './components/actions/Actions';
-import './ProductLibrary.scss';
+import styles from './ProductLibrary.module.scss';
 
 const ProductLibrary = () => (
-    <div className="product-library-container">
+    <div className={styles['product-library-container']}>
         <ProductList />
         <Actions />
     </div>

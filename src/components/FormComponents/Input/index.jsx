@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import useInput from './InputHook';
-import './Input.scss';
+import styles from './Input.module.scss';
 
 const Input = ({
     formField,
@@ -23,7 +23,7 @@ const Input = ({
     const focusInput = () => { inputElement.current.focus(); };
 
     const validateInputType = type === 'email' || type === 'password';
-    const formFocusValidationClass = isValid ? 'input-border-container--valid' : 'input-border-container--invalid';
+    const formFocusValidationClass = isValid ? styles['input-border-container--valid'] : styles['input-border-container--invalid'];
     const formFocusClasses = validateInputType && formFocusValidationClass; 
 
     useEffect(() => {

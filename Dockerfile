@@ -5,7 +5,7 @@ LABEL version="0.2.0"
 
 # variable passed in with build command
 ARG BUILD_STAGE=prod
-RUN echo ${BUILD_STAGE}
+ARG BASE_PATH
 
 RUN apt-get update
 
@@ -25,9 +25,6 @@ COPY test/ test/
 # copy bable configuration
 COPY babel.config.js babel.config.js
 
-# copy the webpack configuration
-COPY webpack/* webpack/
-
 # copy dotenv to WORKDIR
 COPY dotenv dotenv
 
@@ -40,12 +37,14 @@ COPY .eslintrc.json .eslintrc.json
 # copy eslint ignore
 COPY .eslintignore .eslintignore
 
+COPY next.config.js next.config.js
+
 # build the application and copy it into the webroot
-RUN if [ ${BUILD_STAGE} = "prod" ] ; then npm run build-prod ; elif [ ${BUILD_STAGE} = "beta" ] ; then npm run build-beta ; elif [ ${BUILD_STAGE} = "develop" ] ; then npm run build-develop ; elif [ ${BUILD_STAGE} = "feature" ] ; then npm run build-feature ; else npm run build-dev ; fi
+RUN if [ ${BUILD_STAGE} = "prod" ] ; then npm run build-prod ; elif [ ${BUILD_STAGE} = "beta" ] ; then npm run build-beta ; elif [ ${BUILD_STAGE} = "develop" ] ; then npm run build-develop ; elif [ ${BUILD_STAGE} = "feature" ] ; then BASE_PATH=${BASE_PATH} npm run build-feature ; else npm run build-dev ; fi
 
 # copy built application into the webroot
 RUN mkdir /www && \
-    cp -rpv build/* /www
+    cp -rpv out/* /www
 
 # copy files and folders as needed from the intermediate image
 # this will remove the SSH_PRIVATE_KEY_GITLAB and intermediate tools like ssh and git which reduces the final image size
@@ -56,17 +55,3 @@ RUN mkdir /www && \
     chmod -R 755 /www
 
 COPY --from=0 /www /www
-
-## copy files and folders as needed from the intermediate image
-## this will remove the SSH_PRIVATE_KEY_GITLAB and intermediate tools like ssh and git, and will reduce the final image size
-#FROM nginx
-#
-#RUN rm /etc/nginx/conf.d/default.conf
-## copy the nginx conf
-#COPY nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
-#
-## create the www folder and copy the www contents over from the intermediate image
-#RUN mkdir /www && \
-#    chmod -R 755 /www
-#
-#COPY --from=0 /www /www

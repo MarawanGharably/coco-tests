@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
+import Link from 'next/link';
 import { Input } from '../../_formFields';
 import SubmitButton from '../../../FormComponents/SubmitButton';
 import { isValidEmail } from '../../../../utils/validation';
-
 
 // Actions
 import { resetPasswordByEmail } from '../../../../APImethods/AuthAPI';
@@ -74,7 +74,10 @@ const ErrorMessage =({error})=>{
         <h1 style={{ textAlign: 'center' }}>{message}</h1>
         {errorCode === 'USER_NOT_FOUND' && (
             <div style={{ fontSize: '2em', fontWeight: 'bold' }}>
-                <a href="/login">Sign Up</a>
+                <Link href="/auth/login">
+                    <a>Sign Up</a>
+                </Link>
+
             </div>
         )}
     </div>)

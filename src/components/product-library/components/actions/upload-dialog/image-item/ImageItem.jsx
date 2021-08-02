@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
-import './ImageItem.scss';
+import styles from './ImageItem.module.scss';
 
 const ImageItem = ({ isLoading, id, src, updateImage }) => {
     const [hasBackground, setBackground] = useState(false);
@@ -18,11 +18,11 @@ const ImageItem = ({ isLoading, id, src, updateImage }) => {
     };
 
     return (
-        <li className="upload-dialog-item-container">
-            <img className="upload-dialog-item-image" src={src} alt="Product" />
+        <li className={styles['upload-dialog-item-container']} >
+            <img className={styles['upload-dialog-item-image']}  src={src} alt="Product" />
             <Form.Check
                 inline
-                className="upload-dialog-item-checkbox"
+                className={styles['upload-dialog-item-checkbox']}
                 type="checkbox"
                 id={id}
                 label="Remove Background"

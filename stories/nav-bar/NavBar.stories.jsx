@@ -1,14 +1,14 @@
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { withKnobs, text } from '@storybook/addon-knobs';
-import { BrowserRouter as Router, Switch, Route, Link, Redirect, useParams } from 'react-router-dom';
+import Link from 'next/link';
 
-import '../../src/main.scss'
+import '../../src/assets/main.css'
 
 const NavBarItem = ({ pathName, name, children }) => {
     return (
         <li>
-            <Link to={pathName}>{name}</Link>
+            <Link href={pathName}><a>{name}</a></Link>
             { children }
         </li>
     )
@@ -43,10 +43,10 @@ const NavBar = ({ children }) => {
 }
 
 const Child = () => {
-    const { slug } = useParams()
+
     return (
         <div>
-            <h3>{slug}</h3>
+
         </div>
     )
 }
@@ -54,10 +54,7 @@ const Child = () => {
 const DesignPage = () => {
     return (
         <div>
-            <Redirect to="/test"/>
-            <Switch>
-                <Route path="design/:slug" component={<Child/>}/>
-            </Switch>
+
         </div>
     )
 }
@@ -72,12 +69,7 @@ export default {
 export const NavBarTest = () => {
     return (
         <div style={{ display: 'flex' }}>
-            <Router>
-                <NavBar/>
-                <Switch>
-                    <Route path="/design" children={<DesignPage/>}/>
-                </Switch>
-            </Router>
+
         </div>
     );
 };

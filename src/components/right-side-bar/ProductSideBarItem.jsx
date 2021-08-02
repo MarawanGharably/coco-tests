@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './SideBarItem.scss';
+import './ContentSideBarItem.module.scss';
 
 const ProductSideBarItem = ({
     selected, sku, name, thumbnail,

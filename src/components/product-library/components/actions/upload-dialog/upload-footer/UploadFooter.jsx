@@ -6,7 +6,7 @@ import { Button } from 'react-bootstrap';
 import { setSelectedFolderAction } from '../../../../../../store/actions/productLibraryActions';
 import { createHotspotProduct } from '../../../../../../APImethods';
 import { GENERAL_LABEL } from '../../../../../../store/types/productLibrary';
-import './UploadFooter.scss';
+import styles from './UploadFooter.module.scss';
 
 
 const UploadFooter = ({ productLibrary, images, closeDialog }) => {
@@ -63,7 +63,7 @@ const UploadFooter = ({ productLibrary, images, closeDialog }) => {
     return (
         <>
             <Select
-                className="upload-dialog-footer-select"
+                className={styles["upload-dialog-Footer-select"]}
                 placeholder="Select Folder or type to create a new one"
                 options={[defaultFolder, ...folders]}
                 value={folder}

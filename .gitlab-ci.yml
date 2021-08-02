@@ -33,6 +33,8 @@ stages:
     - docker build
       -f Dockerfile
       --build-arg BUILD_STAGE=${APP_ENV}
+      --build-arg DEPLOY_PATH=${DEPLOY_PATH}
+      --build-arg BASE_PATH=${BASE_PATH}
       -t $TEST_IMAGE_TAG
       --target build-env .
     - docker push $TEST_IMAGE_TAG
@@ -40,6 +42,7 @@ stages:
     - docker build
       -f Dockerfile
       --build-arg BUILD_STAGE=${APP_ENV}
+      --build-arg BASE_PATH=${BASE_PATH}
       -t $SERVICE_IMAGE_TAG .
     - docker push $SERVICE_IMAGE_TAG
 
@@ -64,6 +67,7 @@ stages:
     - docker create --name $IMAGE_CONTAINER $SERVICE_IMAGE_TAG
     - mkdir /www
     - docker cp $IMAGE_CONTAINER:/www /
+    - aws s3 cp --acl public-read --recursive /www $DEPLOY_PATH
     - aws s3 sync --acl public-read --delete /www $DEPLOY_PATH
     - docker rm $IMAGE_CONTAINER
 
@@ -72,6 +76,7 @@ build:feature:
   <<: *build-template
   variables:
     APP_ENV: ${FEATURE_ENV}
+    BASE_PATH: /$CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG
   only:
     - /^feature\/.*$/
 
@@ -93,7 +98,7 @@ deploy:feature:
     DEPLOY_PATH: s3://$S3_FB_BUCKET/$CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG
   environment:
     name: $CI_COMMIT_REF_SLUG
-    url: https://${S3_FB_BUCKET}.s3.us-east-2.amazonaws.com/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/index.html
+    url: https://features.obsessvr.com/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/index.html
   only:
     - /^feature\/.*$/
   needs:

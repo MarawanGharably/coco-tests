@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal } from 'react-bootstrap';
 import ImageList from './image-list/ImageList';
 import UploadFooter from './upload-footer/UploadFooter';
-import './UploadDialog.scss';
+import styles from './UploadDialog.module.scss';
 
 const UploadDialog = ({ show, onHide, images, setImages }) => (
     <Modal
@@ -21,7 +21,7 @@ const UploadDialog = ({ show, onHide, images, setImages }) => (
             <ImageList images={images} setImages={setImages} />
         </Modal.Body>
 
-        <Modal.Footer className="upload-dialog-footer-container">
+        <Modal.Footer className={styles['upload-dialog-Footer-container']}>
             <UploadFooter images={images} closeDialog={onHide} />
         </Modal.Footer>
     </Modal>

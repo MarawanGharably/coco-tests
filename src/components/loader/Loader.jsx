@@ -1,9 +1,9 @@
 import React from 'react';
-import './Loader.scss';
+import styles from './Loader.module.scss';
 
 const Loader = () => (
     <div className="full-width flex flex-center">
-        <div className="loader" />
+        <div className={styles.loader} />
     </div>
 );
 

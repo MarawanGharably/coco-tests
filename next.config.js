@@ -24,6 +24,7 @@ module.exports = {
         return config; // Important: return the modified config
     },
     env: {
+        HOST: process.env.HOST,
         CMS_URL: process.env.CMS_URL,
         WEB_STORE_BUCKET_PATH: process.env.WEB_STORE_BUCKET_PATH,
         API_URL: process.env.API_URL,
@@ -36,6 +37,7 @@ module.exports = {
     },
 
     publicRuntimeConfig: {
+        HOST: process.env.HOST,
         API_URL: process.env.API_URL,
         BASE_PATH: process.env.BASE_PATH || false,
     },

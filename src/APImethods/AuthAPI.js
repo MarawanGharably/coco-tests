@@ -1,7 +1,8 @@
 import * as types from '../store/types/auth';
 import axiosApi from '../utils/axiosApi';
-export const { API_URL } = process.env;
-
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
+const { API_URL } = publicRuntimeConfig;
 
 export const logIn = (email, password) => (dispatch) => {
     if (!email || !password) return Promise.reject(new Error('Missed required parameters'));
@@ -21,9 +22,9 @@ export const logOut = () => (dispatch) => {
     return axiosApi
         .get(`${API_URL}/auth/logout`)
         .then((res) => res)
-        .catch((err) => err)
+        .catch((err) =>  Promise.reject(err))
         .finally(()=>{
-            //remove session state in any response condition
+            //remove session state in ANY response condition
             dispatch({ type: types.LOGGED_OUT, payload: false });
         });
 };

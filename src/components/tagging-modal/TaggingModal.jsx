@@ -3,11 +3,10 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
 import { Modal, Button } from 'react-bootstrap';
-
 import TextInput from '../FormComponents/TextInput';
 import { useUIManager } from '../../three-js/ui-manager/UIManager';
 import { apiCreateHotspotByType, apiUpdateHotspotByType, apiDeleteHotspotByType } from '../../utils/apiUtils';
-import './TaggingModal.scss';
+import styles from './TaggingModal.module.scss';
 
 const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, getTransforms, id}) => {
     const [SKU, setSKU] = useState(productSKU);
@@ -112,8 +111,8 @@ const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, ge
             
             <Modal.Body>
                 <div className="flex flex-vertical-center flex-column full-width full-height">
-                    <header className="tagging-modal-header">SKU</header>
-                    <div className="tagging-modal-input">
+                    <header className={styles["tagging-modal-header"]}>SKU</header>
+                    <div className={styles["tagging-modal-input"]}>
                         <TextInput type="text" placeholder="Enter SKU" handleChange={handleChange} value={SKU} focusOnMount />
                     </div>
                 </div>

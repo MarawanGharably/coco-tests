@@ -1,21 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './RightSideBar.scss';
+import { Row } from 'react-bootstrap';
+import styles from './RightSideBar.module.scss';
 
-const RightSideBar = ({
-    cols, rowHeight, children, title, className,
-}) => {
-    const colsAndHeightStyles = {
-        gridTemplateColumns: `repeat(${cols}, 1fr)`,
-        gridAutoRows: rowHeight,
-    };
-
+const RightSideBar = ({  title, className, children}) => {
     return (
-        <div className={`side-bar-container ${className}`}>
-            {title && <div className="side-bar-container-title">{title}</div>}
-            <aside className="right-side-bar" style={colsAndHeightStyles}>
+        <div className={`${styles['side-bar-container']} ${className}`}>
+            {title && <div className={styles['side-bar-container-title']}>{title}</div>}
+            <Row className={styles['right-side-bar']}>
                 {children}
-            </aside>
+            </Row>
         </div>
     );
 };

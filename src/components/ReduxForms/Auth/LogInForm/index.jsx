@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
+import Link from 'next/link';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { withRouter } from 'next/router'
 import { Field, reduxForm } from 'redux-form';
 import { Input } from '../../_formFields';
 import SubmitButton from '../../../FormComponents/SubmitButton';
 import { isValidEmail } from '../../../../utils/validation';
-import './LogInForm.scss';
+import styles from './LogInForm.module.scss';
 
 // Actions
 import { logIn } from '../../../../APImethods/AuthAPI';
@@ -22,14 +23,14 @@ class LogInForm extends Component {
 
     handleSubmit = (values) => {
         // eslint-disable-next-line no-shadow
-        const { logIn, history } = this.props;
+        const { logIn, router } = this.props;
         const { email, password } = values;
 
         this.setState({ submitting: true, error: false });
 
         logIn(email, password)
             .then(() => {
-                history.push('/');
+                router.push('/');
             })
             .catch((err) => {
                 const statusCode = err?.status;
@@ -49,21 +50,21 @@ class LogInForm extends Component {
         const { handleSubmit } = this.props;
 
         return (
-            <form onSubmit={handleSubmit(this.handleSubmit)} style={{ width: '100%' }} className='authFormStyling'>
+            <form onSubmit={handleSubmit(this.handleSubmit)} className='authFormStyling'>
                 <Field name="email" type="email" label="Email" component={Input} placeholder="email" />
                 <Field name="password" type="password" label="Password" component={Input} placeholder="password" />
 
-                <section className="login-page-helper-section flex">
+                <section className={`${styles['login-page-helper-section']} d-flex`} >
                     <div>
                         Don&apos;t have an account?<br/>
                         <a href="mailto:contact@sobsessvr.com"> Send us an email</a>
                     </div>
-                    <a href="/reset-password" className="forget-password" style={{ fontWeight: 'normal' }}>
+                    <Link href="/auth/reset-password" className="forget-password" style={{ fontWeight: 'normal' }}>
                         Forgot password?
-                    </a>
+                    </Link>
                 </section>
 
-                <div className="flex flex-center page-row mb-4">
+                <div className="d-flex  justify-content-center mb-4">
                     <SubmitButton submitting={submitting} />
                 </div>
 
@@ -98,7 +99,6 @@ const validate = (values) => {
 LogInForm.propTypes = {
     logIn: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
-    history: PropTypes.func.isRequired,
 };
 
 // eslint-disable-next-line no-class-assign

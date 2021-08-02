@@ -4,7 +4,8 @@ import React, {
 
 import PropTypes from 'prop-types';
 
-import { apiGetHotspotsByType, apiUpdateHotspotByType } from '../../utils/apiUtils'; // eslint-disable-line
+import { apiUpdateHotspotByType } from '../../utils/apiUtils'; // eslint-disable-line
+import { apiGetHotspotsByType } from '../../APImethods/HotspotsAPI'; // eslint-disable-line
 
 const initialState = {
     loading: false,

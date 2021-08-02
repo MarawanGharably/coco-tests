@@ -1,6 +1,7 @@
 import { formURL } from '../utils/urlHelper';
 import axiosApi from '../utils/axiosApi';
-const { API_URL } = process.env;
+import { publicRuntimeConfig } from '../../next.config.js';
+const API_URL =  publicRuntimeConfig?.API_URL;
 
 /**
  * get all stores
@@ -22,8 +23,6 @@ export const getStores=()=>{
  */
 export const getUserStores=()=>{
     return axiosApi
-        //api endpoint used at main page
-        // OLD route: .get(`${API_URL}/client/users/stores`)
         .get(`${API_URL}/stores/users-stores`)
         .then((res) => res.data)
         .catch((err) => Promise.reject(err));
@@ -57,6 +56,7 @@ export const updateStore=(storeId, data)=>{
 
 
 export const getStoreFlags=(storeId)=>{
+    console.log('>getStoreFlags', {storeId, config });
     if(!storeId) return Promise.reject('Missed required parameter');
 
     const config={
@@ -69,7 +69,8 @@ export const getStoreFlags=(storeId)=>{
 }
 
 
-const getStoreScenes = (storeId) => {
+
+export const getStoreScenes = (storeId) => {
     if (!storeId) return Promise.reject('Missed required param');
 
     const conf = {

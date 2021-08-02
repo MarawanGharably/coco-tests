@@ -6,7 +6,7 @@ import FileInput from './file-input/FileInput';
 import UploadDialog from './upload-dialog/UploadDialog';
 import ConfirmationDialog from '../../../confirmation-dialog/ConfirmationDialog';
 import { deleteHotspotProductFolder } from "../../../../APImethods";
-import './Actions.scss';
+import styles from './Actions.module.scss';
 
 const Actions = ({ selectedFolder }) => {
     const dispatch = useDispatch();
@@ -70,7 +70,7 @@ const Actions = ({ selectedFolder }) => {
     };
 
     return (
-        <div className="product-library-actions">
+        <div className={styles['product-library-actions']}>
             <FileInput
                 fileRef={fileRef}
                 name="images"
@@ -81,7 +81,7 @@ const Actions = ({ selectedFolder }) => {
             <Button variant="primary" onClick={openFileExplorer}>Add Products</Button>
             { canDelete && (
                 <Button
-                    className="product-library-actions-delete"
+                    className={styles['product-library-actions-delete']}
                     variant="danger"
                     onClick={toggleDeleteDialog}
                 >

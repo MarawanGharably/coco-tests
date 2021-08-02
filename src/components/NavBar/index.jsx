@@ -1,35 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './NavBar.scss';
-import {NavLink, useHistory} from "react-router-dom";
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import styles from './NavBar.module.scss';
 
 const NavBar = ({ children }) => (
-    <nav className="nav-bar full-height flex flex-column">
-        <ul className="nav-bar-container">
+    <nav className={`${styles['nav-bar']} d-flex`}>
+        <ul className={styles['nav-bar-container']}>
             {children}
         </ul>
     </nav>
 );
 
 NavBar.Item=({ pathName, name, child, children })=>{
-    const history  = useHistory();
-    const path = history.location.pathname;
-    const isActive = path == pathName;
+    const router  = useRouter();
+    const isActive = router.asPath == pathName;
 
     return(<>
-        <li className={child ? 'NavBar-item-child-container' : 'NavBar-item-container'}>
-            <div className="nav-bar-link-container">
-                <NavLink to={pathName} className={`nav-bar-link ${isActive ? 'selected':''}`} >
-                    {name}
-                </NavLink>
+        <li className={child ? styles['nav-bar-item-child'] : styles['nav-bar-item']}>
+            <div className={styles['nav-bar-link-container']}>
+                <Link href={pathName}  >
+                    <a className={`${styles['nav-bar-link']} ${isActive ? styles['selected']:''}`}>{name}</a>
+                </Link>
             </div>
             {children && (
-                <ul className={`nav-bar-item-children ${isActive && 'NavBar-item-children--show'}`}>
+                <ul className={`${styles['childrenList']} ${isActive ? styles['show'] :''}`}>
                     {children}
                 </ul>
             )}
         </li>
-        {!child && <hr className="nav-bar-section-break" />}
+        {!child && <hr className={styles['section-break']} />}
     </>)
 
 }

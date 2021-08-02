@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './ErrorMessage.scss';
+import styles from './ErrorMessage.module.scss';
 
 const ErrorMessage = ({ text }) => (
-    <li className="input--error">{text}</li>
+    <li className={styles.errorMessage}>{text}</li>
 );
 
 ErrorMessage.propTypes = {

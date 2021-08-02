@@ -1,10 +1,13 @@
 import axiosApi from '../utils/axiosApi';
-const { API_URL } = process.env;
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
+const { API_URL } = publicRuntimeConfig;
+
 const POLICIES_API = `${API_URL}/user-groups`;
 
 
 /**
- * Fetching List of UserGroups
+ * Fetching List of user-groups
   * @returns {Promise}
  */
 export const getPolicies=()=>{

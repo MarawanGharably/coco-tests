@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Loader from '../loader/Loader';
 import SceneSideBarItem from '../right-side-bar/SceneSideBarItem';
-import { apiGetAllScenesData } from '../../utils/apiUtils';
 import { formURL } from '../../utils/urlHelper';
 import RightSideBar from '../right-side-bar/RightSideBar';
-import { SESSION_STORE_ID } from '../../_keys.json';
+import keys from '../../_keys.json';
 import { setSceneData, setCurrentSceneID } from '../../store/actions/SceneEditorActions';
-import './SceneNavigator.scss';
+import styles from './SceneNavigator.module.scss';
+import { getStoreScenes } from '../../APImethods/StoreAPI';
 
 const SceneNavigator = () => {
     const dispatch = useDispatch();
@@ -18,11 +18,11 @@ const SceneNavigator = () => {
 
 
     useEffect(() => {
-        const sessionStorageStoreId = sessionStorage.getItem(SESSION_STORE_ID);
+        const sessionStorageStoreId = sessionStorage.getItem(keys.SESSION_STORE_ID);
         const storeId =  selectedStoreId || sessionStorageStoreId;
         let mounted = true;
 
-        apiGetAllScenesData(storeId)
+        getStoreScenes(storeId)
             .then((scenesDataResponse) => {
                 if (scenesDataResponse.length > 0) {
                     dispatch(setSceneData(scenesDataResponse));
@@ -76,8 +76,8 @@ const SceneNavigator = () => {
     };
 
     return (
-        <div className="scene-navigator">
-            <RightSideBar cols="1" rowHeight="15em" title="Scenes">
+        <div className={styles["scene-navigator"]}>
+            <RightSideBar title="Scenes">
                 {loading ? <Loader /> : renderScenes()}
             </RightSideBar>
         </div>

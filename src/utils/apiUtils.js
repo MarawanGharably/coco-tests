@@ -3,7 +3,7 @@ import { URLS } from './urls';
 const handleErrorResponses = (resolve, reject, response) => {
     const error = response[0];
     if (error === 'Signature has expired') {
-        window.location.href = '/login';
+        window.location.href = `${process.env.BASE_PATH || ''}/auth/login`;
     } else {
         reject(response);
     }
@@ -115,13 +115,11 @@ export const apiUserAuthLogout = () => makeGETRequest(URLS.LOGOUT_URL);
 
 
 // HOTSPOT_APIs
-export const apiGetHotspotsByType = (type, storeId, sceneId) => makeGETRequest(`${URLS.CMS_HOTSPOT_URL}/${type}/${sceneId}`, storeId);
 export const apiCreateHotspotByType = (type, storeId, payload) => makePOSTRequest(`${URLS.CMS_HOTSPOT_URL}/${type}`, payload, storeId);
 export const apiUpdateHotspotByType = (type, storeId, hotspotId, payload) => makePUTRequest(`${URLS.CMS_HOTSPOT_URL}/${type}/${hotspotId}`, payload, storeId);
 export const apiDeleteHotspotByType = (type, storeId, hotspotId) => makeDELETERequest(`${URLS.CMS_HOTSPOT_URL}/${type}/${hotspotId}`, storeId);
 
 
 // PRODCT PLACEMENT PAGE APIs
-export const apiGetAllScenesData = (storeId) => makeGETRequest(URLS.GET_ALL_SCENES_DATA(storeId), storeId) // eslint-disable-line
 export const apiPublishSceneData = (storeId) => makePOSTRequest(`${URLS.PUBLISH_SCENE_DATA}/${storeId}`, {}, storeId);
 

@@ -1,5 +1,5 @@
 import React, { useState, createContext } from 'react';
-
+import styles from './radioGroup.module.scss';
 const initialState = {
     radioHandler: null,
     radioKeyboardHandler: null,
@@ -28,7 +28,7 @@ const RadioGroup = ({ children }) => {
                 optionSelected, setOptionSelected, radioHandler, radioKeyboardHandler,
             }}
         >
-            <section className="radio-group flex">
+            <section className={`${styles['radio-group']} d-flex`} >
                 {children}
             </section>
         </RadioSelectionContext.Provider>

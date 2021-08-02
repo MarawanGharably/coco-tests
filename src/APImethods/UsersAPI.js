@@ -1,5 +1,8 @@
 import axiosApi from '../utils/axiosApi';
-const { API_URL } = process.env;
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
+// const { API_URL } = publicRuntimeConfig;
+const API_URL = publicRuntimeConfig?.API_URL;
 
 export const createUser = (data) => {
     return axiosApi
@@ -18,7 +21,7 @@ export const updateUser = (userName, data) => {
 };
 
 /**
- * get list of Users
+ * get list of users
  */
 export const getUsers = () => {
     return axiosApi

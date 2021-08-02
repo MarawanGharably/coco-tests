@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap';
 import { connect, useDispatch } from 'react-redux';
 import ConfirmationDialog from '../../../../confirmation-dialog/ConfirmationDialog';
 import { deleteHotspotProduct } from '../../../../../APImethods/HotspotsAPI';
-import './Product.scss';
+import styles from './Product.module.scss';
 
 import { PRODUCT_PLACEMENT } from '../../../../mode-selector/modeOptions';
 
@@ -51,9 +51,9 @@ const Product = ({ mode, id, imageUrl, folderId }) => {
     };
 
     return (
-        <div className="product-list-item">
+        <div className={styles['product-list-item']}>
             <img
-                className="product-list-item-image"
+                className={styles['product-list-item-image']}
                 src={imageUrl}
                 alt="black coat"
                 draggable={draggable}
@@ -62,7 +62,7 @@ const Product = ({ mode, id, imageUrl, folderId }) => {
             />
             <Button
                 variant="danger"
-                className="product-list-item-delete"
+                className={styles['product-list-item-delete']}
                 onClick={openDialog}
             >
                 Delete

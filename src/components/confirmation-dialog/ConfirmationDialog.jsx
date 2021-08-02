@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Button } from 'react-bootstrap';
-import './ConfirmationDialog.scss';
+import styles from './ConfirmationDialog.module.scss';
 
 const ConfirmationDialog = ({
     title, content, show, confirmLabel, closeLabel, onHide, onConfirm,
@@ -12,7 +12,7 @@ const ConfirmationDialog = ({
         </Modal.Header>
 
         <Modal.Body>
-            <p className="confirmation-dialog-body text-center">{content}</p>
+            <p className={`${styles['confirmation-dialog-body']} text-center`} >{content}</p>
         </Modal.Body>
 
         <Modal.Footer>

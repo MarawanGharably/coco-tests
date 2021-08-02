@@ -27,6 +27,7 @@ const handleError = (error, xx) => {
         cookies.remove('access_token');
         cookies.remove('refresh_token');
         cookies.remove('auth_timestamp');
+        console.log('>axios, redirect', `${process.env.BASE_PATH || ''}/auth/login`);
         window.location.href = `${process.env.BASE_PATH || ''}/auth/login`;
     }
 

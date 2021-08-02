@@ -21,6 +21,7 @@ const MyApp = ({ Component, pageProps }) => {
     const PROTECTED_ROUTES = [/^\/admin/, /^\/create/];
     const isProtectedRoute = PROTECTED_ROUTES.some(rx => rx.test(router.route)) || router.route === '/';
     if(isProtectedRoute && !sessionCookie && process.browser){
+        console.log('>isProtectedRoute, redirect', `${process.env.BASE_PATH || ''}/auth/login`);
         window.location.href = `${process.env.BASE_PATH || ''}/auth/login`;
     }
 

@@ -114,14 +114,14 @@ build:develop:
     - develop
 
 
-test:develop:
-  <<: *test-template
-  variables:
-    APP_ENV: ${DEVELOP_ENV}
-  only:
-    - develop
-  needs:
-    - build:develop
+#test:develop:
+#  <<: *test-template
+#  variables:
+#    APP_ENV: ${DEVELOP_ENV}
+#  only:
+#    - develop
+#  needs:
+#    - build:develop
 
 
 deploy:develop:
@@ -135,7 +135,7 @@ deploy:develop:
   only:
     - develop
   needs:
-    - test:develop
+    - build:develop
 
 
 build:beta:
@@ -146,14 +146,14 @@ build:beta:
     - master
 
 
-test:beta:
-  <<: *test-template
-  variables:
-    APP_ENV: ${BETA_ENV}
-  only:
-    - master
-  needs:
-    - build:beta
+#test:beta:
+#  <<: *test-template
+#  variables:
+#    APP_ENV: ${BETA_ENV}
+#  only:
+#    - master
+#  needs:
+#    - build:beta
 
 
 deploy:beta:
@@ -167,7 +167,7 @@ deploy:beta:
   only:
     - master
   needs:
-    - test:beta
+    - build:beta
   when: on_success
 
 
@@ -179,14 +179,14 @@ build:prod:
     - master
 
 
-test:prod:
-  <<: *test-template
-  variables:
-    APP_ENV: ${PROD_ENV}
-  only:
-    - master
-  needs:
-    - build:prod
+#test:prod:
+#  <<: *test-template
+#  variables:
+#    APP_ENV: ${PROD_ENV}
+#  only:
+#    - master
+#  needs:
+#    - build:prod
 
 
 deploy:prod:
@@ -200,5 +200,5 @@ deploy:prod:
   only:
     - master
   needs:
-    - test:prod
+    - build:prod
   when: manual

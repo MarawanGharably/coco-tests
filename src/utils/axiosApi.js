@@ -1,6 +1,9 @@
 import axios from 'axios';
 import Cookies from 'universal-cookie';
+import { getLoginRedirectPath } from "./urlHelper";
 const cookies = new Cookies();
+
+
 
 const instance = axios.create({
     // baseURL: config.API_URL,
@@ -26,9 +29,7 @@ const handleError = (error, xx) => {
         //remove session cookies
         cookies.remove('access_token');
         cookies.remove('refresh_token');
-        cookies.remove('auth_timestamp');
-        console.log('>axios, redirect', `${process.env.BASE_PATH || ''}/auth/login/`);
-        window.location.href = `${process.env.BASE_PATH || ''}/auth/login/`;
+        window.location.href = getLoginRedirectPath();
     }
 
     return Promise.reject(error);

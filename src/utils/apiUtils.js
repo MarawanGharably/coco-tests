@@ -1,10 +1,10 @@
 import { URLS } from './urls';
+import { getLoginRedirectPath } from "./urlHelper";
 
 const handleErrorResponses = (resolve, reject, response) => {
     const error = response[0];
     if (error === 'Signature has expired') {
-        console.log('>apiUtils, redirect', `${process.env.BASE_PATH || ''}/auth/login`);
-        window.location.href = `${process.env.BASE_PATH || ''}/auth/login/`;
+        window.location.href = getLoginRedirectPath()
     } else {
         reject(response);
     }

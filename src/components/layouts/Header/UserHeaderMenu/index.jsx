@@ -4,6 +4,7 @@ import { logOut } from '../../../../APImethods/AuthAPI';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import styles from './UserHeaderMenu.module.scss';
+import { getHomePageURL, getLoginRedirectPath } from "../../../../utils/urlHelper";
 
 const DROPDOWN_ICON_URL = 'https://cdn.obsessvr.com/coco/Default-Profile-Icon.png';
 const icon = <img className={styles['dropdown-icon']} alt="dropdown icon" src={DROPDOWN_ICON_URL} />;
@@ -15,7 +16,7 @@ const UserHeaderMenu = () => {
     const logoutEvent = () => {
         dispatch(logOut())
             .then(() => {
-                router.push('/');
+                router.push(getLoginRedirectPath(getHomePageURL()));
             })
             .catch(() => {
                 alert('Server Error');

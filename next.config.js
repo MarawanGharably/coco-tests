@@ -6,7 +6,7 @@ let basePath = '';
 //Exception for FB only! Features hosted under sub-folders
 //BASE_PATH passed here from Dockerfile
 if (process.env.APP_ENV === 'feature') {
-    assetPrefix = `https://features.obsessvr.com${process.env.BASE_PATH}`;
+    assetPrefix = `https://features.develop.obsessvr.com${process.env.BASE_PATH}`;
     basePath = process.env.BASE_PATH;
 }
 
@@ -16,6 +16,7 @@ module.exports = {
     assetPrefix: assetPrefix,
     basePath: basePath,
     trailingSlash: true,
+    poweredByHeader: false,
     webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
         const { mode } = config;
         if (!isServer) config.resolve.fallback.fs = false;
@@ -29,16 +30,17 @@ module.exports = {
         WEB_STORE_BUCKET_PATH: process.env.WEB_STORE_BUCKET_PATH,
         API_URL: process.env.API_URL,
         BASE_PATH: process.env.BASE_PATH || false,
+        AUTH_REDIRECT_BASE: process.env.AUTH_REDIRECT_BASE || false
     },
     eslint: {
         // Warning: Dangerously allow production builds to successfully complete even if
         // your project has ESLint errors.
         ignoreDuringBuilds: true,
     },
-
     publicRuntimeConfig: {
         HOST: process.env.HOST,
         API_URL: process.env.API_URL,
         BASE_PATH: process.env.BASE_PATH || false,
+        AUTH_REDIRECT_BASE: process.env.AUTH_REDIRECT_BASE || false,
     },
 };

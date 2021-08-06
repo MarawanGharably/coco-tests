@@ -9,22 +9,21 @@ const store = reduxStore();
 //Global Styles
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/main.css';
+import { getLoginRedirectPath } from "../utils/urlHelper";
 
 const MyApp = ({ Component, pageProps }) => {
     const router = useRouter();
 
-
-
     //Private routes/pages
     //TODO:fix access_token to be available on frontend
-    const sessionCookie = cookies.get('auth_timestamp');
+    const sessionCookie = cookies.get('access_token');
     const PROTECTED_ROUTES = [/^\/admin/, /^\/create/];
     const isProtectedRoute = PROTECTED_ROUTES.some(rx => rx.test(router.route)) || router.route === '/';
-    if(isProtectedRoute && !sessionCookie && process.browser){
-        console.log('>isProtectedRoute, redirect', `${process.env.BASE_PATH || ''}/auth/login/`);
-        window.location.href = `${process.env.BASE_PATH || ''}/auth/login/`;
-    }
 
+    if(isProtectedRoute && !sessionCookie && process.browser){
+        console.log(">isProtectedRoute, redirect", getLoginRedirectPath());
+        router.push(getLoginRedirectPath());
+    }
 
     /* eslint-disable */
     if(process.env.NODE_ENV === 'production' && process.browser){

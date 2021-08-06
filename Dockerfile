@@ -4,8 +4,11 @@ FROM node:15 AS build-env
 LABEL version="0.2.0"
 
 # variable passed in with build command
-ARG BUILD_STAGE=prod
+ARG APP_ENV=develop
 ARG BASE_PATH
+
+# Disable Next telemetry
+ARG NEXT_TELEMETRY_DISABLED=1
 
 RUN apt-get update
 
@@ -20,7 +23,7 @@ COPY package.json package.json
 RUN npm ci
 
 # copy test to WORKDIR
-COPY test/ test/
+#COPY test/ test/
 
 # copy bable configuration
 COPY babel.config.js babel.config.js
@@ -40,7 +43,7 @@ COPY .eslintignore .eslintignore
 COPY next.config.js next.config.js
 
 # build the application and copy it into the webroot
-RUN if [ ${BUILD_STAGE} = "prod" ] ; then npm run build-prod ; elif [ ${BUILD_STAGE} = "beta" ] ; then npm run build-beta ; elif [ ${BUILD_STAGE} = "develop" ] ; then npm run build-develop ; elif [ ${BUILD_STAGE} = "feature" ] ; then BASE_PATH=${BASE_PATH} npm run build-feature ; else npm run build-dev ; fi
+RUN npm run build-static
 
 # copy built application into the webroot
 RUN mkdir /www && \

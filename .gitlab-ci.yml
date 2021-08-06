@@ -30,18 +30,19 @@ stages:
     # build the test-env test image
     - TEST_IMAGE_TAG=$CI_REGISTRY_IMAGE/${CI_COMMIT_REF_SLUG}/${APP_ENV}_test:$CI_COMMIT_SHORT_SHA
     - SERVICE_IMAGE_TAG=$CI_REGISTRY_IMAGE/${CI_COMMIT_REF_SLUG}/${APP_ENV}_service:$CI_COMMIT_SHORT_SHA
-    - docker build
-      -f Dockerfile
-      --build-arg BUILD_STAGE=${APP_ENV}
-      --build-arg DEPLOY_PATH=${DEPLOY_PATH}
-      --build-arg BASE_PATH=${BASE_PATH}
-      -t $TEST_IMAGE_TAG
-      --target build-env .
-    - docker push $TEST_IMAGE_TAG
+#    - docker build
+#      -f Dockerfile
+#      --build-arg BUILD_STAGE=${APP_ENV}
+#      --build-arg DEPLOY_PATH=${DEPLOY_PATH}
+#      --build-arg BASE_PATH=${BASE_PATH}
+#      -t $TEST_IMAGE_TAG
+#      --target build-env .
+#    - docker push $TEST_IMAGE_TAG
     # build the deploy feature image
     - docker build
       -f Dockerfile
-      --build-arg BUILD_STAGE=${APP_ENV}
+      --no-cache
+      --build-arg APP_ENV=${APP_ENV}
       --build-arg BASE_PATH=${BASE_PATH}
       -t $SERVICE_IMAGE_TAG .
     - docker push $SERVICE_IMAGE_TAG
@@ -81,14 +82,14 @@ build:feature:
     - /^feature\/.*$/
 
 
-test:feature:
-  <<: *test-template
-  variables:
-    APP_ENV: ${FEATURE_ENV}
-  only:
-    - /^feature\/.*$/
-  needs:
-    - build:feature
+#test:feature:
+#  <<: *test-template
+#  variables:
+#    APP_ENV: ${FEATURE_ENV}
+#  only:
+#    - /^feature\/.*$/
+#  needs:
+#    - build:feature
 
 
 deploy:feature:
@@ -98,11 +99,11 @@ deploy:feature:
     DEPLOY_PATH: s3://$S3_FB_BUCKET/$CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG
   environment:
     name: $CI_COMMIT_REF_SLUG
-    url: https://features.obsessvr.com/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/index.html
+    url: https://features.develop.obsessvr.com/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/index.html
   only:
     - /^feature\/.*$/
   needs:
-    - test:feature
+    - build:feature
 
 
 build:develop:

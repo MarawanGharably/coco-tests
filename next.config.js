@@ -26,6 +26,7 @@ module.exports = {
         return config; // Important: return the modified config
     },
     env: {
+        API_ENV: process.env.API_ENV,
         HOST: process.env.HOST,
         CMS_URL: process.env.CMS_URL,
         WEB_STORE_BUCKET_PATH: process.env.WEB_STORE_BUCKET_PATH,

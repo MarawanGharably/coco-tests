@@ -5,7 +5,10 @@ LABEL version="0.2.0"
 
 # variable passed in with build command
 ARG APP_ENV=develop
+ENV APP_ENV $APP_ENV
+
 ARG BASE_PATH
+ENV BASE_PATH $BASE_PATH
 
 # Disable Next telemetry
 ARG NEXT_TELEMETRY_DISABLED=1

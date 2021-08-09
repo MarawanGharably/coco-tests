@@ -1,4 +1,6 @@
-const { parsed: envVars } = require('dotenv').config({ path: `./dotenv/${process.env.APP_ENV}.env` });
+const { parsed: envVars } = require("dotenv").config({
+    path: `./dotenv/${process.env.APP_ENV || "develop"}.env`
+});
 
 let assetPrefix = '/';
 let basePath = '';
@@ -9,7 +11,6 @@ if (process.env.APP_ENV === 'feature') {
     assetPrefix = `https://features.develop.obsessvr.com${process.env.BASE_PATH}`;
     basePath = process.env.BASE_PATH;
 }
-console.log(`=> Building Next APP for ${process.env.APP_ENV} environment`);
 
 module.exports = {
     distDir: 'build',
@@ -26,7 +27,6 @@ module.exports = {
         return config; // Important: return the modified config
     },
     env: {
-        API_ENV: process.env.API_ENV,
         HOST: process.env.HOST,
         CMS_URL: process.env.CMS_URL,
         WEB_STORE_BUCKET_PATH: process.env.WEB_STORE_BUCKET_PATH,

@@ -40,7 +40,7 @@ module.exports = {
         ignoreDuringBuilds: true,
     },
     publicRuntimeConfig: {
-        API_ENV: process.env.API_ENV,
+        APP_ENV: process.env.APP_ENV,
         HOST: process.env.HOST,
         API_URL: process.env.API_URL,
         BASE_PATH: process.env.BASE_PATH || false,

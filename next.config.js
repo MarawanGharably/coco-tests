@@ -9,6 +9,7 @@ if (process.env.APP_ENV === 'feature') {
     assetPrefix = `https://features.develop.obsessvr.com${process.env.BASE_PATH}`;
     basePath = process.env.BASE_PATH;
 }
+console.log(`=> Building Next APP for ${process.env.APP_ENV} environment`);
 
 module.exports = {
     distDir: 'build',

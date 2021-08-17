@@ -5,11 +5,12 @@ import { useRouter } from 'next/router';
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 const store = reduxStore();
+import { getLoginRedirectPath } from "../utils/urlHelper";
 
 //Global Styles
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/main.css';
-import { getLoginRedirectPath } from "../utils/urlHelper";
+
 
 const MyApp = ({ Component, pageProps }) => {
     const router = useRouter();
@@ -21,7 +22,6 @@ const MyApp = ({ Component, pageProps }) => {
     const isProtectedRoute = PROTECTED_ROUTES.some(rx => rx.test(router.route)) || router.route === '/';
 
     if(isProtectedRoute && !sessionCookie && process.browser){
-        console.log(">isProtectedRoute, redirect", getLoginRedirectPath());
         router.push(getLoginRedirectPath());
     }
 

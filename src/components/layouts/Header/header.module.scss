@@ -1,15 +1,16 @@
-nav.header {
-    margin-bottom: 2em;
+@import '../../../assets/scss/variables';
 
-    .navbar-text { color: #212529; }
-    .navbar-brand {
-        flex-grow: 1;
-        max-width: 8em;
-    }
+.header {
+    background-color: #000!important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+    color:$light-grey;
+
+    .navbar-text { color: $light-grey; }
+
 
     .nav-center{
-        flex-grow: 8;
-        align-items: center;
+        //flex-grow: 8;
+        //align-items: center;
     }
 
     .pageTitle {

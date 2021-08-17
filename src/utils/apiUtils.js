@@ -4,7 +4,7 @@ import { getLoginRedirectPath } from "./urlHelper";
 const handleErrorResponses = (resolve, reject, response) => {
     const error = response[0];
     if (error === 'Signature has expired') {
-        window.location.href = getLoginRedirectPath()
+        window.location.href = getLoginRedirectPath();
     } else {
         reject(response);
     }

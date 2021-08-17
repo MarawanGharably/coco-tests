@@ -1,31 +1,54 @@
-.container{
-  &.fullWidth{
-    width: 100%;
-    max-width: none;
-    padding: 0;
+.layout{
+  //background-position: 0% 0em!important;
+  background-size: 100% auto!important;
+  background-color: #000;
+
+
+  h2,h5{ color:#fff; }
+
+  .container{
+    &.fullWidth{
+      width: 100%;
+      max-width: none;
+      padding: 0;
+    }
   }
+
+
+  //Overwrite Bootstrap rules
+  :global {
+    @media (min-width: 1200px){
+      .container, .container-lg, .container-md, .container-sm, .container-xl {
+        max-width: 1210px;
+      }
+    }
+  }
+
+
+
 }
 
-@media (min-width: 576px){
-  .container, .container-sm {
-    max-width: 660px;
-  }
-}
 
-@media (min-width: 768px){
-  .container, .container-md, .container-sm {
-    max-width: 900px;
-  }
-}
 
-@media (min-width: 992px){
-  .container, .container-lg, .container-md, .container-sm {
-    max-width: 1025px;
-  }
-}
 
-@media (min-width: 1200px){
-  .container, .container-lg, .container-md, .container-sm, .container-xl {
-    max-width: 1240px;
-  }
-}
+//@media (min-width: 576px){
+//  .container, .container-sm {
+//    max-width: 660px;
+//  }
+//}
+//
+//@media (min-width: 768px){
+//  .container, .container-md, .container-sm {
+//    max-width: 900px;
+//  }
+//}
+//
+//@media (min-width: 992px){
+//  .container, .container-lg, .container-md, .container-sm {
+//    max-width: 1025px;
+//  }
+//}
+
+
+
+

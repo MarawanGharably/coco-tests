@@ -1,19 +1,16 @@
 /*@import "assets/scss/library";*/
 
 body {
+    background: #000;
     min-height: 100%;
     touch-action: none;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-    font-family: 'Raleway', sans-serif;
-    font-smoothing: antialiased;
-    -webkit-font-smoothing: antialiased;
+    font-family: 'Source Sans Pro', sans-serif;
 }
 
-button {
-    background: none;
-}
+
 
 
 
@@ -65,3 +62,7 @@ ul.form-field-error{
 }
 ul.form-field-error .field-error{ color: red;}
 ul.form-field-error .field-warn{ color: coral;}
+
+.storesList .col{
+    margin-bottom: 2.2rem!important;
+}

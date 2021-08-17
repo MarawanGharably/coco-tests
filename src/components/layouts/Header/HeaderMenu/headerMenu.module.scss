@@ -1,0 +1,63 @@
+@import '../../../../assets/scss/variables';
+
+.headerMenu{
+  flex-direction: inherit;
+
+
+  :global {
+    .nav-link{
+      //color:#fff;
+      color:$light-grey !important;
+      font-weight: 300;
+      font-size:18px;
+      position: relative;
+      margin-left: 2.5em;
+      line-height: 2.7em;
+      padding-right: 1rem;
+      padding-left: 1rem;
+
+
+      &.active{
+        font-weight: 600;
+        background-color: #3370FE;
+        background-image: linear-gradient(92.35deg, #3370FE 1.28%, #00E599 98.95%);
+        background-size: 100%;
+        -webkit-background-clip: text;
+        -moz-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        -moz-text-fill-color: transparent;
+      }
+
+      &.active:after {
+        content: '';
+        position: absolute;
+        bottom: -0.47em;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        border-radius: 1px;
+        background: linear-gradient(92.35deg, #3370FE 1.28%, #00E599 98.95%);
+      }
+
+
+    }
+
+
+    @media (min-width: 992px){
+      .nav-link {
+        padding-right: 1rem!important;
+        padding-left: 1rem!important;
+      }
+    }
+    @media (max-width: 800px){
+      .nav-link {
+        font-size: 16px;
+        margin-left: 1em;
+        padding-right: 0.5rem!important;
+        padding-left: 0.5rem!important;
+      }
+    }
+  }
+
+
+}

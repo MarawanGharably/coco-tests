@@ -17,6 +17,7 @@ const initialState = {
     folders: [],
     selectedFolder: { label: GENERAL_LABEL },
     mode: PRODUCT_TAGGING,
+    mode_slug: 'product_tagging',
     isEnabled: false,
 };
 
@@ -59,7 +60,8 @@ export default function (state = initialState, action) {
         case SET_MODE:
             return ({
                 ...state,
-                mode: payload,
+                mode: payload.label,
+                mode_slug: payload.value,
             });
         case SET_ENABLED:
             return ({

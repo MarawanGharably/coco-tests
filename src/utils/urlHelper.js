@@ -22,7 +22,7 @@ const OriginUrlPrefixDict = {
 export const S3Link = 'https://s3.amazonaws.com/';
 
 export function getCurrentBucket() {
-    if (['coco.beta.obsessvr.com', 'coco.obsessvr.com'].includes(window.location.hostname)) {
+    if (process.browser && ['coco.beta.obsessvr.com', 'coco.obsessvr.com'].includes(window.location.hostname) ) {
         return S3Bucket.BETA;
     }
     return S3Bucket.DEV;
@@ -91,3 +91,4 @@ export const getLoginRedirectPath = (customRedirect = window.location.href) => {
 };
 
 
+export default {};

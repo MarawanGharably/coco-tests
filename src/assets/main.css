@@ -12,8 +12,6 @@ body {
 
 
 
-
-
 /* Old Form Styles */
 form.authFormStyling .input-field{
     border: 0.1em solid #505050;
@@ -53,6 +51,8 @@ form.authFormStyling .input-field{
 .no-margins{ margin: 0;}
 
 
+
+
 /* Forms */
 ul.form-field-error{
     padding: 0;
@@ -66,3 +66,4 @@ ul.form-field-error .field-warn{ color: coral;}
 .storesList .col{
     margin-bottom: 2.2rem!important;
 }
+

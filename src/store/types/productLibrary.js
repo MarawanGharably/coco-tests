@@ -11,4 +11,4 @@ export const SET_ENABLED = 'SET_ENABLED';
 // Enums
 export const PRODUCT_TAGGING = 'Product tagging';
 export const PRODUCT_PLACEMENT = 'Product placement';
-export const GENERAL_LABEL = 'General';
+export const GENERAL_LABEL = 'General Folder';

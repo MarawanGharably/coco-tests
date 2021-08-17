@@ -1,0 +1,17 @@
+[
+  {"_id":{"$oid":"6076f3655f4dbb86ecce3050"},"name":"Scene_0","cube_map_dir":{"origin":"cdn","path":"clients/NARS_/6076f2a85f4dbb86ecce304c/scenes/6076f3655f4dbb86ecce3050/images/cube_map/"}},
+  {"_id":{"$oid":"6076f3945f4dbb86ecce3051"},"name":"Scene_1","cube_map_dir":{"origin":"cdn","path":"clients/NARS_/6076f2a85f4dbb86ecce304c/scenes/6076f3945f4dbb86ecce3051/images/cube_map/"}},
+  {"_id":{"$oid":"6076f3945f4dbb86ecce3052"},"name":"Scene_2","cube_map_dir":{"origin":"cdn","path":"clients/NARS_/6076f2a85f4dbb86ecce304c/scenes/6076f3945f4dbb86ecce3051/images/cube_map/"}},
+  {"_id":{"$oid":"6076f3945f4dbb86ecce3053"},"name":"Scene_3","cube_map_dir":{"origin":"cdn","path":"clients/NARS_/6076f2a85f4dbb86ecce304c/scenes/6076f3945f4dbb86ecce3051/images/cube_map/"}},
+  {"_id":{"$oid":"6076f3945f4dbb86ecce3054"},"name":"Scene_4","cube_map_dir":{"origin":"cdn","path":"clients/NARS_/6076f2a85f4dbb86ecce304c/scenes/6076f3945f4dbb86ecce3051/images/cube_map/"}},
+  {"_id":{"$oid":"6076f3945f4dbb86ecce3055"},"name":"Scene_5","cube_map_dir":{"origin":"cdn","path":"clients/NARS_/6076f2a85f4dbb86ecce304c/scenes/6076f3945f4dbb86ecce3051/images/cube_map/"}},
+  {"_id":{"$oid":"6076f3945f4dbb86ecce3056"},"name":"Scene_6","cube_map_dir":{"origin":"cdn","path":"clients/NARS_/6076f2a85f4dbb86ecce304c/scenes/6076f3945f4dbb86ecce3051/images/cube_map/"}},
+  {"_id":{"$oid":"6076f3945f4dbb86ecce3057"},"name":"Scene_7","cube_map_dir":{"origin":"cdn","path":"clients/NARS_/6076f2a85f4dbb86ecce304c/scenes/6076f3945f4dbb86ecce3051/images/cube_map/"}},
+  {"_id":{"$oid":"6076f3945f4dbb86ecce3058"},"name":"Scene_8","cube_map_dir":{"origin":"cdn","path":"clients/NARS_/6076f2a85f4dbb86ecce304c/scenes/6076f3945f4dbb86ecce3051/images/cube_map/"}},
+  {"_id":{"$oid":"6076f3945f4dbb86ecce3059"},"name":"Scene_9","cube_map_dir":{"origin":"cdn","path":"clients/NARS_/6076f2a85f4dbb86ecce304c/scenes/6076f3945f4dbb86ecce3051/images/cube_map/"}},
+  {"_id":{"$oid":"6076f3945f4dbb86ecce3060"},"name":"Scene_10","cube_map_dir":{"origin":"cdn","path":"clients/NARS_/6076f2a85f4dbb86ecce304c/scenes/6076f3945f4dbb86ecce3051/images/cube_map/"}},
+  {"_id":{"$oid":"6076f3945f4dbb86ecce3061"},"name":"Scene_1","cube_map_dir":{"origin":"cdn","path":"clients/NARS_/6076f2a85f4dbb86ecce304c/scenes/6076f3945f4dbb86ecce3051/images/cube_map/"}},
+  {"_id":{"$oid":"6076f3945f4dbb86ecce3062"},"name":"Scene_1","cube_map_dir":{"origin":"cdn","path":"clients/NARS_/6076f2a85f4dbb86ecce304c/scenes/6076f3945f4dbb86ecce3051/images/cube_map/"}},
+  {"_id":{"$oid":"6076f3945f4dbb86ecce3063"},"name":"Scene_1","cube_map_dir":{"origin":"cdn","path":"clients/NARS_/6076f2a85f4dbb86ecce304c/scenes/6076f3945f4dbb86ecce3051/images/cube_map/"}},
+  {"_id":{"$oid":"6076f3945f4dbb86ecce3064"},"name":"Scene_1","cube_map_dir":{"origin":"cdn","path":"clients/NARS_/6076f2a85f4dbb86ecce304c/scenes/6076f3945f4dbb86ecce3051/images/cube_map/"}}
+]

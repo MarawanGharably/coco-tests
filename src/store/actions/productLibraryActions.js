@@ -30,9 +30,9 @@ export const deleteFolderAction = (id) => ({
     payload: id,
 });
 
-export const setModeAction = (mode) => ({
+export const setModeAction = (data) => ({
     type: types.SET_MODE,
-    payload: mode,
+    payload: data,
 });
 
 export const setEnabledAction = (isEnabled) => ({

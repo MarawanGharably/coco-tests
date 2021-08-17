@@ -22,10 +22,11 @@ const handleSuccess = (response) => {
 const handleError = (error, xx) => {
     const statusCode = error.response?.status;
     const message = error.response?.data?.message;
+    const error_code = error.response?.data?.error_code;
 
 
     //401 - unauthorized. Dont use! Could be returned on longin form when bad credentials sent
-    if([403].includes(statusCode) || message === 'Refresh Token has been revoked'){
+    if([403].includes(statusCode) || message === 'Refresh Token has been revoked' || error_code === 'USER_NOT_FOUND'){
         //remove session cookies
         cookies.remove('access_token');
         cookies.remove('refresh_token');

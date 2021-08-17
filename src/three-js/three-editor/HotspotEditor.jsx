@@ -12,12 +12,11 @@ const ThreeEditor = dynamic(
     { ssr: false }
 );
 
-const HotspotEditor = () => {
-    const { selectedStoreId } = useSelector(state => state['HomePageStore']);
+const HotspotEditor = ({storeId}) => {
     const { currentSceneId } = useSelector(state => state['SceneEditor']);
 
     return (
-        <DataManager hotspotTypes={['product', 'product_image']} sceneId={currentSceneId} storeId={selectedStoreId}>
+        <DataManager hotspotTypes={['product', 'product_image']} sceneId={currentSceneId} storeId={storeId}>
             <CollisionManager>
                 <UIManager>
                     <ThreeEditor>

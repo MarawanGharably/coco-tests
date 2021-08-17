@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Link from 'next/link';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { withRouter } from 'next/router'
+import { withRouter } from 'next/router';
 import { Field, reduxForm } from 'redux-form';
 import { Input } from '../../_formFields';
 import SubmitButton from '../../../FormComponents/SubmitButton';

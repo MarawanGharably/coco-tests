@@ -1,0 +1,26 @@
+@import '../../../../assets/scss/_variables.scss';
+
+.storeMenu{
+  color: $light-grey;
+  list-style: none;
+  margin-top: 1.1em;
+  padding: 0;
+
+  li{
+    padding: 1.1em 0 1.1em 1.3em;
+
+    .link{
+      color: $light-grey;
+      font-size: 1.12em;
+
+      &.active{
+        @extend %textWithGradient;
+        font-weight: 600;
+      }
+    }
+  }
+
+
+  //background: #232323;
+  //box-shadow: 20px 4px 14px rgba(0, 0, 0, 0.5);
+}

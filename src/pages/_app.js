@@ -7,6 +7,9 @@ const cookies = new Cookies();
 const store = reduxStore();
 import { getLoginRedirectPath } from "../utils/urlHelper";
 
+import ToastMessages from "../components/toast-messages/ToastMessages";
+
+
 //Global Styles
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/main.css';
@@ -43,6 +46,7 @@ const MyApp = ({ Component, pageProps }) => {
 
     return (
         <Provider store={store}>
+            <ToastMessages />
             <Component {...pageProps} />
         </Provider>
     );

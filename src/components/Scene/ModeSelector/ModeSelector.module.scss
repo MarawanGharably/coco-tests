@@ -1,7 +1,6 @@
 @import '../../../assets/scss/variables';
 
 .modeSelector {
-
     .radio-custom-button-selector {
         width: 2em;
         height: 2em;
@@ -10,39 +9,49 @@
         transform: translateY(-50%);
 
         &::after {
-           top: 50%;
-           left: 50%;
-           transform: translate(-50%, -50%);  
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
     }
 
-    .item{
-        background-color: #1A1A1A;
+    .item {
+        background-color: #1a1a1a;
         border-radius: 10px;
         padding: 0.9em 1em;
 
-
-        &.checkedSelector{
+        &.checkedSelector {
             @extend %buttonWithGradient;
         }
 
-
         :global {
             //Make radios bigger
-            input.form-check-input{
+            input.form-check-input {
+                position: relative;
                 height: 1.5em;
                 width: 1.5em;
-                //margin-right: 1em; new template rule: doesnt look/work good
+                margin: 0 0.5em 0 0;
+                border: 1px solid #b3b3b3;
             }
 
+            .form-check-input:checked {
+                background-color: #ffffff;
 
-            //input.form-check-input:checked {}
+                &::after {
+                    content: '';
+                    margin: auto;
+                    position: absolute;
+                    height: 14px;
+                    width: 14px;
+                    border-radius: 1em;
+                    top: 4px;
+                    left: 4px;
+                    background: linear-gradient(92.35deg, $blue-ink-color 1.28%, $green-bright-color 98.95%);
+                }
+            }
+
         }
     }
-
-
-
-
 
     .modeTitle {
         flex-basis: 100%;
@@ -57,28 +66,31 @@
 //MD - (min-width: 768)
 //LG - (min-width: 992px)
 
-
 //XS screen size
-@media only screen and (max-width: 800px) {
-    .modeSelector{
-        .radio, label, span{font-size: 0.8em;}
+@media only screen and (max-width: 900px) {
+    .modeSelector {
+        .radio,
+        label,
+        span {
+            font-size: 0.8em;
+        }
 
-        .item{
-            margin-right: .4rem;
+        .item {
+            margin-right: 0.4rem;
         }
     }
 }
 
 //SM screen size
 @media only screen and (max-width: 1380px) {
-    .modeSelector{
-        .item{
-            margin-right: .4rem;
-            padding:0.5em;
+    .modeSelector {
+        .item {
+            margin-right: 0.4rem;
+            padding: 0.5em;
         }
 
         :global {
-            input.form-check-input{
+            input.form-check-input {
                 height: auto;
                 width: auto;
             }

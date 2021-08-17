@@ -13,7 +13,7 @@ if (process.env.APP_ENV === 'feature') {
 }
 
 module.exports = {
-    distDir: 'build',
+    // distDir: 'build',
     reactStrictMode: false,
     assetPrefix: assetPrefix,
     basePath: basePath,

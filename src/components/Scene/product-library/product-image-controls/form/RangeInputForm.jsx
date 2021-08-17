@@ -14,13 +14,14 @@ const RangeInputForm = ({ order, handleOrderChange, size, handleSizeChange }) =>
             <Form.Label className={styles['label']}>Size:</Form.Label>
             <Row className={styles['range']}>
                 <Col>
-                    <Form.Control
-                        type="range"
+                    <Form.Range
                         min={0.01}
                         max={10}
                         step={0.01}
                         value={size}
                         onChange={handleSizeChange}
+                        className='input-field form-control'
+                        style={{backgroundColor:'#fefefe', padding:'0.9em 0.6em'}}
                     />
                 </Col>
                 <Col xs={3}>

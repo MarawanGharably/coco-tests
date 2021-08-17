@@ -1,0 +1,27 @@
+@import '../../../../assets/scss/variables';
+
+.header {
+    background-color: #000!important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+    color:$light-grey;
+
+    .navbar-text { color: $light-grey; }
+
+
+    .nav-center{
+        //flex-grow: 8;
+        //align-items: center;
+    }
+
+    .pageTitle {
+        font-size: 2em;
+        color: #212529 !important;
+        font-weight: 200;
+    }
+}
+
+@media only screen and (max-width: 620px) {
+    nav {
+        .pageTitle {font-size: 2em;}
+    }
+}

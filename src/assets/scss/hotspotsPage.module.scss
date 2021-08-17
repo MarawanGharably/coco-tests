@@ -1,0 +1,40 @@
+@import './variables';
+
+.hotspotsPage{
+  position:relative;
+
+
+  .sceneEditor{
+    position: relative;
+    margin: 0;
+    //display: table;
+    width: 100%;
+
+    .sceneNavigator{
+      width:100%;
+
+      //overwrite SceneNavigator default styles
+      &.withSideBar{
+        width:70%;
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+      }
+    }
+  }
+
+
+  .hotspotsFooter{
+    display: flex;
+    height: 8vh;
+    align-items: center;
+    justify-content: flex-end;
+
+    :global {
+      button{
+        @extend %buttonWithGradient;
+        font-size: 18px;
+      }
+    }
+  }
+
+}

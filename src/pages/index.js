@@ -8,6 +8,7 @@ import Layout from "../components/layouts/Layout";
 import RecordsList from "../components/RecordsList";
 import StoreThumbnail from '../components/StoreThumbnail'
 
+
 export default function HomePage(){
     const [loading, setLoading] = useState(true);
     const HomePageStore = useSelector(store => store.HomePageStore);

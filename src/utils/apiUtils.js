@@ -121,6 +121,3 @@ export const apiUpdateHotspotByType = (type, storeId, hotspotId, payload) => mak
 export const apiDeleteHotspotByType = (type, storeId, hotspotId) => makeDELETERequest(`${URLS.CMS_HOTSPOT_URL}/${type}/${hotspotId}`, storeId);
 
 
-// PRODCT PLACEMENT PAGE APIs
-export const apiPublishSceneData = (storeId) => makePOSTRequest(`${URLS.PUBLISH_SCENE_DATA}/${storeId}`, {}, storeId);
-

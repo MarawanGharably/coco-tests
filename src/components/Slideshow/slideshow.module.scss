@@ -1,0 +1,52 @@
+@import '../../assets/scss/variables';
+
+.slideshow {
+    display: flex;
+    position: relative;
+    background: #1a1a1a;
+    border-radius: 0.7em;
+    margin-bottom: -1em;
+    z-index: 999;
+    overflow: hidden;
+
+    .scrollable {
+        display: flex;
+        overflow-x: scroll;
+        width: 100%;
+        transition: all 1s ease-out;
+        scroll-behavior: smooth;
+
+        .scrollableContainer {
+            transition: all 1s ease-out;
+            display: flex;
+            flex-direction: row;
+            padding: 1.1em 1em;
+        }
+    }
+
+    .scrollBtn {
+        width: 9.5em;
+        background: linear-gradient(270deg, #1a1a1a 0%, #1a1a1a00 75.5%);
+        position: absolute;
+        bottom: 0;
+        top: 0;
+        display: none;
+        align-items: center;
+        justify-content: flex-end;
+        color: #fff;
+
+        &.left {
+            left: 0;
+            justify-content: start;
+            background: linear-gradient(89deg, #1a1a1a 0%, #1a1a1a00 75.5%);
+        }
+        &.right {
+            right: 0;
+        }
+
+        &.active {
+            display: flex;
+            z-index: 99;
+        }
+    }
+}

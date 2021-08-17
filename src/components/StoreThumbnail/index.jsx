@@ -16,7 +16,7 @@ const StoreThumbnail = ({ data }) => {
 
     const handleEditStore = (storeId) => {
         dispatch(setSelectedStoreID(storeId));
-        router.push('/create');
+        router.push(`/store/${storeId}`);
     };
 
     const image = formURL(general?.og_image) || `${config['CDN_HOST']}/noImage.png`;
@@ -27,7 +27,7 @@ const StoreThumbnail = ({ data }) => {
             {/* Card Image */}
             <div className={styles.image} style={{ backgroundImage: `url(${image})` }}>
                 <figcaption className={`${styles.figcaption}`}>
-                    <Button onClick={() => handleEditStore(storeId)} variant="primary" className="" style={{}}>
+                    <Button onClick={() => handleEditStore(storeId)} variant="primary" >
                         Edit Store
                     </Button>
                 </figcaption>

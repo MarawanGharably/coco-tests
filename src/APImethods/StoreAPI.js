@@ -101,14 +101,20 @@ const getFirstSceneImageUrl = (storeId) => {
         .catch((err) => Promise.reject(err));
 };
 
-export const getStoreThumbnails = async (storesArray) => {
-    const thumbnailPromises = [];
-    if (storesArray.length > 0) {
-        for (let i = 0; i < storesArray.length; i += 1) {
-            const storeId = storesArray[i]._id.$oid; // eslint-disable-line
-            thumbnailPromises.push(getFirstSceneImageUrl(storeId));
-        }
-    }
 
-    return Promise.all(thumbnailPromises);
+//export const apiPublishSceneData = (storeId) => makePOSTRequest(`${URLS.PUBLISH_SCENE_DATA}/${storeId}`, {}, storeId);
+//http://127.0.0.1:5000/cms/push_objects/6076f2a85f4dbb86ecce304c
+//Post with empty data ?
+export const apiPublishSceneData = async (storeId) => {
+    if (!storeId) return Promise.reject('Missed required parameter');
+
+    const conf = {
+        headers: { 'ovr-str-id': storeId },
+    };
+
+    return axiosApi
+        .post(`${API_URL}/cms/push_objects/${storeId}`, {},  conf)
+        // .post(`${API_URL}/cms/push_objects/${storeId}`,   conf)
+        .then((res) => res.data)
+        .catch((err) => Promise.reject(err));
 };

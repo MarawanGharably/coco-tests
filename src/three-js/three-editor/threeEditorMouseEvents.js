@@ -4,7 +4,7 @@ import { apiUpdateHotspotByType } from '../../utils/apiUtils';
 import {
     PRODUCT_TAGGING,
     PRODUCT_PLACEMENT,
-} from '../../components/mode-selector/modeOptions';
+} from '../../components/Scene/ModeSelector/modeOptions';
 
 export const threeEditorMouseEvents = (
     renderer,

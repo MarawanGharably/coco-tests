@@ -31,8 +31,8 @@ const ModeSelector = ({ productLibrary }) => {
 
     return (
         <div className={styles.modeSelector}>
-            <fieldset>
-                <Form.Group as={Row} className="">
+            {/*<fieldset>*/}
+            {/*    <Form.Group as={Row} className="">*/}
                     {options.map((item, i) => {
                         const isChecked = item.label == selectedOption.label ? true : false;
 
@@ -53,8 +53,8 @@ const ModeSelector = ({ productLibrary }) => {
                             />
                         );
                     })}
-                </Form.Group>
-            </fieldset>
+                {/*</Form.Group>*/}
+            {/*</fieldset>*/}
         </div>
     );
 };

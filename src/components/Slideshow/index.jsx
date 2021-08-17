@@ -62,7 +62,7 @@ const Slideshow = ({ className='', children }) => {
 
         return function cleanUp() {
             window.removeEventListener('resize', handleResize);
-            scrollableElRef.current.removeEventListener('scroll', handleScroll);
+            scrollableElRef.current?.removeEventListener('scroll', handleScroll);
         };
     }, []);
 

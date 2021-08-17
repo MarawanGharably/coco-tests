@@ -91,6 +91,8 @@ export default class ThreeProductImage extends InteractionObject {
     removeFromManager() {
         const colliderDispatch = this.getColliderDispatcher();
 
+        //TODO: sceneObject often undefined
+
         colliderDispatch({
             type: CollisionManagerActionEnums.REMOVE_COLLIDERS,
             payload: this.sceneObject.uuid,

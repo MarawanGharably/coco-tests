@@ -14,7 +14,7 @@ export default function HeaderMenu() {
     ];
 
     return (
-        <Nav className={`${styles.headerMenu} me-auto justify-content-end`}>
+        <Nav className={`${styles.headerMenu} justify-content-end`}>
             {links.map((item, i) => (
                 <Link href={item.url} key={i}>
                     <a className={`nav-link ${router.pathname == item.url ? 'active' : ''}`}>{item.label}</a>

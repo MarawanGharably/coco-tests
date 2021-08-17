@@ -4,7 +4,6 @@ import { withKnobs, text } from '@storybook/addon-knobs';
 import { SketchPicker } from 'react-color'
 import Input from '../../src/components/FormComponents/Input';
 
-import '../../src/components/color-selector/ColorSelector.scss';
 
 const ColorSelector = ({ labelId, labelTitle }) => {
     const [selectedColor, setSelectedColor] = useState('#000');

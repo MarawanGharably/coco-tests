@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
 import { v1 as uuid } from 'uuid';
 import { Button } from 'react-bootstrap';
 import FileInput from '../actionsComponents/file-input/FileInput';
@@ -10,7 +11,8 @@ import styles from './Actions.module.scss';
 
 const Actions = ({ selectedFolder }) => {
     const dispatch = useDispatch();
-    const { selectedStoreId } = useSelector((store) => store['HomePageStore']);
+    const router = useRouter();
+    const {id:storeId} = router.query;
 
     const [isUploadDialogOpen, setUploadDialog] = useState(false);
     const [isDeleteDialogOpen, setDeleteDialog] = useState(false);
@@ -63,7 +65,7 @@ const Actions = ({ selectedFolder }) => {
     };
 
     const handleFolderDelete = () => {
-        dispatch(deleteHotspotProductFolder(selectedStoreId, selectedFolder.id));
+        dispatch(deleteHotspotProductFolder(storeId, selectedFolder.id));
         toggleDeleteDialog();
     };
 

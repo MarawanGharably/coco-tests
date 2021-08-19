@@ -35,6 +35,7 @@ const ModeSelector = ({ productLibrary }) => {
             {/*    <Form.Group as={Row} className="">*/}
                     {options.map((item, i) => {
                         const isChecked = item.label == selectedOption.label ? true : false;
+                        if(!isEnabled && item.value == 'product_placement') return false;
 
                         return (
                             <Form.Check

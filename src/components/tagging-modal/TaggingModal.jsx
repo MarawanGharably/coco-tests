@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
 import { Modal, Button } from 'react-bootstrap';
@@ -11,9 +12,9 @@ import styles from './TaggingModal.module.scss';
 const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, getTransforms, id}) => {
     const [SKU, setSKU] = useState(productSKU);
     const [UIState] = useUIManager();
-    const { selectedStoreId } = useSelector(state => state['HomePageStore']);
+    const router = useRouter();
+    const {id:selectedStoreId} = router.query;
     const { currentSceneId }  = useSelector(state => state['SceneEditor']);
-
 
     const hotspotType = 'product';
 

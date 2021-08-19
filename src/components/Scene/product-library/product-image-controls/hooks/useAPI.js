@@ -5,13 +5,10 @@ import { apiCreateHotspotByType, apiUpdateHotspotByType, apiDeleteHotspotByType 
 const HOTSPOT_TYPE = 'product_image';
 
 const useAPI = ({ getTransforms, dispose, updateState }) => {
-    const { selectedStoreId }  = useSelector(state => state['HomePageStore']);
     const { currentSceneId } = useSelector(state => state['SceneEditor']);
 
 
-    const parsePostData = ({
-        scale, renderOrder, imageId, folderId,
-    }) => {
+    const parsePostData = ({ scale, renderOrder, imageId, folderId }) => {
         const transforms = getTransforms();
         const { colliderTransform, visualTransform } = transforms;
 
@@ -34,21 +31,17 @@ const useAPI = ({ getTransforms, dispose, updateState }) => {
         });
     };
 
-    const updateHotspot = async ({ postData, id }) => {
+    const updateHotspot = async (storeId, { postData, id }) => {
         try {
-            await apiUpdateHotspotByType(
-                HOTSPOT_TYPE, selectedStoreId, id, postData,
-            );
+            await apiUpdateHotspotByType(HOTSPOT_TYPE, storeId, id, postData);
         } catch (error) {
             console.error(error);
         }
     };
 
-    const createHotspot = async ({ postData }) => {
+    const createHotspot = async (storeId, { postData }) => {
         try {
-            const response = await apiCreateHotspotByType(
-                HOTSPOT_TYPE, selectedStoreId, postData,
-            );
+            const response = await apiCreateHotspotByType(HOTSPOT_TYPE, storeId, postData );
 
             updateState({
                 type: response.props.hotspot_type,
@@ -62,9 +55,9 @@ const useAPI = ({ getTransforms, dispose, updateState }) => {
         }
     };
 
-    const deleteHotspot = async (id) => {
+    const deleteHotspot = async (storeId, id) => {
         try {
-            await apiDeleteHotspotByType(HOTSPOT_TYPE, selectedStoreId, id);
+            await apiDeleteHotspotByType(HOTSPOT_TYPE, storeId, id);
 
             dispose();
         } catch (err) {
@@ -72,17 +65,13 @@ const useAPI = ({ getTransforms, dispose, updateState }) => {
         }
     };
 
-    const handleHotspotChange = async ({
-        scale, id, renderOrder, imageId, folderId,
-    }) => {
-        const postData = parsePostData({
-            scale, renderOrder, imageId, folderId,
-        });
+    const handleHotspotChange = async ({storeId, scale, id, renderOrder, imageId, folderId}) => {
+        const postData = parsePostData({scale, renderOrder, imageId, folderId});
 
         if (id) {
-            await updateHotspot({ postData, id });
+            await updateHotspot(storeId, { postData, id });
         } else {
-            await createHotspot({ postData, dispose });
+            await createHotspot(storeId,{ postData, dispose });
         }
     };
 

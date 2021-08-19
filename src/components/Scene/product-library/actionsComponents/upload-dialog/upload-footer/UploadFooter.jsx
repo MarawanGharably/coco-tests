@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
+import { useRouter } from 'next/router';
 import Select from 'react-select/creatable';
 import { Button } from 'react-bootstrap';
 import { setSelectedFolderAction } from '../../../../../../store/actions/productLibraryActions';
@@ -11,8 +12,8 @@ import styles from './UploadFooter.module.scss';
 
 const UploadFooter = ({ productLibrary, images, closeDialog }) => {
     const { isLoading, folders, selectedFolder } = productLibrary;
-    const HomePageStore = useSelector(store => store['HomePageStore']);
-    const { selectedStoreId } = HomePageStore;
+    const router = useRouter();
+    const {id:selectedStoreId} = router.query;
 
     const [folder, setFolder] = useState(selectedFolder);
     const defaultFolder = { label: GENERAL_LABEL };

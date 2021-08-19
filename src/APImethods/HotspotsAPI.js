@@ -13,7 +13,7 @@ import {
 
 export const getStoreHotspots = (storeId) => {};
 
-export const getHotspotProducts = (storeId) => {
+export const getHotspotProducts = (storeId, options) =>dispatch=> {
     if (!storeId) return Promise.reject('Missed required parameter');
 
     const config = {
@@ -23,10 +23,15 @@ export const getHotspotProducts = (storeId) => {
     return axiosApi
         .get(`${API_URL}/cms/${storeId}/product_library`, config)
         .then((res) => {
-            return {
-                products: parseProducts(res.data.products),
-                folders: parseFolders(res.data.folders),
-            };
+            const products = parseProducts(res.data.products);
+            const folders = parseFolders(res.data.folders);
+            //Update store
+            if(options?.updateStore=='productLibrary'){
+                dispatch(setProductsAction(products));
+                dispatch(setFoldersAction(folders));
+            }
+
+            return { products, folders };
         })
         .catch((err) => Promise.reject(err));
 };

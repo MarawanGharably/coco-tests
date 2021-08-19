@@ -1,31 +1,33 @@
-import React from "react";
+import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import styles from './storeMenu.module.scss';
 
-export default function StoreMenu(props){
+export default function StoreMenu(props) {
     const router = useRouter();
-    const storeBasePath = `/store/${router.query.storeId}`;
-    // console.log('router', {pathname:router.pathname,  storeBasePath,   router});
+    const { id: storeId } = router.query;
+    const storeBasePath = `/store`;
 
-
-
-    const links=[
-        {label:'General', url:`${storeBasePath}/`},
+    const links = [
+        { label: 'General', url: `${storeBasePath}/?id=${storeId}` },
         // {label:'Welcome Screen', url:`${storeBasePath}/welcome`  },
         // {label:'Product Pop Up', url:`${storeBasePath}/popup` },
         // {label:'Section Selector', url: `${storeBasePath}/selectors` },
         // {label:'Icons', url:'/icons'},
-        {label:'Hotspots', url: `${storeBasePath}/hotspots/` },
+        { label: 'Hotspots', url: `${storeBasePath}/hotspots/?id=${storeId}` },
         // {label:'Navigation Arrows', url:'/'},
         // {label:'Product Data', url:'/'},
     ];
 
-    return(<ul className={styles.storeMenu}>
-        {links.map((item, i)=>(<li key={i}>
-            <Link href={item.url}>
-                <a className={`${styles.link} ${router.asPath == item.url ? styles.active  : ''}`}>{item.label}</a>
-            </Link>
-        </li>))}
-    </ul>)
+    return (
+        <ul className={styles.storeMenu}>
+            {links.map((item, i) => (
+                <li key={i}>
+                    <Link href={item.url}>
+                        <a className={`${styles.link} ${router.asPath == item.url ? styles.active : ''}`}>{item.label}</a>
+                    </Link>
+                </li>
+            ))}
+        </ul>
+    );
 }

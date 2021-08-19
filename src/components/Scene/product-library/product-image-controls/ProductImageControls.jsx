@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import RangeInputForm from './form/RangeInputForm';
@@ -23,6 +24,10 @@ const ProductImageControls = ({
     const [id, setId] = useState(currentId);
     const [size, setSize] = useState(scale);
     const [order, setOrder] = useState(renderOrder);
+    const router = useRouter();
+    const {id:storeId} = router.query;
+
+
     const { handleHotspotChange, deleteHotspot } = useAPI({
         getTransforms, dispose, updateState,
     });
@@ -31,7 +36,7 @@ const ProductImageControls = ({
     const createProductImage = (uiStateId) => {
         if (!uiStateId) {
             handleHotspotChange({
-                imageId, scale, renderOrder, folderId,
+                storeId, imageId, scale, renderOrder, folderId,
             });
         }
     };
@@ -100,7 +105,7 @@ const ProductImageControls = ({
     const handleDelete = (e) => {
         e.preventDefault();
 
-        deleteHotspot(id);
+        deleteHotspot(storeId, id);
         onClose();
     };
 

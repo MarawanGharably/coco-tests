@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, Button } from 'react-bootstrap';
 import { formURL } from '../../utils/urlHelper';
-import { setSelectedStoreID } from '../../store/actions';
+
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import config from '../../config';
@@ -15,8 +15,7 @@ const StoreThumbnail = ({ data }) => {
     const router = useRouter();
 
     const handleEditStore = (storeId) => {
-        dispatch(setSelectedStoreID(storeId));
-        router.push(`/store/${storeId}`);
+        router.push(`/store?id=${storeId}`);
     };
 
     const image = formURL(general?.og_image) || `${config['CDN_HOST']}/noImage.png`;

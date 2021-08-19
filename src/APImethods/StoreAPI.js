@@ -1,17 +1,15 @@
 import { formURL } from '../utils/urlHelper';
 import axiosApi from '../utils/axiosApi';
 import { publicRuntimeConfig } from '../../next.config.js';
+import {setEnabledAction} from "../store/actions/productLibraryActions";
+import {setCurrentSceneID, setSceneData} from "../store/actions/SceneEditorActions";
 const API_URL =  publicRuntimeConfig?.API_URL;
 
 /**
  * get all stores
- * old:apiGetAllCMSStores =>cms/stores
- * old:/client/users/stores
  */
 export const getStores=()=>{
     return axiosApi
-        //api endpoint used at main page
-        // .get(`${API_URL}/client/users/stores`)
         .get(`${API_URL}/stores`)
         .then((res) => res.data)
         .catch((err) => Promise.reject(err));
@@ -55,7 +53,7 @@ export const updateStore=(storeId, data)=>{
 
 
 
-export const getStoreFlags=(storeId)=>{
+export const getStoreFlags=(storeId, options)=>dispatch=>{
     console.log('>getStoreFlags', {storeId, config });
     if(!storeId) return Promise.reject('Missed required parameter');
 
@@ -64,13 +62,18 @@ export const getStoreFlags=(storeId)=>{
     }
     return axiosApi
         .get(`${API_URL}/cms/${storeId}/flags`, config)
-        .then((res) => res.data)
+        .then((res) => {
+            if(options?.updateStore=='productLibrary'){
+                dispatch(setEnabledAction(res.data[0]['product_library_enabled']));
+            }
+            return res.data;
+        })
         .catch((err) => Promise.reject(err));
 }
 
 
 
-export const getStoreScenes = (storeId) => {
+export const getStoreScenes = (storeId, options) =>dispatch=> {
     if (!storeId) return Promise.reject('Missed required param');
 
     const conf = {
@@ -79,7 +82,13 @@ export const getStoreScenes = (storeId) => {
 
     return axiosApi
         .get(`${API_URL}/cms/${storeId}/scenes`, conf)
-        .then((res) => res.data)
+        .then((res) => {
+            if(options?.updateStore=='productLibrary'){
+                dispatch(setSceneData(res.data));
+                dispatch(setCurrentSceneID(res.data[0]._id.$oid));
+            }
+            return res.data;
+        })
         .catch((err) => Promise.reject(err));
 };
 

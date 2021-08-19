@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect, useDispatch } from 'react-redux';
-import { Form, Row } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { setModeAction } from '../../../store/actions/productLibraryActions';
 import styles from './ModeSelector.module.scss';
 
@@ -31,8 +31,6 @@ const ModeSelector = ({ productLibrary }) => {
 
     return (
         <div className={styles.modeSelector}>
-            {/*<fieldset>*/}
-            {/*    <Form.Group as={Row} className="">*/}
                     {options.map((item, i) => {
                         const isChecked = item.label == selectedOption.label ? true : false;
                         if(!isEnabled && item.value == 'product_placement') return false;
@@ -54,8 +52,7 @@ const ModeSelector = ({ productLibrary }) => {
                             />
                         );
                     })}
-                {/*</Form.Group>*/}
-            {/*</fieldset>*/}
+
         </div>
     );
 };

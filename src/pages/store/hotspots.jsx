@@ -3,25 +3,23 @@ import { useRouter } from 'next/router';
 import { connect } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { Col, Row, Button } from 'react-bootstrap';
-
-import StoreLayout from '../../../components/layouts/StoreLayout';
-import LoadingScreen from '../../../components/LoadingScreen';
-import HotspotEditor from '../../../three-js/three-editor/HotspotEditor';
-import { ModeSelector, SceneNavigator } from '../../../components/Scene';
-import ProductPlacementSidebar from '../../../components/Scene/ProductPlacementSidebar';
-import { setEnabledAction, setFoldersAction, setProductsAction, setSelectedFolderAction } from '../../../store/actions/productLibraryActions';
-import { getHotspotProducts, getStoreFlags, apiPublishSceneData, getStoreScenes } from '../../../APImethods';
-import { setCurrentSceneID, setSceneData } from '../../../store/actions/SceneEditorActions';
-import { showSuccessMessage, showErrorMessage } from '../../../store/actions/toastActions';
-import { GENERAL_LABEL } from '../../../store/types/productLibrary';
-import styles from '../../../assets/scss/hotspotsPage.module.scss';
+import StoreLayout from '../../components/layouts/StoreLayout';
+import LoadingScreen from '../../components/LoadingScreen';
+import HotspotEditor from '../../three-js/three-editor/HotspotEditor';
+import { ModeSelector, SceneNavigator } from '../../components/Scene';
+import ProductPlacementSidebar from '../../components/Scene/ProductPlacementSidebar';
+import { setSelectedFolderAction } from '../../store/actions/productLibraryActions';
+import { getHotspotProducts, getStoreFlags, apiPublishSceneData, getStoreScenes } from '../../APImethods';
+import { showSuccessMessage, showErrorMessage } from '../../store/actions/toastActions';
+import { GENERAL_LABEL } from '../../store/types/productLibrary';
+import styles from '../../assets/scss/hotspotsPage.module.scss';
 
 let HotspotsPage = (props) => {
     const { isEnabled, mode_slug } = props.productLibrary;
     const [isLoading, setLoading] = useState(false);
     const router = useRouter();
     const dispatch = useDispatch();
-    const { storeId } = router.query;
+    const { id:storeId } = router.query;
 
     const showSideBar = isEnabled && mode_slug == 'product_placement' ? true : false;
 
@@ -30,25 +28,15 @@ let HotspotsPage = (props) => {
     }, [storeId]);
 
     const fetchData = async () => {
-        const flagsReq = await getStoreFlags(storeId);
-        // if(flagsReq[0]) setStoreFlags({product_library_enabled: flagsReq[0]['product_library_enabled'] });
+        const flagsReq = await dispatch(getStoreFlags(storeId, {updateStore:'productLibrary'}));
         const isEnabled = !!flagsReq[0]['product_library_enabled'];
 
-        dispatch(setEnabledAction(isEnabled));
-
         if (isEnabled) {
-            const { products, folders } = await getHotspotProducts(storeId);
-            console.log('>getHotspotProducts', { products, folders });
-            const defaultFolder = { label: GENERAL_LABEL };
-            dispatch(setProductsAction(products));
-            dispatch(setFoldersAction(folders));
-            dispatch(setSelectedFolderAction(defaultFolder));
+            dispatch(setSelectedFolderAction({ label: GENERAL_LABEL }));
+            dispatch(getHotspotProducts(storeId, {updateStore:'productLibrary'})).catch(err=>{});
         }
 
-        getStoreScenes(storeId).then((res) => {
-            dispatch(setSceneData(res));
-            dispatch(setCurrentSceneID(res[0]._id.$oid));
-        });
+        dispatch(getStoreScenes(storeId, {updateStore:'productLibrary'})).catch((err) => {});
     };
 
     const publishSceneData = async () => {

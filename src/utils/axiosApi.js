@@ -30,7 +30,7 @@ const handleError = (error, xx) => {
         //remove session cookies
         cookies.remove('access_token');
         cookies.remove('refresh_token');
-        window.location.href = getLoginRedirectPath();
+        if(process.browser) window.location.href = getLoginRedirectPath();
     }
 
     return Promise.reject(error);

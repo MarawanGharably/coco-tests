@@ -7,7 +7,6 @@ import thunk from 'redux-thunk';
 /**  Reducers **/
 import authReducer from "./reducers/authReducer";
 import productLibraryReducer from "./reducers/productLibraryReducer";
-import HomePageReducer from "./reducers/HomePageReducer";
 import SceneEditorReducer from "./reducers/SceneEditorReducer";
 import ToastMessagesReducer from './reducers/ToastMessagesReducer';
 
@@ -16,7 +15,6 @@ const appReducer = combineReducers({
     form: formReducer,
     session: authReducer,
     productLibrary: productLibraryReducer,
-    HomePageStore: HomePageReducer,
     SceneEditor: SceneEditorReducer,
     toastMessages: ToastMessagesReducer,
 });

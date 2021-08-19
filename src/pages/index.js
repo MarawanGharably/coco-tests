@@ -1,31 +1,28 @@
 import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from "react-redux";
-import keys from "../_keys.json";
 import {getUserStores} from "../APImethods";
-import {setStoreData} from "../store/actions";
 import Loader from "../components/loader/Loader";
 import Layout from "../components/layouts/Layout";
 import RecordsList from "../components/RecordsList";
-import StoreThumbnail from '../components/StoreThumbnail'
+import StoreThumbnail from '../components/StoreThumbnail';
 
 
 export default function HomePage(){
+    const [stores, setStores] = useState();
     const [loading, setLoading] = useState(true);
-    const HomePageStore = useSelector(store => store.HomePageStore);
-    const dispatch = useDispatch();
+
 
     useEffect(() => {
-        // always clear session store id on homepage
-        sessionStorage.removeItem(keys.SESSION_STORE_ID);
+        let controller = new AbortController();
 
         getUserStores()
             .then((clientStoreDataResponse) => {
+                setStores(clientStoreDataResponse);
+            })
+            .catch((err) => console.error(err))
+            .finally(()=>{
                 setLoading(false);
-                dispatch(setStoreData({
-                    stores: clientStoreDataResponse,
-                }));
-            }).catch((err) => console.error(err));
-        dispatch(setStoreData({ pageHeaderTitle: '' }));
+            });
+        return () => controller?.abort();
     }, []);
 
 
@@ -40,9 +37,9 @@ export default function HomePage(){
             </section>
 
             {
-                HomePageStore.stores
+                stores
                     ? (<RecordsList
-                        records={HomePageStore.stores}
+                        records={stores}
                         recordComponent={StoreThumbnail}
                         className='storesList mx-2'
                     />)

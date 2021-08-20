@@ -28,7 +28,7 @@ const ThreeState = createContext(initialState);
 const ThreeDispatch = createContext();
 
 
-export const ThreeEditor = ({ children }) => {
+export const ThreeEditor = ({ storeId, children }) => {
     const [threeReady, setThreeReady] = useState(false);
     const [state, dispatch] = useReducer(ThreeEditorReducer, initialState);
 
@@ -199,6 +199,7 @@ export const ThreeEditor = ({ children }) => {
             addThreeEditorMouseEventListeners,
             removeThreeEditorMouseEventListeners,
         } = threeEditorMouseEvents(
+            storeId,
             renderer,
             controlsRef,
             mouseStartRef,

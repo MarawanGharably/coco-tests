@@ -7,6 +7,7 @@ import {
 } from '../../components/Scene/ModeSelector/modeOptions';
 
 export const threeEditorMouseEvents = (
+    storeId,
     renderer,
     controlsRef,
     mouseStartRef,
@@ -71,13 +72,11 @@ export const threeEditorMouseEvents = (
                 } : {}),
             },
         };
-        const selectedStoreId = sessionStorage.getItem('STORE_ID');
+
 
         if (id) {
             try {
-                await apiUpdateHotspotByType(
-                    type, selectedStoreId, id, postData,
-                );
+                await apiUpdateHotspotByType(type, storeId, id, postData );
             } catch (err) {
                 console.error(err);
             }

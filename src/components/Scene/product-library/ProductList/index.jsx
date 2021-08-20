@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Select from 'react-select';
+import { useRouter } from 'next/router';
 import { GENERAL_LABEL } from '../../../../store/types/productLibrary';
 import Product from "../Product";
 import { setSelectedFolderAction } from '../../../../store/actions/productLibraryActions';
@@ -13,7 +14,8 @@ const ProductList = ({ productLibrary, setSelectedFolderAction }) => {
     const { products, folders, selectedFolder } = productLibrary;
     const defaultOption = { label: GENERAL_LABEL };
     const selectedOption = selectedFolder || defaultOption;
-
+    const router = useRouter();
+    const {id:storeId} = router.query;
     const handleFolderChange = (selected) => {
         setSelectedFolderAction(selected);
     };
@@ -40,7 +42,7 @@ const ProductList = ({ productLibrary, setSelectedFolderAction }) => {
                 {products
                     .filter(filterFolders)
                     .map(({ id, imageUrl, folderId }, i) => (
-                        <Product key={i} id={id} imageUrl={imageUrl} folderId={folderId} />
+                        <Product key={i} id={id} storeId={storeId} imageUrl={imageUrl} folderId={folderId} />
                     ))}
             </div>
         </div>

@@ -7,10 +7,9 @@ import styles from './Product.module.scss';
 
 import { PRODUCT_PLACEMENT } from '../../ModeSelector/modeOptions';
 
-const Product = ({ mode, id, imageUrl, folderId }) => {
+const Product = ({ id, storeId, mode, imageUrl, folderId }) => {
     const dispatch = useDispatch();
     const [isDialogOpen, setDialogOpen] = useState(false);
-    const selectedStoreId = sessionStorage.getItem('STORE_ID');
 
     const draggable = mode === PRODUCT_PLACEMENT;
 
@@ -37,7 +36,7 @@ const Product = ({ mode, id, imageUrl, folderId }) => {
     };
 
     const handleDelete = () => {
-        dispatch(deleteHotspotProduct(selectedStoreId, id));
+        dispatch(deleteHotspotProduct(storeId, id));
     };
 
     return (

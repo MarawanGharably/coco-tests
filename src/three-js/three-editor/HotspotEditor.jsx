@@ -19,7 +19,7 @@ const HotspotEditor = ({storeId}) => {
         <DataManager hotspotTypes={['product', 'product_image']} sceneId={currentSceneId} storeId={storeId}>
             <CollisionManager>
                 <UIManager>
-                    <ThreeEditor>
+                    <ThreeEditor storeId={storeId}>
                         <ColliderSphere />
                         <Background />
                     </ThreeEditor>

@@ -1,5 +1,5 @@
 import { Vector3, Matrix4 } from 'three';
-import { apiUpdateHotspotByType } from '../../utils/apiUtils';
+import { apiUpdateHotspotByType} from '../../APImethods/HotspotsAPI';
 
 import {
     PRODUCT_TAGGING,

@@ -1,10 +1,10 @@
-export const debounce=(fn, ms=1000)=> {
+export const debounce =(callback, time=1000) => {
     let timer;
-    return _ => {
+    return (...args) => {
         clearTimeout(timer);
-        timer = setTimeout(_ => {
-            timer = null
-            fn.apply(this, arguments)
-        }, ms)
+        timer = setTimeout(() => {
+            timer = null;
+            callback(...args);
+        }, time);
     };
-}
+};

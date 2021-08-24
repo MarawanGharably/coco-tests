@@ -24,7 +24,7 @@ export default function StoreMenu(props) {
             {links.map((item, i) => {
                 const isActive = !!(router.asPath == item.url);
                 return (
-                    <li key={i} className={isActive ? styles.liActive:false }>
+                    <li key={i} className={isActive ? styles.liActive: '' }>
                         <Link href={item.url}>
                             <a className={`${styles.link} ${isActive ? styles.active : ''}`}>{item.label}</a>
                         </Link>

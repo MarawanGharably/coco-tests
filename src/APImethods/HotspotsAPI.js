@@ -11,6 +11,7 @@ import {
     deleteFolderAction,
 } from '../store/actions/productLibraryActions';
 
+
 export const getStoreHotspots = (storeId) => {};
 
 export const getHotspotProducts = (storeId, options) =>dispatch=> {
@@ -97,7 +98,7 @@ export const deleteHotspotProductFolder = (storeId, folderId) => (dispatch) => {
 };
 
 
-//CMS_HOTSPOT_URL:`${API_URL}/cms/hotspots`
+
 export const apiGetHotspotsByType =(type, storeId, sceneId)=>{
     if (!storeId || !type || !sceneId) return Promise.reject('Missed required parameter');
 
@@ -110,6 +111,47 @@ export const apiGetHotspotsByType =(type, storeId, sceneId)=>{
 
     return axiosApi
         .get(`${API_URL}/cms/hotspots/${type}/${sceneId}`, options)
+        .then((res) => res.data)
+        .catch((err) => Promise.reject(err));
+}
+
+
+export const apiCreateHotspotByType=(type, storeId, data )=>{
+    if (!storeId || !type || !data) return Promise.reject('Missed required parameter');
+
+    const options={
+        headers: { 'ovr-str-id': storeId }
+    }
+
+    return axiosApi
+        .post(`${API_URL}/cms/hotspots/${type}`, data, options)
+        .then((res) => res.data)
+        .catch((err) => Promise.reject(err));
+}
+
+export const apiUpdateHotspotByType =(type, storeId,  hotspotId, data)=>{
+    if (!storeId || !type || !hotspotId || !data) return Promise.reject('Missed required parameter');
+
+    const options={
+        headers: { 'ovr-str-id': storeId }
+    }
+
+    return axiosApi
+        .put(`${API_URL}/cms/hotspots/${type}/${hotspotId}`, data, options)
+        .then((res) => res.data)
+        .catch((err) => Promise.reject(err));
+}
+
+
+export const apiDeleteHotspotByType=(type, storeId, hotspotId)=>{
+    if (!storeId || !type || !hotspotId ) return Promise.reject('Missed required parameter');
+
+    const options={
+        headers: { 'ovr-str-id': storeId }
+    }
+
+    return axiosApi
+        .delete(`${API_URL}/cms/hotspots/${type}/${hotspotId}`, options)
         .then((res) => res.data)
         .catch((err) => Promise.reject(err));
 }

@@ -13,6 +13,7 @@ import { getHotspotProducts, getStoreFlags, apiPublishSceneData, getStoreScenes 
 import { showSuccessMessage, showErrorMessage } from '../../store/actions/toastActions';
 import { GENERAL_LABEL } from '../../store/types/productLibrary';
 import styles from '../../assets/scss/hotspotsPage.module.scss';
+import {destroySceneData} from "../../store/actions/SceneEditorActions";
 
 let HotspotsPage = (props) => {
     const { isEnabled, mode_slug } = props.productLibrary;
@@ -25,6 +26,10 @@ let HotspotsPage = (props) => {
 
     useEffect(() => {
         if (storeId) fetchData();
+
+        return function cleanup(){
+            dispatch(destroySceneData());
+        }
     }, [storeId]);
 
     const fetchData = async () => {

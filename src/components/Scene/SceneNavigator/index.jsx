@@ -16,7 +16,7 @@ export default function SceneNavigator ({ sceneEditor, className='' }){
 
     return (
         <Slideshow className={`${styles['scene-navigator']} ${className}`}>
-            { sceneData.map((scene) => (
+            { sceneData?.map((scene) => (
                 <SceneThumbnail
                     key={scene._id.$oid} // eslint-disable-line
                     scene={scene}

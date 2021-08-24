@@ -31,6 +31,7 @@ const ProductList = ({ productLibrary, setSelectedFolderAction }) => {
         <div className={styles['product-list']}>
             <Select
                 id='prodList'
+                instanceId='prodList'
                 className={styles["selector"]}
                 options={[defaultOption, ...folders]}
                 value={selectedOption}

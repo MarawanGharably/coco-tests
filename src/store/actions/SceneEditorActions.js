@@ -9,3 +9,10 @@ export const setCurrentSceneID = (data) => ({
     type: types.SET_CURRENT_SCENE_ID,
     payload: data,
 });
+
+
+
+export const destroySceneData = () => ({
+    type: types.DESTROY_SCENE_DATA,
+    payload: false,
+});

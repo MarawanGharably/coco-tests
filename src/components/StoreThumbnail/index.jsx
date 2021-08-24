@@ -2,15 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, Button } from 'react-bootstrap';
 import { formURL } from '../../utils/urlHelper';
-
-import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import config from '../../config';
 import styles from './storeThumbnail.module.scss';
 
 const StoreThumbnail = ({ data }) => {
     const { _id, name, general } = data;
-    const dispatch = useDispatch();
     const storeId = _id.$oid;
     const router = useRouter();
 

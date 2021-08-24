@@ -20,8 +20,6 @@ const SceneThumbnail = ({ scene, selected, sceneClickHandler }) => {
     return (
         <div
             className={`${styles['scene-thumbnail']} d-flex flex-center flex-column ${selected ? styles['selected'] : ''}`}
-            // tabIndex={0}
-            // role="button"
             onClick={() => sceneClickHandler(sceneId)}
             onKeyDown={(e) => {
                 if ([13, 32].includes(e.keyCode)) {
@@ -30,7 +28,7 @@ const SceneThumbnail = ({ scene, selected, sceneClickHandler }) => {
             }}
         >
             <div className={styles.imagePreview} style={{ backgroundImage: `url(${thumbnail})` }} />
-            <span className={styles['caption']}>{name.replace(/_/, ' ')}</span>
+            <span className={styles['caption']}>{name.replace(/[_-]/g, ' ')}</span>
         </div>
     );
 };

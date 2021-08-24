@@ -6,7 +6,8 @@ import debounce from 'lodash.debounce';
 import { Modal, Button } from 'react-bootstrap';
 import TextInput from '../FormComponents/TextInput';
 import { useUIManager } from '../../three-js/ui-manager/UIManager';
-import { apiCreateHotspotByType, apiUpdateHotspotByType, apiDeleteHotspotByType } from '../../utils/apiUtils';
+import {apiCreateHotspotByType, apiUpdateHotspotByType, apiDeleteHotspotByType} from '../../APImethods/HotspotsAPI';
+
 import styles from './TaggingModal.module.scss';
 
 const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, getTransforms, id}) => {

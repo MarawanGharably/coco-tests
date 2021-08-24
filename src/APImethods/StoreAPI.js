@@ -111,8 +111,6 @@ const getFirstSceneImageUrl = (storeId) => {
 };
 
 
-//export const apiPublishSceneData = (storeId) => makePOSTRequest(`${URLS.PUBLISH_SCENE_DATA}/${storeId}`, {}, storeId);
-//http://127.0.0.1:5000/cms/push_objects/6076f2a85f4dbb86ecce304c
 //Post with empty data ?
 export const apiPublishSceneData = async (storeId) => {
     if (!storeId) return Promise.reject('Missed required parameter');

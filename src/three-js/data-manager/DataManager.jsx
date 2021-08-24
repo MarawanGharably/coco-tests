@@ -1,10 +1,5 @@
-import React, {
-    useEffect, useReducer, useContext,
-} from 'react';
-
+import React, {useEffect, useReducer, useContext} from 'react';
 import PropTypes from 'prop-types';
-
-import { apiUpdateHotspotByType } from '../../utils/apiUtils'; // eslint-disable-line
 import { apiGetHotspotsByType } from '../../APImethods/HotspotsAPI'; // eslint-disable-line
 
 const initialState = {

@@ -123,7 +123,7 @@ const ProductImageControls = ({
         setScale(scale); //call marker method???
     };
 
-    const handleDelete = async (e) => {
+    const handleDelete = (e) => {
         e.preventDefault();
 
         apiDeleteHotspotByType(HOTSPOT_TYPE, storeId, id)
@@ -132,8 +132,10 @@ const ProductImageControls = ({
             })
             .catch((err) => {
                 console.error('Hotspot deletion failed\n', err);
+            })
+            .finally(()=>{
+                onClose();
             });
-        onClose();
     };
 
     return (

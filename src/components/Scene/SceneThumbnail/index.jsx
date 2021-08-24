@@ -16,15 +16,12 @@ const SceneThumbnail = ({ scene, selected, sceneClickHandler }) => {
 
     const thumbnail = getThumbnail(scene);
 
-
     return (
         <div
             className={`${styles['scene-thumbnail']} d-flex flex-center flex-column ${selected ? styles['selected'] : ''}`}
             onClick={() => sceneClickHandler(sceneId)}
             onKeyDown={(e) => {
-                if ([13, 32].includes(e.keyCode)) {
-                    sceneClickHandler(sceneId);
-                }
+                if ([13, 32].includes(e.keyCode)) sceneClickHandler(sceneId);
             }}
         >
             <div className={styles.imagePreview} style={{ backgroundImage: `url(${thumbnail})` }} />

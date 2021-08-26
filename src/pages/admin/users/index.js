@@ -15,11 +15,12 @@ export default function UsersPage() {
 
 export const UsersList = ()=>{
     return(<>
-        <Row className="justify-content-between no-margins">
-            <SearchBox />
+        <Row className="no-margins text-end">
 
             <Link href={`/admin/users/create`} style={{ fontSize: '1em', fontWeight: '600' }}>
-                <span>Create <i className="fas fa-user"></i></span>
+                <a className='text-decoration-none'>
+                   Create <i className="fas fa-user"></i>
+                </a>
             </Link>
         </Row>
 
@@ -39,7 +40,7 @@ const UserListItem = ({ data, idx }) => {
             <td>{data.given_name || data.Username}</td>
             <td>{data.email}</td>
             <td>
-                <Link href={`/admin/users/${data.Username}`}>
+                <Link href={`/admin/users/edit?id=${data.Username}`}>
                     <i className="fas fa-pencil-alt"></i>
                 </Link>
             </td>

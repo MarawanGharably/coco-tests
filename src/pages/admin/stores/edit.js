@@ -11,7 +11,7 @@ import AdminPageLayout from '../../../components/layouts/AdminPageLayout';
 import { getStore, updateStore } from '../../../APImethods/StoreAPI';
 
 let StoreForm = (props) => {
-    const { storeId } = props.router.query;
+    const { id:storeId } = props.router.query;
     const [submitting, setSubmitting] = useState(false);
     const [status, setStatus] = useState(false);
 

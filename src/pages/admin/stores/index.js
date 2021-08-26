@@ -20,7 +20,7 @@ const StoresListItem = ({ data, idx }) => {
             <td>{data.name}</td>
             <td>{data.status}</td>
             <td>
-                <Link href={`/admin/stores/${storeId}`}>
+                <Link href={`/admin/stores/edit?id=${storeId}`}>
                     <i className="fas fa-pencil-alt"></i>
                 </Link>
             </td>

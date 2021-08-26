@@ -11,7 +11,7 @@ import SubmitStatusMessage from "../../../components/ReduxForms/SubmitStatusMess
 import {getUser, updateUser, getPolicies, getUserAccessGroupsWithData} from '../../../APImethods';
 
 let UserForm = (props) => {
-    const { userId } = props.router.query;
+    const { id:userId } = props.router.query;
     const [policies, setPolicies] = useState([]);
     const [submitting, setSubmitting] = useState(false);
     const [status, setStatus] = useState();

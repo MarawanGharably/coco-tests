@@ -10,9 +10,9 @@ import {getPolicies} from "../../../APImethods";
 export default function UserGroupsPage() {
     return (<AdminPageLayout title='User Groups / Policies'>
 
-        <Row className="justify-content-end">
+        <Row className="justify-content-end text-end">
             <Link href={`/admin/user-groups/create`} style={{ fontSize: '1em', fontWeight: '600' }}>
-                Create New Policy
+              <a className='text-decoration-none'>Create New Policy</a>
             </Link>
         </Row>
 
@@ -27,7 +27,6 @@ export default function UserGroupsPage() {
 }
 
 const UserGroupListItem = ({ data, idx }) => {
-    const _id= data._id.$oid;
     return (
         <tr>
             <td>{idx}</td>

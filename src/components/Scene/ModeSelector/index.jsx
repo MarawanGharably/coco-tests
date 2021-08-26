@@ -8,11 +8,11 @@ import styles from './ModeSelector.module.scss';
 const options = [
     { label: 'Product tagging', value: 'product_tagging' },
     { label: 'Product placement', value: 'product_placement' },
-    // {label:'Content Hotspots', value:'content_hotspots'},//not yet implemented
+    // { label: 'Content Hotspots', value:'content_hotspots'},//not yet implemented
 ];
 
 
-//TODO: remove RadioGroup, RadioSelectionContext
+
 
 
 const ModeSelector = ({ productLibrary }) => {
@@ -48,7 +48,6 @@ const ModeSelector = ({ productLibrary }) => {
                                 value={item.value}
                                 onChange={onModeChanged}
                                 className={`${styles['item']} ${isChecked ? styles['checkedSelector'] : ''}`}
-                                // className='item'
                             />
                         );
                     })}

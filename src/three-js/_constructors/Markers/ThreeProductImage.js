@@ -1,14 +1,18 @@
 import * as THREE from 'three';
+import InteractionObject from '../../three-base-components/InteractionObject';
+import ModalConstructor from '../ModalConstructor';
+import { CollisionManagerActionEnums } from '../../collision-manager/CollisionManager';
+import ThreeLoadingManager from '../../three-loading-manager/three-loading-manager';
 
-import InteractionObject from '../three-base-components/InteractionObject';
-import ModalComponent from '../modal-component/ModalComponent';
-import { CollisionManagerActionEnums } from '../collision-manager/CollisionManager';
-import ThreeLoadingManager from '../three-loading-manager/three-loading-manager';
+
+//TODO: Marker constructor should not have any information regarding the Scene!!!
+// this.scene - is a scene only constructor prop
+
 
 export default class ThreeProductImage extends InteractionObject {
     constructor(componentToRender, renderProps) {
         super();
-        const modalComponent = new ModalComponent(componentToRender, {
+        const modalComponent = new ModalConstructor(componentToRender, {
             ...renderProps,
             setScale: this.setScale,
             setRenderOrder: this.setRenderOrder.bind(this),
@@ -75,18 +79,8 @@ export default class ThreeProductImage extends InteractionObject {
         this.visualObject.position.copy(this.sceneObject.position);
     };
 
-    renderComponentImmediately = () => {
-        this.components.forEach((component) => {
-            component.onClick();
-        });
-    }
 
-    // Retrieves Matrix transforms of visual and collider components
-    getTransforms = () => {
-        const colliderTransform = this.sceneObject.matrix;
-        const visualTransform = this.visualObject.matrix;
-        return { colliderTransform, visualTransform };
-    }
+
 
     removeFromManager() {
         const colliderDispatch = this.getColliderDispatcher();

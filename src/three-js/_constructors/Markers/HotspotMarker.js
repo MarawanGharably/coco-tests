@@ -1,34 +1,42 @@
 import * as THREE from 'three';
 
-// import { SVGSpriteComponent, fetchSVGStringAsync } from 'three-svg';
 // import { HoverCursorComponent } from 'three-cursor-style';
 // import { PopUpComponent } from 'pop-up-component';
-import fetchSVGStringAsync from './ProductMarkerHelper';
-import InteractionObject from '../three-base-components/InteractionObject';
-import SVGSpriteComponent from '../three-svg/SVGSpriteComponent';
-import ModalComponent from '../modal-component/ModalComponent';
-import { CollisionManagerActionEnums } from '../collision-manager/CollisionManager';
+import InteractionObject from '../../three-base-components/InteractionObject';
+import SVGSpriteComponent from '../../three-svg/SVGSpriteComponent';
+import ModalConstructor from '../ModalConstructor';
+import { CollisionManagerActionEnums } from '../../collision-manager/CollisionManager';
 
-export default class ThreeProductMarker extends InteractionObject {
+
+//TODO: Marker constructor should not have any information regarding the Scene!!!
+// this.scene - is a scene only constructor prop
+// constructor should not fetch the data! 30 scene objects will
+
+export default class HotspotMarker extends InteractionObject {
     constructor(componentToRender, renderProps) {
         super();
-
-        const modalComponent = new ModalComponent(componentToRender, renderProps, this.dispose);
+        // const modalComponent = new HoverCursorComponent('pointer', 'all-scroll');
+        const modalComponent = new ModalConstructor(componentToRender, renderProps, this.dispose);
         this.modalComponentRenderProps = renderProps;
         this.attachComponent(modalComponent);
 
         const svgUrl = 'https://cdn.obsess-vr.com/product-hotspot-icon-circle.svg';
-        fetchSVGStringAsync(svgUrl)
-            .then((svgString) => {
-                this.svgSpriteComponent.setSVGString(svgString);
-            })
-            .catch((error) => console.error(error)); // eslint-disable-line no-console
-
-        // const hoverCursorComponent = new HoverCursorComponent('pointer', 'all-scroll');
-        // this.attachComponent(hoverCursorComponent);
+        this.fetchSVGStringAsync(svgUrl);
 
         this.svgSpriteComponent = null;
         this.isFlatBackground = false;
+    }
+
+     fetchSVGStringAsync= (url) =>{
+         fetch(url)
+            .then((response) => {
+                if (response.status === 200) return response.text();
+                throw new Error('svg load error!');
+            })
+            .then((svgString) => {
+                this.svgSpriteComponent.setSVGString(svgString);
+            })
+            .catch((error) => Promise.reject(error));
     }
 
     addToScene = (scene) => {
@@ -65,30 +73,8 @@ export default class ThreeProductMarker extends InteractionObject {
         this.sceneObject.scale.z = scale;
     }
 
-    setPosition = (x, y, z) => {
-        this.sceneObject.position.set(x, y, z);
 
-        if (this.isFlatBackground) {
-            this.sceneObject.position.x = -10;
-        } else {
-            this.sceneObject.position.clampLength(10, 10);
-        }
 
-        this.visualObject.position.copy(this.sceneObject.position);
-    }
-
-    renderComponentImmediately = () => {
-        this.components.forEach((component) => {
-            component.onClick();
-        });
-    }
-
-    // Retrieves Matrix transforms of visual and collider components
-    getTransforms = () => {
-        const colliderTransform = this.sceneObject.matrix;
-        const visualTransform = this.visualObject.matrix;
-        return { colliderTransform, visualTransform };
-    }
 
     removeFromManager() {
         const colliderDispatch = this.getColliderDispatcher();

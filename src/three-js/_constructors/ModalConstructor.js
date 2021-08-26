@@ -3,7 +3,7 @@ import { v1 as uuidv1 } from 'uuid';
 import ThreeSceneObjectComponent from '../three-base-components/ThreeSceneObjectComponent';
 import { UIManagerEnums } from '../ui-manager/UIManager';
 
-export default class ModalComponent extends ThreeSceneObjectComponent {
+export default class ModalConstructor extends ThreeSceneObjectComponent {
     constructor(componentToRender, renderProps, disposeFunc) {
         super();
         this.onModalClose = this.onModalClose.bind(this);
@@ -21,10 +21,7 @@ export default class ModalComponent extends ThreeSceneObjectComponent {
     }
 
     updateRenderProps(renderProps) {
-        this.renderProps = {
-            ...this.renderProps,
-            ...renderProps,
-        };
+        this.renderProps = {...this.renderProps, ...renderProps };
 
         this.owner.modalComponentRenderProps = this.renderProps;
     }
@@ -41,10 +38,7 @@ export default class ModalComponent extends ThreeSceneObjectComponent {
             renderProps: this.renderProps,
         };
 
-        UIDispatch({
-            type: UIManagerEnums.ADD_UI,
-            payload,
-        });
+        UIDispatch({ type: UIManagerEnums.ADD_UI,payload });
     }
 
     onModalClose() {

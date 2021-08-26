@@ -4,7 +4,7 @@ import SceneThumbnail from '../SceneThumbnail';
 import Slideshow from '../../Slideshow';
 import { setCurrentSceneID } from '../../../store/actions/SceneEditorActions';
 import styles from './SceneNavigator.module.scss';
-import mock from '../../../assets/mocks/scenesListMock.json';
+// import mock from '../../../assets/mocks/scenesListMock.json';
 
 export default function SceneNavigator ({ sceneEditor, className='' }){
     const dispatch = useDispatch();

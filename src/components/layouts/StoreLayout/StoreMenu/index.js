@@ -9,7 +9,7 @@ export default function StoreMenu(props) {
     const storeBasePath = `/store`;
 
     const links = [
-        { label: 'General', url: `${storeBasePath}/?id=${storeId}` },
+        // { label: 'General', url: `${storeBasePath}/?id=${storeId}` },
         // {label:'Welcome Screen', url:`${storeBasePath}/welcome`  },
         // {label:'Product Pop Up', url:`${storeBasePath}/popup` },
         // {label:'Section Selector', url: `${storeBasePath}/selectors` },

@@ -1,5 +1,7 @@
 /*@import "assets/scss/library";*/
 
+
+
 body {
     background: #000;
     min-height: 100%;
@@ -8,9 +10,19 @@ body {
     padding: 0;
     overflow-x: hidden;
     font-family: 'Source Sans Pro', sans-serif;
+    color:#D7D7D7;
 }
 
 
+.table{
+    color:#D7D7D7;
+    border-color:#d7d7d775;
+    font-weight: 300;
+}
+
+.card{
+    background-color: #4c4c4c;
+}
 
 /* Old Form Styles */
 form.authFormStyling .input-field{

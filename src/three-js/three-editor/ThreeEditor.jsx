@@ -5,8 +5,9 @@ import ThreeController from '../three-controls/ThreeController';
 import { setupRenderer, setupCamera } from './setupThreeEditor';
 import { threeEditorMouseEvents } from './threeEditorMouseEvents';
 import { useCollisionManager, CollisionManagerActionEnums } from '../collision-manager/CollisionManager';
-import ThreeProductMarker from '../hotspot-marker/ThreeProductMarker';
-import ThreeProductImage from '../hotspot-marker/ThreeProductImage';
+
+import {HotspotMarker, ThreeProductImage} from '../_constructors/Markers';
+
 import { useUIManager, UIManagerEnums } from '../ui-manager/UIManager';
 import TaggingModal from '../../components/tagging-modal/TaggingModal';
 import { useDataManager } from '../data-manager/DataManager';
@@ -81,11 +82,17 @@ export const ThreeEditor = ({ storeId, children }) => {
         });
     };
 
-    const renderProductMarker = (colliderTransform, visualTransform, renderProps = {}) => {
+
+    const renderProductMarker = (object={}) => {
+        const {collider_transform , transform } = object;
+        const renderProps={
+            type: object.hotspot_type,
+            id: object.id,
+            productSKU: object.sku,
+        }
+
         const componentToRender = (props) => <TaggingModal {...props} />; // eslint-disable-line
-        const marker = new ThreeProductMarker(
-            componentToRender, renderProps, colliderTransform, visualTransform,
-        );
+        const marker = new HotspotMarker(componentToRender, renderProps, collider_transform, transform);
         marker.addToScene(sceneRef.current);
         marker.setScale();
         marker.setUIDispatcher(UIDispatch);
@@ -94,17 +101,33 @@ export const ThreeEditor = ({ storeId, children }) => {
         return marker;
     };
 
-    const setMaxRenderOrder = (renderOrder) => {
-        if (renderOrder >= state.maxRenderOrder) {
-            dispatch(setMaxRenderOrderAction(renderOrder + 1));
-        }
-    };
+    const renderProductImageMarker = (object={}) => {
+        const {collider_transform, transform} = object;
 
-    const renderProductImageMarker = (colliderTransform, visualTransform, renderProps = {}) => {
+        //render existing object. New object provides imageUrl prop.
+        if(object.id && !object?.imageUrl){
+            const product = products.find((p) => p.id === object.image_id);
+            if (!product || !isEnabled) return false;
+            dispatch(setLoadingAction(true));
+            object.imageUrl = product.imageUrl;
+        }
+
+
+        const renderProps={
+            type: object.hotspot_type || 'product_image', //optional
+            id: object.id,//optional
+            imageUrl: object.imageUrl, //!present
+            renderOrder: object.renderOrder,//!present
+        }
+
+        //optional props
+        if(object.folderId) renderProps.folderId = object.folderId;
+        if(object.imageId) renderProps.imageId = object.imageId;
+        if(object.scale) renderProps.scale = object.scale;
+
+
         const componentToRender = (props) => <ProductImageControls {...props} />; // eslint-disable-line
-        const marker = new ThreeProductImage(
-            componentToRender, renderProps, colliderTransform, visualTransform,
-        );
+        const marker = new ThreeProductImage(componentToRender, renderProps, collider_transform, transform);
 
         marker.addToScene(sceneRef.current);
         marker.setUIDispatcher(UIDispatch);
@@ -117,6 +140,14 @@ export const ThreeEditor = ({ storeId, children }) => {
         return marker;
     };
 
+    const setMaxRenderOrder = (renderOrder) => {
+        if (renderOrder >= state.maxRenderOrder) {
+            dispatch(setMaxRenderOrderAction(renderOrder + 1));
+        }
+    };
+
+
+
     const addProductImage = (e) => {
         e.preventDefault();
         const imageId = e.dataTransfer.getData('id');
@@ -125,8 +156,8 @@ export const ThreeEditor = ({ storeId, children }) => {
 
         if (!imageId && !imageUrl) return;
 
-        const marker = renderProductImageMarker(undefined, undefined, {
-            renderOrder: state.maxRenderOrder,
+        const marker = renderProductImageMarker({
+            renderOrder:state.maxRenderOrder,
             imageId,
             folderId,
             imageUrl,
@@ -146,9 +177,7 @@ export const ThreeEditor = ({ storeId, children }) => {
         });
 
         // Removes existing UIs
-        UIDispatch({
-            type: UIManagerEnums.RESET_UIS,
-        });
+        UIDispatch({type: UIManagerEnums.RESET_UIS});
 
         marker.renderComponentImmediately();
     };
@@ -220,9 +249,7 @@ export const ThreeEditor = ({ storeId, children }) => {
         addThreeEditorMouseEventListeners();
 
         // Removes existing UIs
-        UIDispatch({
-            type: UIManagerEnums.RESET_UIS,
-        });
+        UIDispatch({type: UIManagerEnums.RESET_UIS });
 
         return removeThreeEditorMouseEventListeners;
     }, [currentSceneId, mode]); // eslint-disable-line
@@ -248,42 +275,15 @@ export const ThreeEditor = ({ storeId, children }) => {
             });
 
             // Removes existing UIs
-            UIDispatch({
-                type: UIManagerEnums.RESET_UIS,
-            });
+            UIDispatch({ type: UIManagerEnums.RESET_UIS });
         };
 
         const renderMarker = (object) => {
             if (object.hotspot_type === 'product_image') {
-                const product = products.find((p) => p.id === object.image_id);
-
-                if (!product || !isEnabled) return false;
-
-                dispatch(setLoadingAction(true));
-
-
-                return renderProductImageMarker(
-                    object.collider_transform,
-                    object.transform,
-                    {
-                        type: object.hotspot_type,
-                        id: object.id,
-                        scale: object.scale,
-                        imageUrl: product.imageUrl,
-                        renderOrder: object.renderOrder,
-                    },
-                );
+                return renderProductImageMarker(object);
             }
 
-            return renderProductMarker(
-                object.collider_transform,
-                object.transform,
-                {
-                    type: object.hotspot_type,
-                    id: object.id,
-                    productSKU: object.sku,
-                },
-            );
+            return renderProductMarker( object );
         };
 
         const setNewRoomObjectData = () => {

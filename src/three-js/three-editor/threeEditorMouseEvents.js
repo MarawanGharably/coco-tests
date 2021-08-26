@@ -37,9 +37,7 @@ export const threeEditorMouseEvents = (
     let pendingSaveProductObject = null;
 
     const getMousePosition = (refToUpdate, e) => {
-        const {
-            top, left, width, height,
-        } = renderer.domElement.getBoundingClientRect();
+        const {top, left, width, height} = renderer.domElement.getBoundingClientRect();
 
         refToUpdate.current.x = -1 + 2 * (e.clientX - left) / width; // eslint-disable-line
         refToUpdate.current.y = 1 - 2 * (e.clientY - top) / height; // eslint-disable-line
@@ -50,9 +48,7 @@ export const threeEditorMouseEvents = (
 
         const currentProductMarker = object.owner;
         const { colliderTransform, visualTransform } = currentProductMarker.getTransforms();
-        const {
-            id, type, productSKU, scale, renderOrder,
-        } = currentProductMarker.modalComponentRenderProps;
+        const {id, type, productSKU, scale, renderOrder} = currentProductMarker.modalComponentRenderProps;
 
         const postData = {
             type,

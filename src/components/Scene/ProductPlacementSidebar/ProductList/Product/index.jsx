@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect, useDispatch } from 'react-redux';
-import ConfirmationDialog from '../../../ConfirmationDialog';
-import { deleteHotspotProduct } from '../../../../APImethods/HotspotsAPI';
+import ConfirmationDialog from '../../../../ConfirmationDialog';
+import { deleteHotspotProduct } from '../../../../../APImethods/HotspotsAPI';
 import styles from './Product.module.scss';
 
-import { PRODUCT_PLACEMENT } from '../../ModeSelector/modeOptions';
+import { PRODUCT_PLACEMENT } from '../../../ModeSelector/modeOptions';
 
 const Product = ({ id, storeId, mode, imageUrl, folderId }) => {
     const dispatch = useDispatch();

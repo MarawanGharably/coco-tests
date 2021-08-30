@@ -1,7 +1,8 @@
-.layout{
+@import '../../../assets/scss/_variables.scss';
+
+.cmp{
   //background-position: 0% 0em!important;
   background-size: 100% auto!important;
-  background-color: #000;
   min-height: 100vh;
 
   h2,h5{ color:#fff; }
@@ -24,7 +25,21 @@
     }
   }
 
+  .leftSideBar{
+    background: #232323;
+    box-shadow: 20px 4px 14px rgba(0, 0, 0, 0.5);
+    padding-right:0;
+  }
 
+  .contentArea{
+    padding: 0 2em;
+
+    >div{
+      max-width: 2200px;
+
+    }
+
+  }
 
 }
 

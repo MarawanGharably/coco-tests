@@ -4,6 +4,9 @@ import NavBar from "../../NavBar";
 import React from "react";
 import styles from './adminPageLayout.module.scss';
 
+
+//TODO: refactor to use <Layout.LeftSidebar >, <Layout.ContentArea> and <SideBarMenu/>
+
 export default function AdminPageLayout({title, children}){
     return(<Layout fluid='xl' className={styles.adminLayout}>
         <Row>

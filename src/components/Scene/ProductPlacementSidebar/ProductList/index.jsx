@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Select from 'react-select';
 import { useRouter } from 'next/router';
 import { GENERAL_LABEL } from '../../../../store/types/productLibrary';
-import Product from "../Product";
+import Product from "./Product";
 import { setSelectedFolderAction } from '../../../../store/actions/productLibraryActions';
 import styles from './ProductList.module.scss';
 

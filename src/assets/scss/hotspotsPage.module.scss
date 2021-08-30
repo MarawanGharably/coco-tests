@@ -1,13 +1,10 @@
 @import './variables';
 
-.hotspotsPage{
-  position:relative;
-
+.cmp{
 
   .sceneEditor{
     position: relative;
     margin: 0;
-    //display: table;
     width: 100%;
 
     .sceneNavigator{
@@ -15,7 +12,7 @@
 
       //overwrite SceneNavigator default styles
       &.withSideBar{
-        width:70%;
+        width:75%;
         border-bottom-right-radius: 0;
         border-top-right-radius: 0;
       }
@@ -32,7 +29,18 @@
     :global {
       button{
         @extend %buttonWithGradient;
-        font-size: 18px;
+        font-size: 17px;
+      }
+    }
+  }
+
+}
+
+@media (max-width: 1100px){
+  .cmp{
+    .sceneEditor{
+      .sceneNavigator.withSideBar{
+        width:70%;
       }
     }
   }

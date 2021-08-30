@@ -1,32 +1,13 @@
 .cmp {
-    .row {
-        min-height: 100vh;
-
-        .content {
-            max-width: 1196px;
-            padding: 0 15px;
-        }
-    }
 
     .logo {
       padding: 1em;
-        
-      img{
-          margin-top: 1em;
-      }
+
+      img{ margin-top: 1em;}
     }
 
-    .storeSidebar {
-        background: #232323;
-        box-shadow: 20px 4px 14px rgba(0, 0, 0, 0.5);
-        padding-right:0;
-    }
 
-    .title {
-        color: #fff;
-    }
 
-    .subTitle {
-        color: #fff;
-    }
+    .title { color: #fff;}
+    .subTitle { color: #fff;}
 }

@@ -1,6 +1,6 @@
 import React from 'react';
-import ProductList from "../product-library/ProductList";
-import Actions from "../product-library/Actions/Actions";
+import ProductList from "./ProductList";
+import Actions from "./Actions/Actions";
 import styles from './ProductPlacementSidebar.module.scss';
 
 export default function ProductPlacementSidebar({ showSideBar, productLibrary }){

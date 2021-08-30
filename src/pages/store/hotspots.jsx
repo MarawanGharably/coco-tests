@@ -8,12 +8,13 @@ import LoadingScreen from '../../components/LoadingScreen';
 import HotspotEditor from '../../three-js/three-editor/HotspotEditor';
 import { ModeSelector, SceneNavigator } from '../../components/Scene';
 import ProductPlacementSidebar from '../../components/Scene/ProductPlacementSidebar';
-import { setSelectedFolderAction } from '../../store/actions/productLibraryActions';
 import { getHotspotProducts, getStoreFlags, apiPublishSceneData, getStoreScenes } from '../../APImethods';
 import { showSuccessMessage, showErrorMessage } from '../../store/actions/toastActions';
+import {destroySceneData} from "../../store/actions/SceneEditorActions";
+import { setSelectedFolderAction } from '../../store/actions/productLibraryActions';
 import { GENERAL_LABEL } from '../../store/types/productLibrary';
 import styles from '../../assets/scss/hotspotsPage.module.scss';
-import {destroySceneData} from "../../store/actions/SceneEditorActions";
+
 
 let HotspotsPage = (props) => {
     const { isEnabled, mode_slug } = props.productLibrary;
@@ -58,7 +59,7 @@ let HotspotsPage = (props) => {
     };
 
     return (
-        <StoreLayout className={styles.hotspotsPage}>
+        <StoreLayout className={styles.cmp}>
             <Row style={{ color: '#fff' }}>
                 <Col sm={12} md={5}>
                     <h1>Hotspots</h1>
@@ -82,6 +83,8 @@ let HotspotsPage = (props) => {
         </StoreLayout>
     );
 };
+
+
 
 const HotSpotsFooter = ({ onClick }) => {
     return (

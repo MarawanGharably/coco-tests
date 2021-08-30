@@ -1,34 +1,46 @@
 import React from 'react';
-import Head from 'next/head';
-import { Container, Col, Row } from 'react-bootstrap';
+import { useRouter } from 'next/router';
+import { Row } from 'react-bootstrap';
 import Logo from '../_common/Logo';
-import StoreMenu from './StoreMenu';
+import SideBarMenu from '../_common/SideBarMenu';
 import HeaderMenu from '../_common/HeaderMenu';
+import Layout from "../Layout";
 import styles from './storeLayout.module.scss';
 
-export default function StoreLayout({ title, subTitle, meta, className = '', children }) {
+export default function StoreLayout({ title, subTitle, meta={}, className = '', children }) {
+    const router = useRouter();
+    const { id: storeId } = router.query;
+    const storeBasePath = `/store`;
+
+    const links = [
+        // { label: 'General', url: `${storeBasePath}/?id=${storeId}` },
+        // {label:'Welcome Screen', url:`${storeBasePath}/welcome`  },
+        // {label:'Product Pop Up', url:`${storeBasePath}/popup` },
+        // {label:'Section Selector', url: `${storeBasePath}/selectors` },
+        // {label:'Icons', url:'/icons'},
+        { label: 'Hotspots', url: `${storeBasePath}/hotspots/?id=${storeId}` },
+        // {label:'Navigation Arrows', url:'/'},
+        // {label:'Product Data', url:'/'},
+    ];
+
+    if(!meta?.title) meta.title = 'COCO: Store Editing';
+
     return (
-        <Container fluid={true} className={`${styles.cmp} ${className}`}>
-            <Head>
-                <title>{meta?.title || 'COCO: Store Editing'}</title>
-            </Head>
-
-            <Row className={styles.row}>
-                <Col xs={4} sm={3} lg={3} xl={2} className={styles.storeSidebar}>
+        <Layout meta={meta} fluid={true} showNavBar={false} className={`${styles.cmp} ${className}`}>
+            <Row>
+                <Layout.LeftSidebar >
                     <Logo className={styles.logo} />
-                    <StoreMenu />
-                </Col>
+                    <SideBarMenu links={links}/>
+                </Layout.LeftSidebar>
 
-                <Col xs={8} sm={9} lg={9} xl={10}>
-                    {/*Content Wrapper */}
-                    <div className={styles.content}>
+
+                <Layout.ContentArea>
                         <HeaderMenu />
                         {title && (<h1 className={styles.title}>{title}</h1>)}
                         {subTitle && <h6 className={styles.subTitle}>{subTitle}</h6>}
                         {children}
-                    </div>
-                </Col>
+                </Layout.ContentArea>
             </Row>
-        </Container>
+        </Layout>
     );
 }

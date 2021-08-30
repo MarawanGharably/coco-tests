@@ -73,7 +73,7 @@ const Actions = ({ selectedFolder }) => {
         <div className={styles['product-library-actions']}>
             <FileInput fileRef={fileRef} name="images" hidden multiple handleChange={handleImageChange} />
             <Button variant="primary" onClick={openFileExplorer}>
-                Add Product
+                Add <span>Product</span>
             </Button>
 
             {/* TODO: find where and how "Delete Folder" should be placed */}

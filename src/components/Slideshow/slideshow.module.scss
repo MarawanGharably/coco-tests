@@ -5,9 +5,8 @@
     position: relative;
     background: #1a1a1a;
     border-radius: 0.7em;
-    margin-bottom: -1em;
-    z-index: 999;
     overflow: hidden;
+    min-height: 7em;
 
     .scrollable {
         display: flex;
@@ -25,7 +24,7 @@
     }
 
     .scrollBtn {
-        width: 9.5em;
+        width: 6.5em;
         background: linear-gradient(270deg, #1a1a1a 0%, #1a1a1a00 75.5%);
         position: absolute;
         bottom: 0;

@@ -1,6 +1,6 @@
-@import '../../../../assets/scss/_variables.scss';
+@import '../../../../assets/scss/variables';
 
-.storeMenu{
+.cmp{
   color: $light-grey;
   list-style: none;
   margin-top: 3em;
@@ -38,8 +38,4 @@
       }
     }
   }
-
-
-  //background: #232323;
-  //box-shadow: 20px 4px 14px rgba(0, 0, 0, 0.5);
 }

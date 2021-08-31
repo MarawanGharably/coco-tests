@@ -8,12 +8,17 @@
     overflow: hidden;
     min-height: 7em;
 
+
     .scrollable {
         display: flex;
         overflow-x: scroll;
         width: 100%;
         transition: all 1s ease-out;
         scroll-behavior: smooth;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
 
         .scrollableContainer {
             transition: all 1s ease-out;

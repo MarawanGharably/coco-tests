@@ -53,7 +53,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
         geometry.rotateY(THREE.MathUtils.degToRad(180))
         this.setupFaceUV(geometry)
 
-        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
+        const material = new THREE.MeshBasicMaterial({ color: 0x000000 })
 
         this.sceneObject = new THREE.Mesh(geometry, material)
         this.objectWireframe = new WireframeHelper(geometry)

@@ -2,18 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, Button } from 'react-bootstrap';
 import { formURL } from '../../utils/urlHelper';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 import config from '../../config';
 import styles from './storeThumbnail.module.scss';
 
 const StoreThumbnail = ({ data }) => {
     const { _id, name, general } = data;
     const storeId = _id.$oid;
-    const router = useRouter();
-
-    const handleEditStore = (storeId) => {
-        router.push(`/store?id=${storeId}`);
-    };
 
     const image = formURL(general?.og_image) || `${config['CDN_HOST']}/noImage.png`;
 
@@ -23,9 +18,12 @@ const StoreThumbnail = ({ data }) => {
             {/* Card Image */}
             <div className={styles.image} style={{ backgroundImage: `url(${image})` }}>
                 <figcaption className={`${styles.figcaption}`}>
-                    <Button onClick={() => handleEditStore(storeId)} variant="primary" >
-                        Edit Store
-                    </Button>
+                    <Link href={`/store/hotspots/?id=${storeId}`}>
+                        <Button  variant="primary" >
+                            Edit Store
+                        </Button>
+                    </Link>
+
                 </figcaption>
             </div>
 

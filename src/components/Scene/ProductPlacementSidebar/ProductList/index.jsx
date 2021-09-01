@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import { useRouter } from 'next/router';
-import { GENERAL_LABEL } from '../../../../store/types/productLibrary';
 import Product from "./Product";
 import { setSelectedFolderAction } from '../../../../store/actions/productLibraryActions';
+import { GENERAL_LABEL } from '../../../../store/types/productLibrary';
 import styles from './ProductList.module.scss';
 
 
@@ -16,6 +16,7 @@ const ProductList = ({ productLibrary, setSelectedFolderAction }) => {
     const selectedOption = selectedFolder || defaultOption;
     const router = useRouter();
     const {id:storeId} = router.query;
+
     const handleFolderChange = (selected) => {
         setSelectedFolderAction(selected);
     };

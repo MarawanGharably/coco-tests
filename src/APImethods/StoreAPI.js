@@ -54,7 +54,6 @@ export const updateStore=(storeId, data)=>{
 
 
 export const getStoreFlags=(storeId, options)=>dispatch=>{
-    console.log('>getStoreFlags', {storeId, config });
     if(!storeId) return Promise.reject('Missed required parameter');
 
     const config={

@@ -35,7 +35,13 @@ export const setModeAction = (data) => ({
     payload: data,
 });
 
-export const setEnabledAction = (isEnabled) => ({
+
+export const setEnabledAction = (payload) => ({
     type: types.SET_ENABLED,
-    payload: isEnabled,
+    payload,
+});
+
+
+export const destroyProductLibraryData = () => ({
+    type: types.DESTROY_PRODUCT_LIB_DATA
 });

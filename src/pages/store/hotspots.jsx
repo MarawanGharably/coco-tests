@@ -10,9 +10,8 @@ import { ModeSelector, SceneNavigator } from '../../components/Scene';
 import ProductPlacementSidebar from '../../components/Scene/ProductPlacementSidebar';
 import { getHotspotProducts, getStoreFlags, apiPublishSceneData, getStoreScenes } from '../../APImethods';
 import { showSuccessMessage, showErrorMessage } from '../../store/actions/toastActions';
+import { destroyProductLibraryData } from '../../store/actions/productLibraryActions';
 import {destroySceneData} from "../../store/actions/SceneEditorActions";
-import { setSelectedFolderAction } from '../../store/actions/productLibraryActions';
-import { GENERAL_LABEL } from '../../store/types/productLibrary';
 import styles from '../../assets/scss/hotspotsPage.module.scss';
 
 
@@ -29,21 +28,29 @@ let HotspotsPage = (props) => {
         if (storeId) fetchData();
 
         return function cleanup(){
+            //remove all data loaded for the current store when exiting
             dispatch(destroySceneData());
+            dispatch(destroyProductLibraryData());
         }
     }, [storeId]);
 
+
+
     const fetchData = async () => {
-        const flagsReq = await dispatch(getStoreFlags(storeId, {updateStore:'productLibrary'}));
-        const isEnabled = !!flagsReq[0]['product_library_enabled'];
+        try{
+            const flagsReq = await dispatch(getStoreFlags(storeId, {updateStore:'productLibrary'}));
+            const isEnabled = !!flagsReq[0]['product_library_enabled'];
 
-        if (isEnabled) {
-            dispatch(setSelectedFolderAction({ label: GENERAL_LABEL }));
-            dispatch(getHotspotProducts(storeId, {updateStore:'productLibrary'})).catch(err=>{});
+            if (isEnabled) {
+                dispatch(getHotspotProducts(storeId, {updateStore:'productLibrary'}));
+            }
+
+            dispatch(getStoreScenes(storeId, {updateStore:'productLibrary'}));
+        }catch(err){
+            console.error({err})
         }
-
-        dispatch(getStoreScenes(storeId, {updateStore:'productLibrary'})).catch((err) => {});
     };
+
 
     const publishSceneData = async () => {
         try {
@@ -74,7 +81,7 @@ let HotspotsPage = (props) => {
             <Row className={styles['sceneEditor']}>
                 <SceneNavigator sceneEditor={props.SceneEditor} className={`${styles.sceneNavigator} ${showSideBar ? styles.withSideBar : ''}`} />
                 <HotspotEditor storeId={storeId} />
-                <ProductPlacementSidebar showSideBar={showSideBar} productLibrary={props.productLibrary} />
+                {isEnabled && (<ProductPlacementSidebar visible={showSideBar} productLibrary={props.productLibrary} />)}
             </Row>
 
             {isLoading && <LoadingScreen />}

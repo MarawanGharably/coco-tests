@@ -14,6 +14,13 @@ import {
 
 export const getStoreHotspots = (storeId) => {};
 
+
+/**
+ * Get list of products associated with the store hotspots
+ * @param storeId
+ * @param options
+ * @returns {Promise}
+ */
 export const getHotspotProducts = (storeId, options) =>dispatch=> {
     if (!storeId) return Promise.reject('Missed required parameter');
 
@@ -26,6 +33,7 @@ export const getHotspotProducts = (storeId, options) =>dispatch=> {
         .then((res) => {
             const products = parseProducts(res.data.products);
             const folders = parseFolders(res.data.folders);
+
             //Update store
             if(options?.updateStore=='productLibrary'){
                 dispatch(setProductsAction(products));

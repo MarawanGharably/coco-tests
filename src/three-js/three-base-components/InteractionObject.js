@@ -20,9 +20,7 @@ export default class InteractionObject extends ThreeSceneObject {
      */
     onHover = () => {
         this.components.forEach((component) => {
-            if (component.onHover) {
-                component.onHover();
-            }
+            if (component.onHover) component.onHover();
         });
     }
 
@@ -32,9 +30,7 @@ export default class InteractionObject extends ThreeSceneObject {
      */
     onUnhover = () => {
         this.components.forEach((component) => {
-            if (component.onUnhover) {
-                component.onUnhover();
-            }
+            if (component.onUnhover) component.onUnhover();
         });
     }
 
@@ -44,9 +40,7 @@ export default class InteractionObject extends ThreeSceneObject {
      */
     onClick = () => {
         this.components.forEach((component) => {
-            if (component.onClick) {
-                component.onClick();
-            }
+            if (component.onClick) component.onClick();
         });
     }
 

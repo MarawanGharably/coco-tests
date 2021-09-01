@@ -8,7 +8,7 @@ import styles from './ModeSelector.module.scss';
 const options = [
     { label: 'Product tagging', value: 'product_tagging' },
     { label: 'Product placement', value: 'product_placement' },
-    // { label: 'Content Hotspots', value:'content_hotspots'},//not yet implemented
+    // { label: 'Content Hotspots', value:'content_hotspots'},
 ];
 
 
@@ -19,6 +19,8 @@ const ModeSelector = ({ productLibrary }) => {
     const { mode, isEnabled } = productLibrary;
     const dispatch = useDispatch();
 
+    //Display options only when store config data is ready. Prevent flickering.
+    if(isEnabled == null) return false;
 
     //TODO: mode must != label text, use value instead
     const onModeChanged = (e) => {

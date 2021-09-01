@@ -7,6 +7,9 @@ import styles from './Product.module.scss';
 
 import { PRODUCT_PLACEMENT } from '../../../ModeSelector/modeOptions';
 
+//TODO: use connect only once on parent level
+
+
 const Product = ({ id, storeId, mode, imageUrl, folderId }) => {
     const dispatch = useDispatch();
     const [isDialogOpen, setDialogOpen] = useState(false);

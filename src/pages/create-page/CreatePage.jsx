@@ -15,7 +15,7 @@ const CreatePage = () => {
     const placementPath = `${pathPrefix}/product-placement`;
 
     return (<>
-        <Layout fluid={'xl'}>
+        <Layout fluid={true}>
                 <div id="create-store-page" >
                     <Switch>
                         <Route exact path="/create">

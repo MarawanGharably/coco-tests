@@ -7,7 +7,6 @@ const authCookie = cookies.get(AUTH_COOKIE);
 
 const initialState = {
     isAuthenticated: !!authCookie, // session exist while cookie exist
-    user:null
 };
 
 
@@ -16,7 +15,6 @@ export default function (state = initialState, action) {
         case LOGGED_IN:
             return {
                 isAuthenticated: true,
-                user:action.payload
             };
 
         case LOGGED_OUT:
@@ -28,6 +26,7 @@ export default function (state = initialState, action) {
             //options MUST be present
             cookies.remove(AUTH_COOKIE, { path: '/', domain:cookieHost });
             cookies.remove('refresh_token', {path: '/', domain:cookieHost });
+            cookies.remove('user', {path: '/', domain:cookieHost });
 
             return {
                 isAuthenticated: false,

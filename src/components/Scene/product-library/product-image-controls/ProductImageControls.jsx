@@ -37,56 +37,42 @@ const ProductImageControls = ({
         const { colliderTransform, visualTransform } = transforms;
 
         return {
-            type: HOTSPOT_TYPE,
-            scene_id: currentSceneId,
+            type: "HotspotMarker",
+            scene: currentSceneId,
             collider_transform: colliderTransform.elements,
             transform: visualTransform.elements,
             props: {
+                show_icon: true,
                 renderOrder,
                 hotspot_type: HOTSPOT_TYPE,
                 scale,
-                ...(imageId
-                    ? {image_id: imageId}
-                    : {}),
-                ...(folderId
-                    ? {folder_id: folderId }
-                    : {}),
+                image: imageId
             },
         };
     };
 
     const handleHotspotChange = ({ id, storeId, scale, renderOrder, imageId, folderId }) => {
         const postData = parsePostData({ scale, renderOrder, imageId, folderId });
-
-        if (id) {
-            apiUpdateHotspotByType(HOTSPOT_TYPE, storeId, id, postData).catch((err) => {
-                console.error(err);
-            });
-        } else {
-            apiCreateHotspotByType(HOTSPOT_TYPE, storeId, postData)
-                .then((res) => {
-                    updateState({
-                        type: res.props.hotspot_type,
-                        id: res._id.$oid, //eslint-disable-line
-                        scale: res.props.scale,
-                        renderOrder: res.props.renderOrder,
-                    });
-                })
-                .catch((err) => {
-                    console.error(err);
-                    dispose();
-                });
-        }
+        apiUpdateHotspotByType(HOTSPOT_TYPE, storeId, currentSceneId, id['$oid'], postData).catch((err) => {
+            console.error(err);
+        });
     };
 
     const createProductImage = (uiStateId) => {
         if (!uiStateId) {
-            handleHotspotChange({
-                storeId,
-                imageId,
-                scale,
-                renderOrder,
-                folderId,
+            const postData = parsePostData({ scale, renderOrder, imageId, folderId });
+            apiCreateHotspotByType(HOTSPOT_TYPE, storeId, currentSceneId, postData)
+            .then((res) => {
+                updateState({
+                    type: res.props.hotspot_type,
+                    id: res._id.$oid, //eslint-disable-line
+                    scale: res.props.scale,
+                    renderOrder: res.props.renderOrder,
+                });
+            })
+            .catch((err) => {
+                console.error(err);
+                dispose();
             });
         }
     };

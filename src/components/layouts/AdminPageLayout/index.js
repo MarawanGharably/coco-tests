@@ -13,7 +13,6 @@ export default function AdminPageLayout({title, children}){
             <Col xs={4} sm={3}>
                 <NavBar>
                     <NavBar.Item name="USERS" pathName={`/admin/users`} />
-                    <NavBar.Item name="Policies/User Groups" pathName={`/admin/user-groups`} />
                     <NavBar.Item name="STORES" pathName={`/admin/stores`} />
                 </NavBar>
             </Col>

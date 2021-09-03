@@ -8,7 +8,7 @@ import SubmitStatusMessage from '../../../components/ReduxForms/SubmitStatusMess
 import AdminPageLayout from '../../../components/layouts/AdminPageLayout';
 
 // API Methods
-import { getStore, updateStore } from '../../../APImethods/StoreAPI';
+import { getStore, updateStore } from "../../../APImethods";
 
 let StoreForm = (props) => {
     const { id:storeId } = props.router.query;

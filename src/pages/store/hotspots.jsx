@@ -8,7 +8,12 @@ import LoadingScreen from '../../components/LoadingScreen';
 import HotspotEditor from '../../three-js/three-editor/HotspotEditor';
 import { ModeSelector, SceneNavigator } from '../../components/Scene';
 import ProductPlacementSidebar from '../../components/Scene/ProductPlacementSidebar';
-import { getHotspotProducts, getStoreFlags, apiPublishSceneData, getStoreScenes } from '../../APImethods';
+import {
+    getStoreFlags,
+    apiPublishSceneData,
+    getStoreScenes,
+    getProductLibrary
+} from "../../APImethods";
 import { showSuccessMessage, showErrorMessage } from '../../store/actions/toastActions';
 import { destroyProductLibraryData } from '../../store/actions/productLibraryActions';
 import {destroySceneData} from "../../store/actions/SceneEditorActions";
@@ -22,7 +27,10 @@ let HotspotsPage = (props) => {
     const dispatch = useDispatch();
     const { id:storeId } = router.query;
 
-    const showSideBar = isEnabled && mode_slug == 'product_placement' ? true : false;
+    const { currentSceneId } = props.SceneEditor;
+
+    const showSideBar = isEnabled && mode_slug === 'product_placement';
+
 
     useEffect(() => {
         if (storeId) fetchData();
@@ -39,10 +47,12 @@ let HotspotsPage = (props) => {
     const fetchData = async () => {
         try{
             const flagsReq = await dispatch(getStoreFlags(storeId, {updateStore:'productLibrary'}));
-            const isEnabled = !!flagsReq[0]['product_library_enabled'];
+            const isEnabled = !!flagsReq['product_library_enabled'];
 
             if (isEnabled) {
-                dispatch(getHotspotProducts(storeId, {updateStore:'productLibrary'}));
+                const { selectedFolder } = props.productLibrary;
+                const noFolderSelected = selectedFolder && Object.keys(selectedFolder).length === 0 && selectedFolder.constructor === Object;
+                dispatch(getProductLibrary(storeId, noFolderSelected)).catch(err=>{});
             }
 
             dispatch(getStoreScenes(storeId, {updateStore:'productLibrary'}));

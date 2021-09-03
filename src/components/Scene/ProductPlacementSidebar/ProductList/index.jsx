@@ -3,17 +3,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import { useRouter } from 'next/router';
-import Product from "./Product";
 import { setSelectedFolderAction } from '../../../../store/actions/productLibraryActions';
-import { GENERAL_LABEL } from '../../../../store/types/productLibrary';
 import styles from './ProductList.module.scss';
+import Product from "./Product";
 
 
 
 const ProductList = ({ productLibrary, setSelectedFolderAction }) => {
-    const { products, folders, selectedFolder } = productLibrary;
-    const defaultOption = { label: GENERAL_LABEL };
-    const selectedOption = selectedFolder || defaultOption;
+    const { folders, selectedFolder } = productLibrary;
+
+
     const router = useRouter();
     const {id:storeId} = router.query;
 
@@ -22,32 +21,35 @@ const ProductList = ({ productLibrary, setSelectedFolderAction }) => {
     };
 
 
-    const filterFolders = ({ folderId }) => {
-        if (!selectedFolder) return true;
-
-        return !selectedFolder.id || folderId === selectedFolder.id;
-    };
-
     return (
-        <div className={styles['product-list']}>
-            <Select
-                id='prodList'
-                instanceId='prodList'
-                className={styles["selector"]}
-                options={[defaultOption, ...folders]}
-                value={selectedOption}
-                onChange={handleFolderChange}
-            />
+      <div className={styles["product-list"]}>
+
+          <Select
+            id="folderSelector"
+            instanceId="folderSelector"
+            className={styles["selector"]}
+            options={folders.map(item => ({
+                  label: item.name,
+                  value: item._id,
+                  products: item.products
+              })
+            )}
+            value={selectedFolder}
+            onChange={handleFolderChange}
+          />
 
 
-            <div className={styles["list"]} >
-                {products
-                    .filter(filterFolders)
-                    .map(({ id, imageUrl, folderId }, i) => (
-                        <Product key={i} id={id} storeId={storeId} imageUrl={imageUrl} folderId={folderId} />
-                    ))}
-            </div>
-        </div>
+          <div className={styles["list"]}>
+
+              {selectedFolder?.products?.length ?
+                selectedFolder?.products?.map(({ _id, image, folder }, i) => (
+                  <Product key={i} id={_id} storeId={storeId} image={image}
+                           folder={folder} />
+                ))
+                : <span>Folder is empty</span>
+              }
+          </div>
+      </div>
     );
 };
 
@@ -58,10 +60,7 @@ ProductList.propTypes = {
     productLibrary: PropTypes.shape({
         products: PropTypes.arrayOf(PropTypes.object).isRequired,
         folders: PropTypes.arrayOf(PropTypes.object).isRequired,
-        selectedFolder: PropTypes.shape({
-            id: PropTypes.number,
-            label: PropTypes.string,
-        }),
+        selectedFolder: PropTypes.shape({}),
     }).isRequired,
 };
 

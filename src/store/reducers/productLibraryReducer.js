@@ -17,7 +17,7 @@ const initialState = {
     isEnabled: null, //keep null as initial value to determine whether data was loaded or not
     products: [],
     folders: [],
-    selectedFolder: { label: GENERAL_LABEL },
+    selectedFolder: {},
     mode: PRODUCT_TAGGING,
     mode_slug: 'product_tagging',
 };
@@ -40,9 +40,21 @@ export default function (state = initialState, action) {
             return ({ ...state, selectedFolder: payload });
 
         case DELETE_PRODUCT:
+            const { productId, folderId } = payload;
+            let selectedFolderUpdate = state.selectedFolder;
+            selectedFolderUpdate.products = selectedFolderUpdate.products.filter((item) => item._id !== productId);
+            let foldersUpdate = state.folders.map((folder) => {
+                if (folder._id === folderId) {
+
+                    folder.products = selectedFolderUpdate.products;
+                }
+                return folder;
+            });
+
             return ({
                 ...state,
-                products: state.products.filter(({ id }) => id !== payload),
+                selectedFolder: selectedFolderUpdate,
+                folders: foldersUpdate
             });
 
         case DELETE_FOLDER:

@@ -52,7 +52,7 @@ export const threeEditorMouseEvents = (
 
         const postData = {
             type,
-            scene_id: currentSceneId,
+            scene: currentSceneId,
             collider_transform: colliderTransform.elements,
             transform: visualTransform.elements,
             props: {
@@ -72,7 +72,7 @@ export const threeEditorMouseEvents = (
 
         if (id) {
             try {
-                await apiUpdateHotspotByType(type, storeId, id, postData );
+                await apiUpdateHotspotByType(type, storeId, currentSceneId, id['$oid'], postData );
             } catch (err) {
                 console.error(err);
             }

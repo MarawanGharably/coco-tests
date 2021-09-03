@@ -73,9 +73,6 @@ export default class HotspotMarker extends InteractionObject {
         this.sceneObject.scale.z = scale;
     }
 
-
-
-
     removeFromManager() {
         const colliderDispatch = this.getColliderDispatcher();
 

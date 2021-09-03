@@ -15,9 +15,9 @@ export const setFoldersAction = (folders) => ({
     payload: folders,
 });
 
-export const deleteProductAction = (productId) => ({
+export const deleteProductAction = (productId, folderId) => ({
     type: types.DELETE_PRODUCT,
-    payload: productId,
+    payload: { productId, folderId },
 });
 
 export const setSelectedFolderAction = (selectedFolder) => ({

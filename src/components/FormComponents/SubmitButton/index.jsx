@@ -5,7 +5,7 @@ import styles from './SubmitButton.module.scss';
 
 const SubmitButton = ({ buttonText = '', submitting, onClick, className='' }) => {
     return (
-        <Button type="submit" className={`${styles.submitButton} ${className}`} onClick={onClick}>
+        <Button type="submit" className={`${styles.submitButton} ${className}`} onClick={onClick} disabled={submitting}>
             <span className="text">{buttonText}</span>
             <Spinner
                 as="span"

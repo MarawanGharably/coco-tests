@@ -1,46 +1,74 @@
 import React, { useEffect, useState } from 'react';
-import { Field, reduxForm, getFormValues } from 'redux-form';
-import { withRouter } from 'next/router'
+import { Field, reduxForm, FieldArray } from "redux-form";
+import { useRouter} from "next/router";
 import { Card } from 'react-bootstrap';
-import { Input, Select } from '../../../components/ReduxForms/_formFields';
+import { Input} from '../../../components/ReduxForms/_formFields';
 import AdminPageLayout from "../../../components/layouts/AdminPageLayout";
 import {SubmitButton} from "../../../components/FormComponents";
 import SubmitStatusMessage from "../../../components/ReduxForms/SubmitStatusMessage";
 
 //API methods
-import {getUser, updateUser, getPolicies, getUserAccessGroupsWithData} from '../../../APImethods';
+import {
+    getStores,
+    getUserDataWithId, updateUser
+} from "../../../APImethods";
+import { connect } from "react-redux";
+import {  getLabelValuePair } from "../../../utils/helpers";
+import { getClients } from "../../../APImethods/ClientsAPI";
+import PermissionsEditor from "../../../components/ReduxForms/_formFields/PermissionsEditor";
+
+//TODO: remove formatUserDataToSubmit, formatPermissions
 
 let UserForm = (props) => {
-    const { id:userId } = props.router.query;
-    const [policies, setPolicies] = useState([]);
+    const router = useRouter();
+    const { id:userId } = router.query;
+
     const [submitting, setSubmitting] = useState(false);
     const [status, setStatus] = useState();
+
+    const [clients, setClients] = useState([]);
+    const [stores, setStores] = useState();
+
+    useEffect(() => {
+        getClients(["id", "name"]).then(res => {
+            setClients(res.map(item => getLabelValuePair(item.name, item["_id"]["$oid"])));
+        });
+
+        getStores(["id", "name", "client"]).then(response => {
+            const options = response.map(item => {
+                return ({
+                    ...getLabelValuePair(item?.name, item["_id"]["$oid"]),
+                    client: item["client"]["$oid"]
+                });
+            });
+            setStores(options);
+        });
+    }, []);
 
     useEffect(() => {
         if(userId){
             //1. Fetch User Data
-            getUser(userId).then((res) => {
-                props.initialize(res); //Initialize form Data
+            getUserDataWithId(userId).then((res) => {
+                res.permissions = res.permissions.map(item => {
+                    return {
+                        id:item._id,
+                        role: item.role,
+                        reference: item.reference,
+                        scope: item.scope
+                    };
+                });
+                const { given_name, permissions, UserStatus, client, email } = res;
+
+                props.initialize({ given_name, permissions, UserStatus, client, email }); //Initialize form Data
             });
 
-            //2. Fetch User Groups and associated stores
-            getUserAccessGroupsWithData(userId).then((res) => {
-                const values = res?.map((item) => item['access_policy']);
-                props.change('policies', values); //Update form Data
-            });
 
-            //3. Get ALL user-groups/Policies
-            getPolicies().then((res) => {
-                setPolicies( res.map((option) => ({
-                    label: option.name,
-                    value: option.access_policy,
-                })));
-            });
         }
     }, [userId]);
 
     const onSubmit = (values) => {
         setSubmitting(true);
+
         updateUser(userId, values)
             .then(res=>{
                 setStatus({ success: true, message: 'Updated Successfully' });
@@ -70,15 +98,15 @@ let UserForm = (props) => {
                 </Card>
 
                 <Card className="my-4">
-                    <Card.Header>Access Policies</Card.Header>
+
+                <Card.Header>Permissions</Card.Header>
                     <Card.Body>
-                        <Field
-                            name="policies"
-                            label="policies"
-                            isMulti={true}
-                            placeholder="Select Store Policies"
-                            options={policies}
-                            component={Select}
+                        <FieldArray
+                          name="permissions"
+                          userPermissions={props.user.permissions}
+                          component={PermissionsEditor}
+                          clients={clients}
+                          stores={stores}
                         />
                     </Card.Body>
                 </Card>
@@ -96,7 +124,14 @@ const validate = (values) => {
     return errors;
 };
 
-export default reduxForm({
-    form: 'UserForm',
-    validate,
-})(withRouter(UserForm));
+
+UserForm = reduxForm({
+    form: "UserForm",
+    validate
+})(UserForm);
+
+const mapStateToProps = (state) => ({
+    user: state.user
+})
+
+export default connect(mapStateToProps, {})(UserForm);

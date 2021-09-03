@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {getUserStores} from "../APImethods";
+import {getStores} from "../APImethods";
 import Loader from "../components/loader/Loader";
 import Layout from "../components/layouts/Layout";
 import RecordsList from "../components/RecordsList";
@@ -14,7 +14,7 @@ export default function HomePage(){
     useEffect(() => {
         let controller = new AbortController();
 
-        getUserStores()
+        getStores()
             .then((clientStoreDataResponse) => {
                 setStores(clientStoreDataResponse);
             })
@@ -35,7 +35,6 @@ export default function HomePage(){
                 <h1 style={{marginBottom: '0rem'}}>Welcome To COCO</h1>
                 <h4 style={{lineHeight: '1.3', fontWeight: '100'}}>Below Are Your Stores</h4>
             </section>
-
             {
                 stores
                     ? (<RecordsList

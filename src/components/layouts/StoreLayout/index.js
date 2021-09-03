@@ -1,7 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { Row } from 'react-bootstrap';
-import Logo from '../_common/Logo';
 import SideBarMenu from '../_common/SideBarMenu';
 import HeaderMenu from '../_common/HeaderMenu';
 import Layout from "../Layout";
@@ -29,7 +28,6 @@ export default function StoreLayout({ title, subTitle, meta={}, className = '', 
         <Layout meta={meta} fluid={true} showNavBar={false} className={`${styles.cmp} ${className}`}>
             <Row>
                 <Layout.LeftSidebar >
-                    <Logo className={styles.logo} />
                     <SideBarMenu links={links}/>
                 </Layout.LeftSidebar>
 

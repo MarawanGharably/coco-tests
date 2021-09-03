@@ -1,25 +1,31 @@
-import { Col, Row } from 'react-bootstrap';
-import Layout from "../Layout";
-import NavBar from "../../NavBar";
-import React from "react";
+import React from 'react';
+import { Row } from 'react-bootstrap';
+import Layout from '../Layout';
+import SideBarMenu from '../_common/SideBarMenu';
+import HeaderMenu from "../_common/HeaderMenu";
 import styles from './adminPageLayout.module.scss';
 
+export default function AdminPageLayout({ title, meta={}, children }) {
+    const links = [
+        { label: 'Users', url: `/admin/users/` },
+        { label: 'Stores', url: `/admin/stores/` },
+    ];
 
-//TODO: refactor to use <Layout.LeftSidebar >, <Layout.ContentArea> and <SideBarMenu/>
+    if(!meta?.title) meta.title = 'COCO: Admin';
 
-export default function AdminPageLayout({title, children}){
-    return(<Layout fluid='xl' className={styles.adminLayout}>
-        <Row>
-            <Col xs={4} sm={3}>
-                <NavBar>
-                    <NavBar.Item name="USERS" pathName={`/admin/users`} />
-                    <NavBar.Item name="STORES" pathName={`/admin/stores`} />
-                </NavBar>
-            </Col>
-            <Col xs={8} sm={9}>
-                <h2 className={styles.title}>{title}</h2>
-                {children}
-            </Col>
-        </Row>
-    </Layout>)
+    return (
+        <Layout meta={meta} fluid="xl" showNavBar={false} className={styles.adminLayout}>
+            <Row>
+                <Layout.LeftSidebar>
+                    <SideBarMenu links={links} />
+                </Layout.LeftSidebar>
+
+                <Layout.ContentArea>
+                    <HeaderMenu/>
+                    <h2 className={styles.title}>{title}</h2>
+                    {children}
+                </Layout.ContentArea>
+            </Row>
+        </Layout>
+    );
 }

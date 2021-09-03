@@ -15,8 +15,8 @@ export default function HeaderMenu() {
         { label: 'Logout', url: '/auth/logout' },
     ];
 
-    if (userCanAccessAdminPanel(user.permissions)) {
-        links.splice(links.length - 1, 0, { label: 'Manage', url: '/admin' }, )
+    if (userCanAccessAdminPanel(user?.permissions)) {
+        links.splice(links.length - 1, 0, { label: 'Manage', url: '/admin/users/' }, )
     }
 
     return (

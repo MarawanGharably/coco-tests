@@ -89,5 +89,13 @@ export const getLoginRedirectPath = (customRedirect = window.location.href) => {
 
 };
 
+export const getCookieHost=()=>{
+    let cookieHost = window.location.hostname;
+    if(process.env.NODE_ENV === 'production'){
+        cookieHost = cookieHost.split('.').slice(1).join('.');
+    }
+    return cookieHost;
+}
+
 
 export default {};

@@ -1,6 +1,4 @@
 import axiosApi from '../utils/axiosApi';
-import { publicRuntimeConfig } from '../../next.config.js';
-const API_URL = publicRuntimeConfig?.API_URL;
 
 
 export const getClients = (fields = []) => {

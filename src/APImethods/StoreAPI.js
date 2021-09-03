@@ -1,9 +1,9 @@
 import { formURL } from '../utils/urlHelper';
 import axiosApi from '../utils/axiosApi';
-import { publicRuntimeConfig } from '../../next.config.js';
+
 import {setEnabledAction} from "../store/actions/productLibraryActions";
 import {setCurrentSceneID, setSceneData} from "../store/actions/SceneEditorActions";
-const API_URL = publicRuntimeConfig?.API_URL;
+
 
 /**
  * get all stores

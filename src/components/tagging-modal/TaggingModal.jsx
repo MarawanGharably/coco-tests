@@ -44,11 +44,12 @@ const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, ge
         const { colliderTransform, visualTransform } = transforms;
 
         const postData = {
-            type: hotspotType,
-            scene_id: currentSceneId,
+            type: "HotspotMarker",
+            scene: currentSceneId,
             collider_transform: colliderTransform.elements,
             transform: visualTransform.elements,
             props: {
+                show_icon: true,
                 product_sku: SKU,
                 hotspot_type: hotspotType,
             },
@@ -57,7 +58,7 @@ const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, ge
         if (id) {
             try {
                 const response = await apiUpdateHotspotByType(
-                    hotspotType, selectedStoreId, id, postData,
+                    hotspotType, selectedStoreId, currentSceneId, id, postData,
                 );
 
                 updateState({
@@ -69,8 +70,9 @@ const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, ge
             }
         } else {
             try {
+                // ATTENTION! validation is disabled, when extending should be instead made a frontend toggle only for product hotspots
                 const response = await apiCreateHotspotByType(
-                    hotspotType, selectedStoreId, postData,
+                    hotspotType, selectedStoreId, currentSceneId, postData, false
                 );
 
                 updateState({
@@ -110,7 +112,7 @@ const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, ge
             <Modal.Header closeButton>
                 <Modal.Title>Product Hotspot</Modal.Title>
             </Modal.Header>
-            
+
             <Modal.Body>
                 <div className="flex flex-vertical-center flex-column full-width full-height">
                     <header className={styles["tagging-modal-header"]}>SKU</header>
@@ -122,7 +124,7 @@ const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, ge
 
             <Modal.Footer>
                 <Button variant="primary" onClick={handleSave}>Save</Button>
-                <Button variant="danger" onClick={handleDelete}>Delete</Button>  
+                <Button variant="danger" onClick={handleDelete}>Delete</Button>
             </Modal.Footer>
         </Modal>
     );

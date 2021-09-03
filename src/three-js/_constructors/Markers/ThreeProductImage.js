@@ -3,6 +3,7 @@ import InteractionObject from '../../three-base-components/InteractionObject';
 import ModalConstructor from '../ModalConstructor';
 import { CollisionManagerActionEnums } from '../../collision-manager/CollisionManager';
 import ThreeLoadingManager from '../../three-loading-manager/three-loading-manager';
+import { formURL } from "../../../utils/urlHelper";
 
 
 //TODO: Marker constructor should not have any information regarding the Scene!!!
@@ -24,13 +25,12 @@ export default class ThreeProductImage extends InteractionObject {
     }
 
     initVisualObject() {
-        const { imageUrl, renderOrder } = this.modalComponentRenderProps;
-
+        const { image, renderOrder } = this.modalComponentRenderProps;
         this.setVisualObject(new THREE.Mesh(
             new THREE.PlaneGeometry(1, 1),
             new THREE.MeshBasicMaterial(),
         ));
-        this.setImage(imageUrl);
+        this.setImage(image);
         this.setRenderOrder(renderOrder);
     }
 
@@ -79,15 +79,12 @@ export default class ThreeProductImage extends InteractionObject {
         this.visualObject.position.copy(this.sceneObject.position);
     };
 
-
-
-
     removeFromManager() {
         const colliderDispatch = this.getColliderDispatcher();
 
         //TODO: sceneObject often undefined
 
-        colliderDispatch({
+        this.sceneObject?.uuid && colliderDispatch({
             type: CollisionManagerActionEnums.REMOVE_COLLIDERS,
             payload: this.sceneObject.uuid,
         });
@@ -107,9 +104,9 @@ export default class ThreeProductImage extends InteractionObject {
         this.setScale(scale);
     }
 
-    setImage(url) {
+    setImage(image) {
         const loader = new THREE.TextureLoader(ThreeLoadingManager);
-
+        const url = formURL(image.image)
         loader.load(url, (texture) => {
             const { image } = texture;
             const width = image.width / image.height;

@@ -8,9 +8,13 @@ const API_URL = publicRuntimeConfig?.API_URL;
 /**
  * get all stores
  */
-export const getStores=()=>{
+export const getStores=(fields=[])=>{
+    let storesUrl = `/stores`;
+    if (fields?.length > 0) {
+        storesUrl = `${storesUrl}?fields=${fields.join(',')}`
+    }
     return axiosApi
-        .get(`${API_URL}/stores`)
+        .get(storesUrl)
         .then((res) => res.data)
         .catch((err) => Promise.reject(err));
 }
@@ -21,7 +25,7 @@ export const getStores=()=>{
  */
 export const getUserStores=()=>{
     return axiosApi
-        .get(`${API_URL}/stores/users-stores`)
+        .get(`/stores/users-stores`)
         .then((res) => res.data)
         .catch((err) => Promise.reject(err));
 }
@@ -33,7 +37,7 @@ export const getUserStores=()=>{
 export const getStore=(storeId)=>{
     if(!storeId) return Promise.reject(Error('storeId is required parameter'));
     return axiosApi
-        .get(`${API_URL}/stores/${storeId}`)
+        .get(`/stores/${storeId}`)
         .then((res) => res.data)
         .catch((err) => Promise.reject(err));
 }
@@ -45,7 +49,7 @@ export const updateStore=(storeId, data)=>{
     if(!storeId) return Promise.reject(Error('storeId is required parameter'));
 
     return axiosApi
-        .put(`${API_URL}/stores/${storeId}`, data)
+        .put(`/stores/${storeId}`, data)
         .then((res) => res.data)
         .catch((err) => Promise.reject(err));
 }
@@ -54,22 +58,18 @@ export const updateStore=(storeId, data)=>{
 
 
 export const getStoreFlags=(storeId, options)=>dispatch=>{
+    console.log('>getStoreFlags', { storeId });
     if(!storeId) return Promise.reject('Missed required parameter');
-
-    const config={
-        headers:{'ovr-str-id': storeId}
-    }
     return axiosApi
-        .get(`${API_URL}/cms/${storeId}/flags`, config)
+        .get(`/stores/${storeId}/features`)
         .then((res) => {
-            if(options?.updateStore=='productLibrary'){
-                dispatch(setEnabledAction(res.data[0]['product_library_enabled']));
+            if(options?.updateStore === 'productLibrary'){
+                dispatch(setEnabledAction(res.data['product_library_enabled']));
             }
             return res.data;
         })
         .catch((err) => Promise.reject(err));
 }
-
 
 
 export const getStoreScenes = (storeId, options) =>dispatch=> {
@@ -80,9 +80,9 @@ export const getStoreScenes = (storeId, options) =>dispatch=> {
     };
 
     return axiosApi
-        .get(`${API_URL}/cms/${storeId}/scenes`, conf)
+        .get(`/stores/${storeId}/scenes`, conf)
         .then((res) => {
-            if(options?.updateStore=='productLibrary'){
+            if(options?.updateStore === 'productLibrary'){
                 dispatch(setSceneData(res.data));
                 dispatch(setCurrentSceneID(res.data[0]._id.$oid));
             }
@@ -90,7 +90,6 @@ export const getStoreScenes = (storeId, options) =>dispatch=> {
         })
         .catch((err) => Promise.reject(err));
 };
-
 
 
 const getFirstSceneImageUrl = (storeId) => {
@@ -110,7 +109,6 @@ const getFirstSceneImageUrl = (storeId) => {
 };
 
 
-//Post with empty data ?
 export const apiPublishSceneData = async (storeId) => {
     if (!storeId) return Promise.reject('Missed required parameter');
 
@@ -119,8 +117,7 @@ export const apiPublishSceneData = async (storeId) => {
     };
 
     return axiosApi
-        .post(`${API_URL}/cms/push_objects/${storeId}`, {},  conf)
-        // .post(`${API_URL}/cms/push_objects/${storeId}`,   conf)
+        .post(`/stores/${storeId}/push_objects`, {},  conf)
         .then((res) => res.data)
         .catch((err) => Promise.reject(err));
 };

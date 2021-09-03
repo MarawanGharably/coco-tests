@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect, useDispatch } from 'react-redux';
 import ConfirmationDialog from '../../../../ConfirmationDialog';
-import { deleteHotspotProduct } from '../../../../../APImethods/HotspotsAPI';
 import styles from './Product.module.scss';
-
-import { PRODUCT_PLACEMENT } from '../../../ModeSelector/modeOptions';
+import { PRODUCT_PLACEMENT } from "../../../../../store/types/productLibrary";
+import { deleteProductImageFromFolder } from "../../../../../APImethods";
+import { formURL } from "../../../../../utils/urlHelper";
 
 //TODO: use connect only once on parent level
 
-
-const Product = ({ id, storeId, mode, imageUrl, folderId }) => {
+const Product = ({ id, storeId, mode, image, folder }) => {
     const dispatch = useDispatch();
     const [isDialogOpen, setDialogOpen] = useState(false);
 
@@ -26,8 +25,8 @@ const Product = ({ id, storeId, mode, imageUrl, folderId }) => {
         container.appendChild(overlay);
 
         e.dataTransfer.setData('id', id);
-        e.dataTransfer.setData('folderId', folderId);
-        e.dataTransfer.setData('imageUrl', imageUrl);
+        e.dataTransfer.setData('folderId', folder);
+        e.dataTransfer.setData('imageId', id);
     };
 
     const onDragEnd = () => {
@@ -39,12 +38,12 @@ const Product = ({ id, storeId, mode, imageUrl, folderId }) => {
     };
 
     const handleDelete = () => {
-        dispatch(deleteHotspotProduct(storeId, id));
+        dispatch(deleteProductImageFromFolder(storeId, id, folder));
     };
 
     return (
         <div className={styles['product-list-item']}>
-            <img className={styles['image']} src={imageUrl} alt="black coat" draggable={draggable} onDragStart={onDragStart} onDragEnd={onDragEnd} />
+            <img className={styles['image']} src={formURL(image)} alt="black coat" draggable={draggable} onDragStart={onDragStart} onDragEnd={onDragEnd} />
 
             <div className={styles['delete']} onClick={(e) => setDialogOpen(true)}>
                 <i className="far fa-trash-alt"></i>
@@ -65,8 +64,8 @@ const Product = ({ id, storeId, mode, imageUrl, folderId }) => {
 
 Product.propTypes = {
     id: PropTypes.string.isRequired,
-    imageUrl: PropTypes.string.isRequired,
-    folderId: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+    folder: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = ({ productLibrary }) => {

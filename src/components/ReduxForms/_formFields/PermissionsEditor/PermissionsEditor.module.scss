@@ -1,0 +1,25 @@
+.permissionEditor {
+
+  .addIcon {
+    margin-right: 0.5em;
+  }
+
+  .item {
+    display:flex;
+    flex-direction: row;
+    padding: 16px 8px;
+    margin-top: 1em;
+    border-radius: 4px;
+    border-width: 1px;
+    border-color: #2E2E2E50;
+
+    border-style: solid;
+    .field {
+      flex: 1;
+      margin-right: 0.5em;
+    }
+
+  }
+
+}
+

@@ -24,7 +24,7 @@ const Input = ({
 
     const validateInputType = type === 'email' || type === 'password';
     const formFocusValidationClass = isValid ? styles['input-border-container--valid'] : styles['input-border-container--invalid'];
-    const formFocusClasses = validateInputType && formFocusValidationClass; 
+    const formFocusClasses = validateInputType && formFocusValidationClass;
 
     useEffect(() => {
         if (focusOnMount) {
@@ -32,7 +32,7 @@ const Input = ({
         }
     }, [focusOnMount]);
 
-    // Returns an Input that prioritizes text/onChange handlers from props.
+    // Returns an PermissionsEditor that prioritizes text/onChange handlers from props.
     // If no props are passed down, we will use the in-built onChange handler
     return (
         <>

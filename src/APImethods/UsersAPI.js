@@ -1,21 +1,25 @@
-import axiosApi from '../utils/axiosApi';
-import getConfig from 'next/config';
-const { publicRuntimeConfig } = getConfig();
-// const { API_URL } = publicRuntimeConfig;
-const API_URL = publicRuntimeConfig?.API_URL;
+import axiosApi from "../utils/axiosApi";
+import Cookies from "universal-cookie";
+import { setUserData } from "../store/actions/userActions";
+
+const cookies = new Cookies();
+const user_COOKIE = "user";
+
+
+
 
 export const createUser = (data) => {
     return axiosApi
-        .post(`${API_URL}/users/create`, data)
+        .post(`/users/create`, data)
         .then((res) => res.data)
-        .catch((err) => Promise.reject(err));
+        .catch((err) => Promise.reject(err.response.data));
 };
 
 
 export const updateUser = (userName, data) => {
     console.log('>updateUser', {userName, data} );
     return axiosApi
-        .put(`${API_URL}/users/${userName}`, data)
+        .put(`/users/${userName}`, data)
         .then((res) => res.data)
         .catch((err) => Promise.reject(err));
 };
@@ -25,31 +29,46 @@ export const updateUser = (userName, data) => {
  */
 export const getUsers = () => {
     return axiosApi
-        .get(`${API_URL}/users/`)
+        .get(`/users`)
         .then((res) => {
-            const users = res.data.map((item) => {
-                const Attributes = {};
-                item['Attributes'].map((item) => {
-                    Attributes[item.Name] = item['Value'];
-                });
-
+            return res.data.map((item) => {
                 return {
                     Username: item.Username,
-                    given_name: Attributes.given_name || '',
+                    given_name: item.given_name || '',
                     UserCreateDate: item.UserCreateDate,
                     UserLastModifiedDate: item.UserLastModifiedDate,
                     UserStatus: item.UserStatus,
                     Enabled: item.Enabled,
-                    email: Attributes.email,
-                    email_verified: Attributes.email_verified == 'true' ? true : false,
+                    email: item.email,
+                    email_verified: item.email_verified === 'true',
                     Attributes: item.Attributes,
-                    subId: Attributes['sub'],
-                    id: Attributes['sub'],
+                    subId: item['sub'],
+                    id: item['sub'],
                 };
             });
-            return users;
         })
         .catch((err) => Promise.reject(err));
+};
+
+/**
+ * get current user data
+ */
+export const getCurrentUserData = () => dispatch => {
+    const sessionCookie = cookies.get('access_token');
+    if (sessionCookie) {
+        if (cookies.get(user_COOKIE) && cookies.get(user_COOKIE) !== undefined) {
+            const userData = JSON.parse(window.atob(cookies.get(user_COOKIE)));
+            dispatch(setUserData(userData));
+        } else {
+            axiosApi
+            .get(`/users/user`)
+            .then((res) => {
+                cookies.set(user_COOKIE, window.btoa(JSON.stringify(res.data)))
+                dispatch(setUserData(res.data));
+            })
+            .catch((err) => Promise.reject(err));
+        }
+    }
 };
 
 /**
@@ -57,13 +76,11 @@ export const getUsers = () => {
  * @param userId
  * @returns {Promise}
  */
-export const getUser = (userId) => {
+export const getUserDataWithId = (userId) => {
     if (!userId) return Promise.reject('Missed required parameter');
 
     return axiosApi
-        .get(`${API_URL}/users/${userId}`)
+        .get(`/users/${userId}`)
         .then((res) => res.data)
         .catch((err) => Promise.reject(err));
 };
-
-

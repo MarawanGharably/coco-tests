@@ -12,7 +12,7 @@ export default function Layout({ title, subTitle, fluid = false, showNavBar=true
 
     // Page backgrounds
     const pageStyles = {};
-    if (router.asPath == '/') pageStyles.background = `url(${config['CDN_HOST']}/ImageMaskgroup.png) no-repeat`;
+    if (router.asPath === '/') pageStyles.background = `url(${config['CDN_HOST']}/ImageMaskgroup.png) no-repeat`;
 
 
     return (

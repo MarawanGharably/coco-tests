@@ -1,53 +1,41 @@
-import React, { useState } from 'react';
+import React  from 'react';
 import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import { useRouter } from 'next/router';
 import Select from 'react-select/creatable';
 import { Button } from 'react-bootstrap';
 import { setSelectedFolderAction } from '../../../../../../store/actions/productLibraryActions';
-import { createHotspotProduct } from '../../../../../../APImethods';
-import { GENERAL_LABEL } from '../../../../../../store/types/productLibrary';
+import { addProductImageToFolder } from '../../../../../../APImethods';
 import styles from './UploadFooter.module.scss';
+import { useRouter } from "next/router";
 
 
 const UploadFooter = ({ productLibrary, images, closeDialog }) => {
     const { isLoading, folders, selectedFolder } = productLibrary;
-    const router = useRouter();
-    const {id:selectedStoreId} = router.query;
 
-    const [folder, setFolder] = useState(selectedFolder);
-    const defaultFolder = { label: GENERAL_LABEL };
     const buttonText = isLoading ? 'Uploading...' : 'Upload';
     const dispatch = useDispatch();
+    const router = useRouter();
+    const { id: selectedStoreId } = router.query;
 
 
     const handleFolderChange = (selected) => {
-        setFolder(selected);
+        setSelectedFolderAction(selected);
     };
 
     const parsePostData = () => {
-        const folderId = folder.id || 0;
-        const folderName = folder.label === GENERAL_LABEL ? '' : folder.label;
-
-        return {
-            file_upload: images.map((image) => ({
-                content: image.content,
-                filename: image.filename,
-                remove_background: image.remove_background,
-                folder_id: folderId,
-                folder_name: folderName,
-            })),
-        };
+        const folderId = selectedFolder.value;
+        return images.map((image) => ({
+            content: image.content,
+            filename: image.filename,
+            remove_background: image.remove_background,
+            folder: folderId
+        }));
     };
 
     const createProduct = async () => {
         try {
             const postData = parsePostData(images);
-            const res = await dispatch(createHotspotProduct(selectedStoreId, postData));
-            const productFolder = res.folders.find(({ label }) => label === folder.label);
-            const selected = productFolder || defaultFolder;
-
-            dispatch(setSelectedFolderAction(selected));
+            dispatch(addProductImageToFolder(selectedStoreId, selectedFolder.value, postData));
         } catch (error) {
             console.error(error);
         } finally {
@@ -66,8 +54,8 @@ const UploadFooter = ({ productLibrary, images, closeDialog }) => {
             <Select
                 className={styles["upload-dialog-Footer-select"]}
                 placeholder="Select Folder or type to create a new one"
-                options={[defaultFolder, ...folders]}
-                value={folder}
+                options={[...folders]}
+                value={selectedFolder}
                 isDisabled={isLoading}
                 onChange={handleFolderChange}
             />

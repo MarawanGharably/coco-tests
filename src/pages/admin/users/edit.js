@@ -103,7 +103,7 @@ let UserForm = (props) => {
                     <Card.Body>
                         <FieldArray
                           name="permissions"
-                          userPermissions={props.user.permissions}
+                          userPermissions={props.user?.permissions}
                           component={PermissionsEditor}
                           clients={clients}
                           stores={stores}

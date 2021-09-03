@@ -3,6 +3,7 @@ import { Container, Col } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Header from '../_common/Header';
+import Logo from "../_common/Logo";
 import config from '../../../config';
 import styles from './Layout.module.scss';
 
@@ -36,6 +37,7 @@ export default function Layout({ title, subTitle, fluid = false, showNavBar=true
 
 Layout.LeftSidebar=({xs=4, sm=3, lg=3, xl=2, children})=>{
     return(<Col xs={xs} sm={sm} lg={lg} xl={xl} className={styles.leftSideBar}>
+        <Logo className={styles.logo} />
         {children}
     </Col>)
 }

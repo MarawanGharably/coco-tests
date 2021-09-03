@@ -14,8 +14,9 @@ export default function Logout(){
             .then(() => {
                 router.push(getLoginRedirectPath(getHomePageURL()));
             })
-            .catch(() => {
+            .catch((err) => {
                 alert('Server Error');
+                console.log('Error', err)
             });
     },[]);
 

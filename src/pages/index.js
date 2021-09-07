@@ -42,7 +42,7 @@ export default function HomePage(){
                         recordComponent={StoreThumbnail}
                         className='storesList mx-2'
                     />)
-                    : (<h4>There are no stores for this client</h4>)
+                    : (<h4 className='text-center'>There are no stores for this client</h4>)
             }
         </Layout>
     );

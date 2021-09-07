@@ -14,7 +14,7 @@ export default function AdminPageLayout({ title, meta={}, children }) {
     if(!meta?.title) meta.title = 'COCO: Admin';
 
     return (
-        <Layout meta={meta} fluid="xl" showNavBar={false} className={styles.adminLayout}>
+        <Layout meta={meta} fluid={true} showNavBar={false} className={styles.adminLayout}>
             <Row>
                 <Layout.LeftSidebar>
                     <SideBarMenu links={links} />

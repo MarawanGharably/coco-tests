@@ -20,21 +20,25 @@ export const apiCreateHotspotByType=(type, storeId, sceneId, data, validate=true
         .catch((err) => Promise.reject(err));
 }
 
-export const apiUpdateHotspotByType =(type, storeId, sceneId, hotspotId, data)=>{
-    if (!storeId || !type || !hotspotId || !data) return Promise.reject('Missed required parameter');
+
+export const updateHotspotAPI =( hotspotId, storeId, sceneId, data, validate=true)=>{
+    console.log('>updateHotspotAPI', {hotspotId, storeId, sceneId, data});
+    if ( !hotspotId || !storeId || !sceneId || !data) return Promise.reject('Missed required parameter');
 
     return axiosApi
-        .put(`/stores/${storeId}/scenes/${sceneId}/hotspots/${type}/${hotspotId}`, data)
+        .put(`/stores/${storeId}/scenes/${sceneId}/hotspots/${hotspotId}?validate=${validate}`, data)
         .then((res) => res.data)
         .catch((err) => Promise.reject(err));
 }
 
-
-export const apiDeleteHotspotByType=(type, storeId, sceneId, hotspotId)=>{
-    if (!storeId || !type || !hotspotId ) return Promise.reject('Missed required parameter');
+// no type
+// export const deleteHotspot=(hotspotId,  storeId, sceneId)=>{
+export const deleteHotspotAPI=(hotspotId,  storeId, sceneId)=>{
+    console.log('>deleteHotspotAPI', {hotspotId, storeId, sceneId});
+    if (!storeId || !hotspotId || !sceneId) return Promise.reject('Missed required parameter');
 
     return axiosApi
-        .delete(`/stores/${storeId}/scenes/${sceneId}/hotspots/${type}/${hotspotId}`)
+        .delete(`/stores/${storeId}/scenes/${sceneId}/hotspots/${hotspotId}`)
         .then((res) => res.data)
         .catch((err) => Promise.reject(err));
 }

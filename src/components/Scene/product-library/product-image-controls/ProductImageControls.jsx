@@ -7,7 +7,7 @@ import RangeInputForm from './form/RangeInputForm';
 import { useUIManager } from '../../../../three-js/ui-manager/UIManager';
 import styles from './ProductImageControls.module.scss';
 import { debounce } from '../../../../utils/events';
-import { apiCreateHotspotByType, apiDeleteHotspotByType, apiUpdateHotspotByType } from '../../../../APImethods';
+import { apiCreateHotspotByType, deleteHotspotAPI, updateHotspotAPI } from '../../../../APImethods';
 
 const HOTSPOT_TYPE = 'product_image';
 
@@ -32,7 +32,7 @@ const ProductImageControls = ({
     const { id: storeId } = router.query;
     const [UIState] = useUIManager();
 
-    const parsePostData = ({ scale, renderOrder, imageId, folderId }) => {
+    const parsePostData = ({ scale, renderOrder, imageId }) => {
         const transforms = getTransforms();
         const { colliderTransform, visualTransform } = transforms;
 
@@ -53,7 +53,7 @@ const ProductImageControls = ({
 
     const handleHotspotChange = ({ id, storeId, scale, renderOrder, imageId, folderId }) => {
         const postData = parsePostData({ scale, renderOrder, imageId, folderId });
-        apiUpdateHotspotByType(HOTSPOT_TYPE, storeId, currentSceneId, id['$oid'], postData).catch((err) => {
+        updateHotspotAPI(id, storeId, currentSceneId,  postData).catch((err) => {
             console.error(err);
         });
     };
@@ -65,7 +65,7 @@ const ProductImageControls = ({
             .then((res) => {
                 updateState({
                     type: res.props.hotspot_type,
-                    id: res._id.$oid, //eslint-disable-line
+                    id: res._id, //eslint-disable-line
                     scale: res.props.scale,
                     renderOrder: res.props.renderOrder,
                 });
@@ -79,6 +79,7 @@ const ProductImageControls = ({
 
     useEffect(() => {
         const currentData = UIState.stateManager.get(uuid);
+        console.log('__#1. UIState-- useEffect', {uuid, currentId, currentData} );
 
         if (currentData) {
             setId(currentData.uiState.id);
@@ -112,7 +113,7 @@ const ProductImageControls = ({
     const handleDelete = (e) => {
         e.preventDefault();
 
-        apiDeleteHotspotByType(HOTSPOT_TYPE, storeId, id)
+        deleteHotspotAPI(id, storeId, currentSceneId )
             .then((res) => {
                 dispose();
             })
@@ -126,14 +127,15 @@ const ProductImageControls = ({
 
     return (
         <div className={styles['product-image-controls']}>
-            <RangeInputForm order={order} handleOrderChange={handleOrderChange} scale={scale} handleScaleChange={handleScaleChange} />
+            <RangeInputForm
+                order={order}
+                scale={scale}
+                handleOrderChange={handleOrderChange}
+                handleScaleChange={handleScaleChange}
+            />
             <div className={styles['actions']}>
-                <Button variant="primary" onClick={onClose}>
-                    Close
-                </Button>
-                <Button variant="danger" onClick={handleDelete}>
-                    Delete
-                </Button>
+                <Button variant="primary" onClick={onClose}> Close </Button>
+                <Button variant="danger" onClick={handleDelete}> Delete </Button>
             </div>
         </div>
     );

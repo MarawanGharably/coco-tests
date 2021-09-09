@@ -1,28 +1,25 @@
-import React  from 'react';
-import { connect, useDispatch } from 'react-redux';
+import React, {useState}  from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import Select from 'react-select/creatable';
+import Select from 'react-select';
 import { Button } from 'react-bootstrap';
-import { setSelectedFolderAction } from '../../../../../../store/actions/productLibraryActions';
-import { addProductImageToFolder } from '../../../../../../APImethods';
-import styles from './UploadFooter.module.scss';
 import { useRouter } from "next/router";
+import { addProductImageToFolder, setSelectedFolder } from '../../../../../../APImethods';
+import styles from './UploadFooter.module.scss';
 
+const UploadFooter = ({ images, closeDialog, setErrors }) => {
+    const { folders, selectedFolder } = useSelector((state) => state['productLibrary']);
+    const [isLoading, setLoading ] = useState();
 
-const UploadFooter = ({ productLibrary, images, closeDialog }) => {
-    const { isLoading, folders, selectedFolder } = productLibrary;
-
-    const buttonText = isLoading ? 'Uploading...' : 'Upload';
     const dispatch = useDispatch();
     const router = useRouter();
-    const { id: selectedStoreId } = router.query;
+    const { id: storeId } = router.query;
+    const buttonText = isLoading ? 'Uploading...' : 'Upload';
+    const options = folders.map(item=>({label:item.name, value:item._id}) );
 
 
-    const handleFolderChange = (selected) => {
-        setSelectedFolderAction(selected);
-    };
 
-    const parsePostData = () => {
+    const parsePostData = (images) => {
         const folderId = selectedFolder.value;
         return images.map((image) => ({
             content: image.content,
@@ -32,49 +29,54 @@ const UploadFooter = ({ productLibrary, images, closeDialog }) => {
         }));
     };
 
-    const createProduct = async () => {
-        try {
-            const postData = parsePostData(images);
-            dispatch(addProductImageToFolder(selectedStoreId, selectedFolder.value, postData));
-        } catch (error) {
-            console.error(error);
-        } finally {
-            closeDialog();
-        }
-    };
 
-    const handleUpload = () => {
+
+    const onSubmit = async () => {
         if (isLoading) return;
 
-        createProduct();
+        const postData = parsePostData(images);
+        setLoading(true);
+        setErrors(false);
+
+        dispatch(addProductImageToFolder(storeId, selectedFolder.value, postData))
+            .then((records)=>{
+                //Yash's comment
+                console.log(
+                    "=> TODO: parse this response and show appropriate success/error " +
+                    "messages before closing the dialog. " +
+                    "After closing refresh product library using getProductLibrary",
+                    records);
+
+                closeDialog();
+            })
+            .catch((err)=>{
+                console.log('>%c Upload Error', 'color:red', err);
+                setErrors(err);
+            })
+            .finally(()=>{
+                setLoading(false);
+            });
     };
 
     return (
-        <>
+        <div className={styles.cmp}>
             <Select
-                className={styles["upload-dialog-Footer-select"]}
+                className={styles["selector"]}
                 placeholder="Select Folder or type to create a new one"
-                options={[...folders]}
+                options={[...options]}
                 value={selectedFolder}
                 isDisabled={isLoading}
-                onChange={handleFolderChange}
+                onChange={(selected)=> dispatch(setSelectedFolder(selected, storeId))}
             />
-            <Button variant="primary" onClick={handleUpload}>
+            <Button variant="primary" onClick={onSubmit}>
                 {buttonText}
             </Button>
-        </>
+        </div>
     );
 };
 
+
 UploadFooter.propTypes = {
-    productLibrary: PropTypes.shape({
-        isLoading: PropTypes.bool,
-        folders: PropTypes.arrayOf(PropTypes.object),
-        selectedFolder: PropTypes.shape({
-            id: PropTypes.number,
-            label: PropTypes.string,
-        }),
-    }).isRequired,
     images: PropTypes.arrayOf(PropTypes.shape({
         content: PropTypes.string,
         filename: PropTypes.string,
@@ -82,8 +84,5 @@ UploadFooter.propTypes = {
     closeDialog: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ productLibrary }) => {
-    return { productLibrary };
-};
 
-export default connect(mapStateToProps)(UploadFooter);
+export default UploadFooter;

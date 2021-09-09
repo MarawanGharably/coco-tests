@@ -1,23 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Select from 'react-select';
 import { useRouter } from 'next/router';
-import { setSelectedFolderAction } from '../../../../store/actions/productLibraryActions';
-import styles from './ProductList.module.scss';
 import Product from "./Product";
+import {setSelectedFolder} from '../../../../APImethods';
+import styles from './ProductList.module.scss';
 
 
-
-const ProductList = ({ productLibrary, setSelectedFolderAction }) => {
-    const { folders, selectedFolder } = productLibrary;
-
-
+const ProductList = ({ productLibrary }) => {
+    const { folders, selectedFolder, products } = productLibrary;
+    const selectedFolderId = selectedFolder?.value;
+    const dispatch = useDispatch();
     const router = useRouter();
     const {id:storeId} = router.query;
 
     const handleFolderChange = (selected) => {
-        setSelectedFolderAction(selected);
+        dispatch(setSelectedFolder(selected, storeId));
     };
 
 
@@ -41,8 +40,8 @@ const ProductList = ({ productLibrary, setSelectedFolderAction }) => {
 
           <div className={styles["list"]}>
 
-              {selectedFolder?.products?.length ?
-                selectedFolder?.products?.map(({ _id, image, folder }, i) => (
+              {products[selectedFolderId]?.length ?
+                 products[selectedFolderId].map(({ _id, image, folder }, i) => (
                   <Product key={i} id={_id} storeId={storeId} image={image}
                            folder={folder} />
                 ))
@@ -56,7 +55,6 @@ const ProductList = ({ productLibrary, setSelectedFolderAction }) => {
 
 
 ProductList.propTypes = {
-    setSelectedFolderAction: PropTypes.func.isRequired,
     productLibrary: PropTypes.shape({
         products: PropTypes.arrayOf(PropTypes.object).isRequired,
         folders: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -65,5 +63,4 @@ ProductList.propTypes = {
 };
 
 
-
-export default connect(null,{ setSelectedFolderAction })(ProductList);
+export default ProductList;

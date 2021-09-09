@@ -1,5 +1,5 @@
 import { Vector3, Matrix4 } from 'three';
-import { apiUpdateHotspotByType} from '../../APImethods/HotspotsAPI';
+import { updateHotspotAPI} from '../../APImethods/HotspotsAPI';
 
 import {
     PRODUCT_TAGGING,
@@ -44,6 +44,7 @@ export const threeEditorMouseEvents = (
     };
 
     const dragReleaseProductHotspotAutoSave = async (object) => {
+
         if (!object) return;
 
         const currentProductMarker = object.owner;
@@ -51,7 +52,7 @@ export const threeEditorMouseEvents = (
         const {id, type, productSKU, scale, renderOrder} = currentProductMarker.modalComponentRenderProps;
 
         const postData = {
-            type,
+            type: 'HotspotMarker',
             scene: currentSceneId,
             collider_transform: colliderTransform.elements,
             transform: visualTransform.elements,
@@ -71,8 +72,11 @@ export const threeEditorMouseEvents = (
 
 
         if (id) {
+            console.log('>check id here', id);
             try {
-                await apiUpdateHotspotByType(type, storeId, currentSceneId, id['$oid'], postData );
+                const validate = type !== "product";
+                // ATTENTION: validation is force disabled for product hotspots to bypass SKU validation. In future, please make this a frontend toggle
+                await updateHotspotAPI(id, storeId, currentSceneId, postData, validate);
             } catch (err) {
                 console.error(err);
             }

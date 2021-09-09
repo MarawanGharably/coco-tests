@@ -15,9 +15,10 @@ import ProductImageControls from '../../components/Scene/product-library/product
 import LoadingScreen from '../../components/LoadingScreen';
 import ThreeLoadingManager from '../three-loading-manager/three-loading-manager';
 import ThreeEditorReducer from '../../store/reducers/ThreeEditorReducer';
-import {setLoadingAction, setMaxRenderOrderAction, setSceneAction} from "../../store/actions/ThreeEditorActions";
+import { setMaxRenderOrderAction, setSceneAction} from "../../store/actions/ThreeEditorActions";
+import { addProductImageOnDrop, renderProductImageMarker } from '../utils';
 import styles from './ThreeEditor.module.scss';
-import { formURL } from "../../utils/urlHelper";
+
 
 const initialState = {
     isLoading: false,
@@ -88,7 +89,7 @@ export const ThreeEditor = ({ storeId, children }) => {
         const {collider_transform , transform } = object;
         const renderProps={
             type: object?.props?.hotspot_type,
-            id: object?.['_id']?.['$oid'],
+            id: object?.['_id'],
             productSKU: object?.props?.product_sku,
         }
         const componentToRender = (props) => <TaggingModal {...props} />; // eslint-disable-line
@@ -101,69 +102,9 @@ export const ThreeEditor = ({ storeId, children }) => {
         return marker;
     };
 
-    const getProductImageMarkerRenderProps = (object) => {
-        const { isFromDrop } = object;
-        if (isFromDrop) {
-            // Construct props if the object is rendered from drag and drop
-            return {
-                // id: object.imageId,
-                imageId: object.imageId,
-                image: object.image,
-                renderOrder: object.renderOrder,
-                type: 'product_image'
-            };
-        } else {
-            // Construct props for object rendered from existing DB object
-            return {
-                type: object.props.hotspot_type,
-                id: object._id,
-                image: object?.props && object.props.image,
-                renderOrder: object.props.renderOrder,
-            }
-        }
-
-    }
-
-    const renderProductImageMarker = (object={}) => {
-        const {collider_transform, transform} = object;
 
 
 
-        //render existing object. New object provides imageUrl prop.
-        // if(object.id && !object?.imageUrl){
-        //     const product = products.find((p) => p.id === object.image_id);
-        //     if (!product || !isEnabled) return false;
-        //     dispatch(setLoadingAction(true));
-        //     object.imageUrl = product.imageUrl;
-        // }
-
-        const renderProps = getProductImageMarkerRenderProps(object);
-        // const renderProps={
-        //     type: object.hotspot_type || 'product_image', //optional
-        //     id: object.id,//optional
-        //     image: object?.props && object.props.image, //!present
-        //     renderOrder: object.renderOrder,//!present
-        // };
-
-        // //optional props
-        // if(object.folderId) renderProps.folderId = object.folderId;
-        // if(object.imageId) renderProps.imageId = object.imageId;
-        // if(object.scale) renderProps.scale = object.scale;
-
-
-        const componentToRender = (props) => <ProductImageControls {...props} />;
-        const marker = new ThreeProductImage(componentToRender, renderProps, collider_transform, transform);
-
-        marker.addToScene(sceneRef.current);
-        marker.setUIDispatcher(UIDispatch);
-        marker.setColliderDispatcher(colliderDispatch);
-
-        if (renderProps.renderOrder) {
-            setMaxRenderOrder(renderProps.renderOrder);
-        }
-
-        return marker;
-    };
 
     const setMaxRenderOrder = (renderOrder) => {
         if (renderOrder >= state.maxRenderOrder) {
@@ -173,41 +114,6 @@ export const ThreeEditor = ({ storeId, children }) => {
 
 
 
-    const addProductImage = (e) => {
-        e.preventDefault();
-        const imageId = e.dataTransfer.getData('id');
-        const folderId = e.dataTransfer.getData('folderId');
-
-        const image = selectedFolder.products.find(item => item._id === imageId);
-
-        // if (!imageId && !image) return;
-
-        const marker = renderProductImageMarker({
-            renderOrder:state.maxRenderOrder,
-            imageId,
-            folderId,
-            image,
-            isFromDrop: true
-        });
-
-        // Set Position to in front of camera
-        const pos = new THREE.Vector3(0, 0, -10);
-        pos.applyQuaternion(cameraRef.current.quaternion);
-        marker.setPosition(pos.x, pos.y, pos.z);
-        marker.lookAt();
-        marker.setRenderOrder(state.maxRenderOrder);
-
-        // Add Colliders
-        colliderDispatch({
-            type: CollisionManagerActionEnums.SET_COLLIDERS,
-            payload: marker.sceneObject,
-        });
-
-        // Removes existing UIs
-        UIDispatch({type: UIManagerEnums.RESET_UIS});
-
-        marker.renderComponentImmediately();
-    };
 
     useEffect(() => {
         dispatch(setSceneAction(scene));
@@ -306,9 +212,11 @@ export const ThreeEditor = ({ storeId, children }) => {
         };
 
         const renderMarker = (object) => {
+            // console.log('>renderMarker', <object data="" type=""></object>);
+
             if (object.props.hotspot_type === 'product_image') {
                 object["isFromDrop"] = false;
-                return renderProductImageMarker(object);
+                return renderProductImageMarker(object, sceneRef, UIDispatch, colliderDispatch, setMaxRenderOrder);
             }
 
             return renderProductMarker( object );
@@ -336,9 +244,13 @@ export const ThreeEditor = ({ storeId, children }) => {
     useEffect(() => {
         const hasProductImage = (collider) => {
             const { modalComponentRenderProps: renderProps } = collider.owner;
-
+            // console.log('>useEffect', {products});
             if (renderProps.type === 'product_image') {
-                return products.find((product) => (
+                const allProducts = Object.entries(products).map(([folderId, records])=>records);
+                // console.log('>allProducts', allProducts);
+
+                //TODO: product has no imageUrl prop
+                return allProducts.find((product) => (
                     product.imageUrl === collider.owner.modalComponentRenderProps.imageUrl
                 ));
             }
@@ -367,7 +279,7 @@ export const ThreeEditor = ({ storeId, children }) => {
             className={styles['canvas-wrapper']}
             ref={canvasContainerRef}
             onDragOver={(e) => e.preventDefault()}
-            onDrop={addProductImage}
+            onDrop={e=>addProductImageOnDrop(e, cameraRef, selectedFolder.value, products, state.maxRenderOrder, colliderDispatch, UIDispatch, sceneRef, setMaxRenderOrder)}
         >
             <ThreeState.Provider value={state}>
                 <ThreeDispatch.Provider value={dispatch}>

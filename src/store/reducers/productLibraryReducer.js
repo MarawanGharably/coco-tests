@@ -1,6 +1,7 @@
 import {
-    SET_LOADING,
+    SET_PRODUCT_LIB_DATA,
     SET_PRODUCTS,
+    ADD_PRODUCTS_TO_FOLDER,
     SET_FOLDERS,
     SET_SELECTED_FOLDER,
     DELETE_PRODUCT,
@@ -13,11 +14,10 @@ import {
 } from '../types/productLibrary';
 
 const initialState = {
-    isLoading: false,
     isEnabled: null, //keep null as initial value to determine whether data was loaded or not
     products: [],
     folders: [],
-    selectedFolder: {},
+    selectedFolder: null,
     mode: PRODUCT_TAGGING,
     mode_slug: 'product_tagging',
 };
@@ -27,8 +27,18 @@ export default function (state = initialState, action) {
 
     switch (type) {
 
-        case SET_LOADING:
-            return ({ ...state, isLoading: payload });
+        case SET_PRODUCT_LIB_DATA:
+            return ({ ...state, ...payload });
+
+        case ADD_PRODUCTS_TO_FOLDER:
+
+            return {
+                ...state,
+                products: {...state.products,
+                    [payload.folderId]: [...state.products[payload.folderId] || [], ...payload.records ]
+                }
+            };
+
 
         case SET_PRODUCTS:
             return ({...state, products: payload });
@@ -36,8 +46,8 @@ export default function (state = initialState, action) {
         case SET_FOLDERS:
             return ({ ...state, folders: payload });
 
-        case SET_SELECTED_FOLDER:
-            return ({ ...state, selectedFolder: payload });
+        // case SET_SELECTED_FOLDER:
+        //     return ({ ...state, selectedFolder: payload });
 
         case DELETE_PRODUCT:
             const { productId, folderId } = payload;

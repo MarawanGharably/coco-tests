@@ -1,9 +1,23 @@
 import * as types from '../types/productLibrary';
+import {ADD_PRODUCTS_TO_FOLDER} from "../types/productLibrary";
 
-export const setLoadingAction = (isLoading) => ({
-    type: types.SET_LOADING,
-    payload: isLoading,
+/**
+ * Important!
+ * Each action call forces the state update
+ * Each state update forces re-render
+ */
+export const setProductLibDataAction = (data) => ({
+    type: types.SET_PRODUCT_LIB_DATA,
+    payload: data,
 });
+
+
+
+export const addProductsToFolderAction = (folderId, records=[]) => ({
+    type: types.ADD_PRODUCTS_TO_FOLDER,
+    payload:{folderId, records},
+});
+
 
 export const setProductsAction = (products) => ({
     type: types.SET_PRODUCTS,
@@ -20,10 +34,6 @@ export const deleteProductAction = (productId, folderId) => ({
     payload: { productId, folderId },
 });
 
-export const setSelectedFolderAction = (selectedFolder) => ({
-    type: types.SET_SELECTED_FOLDER,
-    payload: selectedFolder,
-});
 
 export const deleteFolderAction = (id) => ({
     type: types.DELETE_FOLDER,

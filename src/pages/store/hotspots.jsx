@@ -50,9 +50,7 @@ let HotspotsPage = (props) => {
             const isEnabled = !!flagsReq['product_library_enabled'];
 
             if (isEnabled) {
-                const { selectedFolder } = props.productLibrary;
-                const noFolderSelected = selectedFolder && Object.keys(selectedFolder).length === 0 && selectedFolder.constructor === Object;
-                dispatch(getProductLibrary(storeId, noFolderSelected)).catch(err=>{});
+                dispatch(getProductLibrary(storeId));
             }
 
             dispatch(getStoreScenes(storeId, {updateStore:'productLibrary'}));

@@ -6,7 +6,7 @@ import debounce from 'lodash.debounce';
 import { Modal, Button } from 'react-bootstrap';
 import TextInput from '../FormComponents/TextInput';
 import { useUIManager } from '../../three-js/ui-manager/UIManager';
-import {apiCreateHotspotByType, apiUpdateHotspotByType, apiDeleteHotspotByType} from '../../APImethods/HotspotsAPI';
+import {apiCreateHotspotByType, updateHotspotAPI, deleteHotspotAPI} from '../../APImethods/HotspotsAPI';
 
 import styles from './TaggingModal.module.scss';
 
@@ -57,13 +57,12 @@ const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, ge
 
         if (id) {
             try {
-                const response = await apiUpdateHotspotByType(
-                    hotspotType, selectedStoreId, currentSceneId, id, postData,
-                );
+                // ATTENTION: validation is force disabled for product hotspots to bypass SKU validation. In future, please make this a frontend toggle
+                const response = await updateHotspotAPI(id, selectedStoreId, currentSceneId, postData , false);
 
                 updateState({
                     type: response.props.hotspot_type,
-                    id: response._id.$oid, //eslint-disable-line
+                    id: response._id, //eslint-disable-line
                 });
             } catch (err) {
                 console.error(err);
@@ -77,7 +76,7 @@ const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, ge
 
                 updateState({
                     type: response.props.hotspot_type,
-                    id: response._id.$oid, //eslint-disable-line
+                    id: response._id, //eslint-disable-line
                 });
             } catch (err) {
                 console.error(err);
@@ -89,9 +88,8 @@ const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, ge
 
     const handleDelete = debounce(async () => {
         try {
-            await apiDeleteHotspotByType(hotspotType, selectedStoreId, id);
+            await deleteHotspotAPI(id, selectedStoreId, currentSceneId);
             updateState({ sku: '' });
-
             dispose();
         } catch (err) {
             console.error('Hotspot deletion failed\n', err);

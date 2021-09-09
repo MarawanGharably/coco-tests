@@ -1,6 +1,9 @@
-.upload-dialog-footer {
-    &-select {
-        width: 23em;
-        font-size: 1.5em;    
+.cmp {
+    display: flex;
+
+    .selector {
+        min-width: 14em;
+        font-size: 1em;
+        margin-right: 1em;
     }
 }

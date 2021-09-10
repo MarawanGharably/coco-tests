@@ -66,6 +66,7 @@ const ProductImageControls = ({
     const createProductImage = (uiStateId) => {
         if (!uiStateId) {
             const postData = getPostData();
+            postData.props.image= image._id;
             apiCreateHotspotByType(HOTSPOT_TYPE, storeId, currentSceneId, postData)
             .then((res) => {
                 updateState({

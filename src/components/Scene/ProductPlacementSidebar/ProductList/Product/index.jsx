@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ConfirmationDialog from '../../../../ConfirmationDialog';
+import { PRODUCT_PLACEMENT } from '../../../../../store/types/productLibrary';
+import { deleteProductImageFromFolder } from '../../../../../APImethods';
+import { formURL } from '../../../../../utils/urlHelper';
 import styles from './Product.module.scss';
-import { PRODUCT_PLACEMENT } from "../../../../../store/types/productLibrary";
-import { deleteProductImageFromFolder } from "../../../../../APImethods";
-import { formURL } from "../../../../../utils/urlHelper";
 
-//TODO: use connect only once on parent level
-
-const Product = ({ id, storeId, mode, image, folder }) => {
+const Product = ({ id, storeId, image, folder }) => {
     const dispatch = useDispatch();
+    const { mode } = useSelector((state) => state['productLibrary']);
     const [isDialogOpen, setDialogOpen] = useState(false);
-
     const draggable = mode === PRODUCT_PLACEMENT;
 
     const onDragStart = (e) => {
@@ -33,17 +31,25 @@ const Product = ({ id, storeId, mode, image, folder }) => {
         if (!draggable) return;
 
         const overlay = document.querySelector('#drag-overlay');
-
         overlay.remove();
     };
 
     const handleDelete = () => {
-        dispatch(deleteProductImageFromFolder(storeId, id, folder));
+        dispatch(deleteProductImageFromFolder(storeId, id, folder)).then((res) => {
+            setDialogOpen(false);
+        });
     };
 
     return (
         <div className={styles['product-list-item']}>
-            <img className={styles['image']} src={formURL(image)} alt="black coat" draggable={draggable} onDragStart={onDragStart} onDragEnd={onDragEnd} />
+            <img
+                className={styles['image']}
+                src={formURL(image)}
+                alt="black coat"
+                draggable={draggable}
+                onDragStart={onDragStart}
+                onDragEnd={onDragEnd}
+            />
 
             <div className={styles['delete']} onClick={(e) => setDialogOpen(true)}>
                 <i className="far fa-trash-alt"></i>
@@ -68,8 +74,4 @@ Product.propTypes = {
     folder: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = ({ productLibrary }) => {
-    return { mode: productLibrary.mode };
-};
-
-export default connect(mapStateToProps, {})(Product);
+export default Product;

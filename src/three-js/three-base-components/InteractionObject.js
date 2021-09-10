@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-
 import ThreeSceneObject from './ThreeSceneObject';
 import ThreeSceneObjectComponent from './ThreeSceneObjectComponent';
 import BoxCollider from './BoxCollider';

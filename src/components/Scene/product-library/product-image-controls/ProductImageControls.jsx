@@ -1,21 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import RangeInputForm from './form/RangeInputForm';
 import { useUIManager } from '../../../../three-js/ui-manager/UIManager';
-import styles from './ProductImageControls.module.scss';
 import { debounce } from '../../../../utils/events';
 import { apiCreateHotspotByType, deleteHotspotAPI, updateHotspotAPI } from '../../../../APImethods';
+import styles from './ProductImageControls.module.scss';
 
 const HOTSPOT_TYPE = 'product_image';
 
 const ProductImageControls = ({
     id: currentId,
     uuid,
-    imageId,
-    folderId,
+    image,
     scale,
     renderOrder,
     setScale,
@@ -32,7 +31,18 @@ const ProductImageControls = ({
     const { id: storeId } = router.query;
     const [UIState] = useUIManager();
 
-    const parsePostData = ({ scale, renderOrder, imageId }) => {
+    //Store data without state update & re-renders + immediate access
+    const data = useRef({
+        show_icon: true, //Where it used?
+        renderOrder,
+        scale,
+        hotspot_type: HOTSPOT_TYPE,
+        // image: image._id
+    })
+
+
+
+    const getPostData = () => {
         const transforms = getTransforms();
         const { colliderTransform, visualTransform } = transforms;
 
@@ -41,18 +51,13 @@ const ProductImageControls = ({
             scene: currentSceneId,
             collider_transform: colliderTransform.elements,
             transform: visualTransform.elements,
-            props: {
-                show_icon: true,
-                renderOrder,
-                hotspot_type: HOTSPOT_TYPE,
-                scale,
-                image: imageId
-            },
+            props: data.current
         };
     };
 
-    const handleHotspotChange = ({ id, storeId, scale, renderOrder, imageId, folderId }) => {
-        const postData = parsePostData({ scale, renderOrder, imageId, folderId });
+    const handleHotspotChange = ({ id }) => {
+        const postData = getPostData();
+
         updateHotspotAPI(id, storeId, currentSceneId,  postData).catch((err) => {
             console.error(err);
         });
@@ -60,7 +65,7 @@ const ProductImageControls = ({
 
     const createProductImage = (uiStateId) => {
         if (!uiStateId) {
-            const postData = parsePostData({ scale, renderOrder, imageId, folderId });
+            const postData = getPostData();
             apiCreateHotspotByType(HOTSPOT_TYPE, storeId, currentSceneId, postData)
             .then((res) => {
                 updateState({
@@ -79,7 +84,6 @@ const ProductImageControls = ({
 
     useEffect(() => {
         const currentData = UIState.stateManager.get(uuid);
-        console.log('__#1. UIState-- useEffect', {uuid, currentId, currentData} );
 
         if (currentData) {
             setId(currentData.uiState.id);
@@ -94,7 +98,9 @@ const ProductImageControls = ({
     const handleOrderChange = debounce((e) => {
         const { value } = e.target;
         const renderOrder = parseInt(value, 10);
-        handleHotspotChange({ id, storeId, renderOrder });
+        data.current.renderOrder = renderOrder;
+
+        handleHotspotChange({ id, renderOrder });
 
         updateState({ renderOrder: renderOrder });
         setOrder(renderOrder);
@@ -104,8 +110,8 @@ const ProductImageControls = ({
     const handleScaleChange = (e) => {
         const { value } = e.target;
         const scale = parseFloat(value, 10);
-
-        handleHotspotChange({ id, storeId, scale });
+        data.current.scale = scale;
+        handleHotspotChange({ id, scale });
         updateState({ scale });
         setScale(scale); //call marker method???
     };
@@ -124,6 +130,7 @@ const ProductImageControls = ({
                 onClose();
             });
     };
+
 
     return (
         <div className={styles['product-image-controls']}>
@@ -144,8 +151,6 @@ const ProductImageControls = ({
 ProductImageControls.propTypes = {
     id: PropTypes.string,
     uuid: PropTypes.string.isRequired,
-    imageId: PropTypes.string.isRequired,
-    folderId: PropTypes.string.isRequired,
     scale: PropTypes.number,
     renderOrder: PropTypes.number,
     setScale: PropTypes.func.isRequired, //marker method?

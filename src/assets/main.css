@@ -24,6 +24,11 @@ body {
     background-color: #4c4c4c;
 }
 
+.modal{
+    color: #4c4c4c;
+}
+
+
 /* Old Form Styles */
 form.authFormStyling .input-field{
     border: 0.1em solid #505050;

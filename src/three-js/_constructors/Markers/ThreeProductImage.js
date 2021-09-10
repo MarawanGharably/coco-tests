@@ -6,13 +6,19 @@ import ThreeLoadingManager from '../../three-loading-manager/three-loading-manag
 import { formURL } from "../../../utils/urlHelper";
 
 
-//TODO: Marker constructor should not have any information regarding the Scene!!!
+//TODO: Marker constructor should not have any computation related the Scene!!!
 // this.scene - is a scene only constructor prop
 
 
 export default class ThreeProductImage extends InteractionObject {
     constructor(componentToRender, renderProps) {
         super();
+
+        // Parent Props
+        // this.sceneObject - parent prop;
+
+        //Local prop
+        // this.scene=null; //reference to the scene.  this.addToScene(sceneRef.current)
         const modalComponent = new ModalConstructor(componentToRender, {
             ...renderProps,
             setScale: this.setScale,

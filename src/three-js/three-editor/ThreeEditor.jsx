@@ -4,19 +4,19 @@ import * as THREE from 'three';
 import ThreeController from '../three-controls/ThreeController';
 import { setupRenderer, setupCamera } from './setupThreeEditor';
 import { threeEditorMouseEvents } from './threeEditorMouseEvents';
-import { useCollisionManager, CollisionManagerActionEnums } from '../collision-manager/CollisionManager';
-
-import {HotspotMarker, ThreeProductImage} from '../_constructors/Markers';
-
-import { useUIManager, UIManagerEnums } from '../ui-manager/UIManager';
 import TaggingModal from '../../components/tagging-modal/TaggingModal';
-import { useDataManager } from '../data-manager/DataManager';
-import ProductImageControls from '../../components/Scene/product-library/product-image-controls/ProductImageControls';
 import LoadingScreen from '../../components/LoadingScreen';
+
+import { useCollisionManager, CollisionManagerActionEnums } from '../collision-manager/CollisionManager';
+import { useUIManager, UIManagerEnums } from '../ui-manager/UIManager';
+import { useDataManager } from '../data-manager/DataManager';
+
 import ThreeLoadingManager from '../three-loading-manager/three-loading-manager';
 import ThreeEditorReducer from '../../store/reducers/ThreeEditorReducer';
 import { setMaxRenderOrderAction, setSceneAction} from "../../store/actions/ThreeEditorActions";
-import { addProductImageOnDrop, renderProductImageMarker } from '../utils';
+
+import {HotspotMarker} from '../_constructors/Markers';
+import {ProductObject, addProductImageOnDrop, renderProductImageMarker } from '../utils/productHotspotHelpers';
 import styles from './ThreeEditor.module.scss';
 
 
@@ -121,19 +121,21 @@ export const ThreeEditor = ({ storeId, children }) => {
         const canvasContainer = canvasContainerRef.current;
         const widthMultiplier = 1;
         const heightMultiplier = 1;
-        const aspectRatio = (canvasContainer.offsetWidth * widthMultiplier)
-            / (canvasContainer.offsetHeight * heightMultiplier);
+        const width = canvasContainer.offsetWidth * widthMultiplier;
+        const height = canvasContainer.offsetHeight * heightMultiplier;
+
+        const aspectRatio = width / height;
         // set new reference for cameraRef.current here
         cameraRef.current = new THREE.PerspectiveCamera(70, aspectRatio, 0.1, 1000);
         controlsRef.current = ThreeController.setupControls(cameraRef.current, renderer);
 
         const windowResizeHandler = () => {
-            const currentAspectRatio = (canvasContainer.offsetWidth * widthMultiplier)
-                / (canvasContainer.offsetHeight * heightMultiplier);
-            cameraRef.current.aspect = currentAspectRatio;
+            const width = canvasContainer.offsetWidth * widthMultiplier;
+            const height = canvasContainer.offsetHeight * heightMultiplier;
+
+            cameraRef.current.aspect = width / height;
             cameraRef.current.updateProjectionMatrix();
-            renderer.setSize((canvasContainer.offsetWidth * widthMultiplier),
-                (canvasContainer.offsetHeight * heightMultiplier));
+            renderer.setSize(width, height);
         };
 
         setupRenderer(rendererRef.current, canvasContainer, widthMultiplier, heightMultiplier);
@@ -215,8 +217,17 @@ export const ThreeEditor = ({ storeId, children }) => {
             // console.log('>renderMarker', <object data="" type=""></object>);
 
             if (object.props.hotspot_type === 'product_image') {
-                object["isFromDrop"] = false;
-                return renderProductImageMarker(object, sceneRef, UIDispatch, colliderDispatch, setMaxRenderOrder);
+
+                const productObj = new ProductObject({
+                    id:object._id,
+                    image:object?.props?.image,
+                    renderOrder:object.props.renderOrder,
+                    scale:object.props.scale,
+                    transform:object.transform,
+                    collider_transform:object.collider_transform,
+                });
+                // console.log('>render product image  ', productObj);
+                return renderProductImageMarker(productObj, sceneRef, UIDispatch, colliderDispatch, setMaxRenderOrder);
             }
 
             return renderProductMarker( object );

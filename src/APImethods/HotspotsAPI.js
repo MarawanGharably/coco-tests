@@ -31,8 +31,7 @@ export const updateHotspotAPI =( hotspotId, storeId, sceneId, data, validate=tru
         .catch((err) => Promise.reject(err));
 }
 
-// no type
-// export const deleteHotspot=(hotspotId,  storeId, sceneId)=>{
+
 export const deleteHotspotAPI=(hotspotId,  storeId, sceneId)=>{
     console.log('>deleteHotspotAPI', {hotspotId, storeId, sceneId});
     if (!storeId || !hotspotId || !sceneId) return Promise.reject('Missed required parameter');

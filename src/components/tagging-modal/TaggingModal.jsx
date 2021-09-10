@@ -49,7 +49,7 @@ const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, ge
             collider_transform: colliderTransform.elements,
             transform: visualTransform.elements,
             props: {
-                show_icon: true,
+                show_icon: true, //Where it used???
                 product_sku: SKU,
                 hotspot_type: hotspotType,
             },

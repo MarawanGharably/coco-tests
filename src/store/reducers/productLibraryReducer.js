@@ -10,7 +10,7 @@ import {
     SET_ENABLED,
     GENERAL_LABEL,
     PRODUCT_TAGGING,
-    DESTROY_PRODUCT_LIB_DATA
+    DESTROY_PRODUCT_LIB_DATA,
 } from '../types/productLibrary';
 
 const initialState = {
@@ -26,65 +26,53 @@ export default function (state = initialState, action) {
     const { type, payload } = action;
 
     switch (type) {
-
+        // update multiple props
         case SET_PRODUCT_LIB_DATA:
-            return ({ ...state, ...payload });
-
-        case ADD_PRODUCTS_TO_FOLDER:
-
-            return {
-                ...state,
-                products: {...state.products,
-                    [payload.folderId]: [...state.products[payload.folderId] || [], ...payload.records ]
-                }
-            };
-
-
-        case SET_PRODUCTS:
-            return ({...state, products: payload });
+            return { ...state, ...payload };
 
         case SET_FOLDERS:
-            return ({ ...state, folders: payload });
-
-        // case SET_SELECTED_FOLDER:
-        //     return ({ ...state, selectedFolder: payload });
-
-        case DELETE_PRODUCT:
-            const { productId, folderId } = payload;
-            let selectedFolderUpdate = state.selectedFolder;
-            selectedFolderUpdate.products = selectedFolderUpdate.products.filter((item) => item._id !== productId);
-            let foldersUpdate = state.folders.map((folder) => {
-                if (folder._id === folderId) {
-
-                    folder.products = selectedFolderUpdate.products;
-                }
-                return folder;
-            });
-
-            return ({
-                ...state,
-                selectedFolder: selectedFolderUpdate,
-                folders: foldersUpdate
-            });
+            return { ...state, folders: payload };
 
         case DELETE_FOLDER:
-            return ({
+            return {
                 ...state,
                 products: state.products.filter(({ folderId }) => folderId !== payload),
                 folders: state.folders.filter(({ id }) => id !== payload),
                 selectedFolder: { label: GENERAL_LABEL },
-            });
+            };
 
+        // case SET_SELECTED_FOLDER:
+        //     return ({ ...state, selectedFolder: payload });
+
+        case SET_PRODUCTS:
+            return { ...state, products: payload };
+
+        case ADD_PRODUCTS_TO_FOLDER:
+            return {
+                ...state,
+                products: { ...state.products,
+                    [payload.folderId]: [...(state.products[payload.folderId] || []), ...payload.records]
+                },
+            };
+
+        case DELETE_PRODUCT:
+            const { productId, folderId } = payload;
+
+            state.products[folderId] = state.products[folderId].filter((item) => item._id != productId);
+            return {
+                ...state,
+                products: { ...state.products },
+            };
 
         case SET_MODE:
-            return ({
+            return {
                 ...state,
                 mode: payload.label,
                 mode_slug: payload.value,
-            });
+            };
 
         case SET_ENABLED:
-            return ({ ...state, isEnabled: payload });
+            return { ...state, isEnabled: payload };
 
         case DESTROY_PRODUCT_LIB_DATA:
             return initialState;

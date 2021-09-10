@@ -10,7 +10,26 @@ export const apiGetHotspotsByType =(type, storeId, sceneId)=>{
         .catch((err) => Promise.reject(err));
 }
 
-
+/**
+ * Create Hotspot
+ * @param type
+ * @param storeId
+ * @param sceneId
+ * @param data={
+ *  "type":"HotspotMarker",
+ *  "scene":"601c753cc1b4f781a3d1ecc4",
+ *  "collider_transform":[],
+ *  "props":{
+ *      "show_icon":true,
+ *       "renderOrder":22,
+ *       "scale":3,
+ *       "hotspot_type":"product_image",
+ *       "image":"612ed293ed7562595020924e"
+ *  }
+ * }
+ * @param validate
+ * @returns {Promise}
+ */
 export const apiCreateHotspotByType=(type, storeId, sceneId, data, validate=true )=>{
     if (!storeId || !type || !data) return Promise.reject('Missed required parameter');
 

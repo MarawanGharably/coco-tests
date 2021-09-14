@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, createContext, useReducer, useContext} from 'react';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import * as THREE from 'three';
 import ThreeController from '../three-controls/ThreeController';
 import { setupRenderer, setupCamera } from './setupThreeEditor';
@@ -18,6 +18,7 @@ import { setMaxRenderOrderAction, setSceneAction} from "../../store/actions/Thre
 import {HotspotMarker} from '../_constructors/Markers';
 import {ProductObject, addProductImageOnDrop, renderProductImageMarker } from '../utils/productHotspotHelpers';
 import styles from './ThreeEditor.module.scss';
+import {RESET_DELETE_PRODUCT_ID} from "../../store/types/productLibrary";
 
 
 const initialState = {
@@ -32,13 +33,14 @@ const ThreeDispatch = createContext();
 
 
 export const ThreeEditor = ({ storeId, children }) => {
+    const reduxDispatch = useDispatch();
     const [threeReady, setThreeReady] = useState(false);
     const [state, dispatch] = useReducer(ThreeEditorReducer, initialState);
 
     const [colliderState, colliderDispatch] = useCollisionManager();
     const [UIState, UIDispatch] = useUIManager();
     const [dataState] = useDataManager();
-    const { selectedFolder, products, mode, isEnabled } = useSelector(state => state.productLibrary);
+    const { selectedFolder, products, mode, deleteProductId } = useSelector(state => state['productLibrary']);
     const { currentSceneId } = useSelector(state => state['SceneEditor']);
 
     const { updateList } = state;
@@ -254,38 +256,26 @@ export const ThreeEditor = ({ storeId, children }) => {
 
 
 
-
+    // Product Image removed? Delete associated hotspots
     useEffect(() => {
-        const hasProductImage = (collider) => {
-            const { modalComponentRenderProps: renderProps } = collider.owner;
-            // console.log('>useEffect', {products});
-            if (renderProps.type === 'product_image') {
-                const allProducts = Object.entries(products).map(([folderId, records])=>records);
-                // console.log('>allProducts', allProducts);
 
-                //TODO: product has no imageUrl prop
-                return allProducts.find((product) => (
-                    product.imageUrl === collider.owner.modalComponentRenderProps.imageUrl
-                ));
-            }
+        if(deleteProductId && deleteProductId.length>5 && typeof deleteProductId === 'string' ){
+            const imageHotspots = colliderRef.current.filter(collider=> (collider.name =='marker' && collider.owner.modalComponentRenderProps.type ==='product_image'));
+            const hotspotsToDelete = imageHotspots.filter(collider=>collider.owner.modalComponentRenderProps.image._id == deleteProductId );
 
-            return true;
-        };
-
-        const resetProducts = () => {
-            colliderRef.current.forEach((collider) => {
-                if (collider.name === 'marker' && !hasProductImage(collider)) {
-                    colliderDispatch({
-                        type: CollisionManagerActionEnums.REMOVE_COLLIDERS,
-                        payload: collider.uuid,
-                    });
-                    collider.owner.dispose();
-                }
+            hotspotsToDelete.forEach((collider) => {
+                colliderDispatch({
+                    type: CollisionManagerActionEnums.REMOVE_COLLIDERS,
+                    payload: collider.uuid,
+                });
+                collider.owner.dispose();
             });
-        };
 
-        resetProducts();
-    }, [products]);
+            //Dont forget to cleanup deleteProductId
+            reduxDispatch({type:RESET_DELETE_PRODUCT_ID});
+        }
+    }, [deleteProductId]);
+
 
     return (
         <div

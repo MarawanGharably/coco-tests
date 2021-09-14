@@ -15,7 +15,7 @@ const Actions = ({ selectedFolder }) => {
     const {id:storeId} = router.query;
 
     const [isUploadDialogOpen, setUploadDialog] = useState(false);
-    const [isDeleteDialogOpen, setDeleteDialog] = useState(false);
+    // const [isDeleteDialogOpen, setDeleteDialog] = useState(false);
     const [images, setImages] = useState([]);
     const fileRef = useRef(null);
     // const canDelete = selectedFolder && selectedFolder.id;
@@ -37,9 +37,9 @@ const Actions = ({ selectedFolder }) => {
         });
     };
 
-    const toggleDeleteDialog = () => {
-        setDeleteDialog(!isDeleteDialogOpen);
-    };
+    // const toggleDeleteDialog = () => {
+    //     setDeleteDialog(!isDeleteDialogOpen);
+    // };
 
     const toggleUploadDialog = () => {
         setUploadDialog(!isUploadDialogOpen);
@@ -64,10 +64,10 @@ const Actions = ({ selectedFolder }) => {
         fileRef.current.click();
     };
 
-    const handleFolderDelete = () => {
-        dispatch(deleteHotspotProductFolder(storeId, selectedFolder.id));
-        toggleDeleteDialog();
-    };
+    // const handleFolderDelete = () => {
+    //     dispatch(deleteHotspotProductFolder(storeId, selectedFolder.id));
+    //     toggleDeleteDialog();
+    // };
 
     return (
         <div className={styles['product-library-actions']}>
@@ -86,15 +86,22 @@ const Actions = ({ selectedFolder }) => {
             {/*        Delete Folder*/}
             {/*    </Button>*/}
             {/*)}*/}
-            <ConfirmationDialog
-                title="Are you sure you want to delete this folder?"
-                content="All products inside will be removed"
-                show={isDeleteDialogOpen}
-                confirmLabel="Delete"
-                onHide={toggleDeleteDialog}
-                onConfirm={handleFolderDelete}
-            />
-            <UploadDialog show={isUploadDialogOpen} onHide={toggleUploadDialog} images={images} setImages={setImages} />
+            {/*<ConfirmationDialog*/}
+            {/*    title="Are you sure you want to delete this folder?"*/}
+            {/*    content="All products inside will be removed"*/}
+            {/*    show={isDeleteDialogOpen}*/}
+            {/*    confirmLabel="Delete"*/}
+            {/*    onHide={toggleDeleteDialog}*/}
+            {/*    onConfirm={handleFolderDelete}*/}
+            {/*/>*/}
+
+            {/*Reset component state by unmounting*/}
+            {isUploadDialogOpen && (<UploadDialog
+                show={isUploadDialogOpen}
+                onHide={toggleUploadDialog}
+                images={images}
+                setImages={setImages}
+            />) }
         </div>
     );
 };

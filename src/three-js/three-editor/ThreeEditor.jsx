@@ -250,7 +250,10 @@ export const ThreeEditor = ({ storeId, children }) => {
 
         resetRoomObjects();
         setNewRoomObjectData();
-    }, [currentSceneId, dataState, products]); // eslint-disable-line
+    }, [currentSceneId, dataState]); // eslint-disable-line
+
+
+
 
     useEffect(() => {
         const hasProductImage = (collider) => {

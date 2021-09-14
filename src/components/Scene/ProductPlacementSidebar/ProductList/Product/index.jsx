@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import ConfirmationDialog from '../../../../ConfirmationDialog';
 import { PRODUCT_PLACEMENT } from '../../../../../store/types/productLibrary';
 import { deleteProductImageFromFolder } from '../../../../../APImethods';
 import { formURL } from '../../../../../utils/urlHelper';
 import styles from './Product.module.scss';
 
-const Product = ({ id, storeId, image, folder }) => {
+const Product = ({ data, storeId, productLibrary }) => {
+    const { _id, image, folder } = data;
     const dispatch = useDispatch();
-    const { mode } = useSelector((state) => state['productLibrary']);
+    const { mode } = productLibrary;
     const [isDialogOpen, setDialogOpen] = useState(false);
     const draggable = mode === PRODUCT_PLACEMENT;
+
 
     const onDragStart = (e) => {
         if (!draggable) return;
@@ -22,9 +24,9 @@ const Product = ({ id, storeId, image, folder }) => {
         overlay.innerHTML = 'Drop the image here to add to the scene';
         container.appendChild(overlay);
 
-        e.dataTransfer.setData('id', id);
+        e.dataTransfer.setData('id', _id);
         e.dataTransfer.setData('folderId', folder);
-        e.dataTransfer.setData('imageId', id);
+        e.dataTransfer.setData('imageId', _id);
     };
 
     const onDragEnd = () => {
@@ -35,9 +37,10 @@ const Product = ({ id, storeId, image, folder }) => {
     };
 
     const handleDelete = () => {
-        dispatch(deleteProductImageFromFolder(storeId, id, folder)).then((res) => {
-            setDialogOpen(false);
-        });
+        dispatch(deleteProductImageFromFolder(storeId, _id, folder))
+            .then((res) => {
+                setDialogOpen(false);
+            });
     };
 
     return (
@@ -58,7 +61,7 @@ const Product = ({ id, storeId, image, folder }) => {
 
             <ConfirmationDialog
                 title="Are you sure you want to delete this product?"
-                content="It will be removed from all scenes"
+                content="It will be removed from all scenes and all associated hotspots will be removed as well"
                 show={isDialogOpen}
                 confirmLabel="Delete"
                 onHide={(e) => setDialogOpen(false)}
@@ -69,9 +72,16 @@ const Product = ({ id, storeId, image, folder }) => {
 };
 
 Product.propTypes = {
-    id: PropTypes.string.isRequired,
-    image: PropTypes.string.isRequired,
-    folder: PropTypes.string.isRequired,
+    storeId: PropTypes.string.isRequired,
+    data: PropTypes.shape({
+        _id: PropTypes.string,
+        image: PropTypes.string,
+        folder: PropTypes.string,
+    }).isRequired,
+    productLibrary: PropTypes.shape({
+        mode: PropTypes.string,
+        isEnabled: PropTypes.bool,
+    }).isRequired,
 };
 
 export default Product;

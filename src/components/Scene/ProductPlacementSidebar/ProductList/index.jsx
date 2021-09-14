@@ -41,11 +41,10 @@ const ProductList = ({ productLibrary }) => {
           <div className={styles["list"]}>
 
               {products[selectedFolderId]?.length ?
-                 products[selectedFolderId].map(({ _id, image, folder }, i) => (
-                  <Product key={i} id={_id} storeId={storeId} image={image}
-                           folder={folder} />
+                 products[selectedFolderId].map((item, i) => (
+                  <Product key={i}  data={item} storeId={storeId}   productLibrary={productLibrary} />
                 ))
-                : <span>Folder is empty</span>
+                : <div className='mt-4'>Folder is empty</div>
               }
           </div>
       </div>

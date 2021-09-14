@@ -8,15 +8,10 @@ import LoadingScreen from '../../components/LoadingScreen';
 import HotspotEditor from '../../three-js/three-editor/HotspotEditor';
 import { ModeSelector, SceneNavigator } from '../../components/Scene';
 import ProductPlacementSidebar from '../../components/Scene/ProductPlacementSidebar';
-import {
-    getStoreFlags,
-    apiPublishSceneData,
-    getStoreScenes,
-    getProductLibrary
-} from "../../APImethods";
 import { showSuccessMessage, showErrorMessage } from '../../store/actions/toastActions';
 import { destroyProductLibraryData } from '../../store/actions/productLibraryActions';
 import {destroySceneData} from "../../store/actions/SceneEditorActions";
+import { getStoreFlags, apiPublishSceneData, getStoreScenes, getProductLibrary} from "../../APImethods";
 import styles from '../../assets/scss/hotspotsPage.module.scss';
 
 
@@ -26,8 +21,6 @@ let HotspotsPage = (props) => {
     const router = useRouter();
     const dispatch = useDispatch();
     const { id:storeId } = router.query;
-
-    const { currentSceneId } = props.SceneEditor;
 
     const showSideBar = isEnabled && mode_slug === 'product_placement';
 
@@ -87,9 +80,9 @@ let HotspotsPage = (props) => {
             </Row>
 
             <Row className={styles['sceneEditor']}>
-                <SceneNavigator sceneEditor={props.SceneEditor} className={`${styles.sceneNavigator} ${showSideBar ? styles.withSideBar : ''}`} />
-                <HotspotEditor storeId={storeId} />
-                {isEnabled && (<ProductPlacementSidebar visible={showSideBar} productLibrary={props.productLibrary} />)}
+                    <SceneNavigator sceneEditor={props.SceneEditor} className={`${styles.sceneNavigator} ${showSideBar ? styles.withSideBar : ''}`} />
+                    <HotspotEditor storeId={storeId} />
+                    {isEnabled && (<ProductPlacementSidebar visible={showSideBar} productLibrary={props.productLibrary} />)}
             </Row>
 
             {isLoading && <LoadingScreen />}

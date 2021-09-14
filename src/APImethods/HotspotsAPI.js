@@ -44,6 +44,9 @@ export const updateHotspotAPI =( hotspotId, storeId, sceneId, data, validate=tru
     console.log('>updateHotspotAPI', {hotspotId, storeId, sceneId, data});
     if ( !hotspotId || !storeId || !sceneId || !data) return Promise.reject('Missed required parameter');
 
+    //do not send image in request
+    delete data.props.image;
+
     return axiosApi
         .put(`/stores/${storeId}/scenes/${sceneId}/hotspots/${hotspotId}?validate=${validate}`, data)
         .then((res) => res.data)

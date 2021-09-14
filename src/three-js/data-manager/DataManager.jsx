@@ -7,20 +7,21 @@ const initialState = {
     roomObjectData: [],
 };
 
-const dataState = React.createContext(initialState);
-const dataDispatch = React.createContext();
+const DataState = React.createContext(initialState);
+
 
 export const DATA_MANAGER_ENUMS = {
     SET_ROOM_OBJECT_DATA: 'SET_ROOM_OBJECT_DATA',
     POST_ROOM_OBJECT_DATA: 'POST_ROOM_OBJECT_DATA',
     UPDATE_ROOM_OBJECT_DATA: 'UPDATE_ROOM_OBJECT_DATA',
     DELETE_ROOM_OBJECT_DATA: 'DELETE_ROOM_OBJECT_DATA',
+    DELETE_ROOM_OBJECTS: 'DELETE_ROOM_OBJECTS',
     CLEAR_ROOM_OBJECT_DATA: 'CLEAR_ROOM_OBJECT_DATA',
     ASSIGN_UUID: 'ASSIGN_UUID',
 };
 
 const {
-    SET_ROOM_OBJECT_DATA, POST_ROOM_OBJECT_DATA, UPDATE_ROOM_OBJECT_DATA, DELETE_ROOM_OBJECT_DATA, CLEAR_ROOM_OBJECT_DATA, ASSIGN_UUID, //eslint-disable-line
+    SET_ROOM_OBJECT_DATA, POST_ROOM_OBJECT_DATA, UPDATE_ROOM_OBJECT_DATA, DELETE_ROOM_OBJECT_DATA, DELETE_ROOM_OBJECTS, CLEAR_ROOM_OBJECT_DATA, ASSIGN_UUID, //eslint-disable-line
 } = DATA_MANAGER_ENUMS;
 
 const dataManagerReducer = (state, action) => {
@@ -30,15 +31,9 @@ const dataManagerReducer = (state, action) => {
             const { roomObjectData } = payload;
 
             if (typeof roomObjectData === 'string') {
-                return ({
-                    ...state,
-                    roomObjectData: [],
-                });
+                return ({...state, roomObjectData: []});
             }
-            return ({
-                ...state,
-                roomObjectData,
-            });
+            return ({...state, roomObjectData});
         }
         case POST_ROOM_OBJECT_DATA: {
             const { roomObject } = payload;
@@ -62,29 +57,34 @@ const dataManagerReducer = (state, action) => {
                 roomObjectData: updatedRoomObjectData,
             });
         }
+
         case DELETE_ROOM_OBJECT_DATA: {
             const { id } = payload;
-            const filteredRoomObjects = state.roomObjectData.filter((roomObject) => {
-                if (roomObject.id === id) {
-                    return false;
-                }
-                return true;
-            });
+            const filteredRoomObjects = state.roomObjectData.filter((roomObject) => (roomObject.id !== id) );
 
             return ({
                 state,
                 roomObjectData: filteredRoomObjects,
             });
         }
-        case ASSIGN_UUID:
+
+        case DELETE_ROOM_OBJECTS: {
+            //payload = [] of objects to remove;
+            const objectsIds= payload.map(item=>item._id);
+            const filtered = state.roomObjectData.filter((item) => (!objectsIds.includes(item._id)) );
+
             return ({
                 state,
+                roomObjectData: filtered,
             });
+        }
+
+        case ASSIGN_UUID:
+            return ({ state });
+
         case CLEAR_ROOM_OBJECT_DATA:
-            return ({
-                ...state,
-                roomObjectData: [],
-            });
+            return ({...state, roomObjectData: []});
+
         default:
             console.error(`Action of type ${type} not supported!`);
             return state;
@@ -93,9 +93,7 @@ const dataManagerReducer = (state, action) => {
 
 
 
-export const DataManager = ({
-    hotspotTypes, sceneId, storeId, children,
-}) => {
+export const DataManager = ({hotspotTypes, sceneId, storeId, children}) => {
     const [state, dispatch] = useReducer(dataManagerReducer, initialState);
 
 
@@ -140,17 +138,14 @@ export const DataManager = ({
     }, [sceneId]); // eslint-disable-line
 
     return (
-        <dataState.Provider value={state}>
-            <dataDispatch.Provider value={dispatch}>
+        <DataState.Provider value={{state, dispatch}}>
                 {children}
-            </dataDispatch.Provider>
-        </dataState.Provider>
+        </DataState.Provider>
     );
 };
 
 export const useDataManager = () => {
-    const state = useContext(dataState);
-    const dispatch = useContext(dataDispatch);
+    const {state, dispatch} = useContext(DataState);
     return [state, dispatch];
 };
 

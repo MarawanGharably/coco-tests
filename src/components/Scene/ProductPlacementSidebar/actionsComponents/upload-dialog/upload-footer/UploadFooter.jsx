@@ -47,13 +47,11 @@ const UploadFooter = ({ images, closeDialog, setErrors }) => {
                     "After closing refresh product library using getProductLibrary",
                     records);
 
-                closeDialog();
+                closeDialog(); //component unmounted, state erased
             })
             .catch((err)=>{
                 console.log('>%c Upload Error', 'color:red', err);
                 setErrors(err);
-            })
-            .finally(()=>{
                 setLoading(false);
             });
     };

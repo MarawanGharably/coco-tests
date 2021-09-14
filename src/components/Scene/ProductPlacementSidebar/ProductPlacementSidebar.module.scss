@@ -1,6 +1,6 @@
 @import '../../../assets/scss/variables';
 
-.product-placement-sidebar {
+.cmp {
   display:none;
   background: $black-color;
   padding: 1em;
@@ -48,6 +48,7 @@
     display: flex;
     flex-flow: column;
     overflow-y: auto;
+    height: 100%;
   }
 
 }

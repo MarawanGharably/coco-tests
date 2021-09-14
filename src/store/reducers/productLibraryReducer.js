@@ -10,6 +10,7 @@ import {
     SET_ENABLED,
     GENERAL_LABEL,
     PRODUCT_TAGGING,
+    RESET_DELETE_PRODUCT_ID,
     DESTROY_PRODUCT_LIB_DATA,
 } from '../types/productLibrary';
 
@@ -20,6 +21,7 @@ const initialState = {
     selectedFolder: null,
     mode: PRODUCT_TAGGING,
     mode_slug: 'product_tagging',
+    deleteProductId:null //ThreeEditor will track this prop to remove hotspot/s. NULL by default
 };
 
 export default function (state = initialState, action) {
@@ -62,7 +64,13 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 products: { ...state.products },
+                deleteProductId:productId //required to update ThreeEditor
             };
+
+        case RESET_DELETE_PRODUCT_ID:
+            return {...state, deleteProductId:null};
+
+
 
         case SET_MODE:
             return {
@@ -76,6 +84,7 @@ export default function (state = initialState, action) {
 
         case DESTROY_PRODUCT_LIB_DATA:
             return initialState;
+
 
         default:
             return state;

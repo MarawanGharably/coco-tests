@@ -42,7 +42,7 @@ const ProductList = ({ productLibrary }) => {
 
               {products[selectedFolderId]?.length ?
                  products[selectedFolderId].map((item, i) => (
-                  <Product key={i}  data={item} storeId={storeId}   productLibrary={productLibrary} />
+                  <Product key={item._id}  data={item} storeId={storeId}   productLibrary={productLibrary} />
                 ))
                 : <div className='mt-4'>Folder is empty</div>
               }

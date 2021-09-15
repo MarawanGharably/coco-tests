@@ -9,7 +9,7 @@ import LoadingScreen from '../../components/LoadingScreen';
 
 import { useCollisionManager, CollisionManagerActionEnums } from '../collision-manager/CollisionManager';
 import { useUIManager, UIManagerEnums } from '../ui-manager/UIManager';
-import { useDataManager } from '../data-manager/DataManager';
+
 
 import ThreeLoadingManager from '../three-loading-manager/three-loading-manager';
 import ThreeEditorReducer from '../../store/reducers/ThreeEditorReducer';
@@ -19,6 +19,7 @@ import {HotspotMarker} from '../_constructors/Markers';
 import {ProductObject, addProductImageOnDrop, renderProductImageMarker } from '../utils/productHotspotHelpers';
 import styles from './ThreeEditor.module.scss';
 import {RESET_DELETE_PRODUCT_ID} from "../../store/types/productLibrary";
+import {apiGetHotspotsByType} from "../../APImethods";
 
 
 const initialState = {
@@ -39,7 +40,8 @@ export const ThreeEditor = ({ storeId, children }) => {
 
     const [colliderState, colliderDispatch] = useCollisionManager();
     const [UIState, UIDispatch] = useUIManager();
-    const [dataState] = useDataManager();
+
+    const [sceneObjects, setSceneObjects] = useState([]);
     const { selectedFolder, products, mode, deleteProductId } = useSelector(state => state['productLibrary']);
     const { currentSceneId } = useSelector(state => state['SceneEditor']);
 
@@ -60,6 +62,8 @@ export const ThreeEditor = ({ storeId, children }) => {
 
     const mouseRef = useRef(new THREE.Vector2());
     const mouseStartRef = useRef(new THREE.Vector2());
+
+
 
     const renderer = rendererRef.current;
     const scene = sceneRef.current;
@@ -115,10 +119,33 @@ export const ThreeEditor = ({ storeId, children }) => {
     };
 
 
+    const fetchSceneHotspots= async( hotspotTypes=[], sceneId, storeId  )=>{
+        if (!sceneId || sceneId.length<5) return;
 
+        setSceneObjects([]);
+
+        const getRoomObjectData = async () => {
+            if (Array.isArray(hotspotTypes)) {
+                const promises = hotspotTypes.map((hotspotType) => (
+                    apiGetHotspotsByType(hotspotType, storeId, sceneId)
+                ));
+
+                return Promise.all(promises);
+            }
+
+            return apiGetHotspotsByType(hotspotTypes, storeId, sceneId);
+        };
+
+        const response = await getRoomObjectData();
+        const formatted = response.flat().filter((object) => (typeof object !== 'string'));
+        setSceneObjects(formatted );
+    }
 
     useEffect(() => {
         dispatch(setSceneAction(scene));
+
+        //#1. Fetch Scene Hotspots
+        fetchSceneHotspots(['product', 'product_image'], currentSceneId, storeId);
 
         const canvasContainer = canvasContainerRef.current;
         const widthMultiplier = 1;
@@ -199,6 +226,7 @@ export const ThreeEditor = ({ storeId, children }) => {
         colliderRef.current = colliderState.colliders;
     }, [colliderState]);
 
+    //Render Scene objects
     useEffect(() => {
         const resetRoomObjects = () => {
             colliderRef.current.forEach((collider) => {
@@ -236,8 +264,8 @@ export const ThreeEditor = ({ storeId, children }) => {
         };
 
         const setNewRoomObjectData = () => {
-            if (dataState.roomObjectData && products) {
-                dataState.roomObjectData.forEach((object) => {
+            if (sceneObjects && products) {
+                sceneObjects.forEach((object) => {
                     const marker = renderMarker(object);
 
                     if (!marker) return;
@@ -252,13 +280,12 @@ export const ThreeEditor = ({ storeId, children }) => {
 
         resetRoomObjects();
         setNewRoomObjectData();
-    }, [currentSceneId, dataState]); // eslint-disable-line
+    }, [currentSceneId, sceneObjects]); // eslint-disable-line
 
 
 
     // Product Image removed? Delete associated hotspots
     useEffect(() => {
-
         if(deleteProductId && deleteProductId.length>5 && typeof deleteProductId === 'string' ){
             const imageHotspots = colliderRef.current.filter(collider=> (collider.name =='marker' && collider.owner.modalComponentRenderProps.type ==='product_image'));
             const hotspotsToDelete = imageHotspots.filter(collider=>collider.owner.modalComponentRenderProps.image._id == deleteProductId );
@@ -271,7 +298,7 @@ export const ThreeEditor = ({ storeId, children }) => {
                 collider.owner.dispose();
             });
 
-            //Dont forget to cleanup deleteProductId
+            //Dont forget to cleanup deleteProductId value
             reduxDispatch({type:RESET_DELETE_PRODUCT_ID});
         }
     }, [deleteProductId]);

@@ -32,6 +32,10 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
         this.setColor(this.primaryColor);
     }
 
+    setScale(scale) {
+        this.svgSprite.scale.set(scale, scale, scale);
+    }
+
     setPrimaryColor(color) {
         this.primaryColor = color;
     }

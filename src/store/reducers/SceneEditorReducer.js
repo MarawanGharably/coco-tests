@@ -1,4 +1,5 @@
-import { SET_CURRENT_SCENE_ID, SET_SCENE_DATA } from '../types/SceneEditorTypes';
+import { SET_CURRENT_SCENE_ID, SET_SCENE_DATA, DESTROY_SCENE_DATA } from '../types/SceneEditorTypes';
+
 
 const initialState = {
     currentSceneId: '',
@@ -15,6 +16,8 @@ export default function sceneEditorReducer(state=initialState, action) {
         case SET_SCENE_DATA:
             return {...state, sceneData: [...payload]};
 
+        case DESTROY_SCENE_DATA:
+            return initialState;
         default:
             return state;
     }

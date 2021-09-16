@@ -1,10 +1,10 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import './Input.scss';
+import styles from './Input.module.scss';
 
 const Input = ({ input = {}, type = 'text', label = '',  placeholder = '',  extraClass = '', isRequired = false, disabled, meta: { touched, error, warning }}) => (
-    <Form.Group className="mb-3 input-field" controlId={input.name}>
+    <Form.Group className={`mb-3 ${styles['input-field']} input-field`} controlId={input.name}>
         <Form.Label>{label}</Form.Label>
         <Form.Control {...input} type={type} placeholder={placeholder} readOnly={disabled ? true : false} />
 

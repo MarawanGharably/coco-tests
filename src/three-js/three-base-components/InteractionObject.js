@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-
 import ThreeSceneObject from './ThreeSceneObject';
 import ThreeSceneObjectComponent from './ThreeSceneObjectComponent';
 import BoxCollider from './BoxCollider';
@@ -11,6 +10,7 @@ export default class InteractionObject extends ThreeSceneObject {
         this.sceneObject = new BoxCollider(1, 1, 1, this.onHover, this.onUnhover, this.onClick);
         this.sceneObject.setOwner(this);
         this.UIDispatcher = null;
+        // this.visualObject = null;
     }
 
     /**
@@ -19,9 +19,7 @@ export default class InteractionObject extends ThreeSceneObject {
      */
     onHover = () => {
         this.components.forEach((component) => {
-            if (component.onHover) {
-                component.onHover();
-            }
+            if (component.onHover) component.onHover();
         });
     }
 
@@ -31,9 +29,7 @@ export default class InteractionObject extends ThreeSceneObject {
      */
     onUnhover = () => {
         this.components.forEach((component) => {
-            if (component.onUnhover) {
-                component.onUnhover();
-            }
+            if (component.onUnhover) component.onUnhover();
         });
     }
 
@@ -43,9 +39,7 @@ export default class InteractionObject extends ThreeSceneObject {
      */
     onClick = () => {
         this.components.forEach((component) => {
-            if (component.onClick) {
-                component.onClick();
-            }
+            if (component.onClick) component.onClick();
         });
     }
 
@@ -66,10 +60,22 @@ export default class InteractionObject extends ThreeSceneObject {
         this.visualObject = visualObject;
     }
 
-    setPosition = (positionVector) => {
-        this.visualObject.position = positionVector;
-        this.BoxCollider.position = positionVector;
+    // setPosition = (positionVector) => {
+    //     this.visualObject.position = positionVector;
+    //     this.BoxCollider.position = positionVector;
+    // }
+    setPosition = (x, y, z) => {
+        this.sceneObject.position.set(x, y, z);
+
+        if (this.isFlatBackground) {
+            this.sceneObject.position.x = -10;
+        } else {
+            this.sceneObject.position.clampLength(10, 10);
+        }
+
+        this.visualObject.position.copy(this.sceneObject.position);
     }
+
 
     /**
      * Set the transform of the visualObject attached to this InteractableObject.
@@ -114,6 +120,19 @@ export default class InteractionObject extends ThreeSceneObject {
 
         component.setOwner(this);
         this.components.push(component);
+    }
+
+
+    renderComponentImmediately = () => {
+        this.components.forEach((component) => {
+            component.onClick();
+        });
+    }
+
+    getTransforms = () => {
+        const colliderTransform = this.sceneObject.matrix;
+        const visualTransform = this.visualObject.matrix;
+        return { colliderTransform, visualTransform };
     }
 
     /**

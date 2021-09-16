@@ -1,0 +1,41 @@
+@import '../../../../assets/scss/variables';
+
+.cmp{
+  color: $light-grey;
+  list-style: none;
+  margin-top: 3em;
+  padding: 0;
+
+  li{
+    padding: 0.6em 0 0.6em 1.3em;
+    margin-bottom: 0.6em;
+    position: relative;
+
+    &.liActive{
+      background: $black-darken-3;
+      border-radius: 10px 0 0 10px;
+
+      &::after {
+        content: '';
+        position: absolute;
+        width: 4px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(304deg, $blue-ink-color 1.28%, $green-bright-color 98.95%);
+      }
+
+    }
+
+    .link{
+      color: $light-grey;
+      font-size: 1.12em;
+      text-decoration: none;
+
+      &.active{
+        @extend %textWithGradient;
+        font-weight: 600;
+      }
+    }
+  }
+}

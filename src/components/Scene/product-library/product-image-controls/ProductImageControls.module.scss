@@ -1,0 +1,31 @@
+.product-image-controls {
+    position: absolute;
+    max-width: 20em;
+    top: 8em;
+    left: 0;
+    padding: 1.5em 2em 2em 2em;
+    border-top-right-radius: 2em;
+    border-bottom-right-radius: 2em;
+    color: #fff;
+    background-color: rgba(0,0,0,.6);
+    z-index: 1;
+
+    div[role="textbox"] {
+        border: 0.1em solid #fff;
+    }
+
+
+
+    .actions {
+        margin-top: 1em;
+        display: flex;
+        align-items: center;
+
+        :global {
+            .btn {
+                margin-right: 0.5em;
+            }
+        }
+
+    }
+}

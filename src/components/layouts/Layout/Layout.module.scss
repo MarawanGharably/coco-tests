@@ -1,0 +1,77 @@
+@import '../../../assets/scss/_variables.scss';
+
+.cmp{
+  //background-position: 0% 0em!important;
+  background-size: 100% auto!important;
+  min-height: 100vh;
+
+  h2,h5{ color:#fff; }
+
+  .container{
+    &.fullWidth{
+      width: 100%;
+      max-width: none;
+      padding: 0;
+    }
+  }
+
+
+  //Overwrite Bootstrap rules
+  :global {
+    @media (min-width: 1200px){
+      .container, .container-lg, .container-md, .container-sm, .container-xl {
+        max-width: 1210px;
+      }
+    }
+  }
+
+  .leftSideBar{
+    background: #232323;
+    box-shadow: 20px 4px 14px rgba(0, 0, 0, 0.5);
+    padding-right:0;
+    min-height: 100vh;
+
+
+    .logo {
+      padding: 1em;
+
+      img{ margin-top: 1em;}
+    }
+
+  }
+
+  .contentArea{
+    padding: 0 2em;
+
+    >div{
+      max-width: 2200px;
+    }
+
+  }
+
+}
+
+
+
+
+//@media (min-width: 576px){
+//  .container, .container-sm {
+//    max-width: 660px;
+//  }
+//}
+//
+//@media (min-width: 768px){
+//  .container, .container-md, .container-sm {
+//    max-width: 900px;
+//  }
+//}
+//
+//@media (min-width: 992px){
+//  .container, .container-lg, .container-md, .container-sm {
+//    max-width: 1025px;
+//  }
+//}
+
+
+
+

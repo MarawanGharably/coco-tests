@@ -1,57 +1,81 @@
-import axiosApi from '../utils/axiosApi';
-const { API_URL } = process.env;
+import axiosApi from "../utils/axiosApi";
+import { setUserData } from "../store/actions/userActions";
+
 
 export const createUser = (data) => {
+    if (!data) return Promise.reject('Missed required parameter');
+
     return axiosApi
-        .post(`${API_URL}/users/create`, data)
+        .post(`/users/create`, data)
+        .then((res) => res.data)
+        .catch((err) => Promise.reject(err.response.data));
+};
+
+
+export const updateUser = (userName, data) => {
+    if (!userName || !data) return Promise.reject('Missed required parameter');
+
+    return axiosApi
+        .put(`/users/${userName}`, data)
         .then((res) => res.data)
         .catch((err) => Promise.reject(err));
 };
 
 /**
- * get list of Users
+ * get list of users
  */
 export const getUsers = () => {
     return axiosApi
-        .get(`${API_URL}/users/`)
+        .get(`/users`)
         .then((res) => {
-            const users = res.data.map((item) => {
-                const Attributes = {};
-                item['Attributes'].map((item) => {
-                    Attributes[item.Name] = item['Value'];
-                });
-
+            return res.data.map((item) => {
                 return {
                     Username: item.Username,
-                    given_name: Attributes.given_name || '',
+                    given_name: item.given_name || '',
                     UserCreateDate: item.UserCreateDate,
                     UserLastModifiedDate: item.UserLastModifiedDate,
                     UserStatus: item.UserStatus,
                     Enabled: item.Enabled,
-                    email: Attributes.email,
-                    email_verified: Attributes.email_verified == 'true' ? true : false,
+                    email: item.email,
+                    email_verified: item.email_verified === 'true',
                     Attributes: item.Attributes,
-                    subId: Attributes['sub'],
-                    id: Attributes['sub'],
+                    subId: item['sub'],
+                    id: item['sub'],
                 };
             });
-            return users;
         })
         .catch((err) => Promise.reject(err));
 };
+
+
+
+/**
+ * get current user data
+ */
+export const getCurrentUserData = (options) =>dispatch=> {
+    return axiosApi
+        .get(`/users/user`)
+        .then((res) => {
+            //Update Store if required
+            if(options?.updateUserStore) dispatch(setUserData(res.data));
+
+            return res.data;
+        })
+        .catch((err) => Promise.reject(err));
+};
+
+
 
 /**
  * Fetch User Data
  * @param userId
  * @returns {Promise}
  */
-export const getUser = (userId) => {
+export const getUserDataWithId = (userId) => {
     if (!userId) return Promise.reject('Missed required parameter');
 
     return axiosApi
-        .get(`${API_URL}/users/${userId}`)
+        .get(`/users/${userId}`)
         .then((res) => res.data)
         .catch((err) => Promise.reject(err));
 };
-
-

@@ -1,14 +1,15 @@
 import { Vector3, Matrix4 } from 'three';
-import { apiUpdateHotspotByType } from '../../utils/apiUtils';
+import { updateHotspotAPI} from '../../APImethods/HotspotsAPI';
 
 import {
     PRODUCT_TAGGING,
     PRODUCT_PLACEMENT,
-} from '../../components/mode-selector/modeOptions';
+} from '../../components/Scene/ModeSelector/modeOptions';
 
 export const threeEditorMouseEvents = (
+    storeId,
     renderer,
-    controls,
+    controlsRef,
     mouseStartRef,
     mouseRef,
     cameraRef,
@@ -36,26 +37,23 @@ export const threeEditorMouseEvents = (
     let pendingSaveProductObject = null;
 
     const getMousePosition = (refToUpdate, e) => {
-        const {
-            top, left, width, height,
-        } = renderer.domElement.getBoundingClientRect();
+        const {top, left, width, height} = renderer.domElement.getBoundingClientRect();
 
         refToUpdate.current.x = -1 + 2 * (e.clientX - left) / width; // eslint-disable-line
         refToUpdate.current.y = 1 - 2 * (e.clientY - top) / height; // eslint-disable-line
     };
 
     const dragReleaseProductHotspotAutoSave = async (object) => {
+
         if (!object) return;
 
         const currentProductMarker = object.owner;
         const { colliderTransform, visualTransform } = currentProductMarker.getTransforms();
-        const {
-            id, type, productSKU, scale, renderOrder,
-        } = currentProductMarker.modalComponentRenderProps;
+        const {id, type, productSKU, scale, renderOrder} = currentProductMarker.modalComponentRenderProps;
 
         const postData = {
-            type,
-            scene_id: currentSceneId,
+            type: 'HotspotMarker',
+            scene: currentSceneId,
             collider_transform: colliderTransform.elements,
             transform: visualTransform.elements,
             props: {
@@ -71,13 +69,14 @@ export const threeEditorMouseEvents = (
                 } : {}),
             },
         };
-        const selectedStoreId = sessionStorage.getItem('STORE_ID');
+
 
         if (id) {
+            console.log('>check id here', id);
             try {
-                await apiUpdateHotspotByType(
-                    type, selectedStoreId, id, postData,
-                );
+                const validate = type !== "product";
+                // ATTENTION: validation is force disabled for product hotspots to bypass SKU validation. In future, please make this a frontend toggle
+                await updateHotspotAPI(id, storeId, currentSceneId, postData, validate);
             } catch (err) {
                 console.error(err);
             }
@@ -93,7 +92,7 @@ export const threeEditorMouseEvents = (
 
         if (marker) {
             isMarkerClicked = true;
-            controls.enabled = false; // eslint-disable-line
+            controlsRef.current.enabled = false; //eslint-disable-line
             focusedObject = marker.object;
             const { point } = marker;
             inverseMatrix.copy(focusedObject.parent.matrixWorld).getInverse(inverseMatrix);
@@ -160,7 +159,7 @@ export const threeEditorMouseEvents = (
     };
 
     const onMouseUp = (e) => {
-        controls.enabled = true; // eslint-disable-line
+        controlsRef.current.enabled = true; //eslint-disable-line
 
         getMousePosition(mouseRef, e);
         const dragDistance = mouseRef.current.distanceTo(mouseStartRef.current);
@@ -205,7 +204,7 @@ export const threeEditorMouseEvents = (
             getMousePosition(mouseRef, e);
             raycasterRef.current.setFromCamera(mouseRef.current, cameraRef.current);
             const intersects = raycasterRef.current.intersectObjects(colliderRef.current);
-            const { point } = intersects[1];
+            const { point } = intersects[0];
             const { x, y, z } = point.sub(offset).applyMatrix4(inverseMatrix);
             focusedObject.owner.setPosition(x, y, z);
         }

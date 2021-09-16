@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
 import { Modal, Button } from 'react-bootstrap';
-
 import TextInput from '../FormComponents/TextInput';
 import { useUIManager } from '../../three-js/ui-manager/UIManager';
-import { apiCreateHotspotByType, apiUpdateHotspotByType, apiDeleteHotspotByType } from '../../utils/apiUtils';
-import './TaggingModal.scss';
+import {apiCreateHotspotByType, updateHotspotAPI, deleteHotspotAPI} from '../../APImethods/HotspotsAPI';
+
+import styles from './TaggingModal.module.scss';
 
 const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, getTransforms, id}) => {
     const [SKU, setSKU] = useState(productSKU);
     const [UIState] = useUIManager();
-    const { selectedStoreId } = useSelector(state => state['HomePageStore']);
+    const router = useRouter();
+    const {id:selectedStoreId} = router.query;
     const { currentSceneId }  = useSelector(state => state['SceneEditor']);
-
 
     const hotspotType = 'product';
 
@@ -43,11 +44,12 @@ const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, ge
         const { colliderTransform, visualTransform } = transforms;
 
         const postData = {
-            type: hotspotType,
-            scene_id: currentSceneId,
+            type: "HotspotMarker",
+            scene: currentSceneId,
             collider_transform: colliderTransform.elements,
             transform: visualTransform.elements,
             props: {
+                show_icon: true, //Where it used???
                 product_sku: SKU,
                 hotspot_type: hotspotType,
             },
@@ -55,26 +57,26 @@ const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, ge
 
         if (id) {
             try {
-                const response = await apiUpdateHotspotByType(
-                    hotspotType, selectedStoreId, id, postData,
-                );
+                // ATTENTION: validation is force disabled for product hotspots to bypass SKU validation. In future, please make this a frontend toggle
+                const response = await updateHotspotAPI(id, selectedStoreId, currentSceneId, postData , false);
 
                 updateState({
                     type: response.props.hotspot_type,
-                    id: response._id.$oid, //eslint-disable-line
+                    id: response._id, //eslint-disable-line
                 });
             } catch (err) {
                 console.error(err);
             }
         } else {
             try {
+                // ATTENTION! validation is disabled, when extending should be instead made a frontend toggle only for product hotspots
                 const response = await apiCreateHotspotByType(
-                    hotspotType, selectedStoreId, postData,
+                    hotspotType, selectedStoreId, currentSceneId, postData, false
                 );
 
                 updateState({
                     type: response.props.hotspot_type,
-                    id: response._id.$oid, //eslint-disable-line
+                    id: response._id, //eslint-disable-line
                 });
             } catch (err) {
                 console.error(err);
@@ -86,9 +88,8 @@ const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, ge
 
     const handleDelete = debounce(async () => {
         try {
-            await apiDeleteHotspotByType(hotspotType, selectedStoreId, id);
+            await deleteHotspotAPI(id, selectedStoreId, currentSceneId);
             updateState({ sku: '' });
-
             dispose();
         } catch (err) {
             console.error('Hotspot deletion failed\n', err);
@@ -96,24 +97,24 @@ const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, ge
         }
     }, 200);
 
-    const handleClose = () => {
+    const handleClose = debounce(() => {
         if (!SKU) {
             dispose();
         } else {
             onClose();
         }
-    };
+    }, 250);
 
     return (
         <Modal show onHide={handleClose} centered>
             <Modal.Header closeButton>
                 <Modal.Title>Product Hotspot</Modal.Title>
             </Modal.Header>
-            
+
             <Modal.Body>
                 <div className="flex flex-vertical-center flex-column full-width full-height">
-                    <header className="tagging-modal-header">SKU</header>
-                    <div className="tagging-modal-input">
+                    <header className={styles["tagging-modal-header"]}>SKU</header>
+                    <div className={styles["tagging-modal-input"]}>
                         <TextInput type="text" placeholder="Enter SKU" handleChange={handleChange} value={SKU} focusOnMount />
                     </div>
                 </div>
@@ -121,7 +122,7 @@ const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, ge
 
             <Modal.Footer>
                 <Button variant="primary" onClick={handleSave}>Save</Button>
-                <Button variant="danger" onClick={handleDelete}>Delete</Button>  
+                <Button variant="danger" onClick={handleDelete}>Delete</Button>
             </Modal.Footer>
         </Modal>
     );

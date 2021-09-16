@@ -1,39 +1,78 @@
 import { formURL } from '../utils/urlHelper';
 import axiosApi from '../utils/axiosApi';
-const { API_URL } = process.env;
+
+import {setEnabledAction} from "../store/actions/productLibraryActions";
+import {setCurrentSceneID, setSceneData} from "../store/actions/SceneEditorActions";
+
 
 /**
  * get all stores
  */
-export const getStores=()=>{
+export const getStores=(fields=[])=>{
+    let storesUrl = `/stores`;
+    if (fields?.length > 0) {
+        storesUrl = `${storesUrl}?fields=${fields.join(',')}`
+    }
     return axiosApi
-        .get(`${API_URL}/client/users/stores`)
+        .get(storesUrl)
+        .then((res) => res.data)
+        .catch((err) => Promise.reject(err));
+}
+
+
+/**
+ * get stores in a user access group
+ */
+export const getUserStores=()=>{
+    return axiosApi
+        .get(`/stores/users-stores`)
+        .then((res) => res.data)
+        .catch((err) => Promise.reject(err));
+}
+
+
+/**
+ * get single store data
+ */
+export const getStore=(storeId)=>{
+    if(!storeId) return Promise.reject(Error('storeId is required parameter'));
+    return axiosApi
+        .get(`/stores/${storeId}`)
         .then((res) => res.data)
         .catch((err) => Promise.reject(err));
 }
 
 /**
- * get single store data
+ * Update store data
  */
-export const getStore=(storeId)=>{}
+export const updateStore=(storeId, data)=>{
+    if(!storeId) return Promise.reject(Error('storeId is required parameter'));
 
-
-const OBSESS_GREY_LOGO = 'https://cdn.obsess-vr.com/obsess-logo-636466.png';
-
-export const getStoreFlags=(storeId)=>{
-    if(!storeId) return Promise.reject('Missed required parameter');
-
-    const config={
-        headers:{'ovr-str-id': storeId}
-    }
     return axiosApi
-        .get(`${API_URL}/cms/${storeId}/flags`, config)
+        .put(`/stores/${storeId}`, data)
         .then((res) => res.data)
         .catch((err) => Promise.reject(err));
 }
 
 
-const getStoreScenes = (storeId) => {
+
+
+export const getStoreFlags=(storeId, options)=>dispatch=>{
+    console.log('>getStoreFlags', { storeId });
+    if(!storeId) return Promise.reject('Missed required parameter');
+    return axiosApi
+        .get(`/stores/${storeId}/features`)
+        .then((res) => {
+            if(options?.updateStore === 'productLibrary'){
+                dispatch(setEnabledAction(res.data['product_library_enabled']));
+            }
+            return res.data;
+        })
+        .catch((err) => Promise.reject(err));
+}
+
+
+export const getStoreScenes = (storeId, options) =>dispatch=> {
     if (!storeId) return Promise.reject('Missed required param');
 
     const conf = {
@@ -41,12 +80,21 @@ const getStoreScenes = (storeId) => {
     };
 
     return axiosApi
-        .get(`${API_URL}/cms/${storeId}/scenes`, conf)
-        .then((res) => res.data)
+        .get(`/stores/${storeId}/scenes`, conf)
+        .then((res) => {
+            if(options?.updateStore === 'productLibrary'){
+                dispatch(setSceneData(res.data));
+                dispatch(setCurrentSceneID(res.data[0]._id.$oid));
+            }
+            return res.data;
+        })
         .catch((err) => Promise.reject(err));
 };
 
+
 const getFirstSceneImageUrl = (storeId) => {
+    const OBSESS_GREY_LOGO = 'https://cdn.obsess-vr.com/obsess-logo-636466.png';
+
     return getStoreScenes(storeId)
         .then((res) => {
             const firstObj = res[0] || false;
@@ -60,14 +108,16 @@ const getFirstSceneImageUrl = (storeId) => {
         .catch((err) => Promise.reject(err));
 };
 
-export const getStoreThumbnails = async (storesArray) => {
-    const thumbnailPromises = [];
-    if (storesArray.length > 0) {
-        for (let i = 0; i < storesArray.length; i += 1) {
-            const storeId = storesArray[i]._id.$oid; // eslint-disable-line
-            thumbnailPromises.push(getFirstSceneImageUrl(storeId));
-        }
-    }
 
-    return Promise.all(thumbnailPromises);
+export const apiPublishSceneData = async (storeId) => {
+    if (!storeId) return Promise.reject('Missed required parameter');
+
+    const conf = {
+        headers: { 'ovr-str-id': storeId },
+    };
+
+    return axiosApi
+        .post(`/stores/${storeId}/push_objects`, {},  conf)
+        .then((res) => res.data)
+        .catch((err) => Promise.reject(err));
 };

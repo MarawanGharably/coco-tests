@@ -4,8 +4,14 @@ FROM node:15 AS build-env
 LABEL version="0.2.0"
 
 # variable passed in with build command
-ARG BUILD_STAGE=prod
-RUN echo ${BUILD_STAGE}
+ARG APP_ENV=develop
+ENV APP_ENV $APP_ENV
+
+ARG BASE_PATH
+ENV BASE_PATH $BASE_PATH
+
+# Disable Next telemetry
+ARG NEXT_TELEMETRY_DISABLED=1
 
 RUN apt-get update
 
@@ -17,16 +23,13 @@ WORKDIR /coco-cms-workdir/
 # copying to destinations without prefix / will copy into the work directory
 COPY package-lock.json package-lock.json
 COPY package.json package.json
-RUN npm install
+RUN npm ci
 
 # copy test to WORKDIR
-COPY test/ test/
+#COPY test/ test/
 
 # copy bable configuration
 COPY babel.config.js babel.config.js
-
-# copy the webpack configuration
-COPY webpack/* webpack/
 
 # copy dotenv to WORKDIR
 COPY dotenv dotenv
@@ -40,19 +43,18 @@ COPY .eslintrc.json .eslintrc.json
 # copy eslint ignore
 COPY .eslintignore .eslintignore
 
+COPY next.config.js next.config.js
+
 # build the application and copy it into the webroot
-RUN if [ ${BUILD_STAGE} = "prod" ] ; then npm run build-prod ; elif [ ${BUILD_STAGE} = "beta" ] ; then npm run build-beta ; elif [ ${BUILD_STAGE} = "feature" ] ; then npm run build-feature ; else npm run build-dev ; fi
+RUN npm run build-static
+
 # copy built application into the webroot
 RUN mkdir /www && \
-    cp -rpv build/* /www
+    cp -rpv out/* /www
 
 # copy files and folders as needed from the intermediate image
-# this will remove the SSH_PRIVATE_KEY_GITLAB and intermediate tools like ssh and git, and will reduce the final image size
-FROM nginx
-
-RUN rm /etc/nginx/conf.d/default.conf
-# copy the nginx conf
-COPY nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
+# this will remove the SSH_PRIVATE_KEY_GITLAB and intermediate tools like ssh and git which reduces the final image size
+FROM alpine:3.7
 
 # create the www folder and copy the www contents over from the intermediate image
 RUN mkdir /www && \

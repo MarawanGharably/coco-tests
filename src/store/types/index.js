@@ -1,3 +1,3 @@
-export * from './homePageTypes';
-
+export * from './user';
+export * from './auth';
 

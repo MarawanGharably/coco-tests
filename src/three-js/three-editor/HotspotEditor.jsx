@@ -1,27 +1,25 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { ThreeEditor } from './ThreeEditor';
-import BackgroundCube from '../three-background/BackgroundCube';
+import Background from '../three-background/Background';
 import { CollisionManager } from '../collision-manager/CollisionManager';
 import ColliderSphere from '../three-background/ColliderSphere';
 import { UIManager } from '../ui-manager/UIManager';
-import { DataManager } from '../data-manager/DataManager';
+import dynamic from 'next/dynamic'
 
-const HotspotEditor = () => {
-    const { selectedStoreId } = useSelector(state => state['HomePageStore']);
-    const { currentSceneId } = useSelector(state => state['SceneEditor']);
+const ThreeEditor = dynamic(
+    () => import('./ThreeEditor').then((mod) => mod.ThreeEditor),
+    { ssr: false }
+);
 
+const HotspotEditor = ({storeId}) => {
     return (
-        <DataManager hotspotTypes={['product', 'product_image']} sceneId={currentSceneId} storeId={selectedStoreId}>
             <CollisionManager>
                 <UIManager>
-                    <ThreeEditor>
+                    <ThreeEditor storeId={storeId}>
                         <ColliderSphere />
-                        <BackgroundCube />
+                        <Background />
                     </ThreeEditor>
                 </UIManager>
             </CollisionManager>
-        </DataManager>
     );
 };
 

@@ -7,7 +7,7 @@ import SubmitButton from '../../../FormComponents/SubmitButton';
 
 
 // Actions
-import { resetPasswordConfirmCode } from '../../../../store/actions';
+import { resetPasswordConfirmCode } from '../../../../APImethods/AuthAPI';
 
 class ResetPasswordForm extends Component {
     constructor(props) {
@@ -48,11 +48,11 @@ class ResetPasswordForm extends Component {
 
         return (
             <form onSubmit={handleSubmit(this.handleSubmit)}   className='d-flex flex-column authFormStyling'>
-                <p style={{ fontSize: '2em', textAlign: 'center' }}>
+                <p style={{ fontSize: '1em', textAlign: 'center' }}>
                     Your Verification Code was sent on &nbsp;
                     {verificationCodeStatus.Destination}
                 </p>
-                <p style={{ fontSize: '2em', textAlign: 'center' }}>Please, insert your code to continue</p>
+                <p style={{ fontSize: '1em', textAlign: 'center' }}>Please, insert your code to continue</p>
 
                 <Field name="code" label="Verification Code" component={Input} />
                 <Field name="new_password" type="password" label="New Password" component={Input} />

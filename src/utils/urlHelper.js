@@ -1,3 +1,6 @@
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig();
+
 export const S3Bucket = Object.freeze({
     DEV: 'obsess-cms-dev',
     BETA: 'obsess-cms-beta',
@@ -19,23 +22,22 @@ const OriginUrlPrefixDict = {
 export const S3Link = 'https://s3.amazonaws.com/';
 
 export function getCurrentBucket() {
-    if (['localhost', '0.0.0.0', 'ardentpeak.org'].includes(window.location.hostname)) {
-        return S3Bucket.DEV;
+    if (process.browser && ['coco.beta.obsessvr.com', 'coco.obsessvr.com'].includes(window.location.hostname) ) {
+        return S3Bucket.BETA;
     }
-    return S3Bucket.BETA;
+    return S3Bucket.DEV;
 }
 
 export function formURL(urlObject) {
     let url = '';
     if (urlObject) {
-        const { origin } = urlObject;
-        const { path } = urlObject;
+        const { origin, path } = urlObject;
         switch (origin) {
             // case UrlOriginEnum.CDN:
             //     url = OriginUrlPrefixDict[UrlOriginEnum.CDN] + getCurrentBucket() + '/' + path;
             //     break;
             case UrlOriginEnum.S3: case UrlOriginEnum.CDN:
-                url = `${OriginUrlPrefixDict[UrlOriginEnum.CDN]}${getCurrentBucket()}/${path}`;
+                url = `${OriginUrlPrefixDict[UrlOriginEnum.CDN]}${getCurrentBucket()}/${path}`.replace(/'/g, '%27');
                 break;
             case UrlOriginEnum.External:
                 url = path;
@@ -48,32 +50,52 @@ export function formURL(urlObject) {
     return url;
 }
 
-export function getNameFromURL(link) {
-    let name = null;
-    if (link) {
-        if (link.path) {
-            const array = link.path.split('/');
-            if (array.length > 0) {
-                name = { filename: array[array.length - 1], url: link };
-            }
-        }
+export const getHomePageURL = () => {
+    let basePath = publicRuntimeConfig.BASE_PATH || '';
+    if (!basePath.endsWith("/")) {
+        basePath = basePath + "/";
     }
-    return name;
+    return `${window.location.protocol}//${window.location.host}${basePath}`;
 }
 
-/**
- * Function convert url string query parameters into object
- * @param url {string}
- * @returns {object}
- */
-export const getUrlQueryParams = (url) => {
-    if (!url) return {};
+export const getBase64EncodedURL = (url) => {
+    return window.btoa(url);
+}
 
-    const [, queryString] = url.split('?');
-    if (!queryString) return {};
+export const getLoginRedirectPath = (customRedirect = window.location.href) => {
+    /*Get login page redirect path
+    *
+    * Parameters
+    * customRedirect (string)
+    *   Description: url to redirect to after successful login
+    *   default: window.location.href (current page)
+    *
+    * Returns
+    * loginRedirectPath (string)
+    *   Description: Path to redirect user to for authentication
+    *
+    * */
+    const fallBackUrl = `${publicRuntimeConfig.BASE_PATH || ''}/auth/login/`;
 
-    return JSON.parse(`{"${decodeURI(queryString)
-        .replace(/"/g, '\\"')
-        .replace(/&/g, '","')
-        .replace(/=/g, '":"')}"}`);
+    if (process.env.NODE_ENV === "development") return fallBackUrl;
+
+    //FB, Beta, Prod
+    else{
+        if (publicRuntimeConfig.AUTH_REDIRECT_BASE) {
+            return `${publicRuntimeConfig.AUTH_REDIRECT_BASE}/?redirect=${getBase64EncodedURL(customRedirect)}`;
+        }
+        return fallBackUrl;
+    }
+
 };
+
+export const getCookieHost=()=>{
+    let cookieHost = window.location.hostname;
+    if(process.env.NODE_ENV === 'production'){
+        cookieHost = cookieHost.split('.').slice(1).join('.');
+    }
+    return cookieHost;
+}
+
+
+export default {};

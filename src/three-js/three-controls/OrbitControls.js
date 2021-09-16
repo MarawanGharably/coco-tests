@@ -101,6 +101,10 @@ var OrbitControls = function ( object, domElement ) {
 	this.position0 = this.object.position.clone();
 	this.zoom0 = this.object.zoom;
 
+	// min max pan area
+	this.minPan = new THREE.Vector3(-1, 0, -1);
+	this.maxPan = new THREE.Vector3(1, 0, 1);
+
 	//
 	// public methods
 	//
@@ -206,6 +210,10 @@ var OrbitControls = function ( object, domElement ) {
 
 				scope.target.add( panOffset );
 
+			}
+
+			if (scope.enablePan) {
+				scope.target.clamp(scope.minPan, scope.maxPan);
 			}
 
 			offset.setFromSpherical( spherical );

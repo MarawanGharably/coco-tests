@@ -1,0 +1,86 @@
+/*@import "assets/scss/library";*/
+
+
+
+body {
+    background: #000;
+    min-height: 100%;
+    touch-action: none;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    font-family: 'Source Sans Pro', sans-serif;
+    color:#D7D7D7;
+}
+
+
+.table{
+    color:#D7D7D7;
+    border-color:#d7d7d775;
+    font-weight: 300;
+}
+
+.card{
+    background-color: #4c4c4c;
+}
+
+.modal{
+    color: #4c4c4c;
+}
+
+
+/* Old Form Styles */
+form.authFormStyling .input-field{
+    border: 0.1em solid #505050;
+    border-radius: 0.5em;
+    padding: 5px 10px 0;
+}
+
+.authFormStyling .input-field input{
+    width: 100%;
+    margin: 5px 0;
+    border: none;
+    font-size: 1em;
+    color: #505050;
+}
+.authFormStyling .input-field input:focus{
+    outline: none;
+}
+
+.authFormStyling .input-field .form-label{
+    font-size: 1em;
+    font-weight: 600;
+    text-transform: capitalize;
+    margin: 5px 0 0 0;
+    color: #505050;
+}
+/* End - Old Form Styles */
+
+
+
+@media only screen and (max-width: 500px) {
+    .hide-on-xs{ display:none; }
+}
+
+
+
+
+.no-margins{ margin: 0;}
+
+
+
+
+/* Forms */
+ul.form-field-error{
+    padding: 0;
+    margin-top: 0.5em;
+    font-size: 12px;
+    list-style: none;
+}
+ul.form-field-error .field-error{ color: red;}
+ul.form-field-error .field-warn{ color: coral;}
+
+.storesList .col{
+    margin-bottom: 2.2rem!important;
+}
+

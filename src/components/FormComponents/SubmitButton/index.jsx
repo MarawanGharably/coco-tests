@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Spinner } from 'react-bootstrap';
-import './SubmitButton.scss';
+import styles from './SubmitButton.module.scss';
 
 const SubmitButton = ({ buttonText = '', submitting, onClick, className='' }) => {
     return (
-        <Button type="submit" className={`submitButton ${className}`} onClick={onClick}>
+        <Button type="submit" className={`${styles.submitButton} ${className}`} onClick={onClick} disabled={submitting}>
             <span className="text">{buttonText}</span>
             <Spinner
                 as="span"
@@ -13,7 +13,7 @@ const SubmitButton = ({ buttonText = '', submitting, onClick, className='' }) =>
                 size="sm"
                 role="status"
                 aria-hidden="true"
-                className={`spinner ${submitting ? 'active' : 'hidden'}`}
+                className={`${styles.spinner} ${submitting ? styles.active : styles.hidden}`}
             />
         </Button>
     );

@@ -1,20 +1,26 @@
 import React, { useState, useEffect, useRef, createContext, useReducer, useContext} from 'react';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import * as THREE from 'three';
-import OrbitControls from '../three-controls/OrbitControls';
-import { setupRenderer, setupCamera, setupControls } from './setupThreeEditor';
+import ThreeController from '../three-controls/ThreeController';
+import { setupRenderer, setupCamera } from './setupThreeEditor';
 import { threeEditorMouseEvents } from './threeEditorMouseEvents';
-import { useCollisionManager, CollisionManagerActionEnums } from '../collision-manager/CollisionManager';
-import ThreeProductMarker from '../hotspot-marker/ThreeProductMarker';
-import ThreeProductImage from '../hotspot-marker/ThreeProductImage';
-import { useUIManager, UIManagerEnums } from '../ui-manager/UIManager';
 import TaggingModal from '../../components/tagging-modal/TaggingModal';
-import { useDataManager } from '../data-manager/DataManager';
-import ProductImageControls from '../../components/product-image-controls/ProductImageControls';
-import LoadingScreen from '../../components/loading-screen/LoadingScreen';
+import LoadingScreen from '../../components/LoadingScreen';
+
+import { useCollisionManager, CollisionManagerActionEnums } from '../collision-manager/CollisionManager';
+import { useUIManager, UIManagerEnums } from '../ui-manager/UIManager';
+
+
 import ThreeLoadingManager from '../three-loading-manager/three-loading-manager';
 import ThreeEditorReducer from '../../store/reducers/ThreeEditorReducer';
-import {setLoadingAction, setMaxRenderOrderAction, setSceneAction} from "../../store/actions/ThreeEditorActions";
+import { setMaxRenderOrderAction, setSceneAction} from "../../store/actions/ThreeEditorActions";
+
+import {HotspotMarker} from '../_constructors/Markers';
+import {ProductObject, addProductImageOnDrop, renderProductImageMarker } from '../utils/productHotspotHelpers';
+import styles from './ThreeEditor.module.scss';
+import {RESET_DELETE_PRODUCT_ID} from "../../store/types/productLibrary";
+import {apiGetHotspotsByType} from "../../APImethods";
+
 
 const initialState = {
     isLoading: false,
@@ -27,14 +33,16 @@ const ThreeState = createContext(initialState);
 const ThreeDispatch = createContext();
 
 
-export const ThreeEditor = ({ children }) => {
+export const ThreeEditor = ({ storeId, children }) => {
+    const reduxDispatch = useDispatch();
     const [threeReady, setThreeReady] = useState(false);
     const [state, dispatch] = useReducer(ThreeEditorReducer, initialState);
 
     const [colliderState, colliderDispatch] = useCollisionManager();
     const [UIState, UIDispatch] = useUIManager();
-    const [dataState] = useDataManager();
-    const { products, mode, isEnabled } = useSelector(state => state.productLibrary);
+
+    const [sceneObjects, setSceneObjects] = useState([]);
+    const { selectedFolder, products, mode, deleteProductId } = useSelector(state => state['productLibrary']);
     const { currentSceneId } = useSelector(state => state['SceneEditor']);
 
     const { updateList } = state;
@@ -54,6 +62,8 @@ export const ThreeEditor = ({ children }) => {
 
     const mouseRef = useRef(new THREE.Vector2());
     const mouseStartRef = useRef(new THREE.Vector2());
+
+
 
     const renderer = rendererRef.current;
     const scene = sceneRef.current;
@@ -80,11 +90,16 @@ export const ThreeEditor = ({ children }) => {
         });
     };
 
-    const renderProductMarker = (colliderTransform, visualTransform, renderProps = {}) => {
+
+    const renderProductMarker = (object={}) => {
+        const {collider_transform , transform } = object;
+        const renderProps={
+            type: object?.props?.hotspot_type,
+            id: object?.['_id'],
+            productSKU: object?.props?.product_sku,
+        }
         const componentToRender = (props) => <TaggingModal {...props} />; // eslint-disable-line
-        const marker = new ThreeProductMarker(
-            componentToRender, renderProps, colliderTransform, visualTransform,
-        );
+        const marker = new HotspotMarker(componentToRender, renderProps, collider_transform, transform);
         marker.addToScene(sceneRef.current);
         marker.setScale();
         marker.setUIDispatcher(UIDispatch);
@@ -93,88 +108,67 @@ export const ThreeEditor = ({ children }) => {
         return marker;
     };
 
+
+
+
+
     const setMaxRenderOrder = (renderOrder) => {
         if (renderOrder >= state.maxRenderOrder) {
             dispatch(setMaxRenderOrderAction(renderOrder + 1));
         }
     };
 
-    const renderProductImageMarker = (colliderTransform, visualTransform, renderProps = {}) => {
-        const componentToRender = (props) => <ProductImageControls {...props} />; // eslint-disable-line
-        const marker = new ThreeProductImage(
-            componentToRender, renderProps, colliderTransform, visualTransform,
-        );
 
-        marker.addToScene(sceneRef.current);
-        marker.setUIDispatcher(UIDispatch);
-        marker.setColliderDispatcher(colliderDispatch);
+    const fetchSceneHotspots= async( hotspotTypes=[], sceneId, storeId  )=>{
+        if (!sceneId || sceneId.length<5) return;
 
-        if (renderProps.renderOrder) {
-            setMaxRenderOrder(renderProps.renderOrder);
-        }
+        setSceneObjects([]);
 
-        return marker;
-    };
+        const getRoomObjectData = async () => {
+            if (Array.isArray(hotspotTypes)) {
+                const promises = hotspotTypes.map((hotspotType) => (
+                    apiGetHotspotsByType(hotspotType, storeId, sceneId)
+                ));
 
-    const addProductImage = (e) => {
-        e.preventDefault();
-        const imageId = e.dataTransfer.getData('id');
-        const folderId = e.dataTransfer.getData('folderId');
-        const imageUrl = e.dataTransfer.getData('imageUrl');
+                return Promise.all(promises);
+            }
 
-        if (!imageId && !imageUrl) return;
+            return apiGetHotspotsByType(hotspotTypes, storeId, sceneId);
+        };
 
-        const marker = renderProductImageMarker(undefined, undefined, {
-            renderOrder: state.maxRenderOrder,
-            imageId,
-            folderId,
-            imageUrl,
-        });
-
-        // Set Position to in front of camera
-        const pos = new THREE.Vector3(0, 0, -8);
-        pos.applyQuaternion(cameraRef.current.quaternion);
-        marker.setPosition(pos.x, pos.y, pos.z);
-        marker.setRenderOrder(state.maxRenderOrder);
-
-        // Add Colliders
-        colliderDispatch({
-            type: CollisionManagerActionEnums.SET_COLLIDERS,
-            payload: marker.sceneObject,
-        });
-
-        // Removes existing UIs
-        UIDispatch({
-            type: UIManagerEnums.RESET_UIS,
-        });
-
-        marker.renderComponentImmediately();
-    };
+        const response = await getRoomObjectData();
+        const formatted = response.flat().filter((object) => (typeof object !== 'string'));
+        setSceneObjects(formatted );
+    }
 
     useEffect(() => {
         dispatch(setSceneAction(scene));
 
+        //#1. Fetch Scene Hotspots
+        fetchSceneHotspots(['product', 'product_image'], currentSceneId, storeId);
+
         const canvasContainer = canvasContainerRef.current;
         const widthMultiplier = 1;
         const heightMultiplier = 1;
-        const aspectRatio = (canvasContainer.offsetWidth * widthMultiplier)
-            / (canvasContainer.offsetHeight * heightMultiplier);
+        const width = canvasContainer.offsetWidth * widthMultiplier;
+        const height = canvasContainer.offsetHeight * heightMultiplier;
+
+        const aspectRatio = width / height;
         // set new reference for cameraRef.current here
         cameraRef.current = new THREE.PerspectiveCamera(70, aspectRatio, 0.1, 1000);
-        controlsRef.current = new OrbitControls(cameraRef.current, renderer.domElement);
+        controlsRef.current = ThreeController.setupControls(cameraRef.current, renderer);
 
         const windowResizeHandler = () => {
-            const currentAspectRatio = (canvasContainer.offsetWidth * widthMultiplier)
-                / (canvasContainer.offsetHeight * heightMultiplier);
-            cameraRef.current.aspect = currentAspectRatio;
+            const width = canvasContainer.offsetWidth * widthMultiplier;
+            const height = canvasContainer.offsetHeight * heightMultiplier;
+
+            cameraRef.current.aspect = width / height;
             cameraRef.current.updateProjectionMatrix();
-            renderer.setSize((canvasContainer.offsetWidth * widthMultiplier),
-                (canvasContainer.offsetHeight * heightMultiplier));
+            renderer.setSize(width, height);
         };
 
         setupRenderer(rendererRef.current, canvasContainer, widthMultiplier, heightMultiplier);
         setupCamera(aspectRatio, cameraRef.current);
-        setupControls(controlsRef.current);
 
         window.addEventListener('resize', windowResizeHandler);
 
@@ -198,8 +192,9 @@ export const ThreeEditor = ({ children }) => {
             addThreeEditorMouseEventListeners,
             removeThreeEditorMouseEventListeners,
         } = threeEditorMouseEvents(
+            storeId,
             renderer,
-            controlsRef.current,
+            controlsRef,
             mouseStartRef,
             mouseRef,
             cameraRef,
@@ -218,9 +213,7 @@ export const ThreeEditor = ({ children }) => {
         addThreeEditorMouseEventListeners();
 
         // Removes existing UIs
-        UIDispatch({
-            type: UIManagerEnums.RESET_UIS,
-        });
+        UIDispatch({type: UIManagerEnums.RESET_UIS });
 
         return removeThreeEditorMouseEventListeners;
     }, [currentSceneId, mode]); // eslint-disable-line
@@ -233,6 +226,7 @@ export const ThreeEditor = ({ children }) => {
         colliderRef.current = colliderState.colliders;
     }, [colliderState]);
 
+    //Render Scene objects
     useEffect(() => {
         const resetRoomObjects = () => {
             colliderRef.current.forEach((collider) => {
@@ -246,47 +240,32 @@ export const ThreeEditor = ({ children }) => {
             });
 
             // Removes existing UIs
-            UIDispatch({
-                type: UIManagerEnums.RESET_UIS,
-            });
+            UIDispatch({ type: UIManagerEnums.RESET_UIS });
         };
 
         const renderMarker = (object) => {
-            if (object.hotspot_type === 'product_image') {
-                const product = products.find((p) => p.id === object.image_id);
+            // console.log('>renderMarker', <object data="" type=""></object>);
 
-                if (!product || !isEnabled) return false;
+            if (object.props.hotspot_type === 'product_image') {
 
-                dispatch(setLoadingAction(true));
-
-
-                return renderProductImageMarker(
-                    object.collider_transform,
-                    object.transform,
-                    {
-                        type: object.hotspot_type,
-                        id: object.id,
-                        scale: object.scale,
-                        imageUrl: product.imageUrl,
-                        renderOrder: object.renderOrder,
-                    },
-                );
+                const productObj = new ProductObject({
+                    id:object._id,
+                    image:object?.props?.image,
+                    renderOrder:object.props.renderOrder,
+                    scale:object.props.scale,
+                    transform:object.transform,
+                    collider_transform:object.collider_transform,
+                });
+                // console.log('>render product image  ', productObj);
+                return renderProductImageMarker(productObj, sceneRef, UIDispatch, colliderDispatch, setMaxRenderOrder);
             }
 
-            return renderProductMarker(
-                object.collider_transform,
-                object.transform,
-                {
-                    type: object.hotspot_type,
-                    id: object.id,
-                    productSKU: object.sku,
-                },
-            );
+            return renderProductMarker( object );
         };
 
         const setNewRoomObjectData = () => {
-            if (dataState.roomObjectData && products) {
-                dataState.roomObjectData.forEach((object) => {
+            if (sceneObjects && products) {
+                sceneObjects.forEach((object) => {
                     const marker = renderMarker(object);
 
                     if (!marker) return;
@@ -301,46 +280,37 @@ export const ThreeEditor = ({ children }) => {
 
         resetRoomObjects();
         setNewRoomObjectData();
-    }, [currentSceneId, dataState, products]); // eslint-disable-line
+    }, [currentSceneId, sceneObjects]); // eslint-disable-line
 
+
+
+    // Product Image removed? Delete associated hotspots
     useEffect(() => {
-        const hasProductImage = (collider) => {
-            const { modalComponentRenderProps: renderProps } = collider.owner;
+        if(deleteProductId && deleteProductId.length>5 && typeof deleteProductId === 'string' ){
+            const imageHotspots = colliderRef.current.filter(collider=> (collider.name =='marker' && collider.owner.modalComponentRenderProps.type ==='product_image'));
+            const hotspotsToDelete = imageHotspots.filter(collider=>collider.owner.modalComponentRenderProps.image._id == deleteProductId );
 
-            if (renderProps.type === 'product_image') {
-                return products.find((product) => (
-                    product.imageUrl === collider.owner.modalComponentRenderProps.imageUrl
-                ));
-            }
-
-            return true;
-        };
-
-        const resetProducts = () => {
-            colliderRef.current.forEach((collider) => {
-                if (collider.name === 'marker' && !hasProductImage(collider)) {
-                    colliderDispatch({
-                        type: CollisionManagerActionEnums.REMOVE_COLLIDERS,
-                        payload: collider.uuid,
-                    });
-                    collider.owner.dispose();
-                }
+            hotspotsToDelete.forEach((collider) => {
+                colliderDispatch({
+                    type: CollisionManagerActionEnums.REMOVE_COLLIDERS,
+                    payload: collider.uuid,
+                });
+                collider.owner.dispose();
             });
-        };
 
-        resetProducts();
-    }, [products]);
+            //Dont forget to cleanup deleteProductId value
+            reduxDispatch({type:RESET_DELETE_PRODUCT_ID});
+        }
+    }, [deleteProductId]);
+
 
     return (
         <div
             id="canvas-wrapper"
-            style={{
-                width: '100%',
-                height: '100%',
-            }}
+            className={styles['canvas-wrapper']}
             ref={canvasContainerRef}
             onDragOver={(e) => e.preventDefault()}
-            onDrop={addProductImage}
+            onDrop={e=>addProductImageOnDrop(e, cameraRef, selectedFolder.value, products, state.maxRenderOrder, colliderDispatch, UIDispatch, sceneRef, setMaxRenderOrder)}
         >
             <ThreeState.Provider value={state}>
                 <ThreeDispatch.Provider value={dispatch}>

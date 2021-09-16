@@ -1,14 +1,55 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Select from 'react-select';
 
-const Select2 = ({ input = {}, label = '', options = [], placeholder='', disabled, meta: { touched, error, warning } }) => {
+
+/**
+ *
+ * @param input
+ * @param options = [{label:'', value:''}]
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const SelectInput = ({ input = {}, searchable=false, className='select', label = '', options = [], isMulti=false, placeholder='',  meta: { touched, error, warning } }) => {
 
     const onChangeEvent = (data) => {
-        const values = data.map(item=>item.value);
-        input.onChange(values);
+        //Single value
+        if(data?.value) input.onChange(data.value);
+
+        //Multi-Select
+        else if(Array.isArray(data)){
+            input.onChange(data.map(item=>item.value));
+        }
     };
 
-    return <Select className="select col-12" isMulti placeholder={placeholder} options={options} onChange={onChangeEvent} />;
+
+    const calcValue=()=>{
+        if(isMulti && Array.isArray(input.value)){
+            return input.value.map(item=>{
+                const option = options.find(optItem=> optItem['value'] === item);
+                return {
+                    label: option?.label || 'Record Not Exist',
+                    value: item
+                };
+            });
+        }else{
+            return options.find(item=> item['value'] === input.value);
+        }
+    }
+
+    // console.log('>Select', {input, options, isMulti,  });
+
+
+    return <Select
+        name={input.name}
+        className= {className}
+        value={calcValue()}
+        isMulti={isMulti}
+        placeholder={placeholder}
+        options={options}
+        searchable={searchable}
+        onChange={onChangeEvent}
+
+    />;
 };
 
-export default Select2;
+export default SelectInput;

@@ -7,6 +7,7 @@ module.exports = {
     // plugins are applied from top to bottom
     plugins: [
         '@babel/plugin-syntax-dynamic-import',
+        '@babel/plugin-syntax-import-assertions',
         [
             'transform-react-remove-prop-types',
             {
@@ -19,9 +20,9 @@ module.exports = {
         ],
         [
             '@babel/plugin-proposal-class-properties',
-            {
-                loose: true,
-            },
+            // {
+            //     loose: true,
+            // },
         ],
         '@babel/plugin-transform-runtime',
     ],

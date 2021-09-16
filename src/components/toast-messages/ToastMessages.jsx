@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Toast } from 'react-bootstrap';
 import { hideMessage } from '../../store/actions/toastActions';
-import './ToastMessages.scss';
+import styles from './ToastMessages.module.scss';
 
 const ToastMessages = () => {
     const { message, show, delay, variant } = useSelector(state => state.toastMessages);
@@ -14,7 +14,7 @@ const ToastMessages = () => {
 
     return (
         <Toast
-            className={`toast-message bg-${variant}`}
+            className={`${styles['toast-message']} bg-${variant}`}
             onClose={handleClose}
             show={show}
             delay={delay}

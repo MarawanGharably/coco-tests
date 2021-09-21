@@ -23,6 +23,7 @@ export const threeEditorMouseEvents = (
     UIDispatch,
     UIManagerEnums,
     mode,
+    reduxDispatch
 ) => {
     const DESKTOP_THRESHOLD = 0.005;
     const MIN_ZOOM_FOV = 20;
@@ -76,7 +77,7 @@ export const threeEditorMouseEvents = (
             try {
                 const validate = type !== "product";
                 // ATTENTION: validation is force disabled for product hotspots to bypass SKU validation. In future, please make this a frontend toggle
-                await updateHotspotAPI(id, storeId, currentSceneId, postData, validate);
+                await reduxDispatch(updateHotspotAPI(id, storeId, currentSceneId, postData, validate));
             } catch (err) {
                 console.error(err);
             }

@@ -6,7 +6,7 @@ import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 const store = reduxStore();
 import { getLoginRedirectPath, rollbarInit } from '../utils';
-import ToastMessages from '../components/toast-messages/ToastMessages';
+import AppAlerts from '../components/AppAlerts';
 import { getCurrentUserData } from '../APImethods';
 
 //Global Styles
@@ -37,7 +37,7 @@ const MyApp = ({ Component, pageProps }) => {
 
     return (
         <Provider store={store}>
-            <ToastMessages />
+            <AppAlerts />
             <Component {...pageProps} />
         </Provider>
     );

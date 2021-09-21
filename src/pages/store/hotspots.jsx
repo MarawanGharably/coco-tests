@@ -8,7 +8,7 @@ import LoadingScreen from '../../components/LoadingScreen';
 import HotspotEditor from '../../three-js/three-editor/HotspotEditor';
 import { ModeSelector, SceneNavigator } from '../../components/Scene';
 import ProductPlacementSidebar from '../../components/Scene/ProductPlacementSidebar';
-import { showSuccessMessage, showErrorMessage } from '../../store/actions/toastActions';
+import { showAppSuccessAlert, showAppErrorAlert } from '../../store/actions/appAlertsActions';
 import { destroyProductLibraryData } from '../../store/actions/productLibraryActions';
 import {destroySceneData} from "../../store/actions/SceneEditorActions";
 import { getStoreFlags, apiPublishSceneData, getStoreScenes, getProductLibrary} from "../../APImethods";
@@ -57,9 +57,9 @@ let HotspotsPage = (props) => {
         try {
             setLoading(true);
             await apiPublishSceneData(storeId);
-            dispatch(showSuccessMessage('Store Published successfully'));
+            dispatch(showAppSuccessAlert('Store Published successfully'));
         } catch (error) {
-            dispatch(showErrorMessage('An error occurred while publishing store'));
+            dispatch(showAppErrorAlert('An error occurred while publishing store'));
             console.error(error);
         } finally {
             setLoading(false);

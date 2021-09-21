@@ -208,6 +208,7 @@ export const ThreeEditor = ({ storeId, children }) => {
             UIDispatch,
             UIManagerEnums,
             mode,
+            reduxDispatch
         );
 
         addThreeEditorMouseEventListeners();

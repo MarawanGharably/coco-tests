@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import RangeInputForm from './form/RangeInputForm';
@@ -24,6 +24,7 @@ const ProductImageControls = ({
     getTransforms,
     updateState,
 }) => {
+    const dispatch = useDispatch();
     const { currentSceneId } = useSelector((state) => state['SceneEditor']);
     const [id, setId] = useState(currentId);
     const [order, setOrder] = useState(renderOrder);
@@ -58,9 +59,10 @@ const ProductImageControls = ({
     const handleHotspotChange = ({ id }) => {
         const postData = getPostData();
 
-        updateHotspotAPI(id, storeId, currentSceneId,  postData).catch((err) => {
-            console.error(err);
-        });
+        dispatch(updateHotspotAPI(id, storeId, currentSceneId,  postData))
+            .catch((err) => {
+              console.error(err);
+           });
     };
 
     const createProductImage = (uiStateId) => {
@@ -109,8 +111,10 @@ const ProductImageControls = ({
     }, 1000);
 
     const handleScaleChange = (e) => {
-        const { value } = e.target;
-        const scale = parseFloat(value, 10);
+        const value = Number(e.target.value);
+        const scale = !isNaN(value) ? parseFloat(value, 10): 1;
+
+
         data.current.scale = scale;
         handleHotspotChange({ id, scale });
         updateState({ scale });
@@ -137,7 +141,7 @@ const ProductImageControls = ({
         <div className={styles['product-image-controls']}>
             <RangeInputForm
                 order={order}
-                scale={scale}
+                scale={data.current.scale}
                 handleOrderChange={handleOrderChange}
                 handleScaleChange={handleScaleChange}
             />

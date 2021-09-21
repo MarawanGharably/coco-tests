@@ -1,5 +1,10 @@
 import axiosApi from '../utils/axiosApi';
+import {showAppSuccessAlert, showAppErrorAlert} from "../store/actions/appAlertsActions";
+import * as types from '../store/types';
 
+
+
+// import App
 
 export const apiGetHotspotsByType =(type, storeId, sceneId)=>{
     if (!storeId || !type || !sceneId) return Promise.reject('Missed required parameter');
@@ -40,7 +45,7 @@ export const apiCreateHotspotByType=(type, storeId, sceneId, data, validate=true
 }
 
 
-export const updateHotspotAPI =( hotspotId, storeId, sceneId, data, validate=true)=>{
+export const updateHotspotAPI =( hotspotId, storeId, sceneId, data, validate=true) => dispatch =>{
     console.log('>updateHotspotAPI', {hotspotId, storeId, sceneId, data});
     if ( !hotspotId || !storeId || !sceneId || !data) return Promise.reject('Missed required parameter');
 
@@ -50,7 +55,10 @@ export const updateHotspotAPI =( hotspotId, storeId, sceneId, data, validate=tru
     return axiosApi
         .put(`/stores/${storeId}/scenes/${sceneId}/hotspots/${hotspotId}?validate=${validate}`, data)
         .then((res) => res.data)
-        .catch((err) => Promise.reject(err));
+        .catch((err) => {
+            dispatch(showAppErrorAlert('Server Error'));
+            return Promise.reject(err);
+        });
 }
 
 

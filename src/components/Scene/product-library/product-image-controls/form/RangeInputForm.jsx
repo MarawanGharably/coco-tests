@@ -50,8 +50,11 @@ const RangeInputForm = ({ order, scale, handleOrderChange, handleScaleChange }) 
                         <Form.Control
                             type="text"
                             value={sizeVal}
-                            onChange={handleScaleChange}
                             size="sm"
+                            onChange={(e)=>{
+                                setSize(e.target.value);
+                                handleScaleChange(e);
+                            }}
                         />
                     </Col>
                 </Row>

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
 import { Modal, Button } from 'react-bootstrap';
 import TextInput from '../FormComponents/TextInput';
-import { useUIManager } from '../../three-js/ui-manager/UIManager';
+import { useUIManager } from '../../three-js/_contextDataManagers/UIManager';
 import {apiCreateHotspotByType, updateHotspotAPI, deleteHotspotAPI} from '../../APImethods/HotspotsAPI';
 
 import styles from './TaggingModal.module.scss';

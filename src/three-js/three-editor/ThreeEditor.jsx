@@ -7,55 +7,50 @@ import { threeEditorMouseEvents } from './threeEditorMouseEvents';
 import TaggingModal from '../../components/tagging-modal/TaggingModal';
 import LoadingScreen from '../../components/LoadingScreen';
 
-import { useCollisionManager, CollisionManagerActionEnums } from '../collision-manager/CollisionManager';
-import { useUIManager, UIManagerEnums } from '../ui-manager/UIManager';
-
-
+import { useCollisionManager, CollisionManagerActionEnums } from '../_contextDataManagers/CollisionManager';
+import { useUIManager, UIManagerEnums } from '../_contextDataManagers/UIManager';
 import ThreeLoadingManager from '../three-loading-manager/three-loading-manager';
+
 import ThreeEditorReducer from '../../store/reducers/ThreeEditorReducer';
 import { setMaxRenderOrderAction, setSceneAction} from "../../store/actions/ThreeEditorActions";
 
 import {HotspotMarker} from '../_constructors/Markers';
-import {ProductObject, addProductImageOnDrop, renderProductImageMarker } from '../utils/productHotspotHelpers';
-import styles from './ThreeEditor.module.scss';
-import {RESET_DELETE_PRODUCT_ID} from "../../store/types/productLibrary";
-import {apiGetHotspotsByType} from "../../APImethods";
+import {ProductObject, addProductImageOnDrop, renderProductImageMarker } from '../SceneEditor/utils/imageHotspotHelpers';
 
+import {RESET_DELETE_PRODUCT_ID} from "../../store/types/productLibrary";
+import styles from './ThreeEditor.module.scss';
 
 const initialState = {
     isLoading: false,
     scene: null,
-    updateList: [],
     maxRenderOrder: 1,
 };
 
 const ThreeState = createContext(initialState);
-const ThreeDispatch = createContext();
 
 
-export const ThreeEditor = ({ storeId, children }) => {
+
+export const ThreeEditor = (props) => {
+    const { sceneRef, sceneObjects, children } = props;
+    const { selectedFolder, products, mode, deleteProductId } = useSelector(state => state['productLibrary']);
+    const { currentSceneId } = useSelector(state => state['SceneEditor']);
     const reduxDispatch = useDispatch();
+
     const [threeReady, setThreeReady] = useState(false);
     const [state, dispatch] = useReducer(ThreeEditorReducer, initialState);
 
     const [colliderState, colliderDispatch] = useCollisionManager();
     const [UIState, UIDispatch] = useUIManager();
 
-    const [sceneObjects, setSceneObjects] = useState([]);
-    const { selectedFolder, products, mode, deleteProductId } = useSelector(state => state['productLibrary']);
-    const { currentSceneId } = useSelector(state => state['SceneEditor']);
 
-    const { updateList } = state;
 
     // useRef used to prevent ThreeEditor from losing variable references.
     const canvasContainerRef = useRef();
     const rendererRef = useRef(new THREE.WebGLRenderer());
     const cameraRef = useRef();
     const controlsRef = useRef();
-    const sceneRef = useRef(new THREE.Scene());
+    // const sceneRef = useRef(new THREE.Scene());
     const clock = new THREE.Clock();
-
-    const updateRef = useRef(updateList);
 
     const raycasterRef = useRef(new THREE.Raycaster());
     const colliderRef = useRef(colliderState.colliders);
@@ -63,31 +58,17 @@ export const ThreeEditor = ({ storeId, children }) => {
     const mouseRef = useRef(new THREE.Vector2());
     const mouseStartRef = useRef(new THREE.Vector2());
 
-
-
     const renderer = rendererRef.current;
     const scene = sceneRef.current;
     ThreeLoadingManager.setOnLoad(dispatch);
 
+
+
     const animate = (controllerUpdate) => {
         requestAnimationFrame(() => animate(controllerUpdate));
         renderer.render(scene, cameraRef.current);
-        const deltaTime = clock.getDelta();
 
-        if (controllerUpdate) {
-            controllerUpdate();
-        }
-
-        // Need to use ref in animate function because animate doesn't have access to state
-        updateRef.current.forEach((element) => {
-            if (element) {
-                if (element.disposed) {
-                    element = null; // eslint-disable-line
-                } else {
-                    element.update(deltaTime, clock.elapsedTime);
-                }
-            }
-        });
+        if (controllerUpdate) controllerUpdate();
     };
 
 
@@ -119,33 +100,8 @@ export const ThreeEditor = ({ storeId, children }) => {
     };
 
 
-    const fetchSceneHotspots= async( hotspotTypes=[], sceneId, storeId  )=>{
-        if (!sceneId || sceneId.length<5) return;
-
-        setSceneObjects([]);
-
-        const getRoomObjectData = async () => {
-            if (Array.isArray(hotspotTypes)) {
-                const promises = hotspotTypes.map((hotspotType) => (
-                    apiGetHotspotsByType(hotspotType, storeId, sceneId)
-                ));
-
-                return Promise.all(promises);
-            }
-
-            return apiGetHotspotsByType(hotspotTypes, storeId, sceneId);
-        };
-
-        const response = await getRoomObjectData();
-        const formatted = response.flat().filter((object) => (typeof object !== 'string'));
-        setSceneObjects(formatted );
-    }
-
     useEffect(() => {
         dispatch(setSceneAction(scene));
-
-        //#1. Fetch Scene Hotspots
-        fetchSceneHotspots(['product', 'product_image'], currentSceneId, storeId);
 
         const canvasContainer = canvasContainerRef.current;
         const widthMultiplier = 1;
@@ -182,9 +138,9 @@ export const ThreeEditor = ({ storeId, children }) => {
             controlsRef.current.dispose();
             scene.dispose();
             renderer.dispose();
-            updateList.length = 0;
         };
     }, [currentSceneId]); // eslint-disable-line
+
 
     useEffect(() => {
         // mouse event listeners
@@ -192,7 +148,6 @@ export const ThreeEditor = ({ storeId, children }) => {
             addThreeEditorMouseEventListeners,
             removeThreeEditorMouseEventListeners,
         } = threeEditorMouseEvents(
-            storeId,
             renderer,
             controlsRef,
             mouseStartRef,
@@ -200,15 +155,10 @@ export const ThreeEditor = ({ storeId, children }) => {
             cameraRef,
             raycasterRef,
             colliderRef,
-            renderProductMarker,
-            colliderDispatch,
-            CollisionManagerActionEnums,
-            currentSceneId,
-            UIState,
-            UIDispatch,
-            UIManagerEnums,
             mode,
-            reduxDispatch
+            props.onMouseDown,
+            props.onMouseUp,
+            props.onMouseMove
         );
 
         addThreeEditorMouseEventListeners();
@@ -219,9 +169,7 @@ export const ThreeEditor = ({ storeId, children }) => {
         return removeThreeEditorMouseEventListeners;
     }, [currentSceneId, mode]); // eslint-disable-line
 
-    useEffect(() => {
-        updateRef.current = updateList;
-    }, [updateList]);
+
 
     useEffect(() => {
         colliderRef.current = colliderState.colliders;
@@ -313,18 +261,15 @@ export const ThreeEditor = ({ storeId, children }) => {
             onDragOver={(e) => e.preventDefault()}
             onDrop={e=>addProductImageOnDrop(e, cameraRef, selectedFolder.value, products, state.maxRenderOrder, colliderDispatch, UIDispatch, sceneRef, setMaxRenderOrder)}
         >
-            <ThreeState.Provider value={state}>
-                <ThreeDispatch.Provider value={dispatch}>
+            <ThreeState.Provider value={{state, dispatch}}>
                     {threeReady && children}
                     {state.isLoading && <LoadingScreen />}
-                </ThreeDispatch.Provider>
             </ThreeState.Provider>
         </div>
     );
 };
 
 export const useThree = () => {
-    const state = useContext(ThreeState);
-    const dispatch = useContext(ThreeDispatch);
+    const {state, dispatch} = useContext(ThreeState);
     return [state, dispatch];
 };

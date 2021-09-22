@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import InteractionObject from '../../three-base-components/InteractionObject';
 import SVGSpriteComponent from '../../three-svg/SVGSpriteComponent';
 import ModalConstructor from '../ModalConstructor';
-import { CollisionManagerActionEnums } from '../../collision-manager/CollisionManager';
+import { CollisionManagerActionEnums } from '../../_contextDataManagers/CollisionManager';
 
 
 //TODO: Marker constructor should not have any information regarding the Scene!!!

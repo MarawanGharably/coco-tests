@@ -1,7 +1,7 @@
 import { v1 as uuidv1 } from 'uuid';
 
 import ThreeSceneObjectComponent from '../three-base-components/ThreeSceneObjectComponent';
-import { UIManagerEnums } from '../ui-manager/UIManager';
+import { UIManagerEnums } from '../_contextDataManagers/UIManager';
 
 export default class ModalConstructor extends ThreeSceneObjectComponent {
     constructor(componentToRender, renderProps, disposeFunc) {

@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import ThreeFlatBackground from './ThreeFlatBackground';
 import { useThree } from '../three-editor/ThreeEditor';
-import { useCollisionManager, CollisionManagerActionEnums } from '../collision-manager/CollisionManager';
+import { useCollisionManager, CollisionManagerActionEnums } from '../_contextDataManagers/CollisionManager';
 
 const FlatBackground = ({ backgroundUrl }) => {
     const [state] = useThree();

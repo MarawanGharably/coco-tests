@@ -1,13 +1,15 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import reduxStore, { wrapper } from '../store';
 import { useRouter } from 'next/router';
 import Cookies from 'universal-cookie';
-const cookies = new Cookies();
-const store = reduxStore();
+
 import { getLoginRedirectPath, rollbarInit } from '../utils';
 import AppAlerts from '../components/AppAlerts';
 import { getCurrentUserData } from '../APImethods';
+import reduxStore, { wrapper } from '../store';
+const cookies = new Cookies();
+const store = reduxStore();
+
 
 //Global Styles
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -26,7 +28,7 @@ const MyApp = ({ Component, pageProps }) => {
     }
 
     // Initialize RollBar
-    rollbarInit();
+    // rollbarInit();
 
     //Fetch User Data if not exist in cookie & session is active. Exclude auth pages
     if (!store.getState().user && sessionCookie && !router.pathname.includes('auth')) {
@@ -37,8 +39,8 @@ const MyApp = ({ Component, pageProps }) => {
 
     return (
         <Provider store={store}>
-            <AppAlerts />
             <Component {...pageProps} />
+            <AppAlerts />
         </Provider>
     );
 };

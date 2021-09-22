@@ -1,5 +1,4 @@
 import { Vector3, Matrix4 } from 'three';
-import { updateHotspotAPI} from '../../APImethods/HotspotsAPI';
 
 import {
     PRODUCT_TAGGING,
@@ -7,7 +6,6 @@ import {
 } from '../../components/Scene/ModeSelector/modeOptions';
 
 export const threeEditorMouseEvents = (
-    storeId,
     renderer,
     controlsRef,
     mouseStartRef,
@@ -15,15 +13,10 @@ export const threeEditorMouseEvents = (
     cameraRef,
     raycasterRef,
     colliderRef,
-    renderProductMarker, // function
-    colliderDispatch, // function
-    CollisionManagerActionEnums,
-    currentSceneId,
-    UIState,
-    UIDispatch,
-    UIManagerEnums,
     mode,
-    reduxDispatch
+    onMouseDownCallback,
+    onMouseUpCallback,
+    onMouseMoveCallback
 ) => {
     const DESKTOP_THRESHOLD = 0.005;
     const MIN_ZOOM_FOV = 20;
@@ -35,55 +28,18 @@ export const threeEditorMouseEvents = (
     // reference to the object that is clicked/being dragged
     let isMarkerClicked = false;
     let focusedObject = null;
-    let pendingSaveProductObject = null;
 
     const getMousePosition = (refToUpdate, e) => {
         const {top, left, width, height} = renderer.domElement.getBoundingClientRect();
+        const x = -1 + 2 * (e.clientX - left) / width; // eslint-disable-line
+        const y = 1 - 2 * (e.clientY - top) / height; // eslint-disable-line
 
-        refToUpdate.current.x = -1 + 2 * (e.clientX - left) / width; // eslint-disable-line
-        refToUpdate.current.y = 1 - 2 * (e.clientY - top) / height; // eslint-disable-line
+        refToUpdate.current.x = x;
+        refToUpdate.current.y = y;
+        return { x, y }
     };
 
-    const dragReleaseProductHotspotAutoSave = async (object) => {
 
-        if (!object) return;
-
-        const currentProductMarker = object.owner;
-        const { colliderTransform, visualTransform } = currentProductMarker.getTransforms();
-        const {id, type, productSKU, scale, renderOrder} = currentProductMarker.modalComponentRenderProps;
-
-        const postData = {
-            type: 'HotspotMarker',
-            scene: currentSceneId,
-            collider_transform: colliderTransform.elements,
-            transform: visualTransform.elements,
-            props: {
-                hotspot_type: type,
-                ...(productSKU ? {
-                    product_sku: productSKU,
-                } : {}),
-                ...(scale ? {
-                    scale,
-                } : {}),
-                ...(renderOrder ? {
-                    renderOrder,
-                } : {}),
-            },
-        };
-
-
-        if (id) {
-            console.log('>check id here', id);
-            try {
-                const validate = type !== "product";
-                // ATTENTION: validation is force disabled for product hotspots to bypass SKU validation. In future, please make this a frontend toggle
-                await reduxDispatch(updateHotspotAPI(id, storeId, currentSceneId, postData, validate));
-            } catch (err) {
-                console.error(err);
-            }
-        }
-        pendingSaveProductObject = null;
-    };
 
     const onMouseDown = (e) => {
         getMousePosition(mouseStartRef, e);
@@ -99,65 +55,18 @@ export const threeEditorMouseEvents = (
             inverseMatrix.copy(focusedObject.parent.matrixWorld).getInverse(inverseMatrix);
             offset.copy(point).sub(worldPosition.setFromMatrixPosition(focusedObject.matrixWorld));
         }
+
+        //Public interface
+        if(onMouseDownCallback) onMouseDownCallback(e, marker);
     };
 
-    const getComponentUUID = (marker) => {
-        const { uuid } = marker.owner.components.find((component) => (
-            component.uuid
-        ));
 
-        return uuid;
-    };
 
-    const hasUI = (marker) => {
-        const uuid = getComponentUUID(marker);
-        return UIState.dynamicUIs.has(uuid);
-    };
 
-    const resetUI = (object) => {
-        if (!hasUI(object)) {
-            UIDispatch({
-                type: UIManagerEnums.RESET_UIS,
-            });
-        }
-    };
 
-    const addProductMarker = (intersects) => {
-        const { point } = intersects[0];
 
-        const newMarker = renderProductMarker();
 
-        colliderDispatch({
-            type: CollisionManagerActionEnums.SET_COLLIDERS,
-            payload: newMarker.sceneObject,
-        });
 
-        newMarker.setPosition(point.x, point.y, point.z);
-
-        newMarker.renderComponentImmediately();
-    };
-
-    const openProductUI = (markerOnRelease, intersects) => {
-        if (isMarkerClicked) {
-            isMarkerClicked = false;
-            const { type } = markerOnRelease.owner.modalComponentRenderProps;
-            const isProductMarker = mode === PRODUCT_TAGGING && type === 'product';
-            const isProductImage = (
-                mode === PRODUCT_PLACEMENT
-                    && type === 'product_image'
-                    && !hasUI(markerOnRelease)
-            );
-
-            if (isProductImage || isProductMarker) {
-                markerOnRelease.onClick();
-                return;
-            }
-        }
-
-        if (mode === PRODUCT_TAGGING) {
-            addProductMarker(intersects);
-        }
-    };
 
     const onMouseUp = (e) => {
         controlsRef.current.enabled = true; //eslint-disable-line
@@ -170,20 +79,23 @@ export const threeEditorMouseEvents = (
         const markerIntersection = intersects.find((intersect) => intersect.object.name === 'marker');
         const markerOnRelease = markerIntersection && markerIntersection.object;
 
-        if (markerOnRelease) {
-            resetUI(markerOnRelease);
-        }
+        // if (markerOnRelease) resetUI(markerOnRelease);
+
+
+        // public method/callback
+        if(onMouseUpCallback) onMouseUpCallback(e, markerOnRelease, {
+            DESKTOP_THRESHOLD,
+            dragDistance,
+            isMarkerClicked,
+            intersects
+        });
+
 
         if (dragDistance > DESKTOP_THRESHOLD) {
-            if (isMarkerClicked) {
-                isMarkerClicked = false;
-                pendingSaveProductObject = markerOnRelease;
-                dragReleaseProductHotspotAutoSave(pendingSaveProductObject);
-            }
-            return;
+            if (isMarkerClicked) isMarkerClicked = false;
+        }else{
+            isMarkerClicked = false;
         }
-
-        openProductUI(markerOnRelease, intersects);
     };
 
     const mouseWheelHandler = (e) => {
@@ -196,6 +108,8 @@ export const threeEditorMouseEvents = (
         }
     };
 
+    //TODO: what for we checking hotspot type?
+    // Isn't all scene objects suppose to be able to move?
     const moveFocusedObject = (e) => {
         const { type } = focusedObject.owner.modalComponentRenderProps;
         const isProductMarker = mode === PRODUCT_TAGGING && type === 'product';
@@ -211,7 +125,17 @@ export const threeEditorMouseEvents = (
         }
     };
 
+
+
     const onMouseMove = (e) => {
+        const mousePosition = getMousePosition(mouseRef, e);
+
+        //public callback/interface
+        if(onMouseMoveCallback) onMouseMoveCallback(e, focusedObject, {
+            isMarkerClicked,
+            mousePosition
+        });
+
         if (focusedObject && isMarkerClicked) {
             moveFocusedObject(e);
         } else if (focusedObject) {
@@ -230,7 +154,7 @@ export const threeEditorMouseEvents = (
     // 2 main functions of event listeners
     const addThreeEditorMouseEventListeners = () => {
         renderer.domElement.addEventListener('mousedown', onMouseDown);
-        renderer.domElement.addEventListener('mouseup', onMouseUp);
+        renderer.domElement.addEventListener('mouseup', onMouseUp,  { passive: true });
         renderer.domElement.addEventListener('contextmenu', preventContextMenu);
         renderer.domElement.addEventListener('mousemove', onMouseMove);
         renderer.domElement.addEventListener('wheel', mouseWheelHandler, { passive: true });

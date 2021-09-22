@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import RangeInputForm from './form/RangeInputForm';
-import { useUIManager } from '../../../../three-js/ui-manager/UIManager';
+import { useUIManager } from '../../../../three-js/_contextDataManagers/UIManager';
 import { debounce } from '../../../../utils/events';
 import { apiCreateHotspotByType, deleteHotspotAPI, updateHotspotAPI } from '../../../../APImethods';
 import styles from './ProductImageControls.module.scss';

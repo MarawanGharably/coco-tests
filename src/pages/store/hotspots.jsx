@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { Col, Row, Button } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import StoreLayout from '../../components/layouts/StoreLayout';
 import LoadingScreen from '../../components/LoadingScreen';
 import HotspotEditor from '../../three-js/SceneEditor';
 import { ModeSelector, SceneNavigator } from '../../components/Scene';
 import ProductPlacementSidebar from '../../components/Scene/ProductPlacementSidebar';
-import { showAppSuccessAlert, showAppErrorAlert } from '../../store/actions/appAlertsActions';
 import { destroyProductLibraryData } from '../../store/actions/productLibraryActions';
 import {destroySceneData} from "../../store/actions/SceneEditorActions";
-import { getStoreFlags, apiPublishSceneData, getStoreScenes, getProductLibrary} from "../../APImethods";
+import { getStoreFlags, getStoreScenes, getProductLibrary} from "../../APImethods";
 import {
     UIManager,
     CollisionManager
@@ -59,28 +58,16 @@ export default function HotspotsPage(props){
     };
 
 
-    const publishSceneData = async () => {
-        try {
-            setLoading(true);
-            await apiPublishSceneData(storeId);
-            dispatch(showAppSuccessAlert('Store Published successfully'));
-        } catch (error) {
-            dispatch(showAppErrorAlert('An error occurred while publishing store'));
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     return (
         <StoreLayout className={styles.cmp}>
             <Row style={{ color: '#fff' }}>
-                <Col sm={12} md={5}>
-                    <h1>Hotspots</h1>
-                    <h6 style={{ fontSize: '14px', fontWeight: '300', color: '#efefef' }}>Click anywhere on the store to add a hotspot</h6>
+                <Col sm={12} md={6}>
+                    <h1 style={{lineHeight: '0.7'}}>Hotspots</h1>
+                    <h6 style={{ fontSize: '14px', fontWeight: '300', color: '#efefef' }}>Click anywhere on the scene image to add a hotspot. <br/> Your changes will be saved immediately</h6>
                 </Col>
 
-                <Col sm={12} md={7} className="d-flex justify-content-end">
+                <Col sm={12} md={6}>
                     <ModeSelector />
                 </Col>
             </Row>
@@ -101,19 +88,9 @@ export default function HotspotsPage(props){
 
             {isLoading && <LoadingScreen />}
 
-            <HotSpotsFooter onClick={publishSceneData} />
+
         </StoreLayout>
     );
 };
 
 
-
-const HotSpotsFooter = ({ onClick }) => {
-    return (
-        <div className={styles['hotspotsFooter']}>
-            <Button  onClick={onClick}>
-                Save Changes
-            </Button>
-        </div>
-    );
-};

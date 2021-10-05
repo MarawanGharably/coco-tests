@@ -1,6 +1,9 @@
 @import '../../../assets/scss/variables';
 
 .modeSelector {
+    float: right;
+    width: max-content;
+
     .radio-custom-button-selector {
         width: 2em;
         height: 2em;
@@ -62,26 +65,16 @@
     }
 }
 
+
+
+
+
 //SM - (min-width: 576px)
 //MD - (min-width: 768)
 //LG - (min-width: 992px)
 
-//XS screen size
-@media only screen and (max-width: 900px) {
-    .modeSelector {
-        .radio,
-        label,
-        span {
-            font-size: 0.8em;
-        }
 
-        .item {
-            margin-right: 0.4rem;
-        }
-    }
-}
-
-//SM screen size
+//MD screen size
 @media only screen and (max-width: 1380px) {
     .modeSelector {
         .item {
@@ -95,5 +88,33 @@
                 width: auto;
             }
         }
+    }
+}
+
+//Fix
+@media only screen and (max-width: 1040px) {
+    .modeSelector {
+        .item {
+            margin-right: 0.3rem;
+            padding: 0.3em;
+
+            label{font-size: 0.8em;}
+        }
+    }
+}
+
+//SM screen size
+@media only screen and (max-width: 900px) {
+    .modeSelector {
+
+        .radio,
+        label,
+        span {font-size: 0.8em;}
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .modeSelector {
+        float: left;
     }
 }

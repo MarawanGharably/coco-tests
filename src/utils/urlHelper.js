@@ -15,7 +15,7 @@ const UrlOriginEnum = Object.freeze({
 
 const OriginUrlPrefixDict = {
     [UrlOriginEnum.S3]: 'https://s3.amazonaws.com/',
-    [UrlOriginEnum.CDN]: 'https://cdn.obsessvr.com/',
+    [UrlOriginEnum.CDN]: 'https://cdn.obsess-vr.com/',
 };
 
 

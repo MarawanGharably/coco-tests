@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
 import { Modal, Button } from 'react-bootstrap';
 import TextInput from '../FormComponents/TextInput';
-import { useUIManager } from '../../three-js/ui-manager/UIManager';
+import { useUIManager } from '../../three-js/_contextDataManagers/UIManager';
 import {apiCreateHotspotByType, updateHotspotAPI, deleteHotspotAPI} from '../../APImethods/HotspotsAPI';
 
 import styles from './TaggingModal.module.scss';
@@ -16,7 +16,7 @@ const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, ge
     const router = useRouter();
     const {id:selectedStoreId} = router.query;
     const { currentSceneId }  = useSelector(state => state['SceneEditor']);
-
+    const dispatch = useDispatch();
     const hotspotType = 'product';
 
 
@@ -58,7 +58,7 @@ const TaggingModal = ({ productSKU = '', onClose, updateState, uuid, dispose, ge
         if (id) {
             try {
                 // ATTENTION: validation is force disabled for product hotspots to bypass SKU validation. In future, please make this a frontend toggle
-                const response = await updateHotspotAPI(id, selectedStoreId, currentSceneId, postData , false);
+                const response = await dispatch(updateHotspotAPI(id, selectedStoreId, currentSceneId, postData , false));
 
                 updateState({
                     type: response.props.hotspot_type,

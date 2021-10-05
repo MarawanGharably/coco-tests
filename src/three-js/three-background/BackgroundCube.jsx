@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useThree } from '../three-editor/ThreeEditor';
 import ThreeBackgroundCube from './ThreeBackgroundCube';
-import { useCollisionManager, CollisionManagerActionEnums } from '../collision-manager/CollisionManager';
+import { useCollisionManager, CollisionManagerActionEnums } from '../_contextDataManagers';
 
 // SET LOD
 const LOD = 3;
@@ -15,7 +15,6 @@ const BackgroundCube = ({ backgroundUrl }) => {
 
     useEffect(() => {
         cube.current = new ThreeBackgroundCube(LOD);
-
         cube.current.resolveFaceMaterialIndexes(1);
 
         colliderDispatch({

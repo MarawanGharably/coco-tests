@@ -1,13 +1,12 @@
 import React, { useReducer, useContext } from 'react';
 
-
 const initialState = {
     dynamicUIs: new Map(),
     stateManager: new Map(),
 };
 
 const UIState = React.createContext({ initialState });
-const UIDispatch = React.createContext();
+
 
 export const UIManagerEnums = Object.freeze({
     ADD_UI: 'ADD_UI',
@@ -16,9 +15,7 @@ export const UIManagerEnums = Object.freeze({
     UPDATE_UI_STATE: 'UPDATE_UI_STATE',
 });
 
-const {
-    ADD_UI, REMOVE_UI, RESET_UIS, UPDATE_UI_STATE,
-} = UIManagerEnums;
+const {ADD_UI, REMOVE_UI, RESET_UIS, UPDATE_UI_STATE} = UIManagerEnums;
 
 const UIManagerReducer = (state, action) => {
     const { dynamicUIs, stateManager } = state;
@@ -38,18 +35,12 @@ const UIManagerReducer = (state, action) => {
                 props: renderProps,
             };
             dynamicUIs.set(uuid, uiData);
-            return (
-                {
-                    ...state,
-                    dynamicUIs,
-                });
+            return {...state, dynamicUIs}
         }
+
         case REMOVE_UI: {
             const { uuid } = payload;
-
-            if (!dynamicUIs.has(uuid)) {
-                return state;
-            }
+            if (!dynamicUIs.has(uuid)) return state;
 
             const deleted = dynamicUIs.delete(uuid);
 
@@ -58,20 +49,15 @@ const UIManagerReducer = (state, action) => {
                 return state;
             }
 
-            return (
-                {
-                    ...state,
-                    dynamicUIs,
-                });
+            return {...state, dynamicUIs};
         }
+
         case RESET_UIS: {
             dynamicUIs.clear();
 
-            return ({
-                ...state,
-                dynamicUIs,
-            });
+            return ({...state, dynamicUIs});
         }
+
         case UPDATE_UI_STATE: {
             const { uuid, uiState } = payload;
             const currentState = stateManager.get(uuid);
@@ -84,11 +70,9 @@ const UIManagerReducer = (state, action) => {
                 },
             });
 
-            return ({
-                ...state,
-                stateManager,
-            });
+            return ({...state, stateManager});
         }
+
         default:
             console.error(`Action of type ${type} not supported!`);
             break;
@@ -109,17 +93,14 @@ export const UIManager = ({ children }) => {
     });
 
     return (
-        <UIState.Provider value={state}>
-            <UIDispatch.Provider value={dispatch}>
+        <UIState.Provider value={{state, dispatch}}>
                 {dynamicUIRender}
                 {children}
-            </UIDispatch.Provider>
         </UIState.Provider>
     );
 };
 
 export const useUIManager = () => {
-    const state = useContext(UIState);
-    const dispatch = useContext(UIDispatch);
+    const {state, dispatch} = useContext(UIState);
     return [state, dispatch];
 };

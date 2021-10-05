@@ -1,8 +1,8 @@
 import * as THREE from 'three';
-import {CollisionManagerActionEnums} from "../collision-manager/CollisionManager";
-import {UIManagerEnums} from "../ui-manager/UIManager";
-import ProductImageControls from "../../components/Scene/product-library/product-image-controls/ProductImageControls";
-import {ThreeProductImage} from "../_constructors/Markers";
+import {CollisionManagerActionEnums} from "../../_contextDataManagers/CollisionManager";
+import {UIManagerEnums} from "../../_contextDataManagers/UIManager";
+import ProductImageControls from "../../../components/Scene/product-library/product-image-controls/ProductImageControls";
+import {ThreeProductImage} from "../../_constructors/Markers";
 import React from "react";
 
 

@@ -18,10 +18,11 @@ const StoreThumbnail = ({ data }) => {
             {/* Card Image */}
             <div className={styles.image} style={{ backgroundImage: `url(${image})` }}>
                 <figcaption className={`${styles.figcaption}`}>
-                    <Link href={`/store/hotspots/?id=${storeId}`}>
+                    <Link href={`/store/hotspots/?id=${storeId}`}><a>
                         <Button  variant="primary" >
                             Edit Store
                         </Button>
+                    </a>
                     </Link>
 
                 </figcaption>

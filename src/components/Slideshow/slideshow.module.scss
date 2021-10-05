@@ -7,7 +7,7 @@
     border-radius: 0.7em;
     overflow: hidden;
     min-height: 7em;
-
+    padding: 0 1.2em;
 
     .scrollable {
         display: flex;
@@ -24,19 +24,17 @@
             transition: all 1s ease-out;
             display: flex;
             flex-direction: row;
-            padding: 1.1em 1em;
+            padding: 1.1em 0;
         }
     }
 
     .scrollBtn {
         width: 3em;
-        background: linear-gradient(270deg, #1a1a1a 0%, #1a1a1a00 75.5%);
         position: absolute;
         bottom: 0;
         top: 0;
         display: none;
         align-items: center;
-        justify-content: flex-end;
         color: #fff;
 
         &.left {
@@ -46,11 +44,17 @@
         }
         &.right {
             right: 0;
+            justify-content: flex-end;
+            background: linear-gradient(270deg, #1a1a1a 0%, #1a1a1a00 75.5%);
         }
 
         &.active {
             display: flex;
             z-index: 99;
+
+            i{font-size: 1.5em}
         }
+
+
     }
 }

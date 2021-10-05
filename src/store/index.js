@@ -9,7 +9,7 @@ import authReducer from "./reducers/authReducer";
 import userReducer from "./reducers/userReducer";
 import productLibraryReducer from "./reducers/productLibraryReducer";
 import SceneEditorReducer from "./reducers/SceneEditorReducer";
-import ToastMessagesReducer from './reducers/ToastMessagesReducer';
+import appAlertsReducer from './reducers/appAlertsReducer';
 
 
 const appReducer = combineReducers({
@@ -18,7 +18,7 @@ const appReducer = combineReducers({
     user: userReducer,
     productLibrary: productLibraryReducer,
     SceneEditor: SceneEditorReducer,
-    toastMessages: ToastMessagesReducer,
+    appAlerts: appAlertsReducer,
 });
 
 

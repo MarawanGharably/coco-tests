@@ -12,7 +12,8 @@
     margin-right: 0.5em;
     overflow: hidden;
 
-    &.selected {
+    &.selected,
+    &:hover{
         padding: 3px;
         background: linear-gradient(92.35deg, #3370fe 1.28%, #00e599 98.95%);
     }

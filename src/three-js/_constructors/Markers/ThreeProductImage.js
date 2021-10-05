@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import InteractionObject from '../../three-base-components/InteractionObject';
 import ModalConstructor from '../ModalConstructor';
-import { CollisionManagerActionEnums } from '../../collision-manager/CollisionManager';
+import { CollisionManagerActionEnums } from '../../_contextDataManagers/CollisionManager';
 import ThreeLoadingManager from '../../three-loading-manager/three-loading-manager';
 import { formURL } from "../../../utils/urlHelper";
 

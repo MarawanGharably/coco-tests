@@ -1,0 +1,52 @@
+._ {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9;
+    padding: 0 1em 1em 1em;
+
+    :global {
+        .toast {
+            width: 100%;
+            color: #333;
+
+            .toast-header {
+                color: #fff;
+            }
+
+            .toast-body {
+                font-size: 12px;
+                background: #fff;
+            }
+
+            //Error Message
+            &.error {
+                .toast-header {
+                    background: #f38282f0;
+                }
+            }
+
+            //Success Message
+            &.success {
+                .toast-header {
+                    //background: rgba(171, 212, 157, 0.94);
+                }
+            }
+
+            //Warning Message
+            &.warning {
+                .toast-header {
+                    background: rgba(255, 132, 7, 0.94);
+                }
+            }
+
+            //Info Message
+            &.info {
+                .toast-header {
+                    background: rgb(10, 196, 224);
+                }
+            }
+        }
+    }
+}

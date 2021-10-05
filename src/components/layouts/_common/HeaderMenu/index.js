@@ -9,28 +9,29 @@ import styles from './headerMenu.module.scss';
 export default function HeaderMenu() {
     const router = useRouter();
     const user = useSelector((state) => state['user']);
-    const [mounted, setMounted] = useState();
+    const [isReady, setIsReady] = useState();
     const [links, setLinks] = useState([
         { label: 'Stores', url: '/' },
         { label: 'Logout', url: '/auth/logout' },
     ]);
 
     useEffect(() => {
-        if (!mounted) setMounted(true);
-
-        if (userCanAccessAdminPanel(user?.permissions)) {
-            links.splice(links.length - 1, 0, { label: 'Manage', url: '/admin/users/' });
-            setLinks(links);
+        if (user) {
+            setIsReady(true);
+            if (userCanAccessAdminPanel(user?.permissions)) {
+                links.splice(links.length - 1, 0, { label: 'Manage', url: '/admin/users/' });
+                setLinks(links);
+            }
         }
-    }, []);
+    }, [user]); //fix here
 
     return (
-        <Nav className={`${styles.headerMenu} justify-content-end`}>
-            {mounted && links.map((item, i) => (
-                    <Link href={item.url} key={i}>
-                        <a className={`nav-link ${router.pathname.startsWith() === item.url ? 'active' : ''}`}>{item.label}</a>
-                    </Link>
-                ))}
-        </Nav>
+      <Nav className={`${styles.headerMenu} justify-content-end`}>
+          {isReady && links.map((item, i) => (
+            <Link href={item.url} key={i}>
+                <a className={`nav-link ${router.pathname.startsWith() === item.url ? 'active' : ''}`}>{item.label}</a>
+            </Link>
+          ))}
+      </Nav>
     );
 }

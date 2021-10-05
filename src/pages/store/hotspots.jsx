@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { connect } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { Col, Row, Button } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import StoreLayout from '../../components/layouts/StoreLayout';
 import LoadingScreen from '../../components/LoadingScreen';
-import HotspotEditor from '../../three-js/three-editor/HotspotEditor';
+import HotspotEditor from '../../three-js/SceneEditor';
 import { ModeSelector, SceneNavigator } from '../../components/Scene';
 import ProductPlacementSidebar from '../../components/Scene/ProductPlacementSidebar';
-import { showSuccessMessage, showErrorMessage } from '../../store/actions/toastActions';
 import { destroyProductLibraryData } from '../../store/actions/productLibraryActions';
 import {destroySceneData} from "../../store/actions/SceneEditorActions";
-import { getStoreFlags, apiPublishSceneData, getStoreScenes, getProductLibrary} from "../../APImethods";
+import { getStoreFlags, getStoreScenes, getProductLibrary} from "../../APImethods";
+import {
+    UIManager,
+    CollisionManager
+} from "../../three-js/_contextDataManagers";
 import styles from '../../assets/scss/hotspotsPage.module.scss';
 
 
-let HotspotsPage = (props) => {
-    const { isEnabled, mode_slug } = props.productLibrary;
+export default function HotspotsPage(props){
+    const store = useSelector(state =>({
+        sceneEditorData: state['SceneEditor'],
+        productLibrary:state['productLibrary']
+    }));
+
+    const { isEnabled, mode_slug } = store.productLibrary;
     const [isLoading, setLoading] = useState(false);
     const router = useRouter();
     const dispatch = useDispatch();
@@ -42,9 +49,7 @@ let HotspotsPage = (props) => {
             const flagsReq = await dispatch(getStoreFlags(storeId, {updateStore:'productLibrary'}));
             const isEnabled = !!flagsReq['product_library_enabled'];
 
-            if (isEnabled) {
-                dispatch(getProductLibrary(storeId));
-            }
+            if (isEnabled) dispatch(getProductLibrary(storeId));
 
             dispatch(getStoreScenes(storeId, {updateStore:'productLibrary'}));
         }catch(err){
@@ -53,59 +58,39 @@ let HotspotsPage = (props) => {
     };
 
 
-    const publishSceneData = async () => {
-        try {
-            setLoading(true);
-            await apiPublishSceneData(storeId);
-            dispatch(showSuccessMessage('Store Published successfully'));
-        } catch (error) {
-            dispatch(showErrorMessage('An error occurred while publishing store'));
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     return (
         <StoreLayout className={styles.cmp}>
             <Row style={{ color: '#fff' }}>
-                <Col sm={12} md={5}>
-                    <h1>Hotspots</h1>
-                    <h6 style={{ fontSize: '14px', fontWeight: '300', color: '#efefef' }}>Click anywhere on the store to add a hotspot</h6>
+                <Col sm={12} md={6}>
+                    <h1 style={{lineHeight: '0.7'}}>Hotspots</h1>
+                    <h6 style={{ fontSize: '14px', fontWeight: '300', color: '#efefef' }}>Click anywhere on the scene image to add a hotspot. <br/> Your changes will be saved immediately</h6>
                 </Col>
 
-                <Col sm={12} md={7} className="d-flex justify-content-end">
+                <Col sm={12} md={6}>
                     <ModeSelector />
                 </Col>
             </Row>
 
             <Row className={styles['sceneEditor']}>
-                    <SceneNavigator sceneEditor={props.SceneEditor} className={`${styles.sceneNavigator} ${showSideBar ? styles.withSideBar : ''}`} />
-                    <HotspotEditor storeId={storeId} />
-                    {isEnabled && (<ProductPlacementSidebar visible={showSideBar} productLibrary={props.productLibrary} />)}
+                <SceneNavigator sceneEditor={store.sceneEditorData} className={`${styles.sceneNavigator} ${showSideBar ? styles.withSideBar : ''}`} />
+                <CollisionManager>
+                    <UIManager>
+                        <HotspotEditor storeId={storeId} />
+                    </UIManager>
+                </CollisionManager>
+
+                    {isEnabled && (<ProductPlacementSidebar
+                        visible={showSideBar}
+                        productLibrary={store.productLibrary}
+                    />)}
             </Row>
 
             {isLoading && <LoadingScreen />}
 
-            <HotSpotsFooter onClick={publishSceneData} />
+
         </StoreLayout>
     );
 };
 
 
-
-const HotSpotsFooter = ({ onClick }) => {
-    return (
-        <div className={styles['hotspotsFooter']}>
-            <Button  onClick={onClick}>
-                Save Changes
-            </Button>
-        </div>
-    );
-};
-
-const mapStateToProps = ({ SceneEditor, productLibrary }) => {
-    return { SceneEditor, productLibrary };
-};
-
-export default connect(mapStateToProps, {})(HotspotsPage);

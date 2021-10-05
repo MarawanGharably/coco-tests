@@ -1,13 +1,9 @@
 export const SET_LOADING = 'SET_LOADING';
 export const SET_SCENE = 'SET_SCENE';
-export const SET_UPDATE_LIST = 'SET_UPDATE_LIST';
-export const CLEAR_UPDATE_LIST = 'CLEAR_UPDATE_LIST';
 export const SET_MAX_RENDER_ORDER = 'SET_MAX_RENDER_ORDER';
 
 export default {
     SET_LOADING,
     SET_SCENE,
-    SET_UPDATE_LIST,
-    CLEAR_UPDATE_LIST,
     SET_MAX_RENDER_ORDER,
 };

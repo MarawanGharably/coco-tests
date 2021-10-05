@@ -1,9 +1,6 @@
 import * as types from '../types/ThreeEditorActionTypes';
 
-export const setLoadingAction = (data) => ({
-    type: types.SET_LOADING,
-    payload: data,
-});
+
 
 export const setSceneAction = (data) => ({
     type: types.SET_SCENE,

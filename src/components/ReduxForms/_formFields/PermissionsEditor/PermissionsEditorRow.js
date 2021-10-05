@@ -93,6 +93,7 @@ const PermissionsEditorRow = ({input, index, fields, userPermissions, scopes, st
         placeholder={"Scope"}
         options={scopes}
         component={Select}
+        onChange={(val) => input.onChange({scope: val})}
       />
 
       {input?.value.scope && input?.value.scope !== Scopes.Obsess &&

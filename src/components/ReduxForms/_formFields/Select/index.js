@@ -12,12 +12,11 @@ import Select from 'react-select';
 const SelectInput = ({ input = {}, searchable=false, className='select', label = '', options = [], isMulti=false, placeholder='',  meta: { touched, error, warning } }) => {
 
     const onChangeEvent = (data) => {
-        //Single value
-        if(data?.value) input.onChange(data.value);
-
         //Multi-Select
-        else if(Array.isArray(data)){
+        if(Array.isArray(data)){
             input.onChange(data.map(item=>item.value));
+        }else{
+            input.onChange(data.value);
         }
     };
 
@@ -32,11 +31,11 @@ const SelectInput = ({ input = {}, searchable=false, className='select', label =
                 };
             });
         }else{
-            return options.find(item=> item['value'] === input.value);
+            return input.value ? options.find(item=> item['value'] === input.value): '';
         }
     }
 
-    // console.log('>Select', {input, options, isMulti,  });
+    // console.log('>Select', {input,calc:calcValue()  });
 
 
     return <Select
@@ -48,7 +47,6 @@ const SelectInput = ({ input = {}, searchable=false, className='select', label =
         options={options}
         searchable={searchable}
         onChange={onChangeEvent}
-
     />;
 };
 

@@ -2,11 +2,28 @@ import React, { useEffect, useState, useRef } from 'react';
 import { debounce } from '../../utils/events';
 import styles from './slideshow.module.scss';
 
-const Slideshow = ({ className='', children }) => {
+/**
+ *
+ * @param step - amount of items to scroll in one scroll event
+ * @param className - extra class to customize the styling
+ * @param children - <div> elements used to display Slideshow items
+ * @returns {JSX.Element}
+ * @constructor
+ * Example: <Slideshow step={10} className='extraClassName'>...elements here ..</Slideshow>
+ */
+const Slideshow = ({ step=5, className='', children }) => {
     const navigatorRef = useRef();
     const scrollableElRef = useRef();
     const wrapperElRef = useRef();
-    const scrollStep = 300;
+
+
+
+    //Compute Slideshow element/slide width
+    const item = wrapperElRef.current?.children[0];
+    const itemExtraSpacings= calcExtraSpacings(item);
+    const itemWidth = item?.clientWidth + itemExtraSpacings || 300;
+    const scrollStep = itemWidth * step;
+
     const [scrollData, setScrollData] = useState({
         scrollLeft: 0,
         endReached: false,
@@ -20,6 +37,7 @@ const Slideshow = ({ className='', children }) => {
             if (newVal > 0 && newVal < scrollStep) newVal = 0; //scroll to beginning
         }
         if (direction == 'right') newVal = scrollVal + scrollStep;
+
 
         scrollableElRef.current.scrollLeft = newVal;
         setTimeout(() => {
@@ -66,7 +84,6 @@ const Slideshow = ({ className='', children }) => {
         };
     }, []);
 
-    // console.log('render', scrollData);
 
     return (
         <div ref={navigatorRef} className={`${styles['slideshow']} ${className}`}>
@@ -95,5 +112,17 @@ const ScrollBtn = ({ direction, status, onClick }) => {
         </div>
     );
 };
+
+
+//TODO: incomplete
+const calcExtraSpacings=(item)=>{
+    if(!item) return 0;
+    let res=0;
+
+    const itemStyles = getComputedStyle(item);
+    if(itemStyles['margin-right']) res+= parseInt(itemStyles['margin-right']);
+    if(itemStyles['margin-left']) res+= parseInt(itemStyles['margin-left']);
+    return res;
+}
 
 export default Slideshow;

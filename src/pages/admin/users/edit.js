@@ -1,23 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Field, reduxForm, FieldArray } from "redux-form";
+import { connect } from "react-redux";
 import { useRouter} from "next/router";
 import { Card } from 'react-bootstrap';
 import { Input} from '../../../components/ReduxForms/_formFields';
 import AdminPageLayout from "../../../components/layouts/AdminPageLayout";
 import {SubmitButton} from "../../../components/FormComponents";
 import SubmitStatusMessage from "../../../components/ReduxForms/SubmitStatusMessage";
-
-//API methods
-import {
-    getStores,
-    getUserDataWithId, updateUser
-} from "../../../APImethods";
-import { connect } from "react-redux";
+import {getStores, getUserDataWithId, updateUser} from "../../../APImethods";
 import {  getLabelValuePair } from "../../../utils/helpers";
 import { getClients } from "../../../APImethods/ClientsAPI";
 import PermissionsEditor from "../../../components/ReduxForms/_formFields/PermissionsEditor";
 
-//TODO: remove formatUserDataToSubmit, formatPermissions
 
 let UserForm = (props) => {
     const router = useRouter();
@@ -45,24 +39,26 @@ let UserForm = (props) => {
         });
     }, []);
 
+    const initializeStateFromResponse = (response) => {
+        response.permissions = response.permissions.map(item => {
+            return {
+                id:item._id,
+                role: item.role,
+                reference: item.reference,
+                scope: item.scope
+            };
+        });
+        const { given_name, permissions, UserStatus, client, email } = response;
+
+        props.initialize({ given_name, permissions, UserStatus, client, email }); //Initialize form Data
+    }
+
     useEffect(() => {
         if(userId){
             //1. Fetch User Data
             getUserDataWithId(userId).then((res) => {
-                res.permissions = res.permissions.map(item => {
-                    return {
-                        id:item._id,
-                        role: item.role,
-                        reference: item.reference,
-                        scope: item.scope
-                    };
-                });
-                const { given_name, permissions, UserStatus, client, email } = res;
-
-                props.initialize({ given_name, permissions, UserStatus, client, email }); //Initialize form Data
+                initializeStateFromResponse(res);
             });
-
-
         }
     }, [userId]);
 
@@ -71,6 +67,7 @@ let UserForm = (props) => {
 
         updateUser(userId, values)
             .then(res=>{
+                initializeStateFromResponse(res);
                 setStatus({ success: true, message: 'Updated Successfully' });
             }).catch(err=>{
             setStatus({ error: true, message: err?.message || 'Error' });
@@ -103,8 +100,8 @@ let UserForm = (props) => {
                     <Card.Body>
                         <FieldArray
                           name="permissions"
-                          userPermissions={props.user?.permissions}
                           component={PermissionsEditor}
+                          userPermissions={props.user?.permissions}
                           clients={clients}
                           stores={stores}
                         />

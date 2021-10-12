@@ -34,9 +34,12 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
         const { image } = texture;
 
         this.width = image.width / image.height;
-        this.sceneObject.scale.set(this.width, 1, 1);
-        this.sceneObject.material.map = texture;
-        this.sceneObject.material.needsUpdate = true;
+        if(this.sceneObject){
+            this.sceneObject.scale.set(this.width, 1, 1);
+            this.sceneObject.material.map = texture;
+            this.sceneObject.material.needsUpdate = true;
+        }
+
         this.setPanArea();
     }
 

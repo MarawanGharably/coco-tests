@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useThree } from '../three-editor/ThreeEditor';
 import ThreeBackgroundCube from './ThreeBackgroundCube';
-import { useCollisionManager, CollisionManagerActionEnums } from '../_contextDataManagers';
+import { useCollisionManager, CollisionManagerActionEnums } from '../_DataManagers';
 
 // SET LOD
 const LOD = 3;

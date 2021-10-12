@@ -1,2 +1,2 @@
 export { default as HotspotMarker } from './HotspotMarker';
-export { default as ThreeProductImage } from './ThreeProductImage';
+export { default as ImageMarker } from './ImageMarker';

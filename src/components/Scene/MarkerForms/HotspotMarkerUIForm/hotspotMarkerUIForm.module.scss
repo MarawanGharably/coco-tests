@@ -1,0 +1,49 @@
+@import '../../../../assets/scss/variables';
+$fontSize: 14px;
+
+.cmp {
+    width: 240px;
+    background: #000000;
+    color: #efefef;
+    padding: 1em;
+    border-radius: 4px;
+
+    .title {
+        color: #efefef;
+        font-size: $fontSize;
+        margin-bottom: 1.1em;
+    }
+
+    label {
+        font-size: $fontSize;
+        font-weight: 300;
+    }
+    input {
+        background: #e1e1e1;
+        &:focus{ background: #e1e1e1;}
+    }
+
+    .actionsWrapper {
+        display: flex;
+
+        .deleteButton {
+            flex: 1;
+            text-decoration: none;
+
+            .deleteLink {
+                @extend %textWithGradient;
+            }
+        }
+
+        .saveButton {
+            flex: 1;
+            @extend %buttonWithGradient;
+        }
+    }
+
+    .closeModalIcon {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+    }
+}

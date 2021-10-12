@@ -1,24 +1,18 @@
 import * as THREE from 'three';
-
-// import { HoverCursorComponent } from 'three-cursor-style';
-// import { PopUpComponent } from 'pop-up-component';
 import InteractionObject from '../../three-base-components/InteractionObject';
 import SVGSpriteComponent from '../../three-svg/SVGSpriteComponent';
-import ModalConstructor from '../ModalConstructor';
-import { CollisionManagerActionEnums } from '../../_contextDataManagers/CollisionManager';
+// import ModalConstructor from '../ModalConstructor';
+import { CollisionManagerActionEnums } from '../../_DataManagers/CollisionManager';
 
-
-//TODO: Marker constructor should not have any information regarding the Scene!!!
-// this.scene - is a scene only constructor prop
-// constructor should not fetch the data! 30 scene objects will
 
 export default class HotspotMarker extends InteractionObject {
-    constructor(componentToRender, renderProps) {
+    constructor({data, UIConfig}) {
         super();
-        // const modalComponent = new HoverCursorComponent('pointer', 'all-scroll');
-        const modalComponent = new ModalConstructor(componentToRender, renderProps, this.dispose);
-        this.modalComponentRenderProps = renderProps;
-        this.attachComponent(modalComponent);
+        // this.attachComponent(modalComponent);
+
+        this.hotspot_type = 'hotspot_marker'; //type of marker
+        this.data = data; //stores custom user data
+        this.UIConfig = UIConfig; //could be used for modals
 
         const svgUrl = 'https://cdn.obsess-vr.com/product-hotspot-icon-circle.svg';
         this.fetchSVGStringAsync(svgUrl);
@@ -26,6 +20,8 @@ export default class HotspotMarker extends InteractionObject {
         this.svgSpriteComponent = null;
         this.isFlatBackground = false;
     }
+
+
 
      fetchSVGStringAsync= (url) =>{
          fetch(url)
@@ -48,6 +44,7 @@ export default class HotspotMarker extends InteractionObject {
         this.svgSpriteComponent = new SVGSpriteComponent(this.visualTransform);
         this.attachComponent(this.svgSpriteComponent);
     }
+
 
     setTransform = (colliderTransform, visualTransform) => {
         const colliderMatrix = new THREE.Matrix4();

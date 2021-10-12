@@ -1,20 +1,17 @@
 import { v1 as uuidv1 } from 'uuid';
 
 import ThreeSceneObjectComponent from '../three-base-components/ThreeSceneObjectComponent';
-import { UIManagerEnums } from '../_contextDataManagers/UIManager';
+
 
 export default class ModalConstructor extends ThreeSceneObjectComponent {
     constructor(componentToRender, renderProps, disposeFunc) {
         super();
         this.onModalClose = this.onModalClose.bind(this);
-        this.updateState = this.updateState.bind(this);
 
         this.uuid = uuidv1();
-
         this.componentToRender = componentToRender;
         this.renderProps = renderProps;
         this.renderProps.onClose = this.onModalClose;
-        this.renderProps.updateState = this.updateState;
         this.renderProps.uuid = this.uuid;
         this.renderProps.dispose = disposeFunc;
         this.renderProps.getTransforms = this.getTransforms;
@@ -27,10 +24,8 @@ export default class ModalConstructor extends ThreeSceneObjectComponent {
     }
 
     onClick() {
-        const UIDispatch = this.owner.getUIDispatcher();
-        if (!UIDispatch) {
-            console.error(`UIDispatch not set on InteractableObject ${this.owner}`); // eslint-disable-line no-console
-        }
+        console.log('MODAL CONSTR onClick');
+
 
         const payload = {
             uuid: this.uuid,
@@ -38,37 +33,14 @@ export default class ModalConstructor extends ThreeSceneObjectComponent {
             renderProps: this.renderProps,
         };
 
-        UIDispatch({ type: UIManagerEnums.ADD_UI,payload });
+
     }
 
     onModalClose() {
-        const UIDispatch = this.owner.getUIDispatcher();
-        if (!UIDispatch) {
-            console.error(`UIDispatch not set on InteractableObject ${this.owner}`); // eslint-disable-line no-console
-        }
-
-        UIDispatch({
-            type: UIManagerEnums.REMOVE_UI,
-            payload: { uuid: this.uuid },
-        });
+        console.log('--onModalClose ');
     }
 
-    updateState(uiState) {
-        const UIDispatch = this.owner.getUIDispatcher();
-        if (!UIDispatch) {
-            console.error(`UIDispatch not set on InteractableObject ${this.owner}`); // eslint-disable-line no-console
-        }
 
-        UIDispatch({
-            type: UIManagerEnums.UPDATE_UI_STATE,
-            payload: {
-                uuid: this.uuid,
-                uiState,
-            },
-        });
-
-        this.updateRenderProps(uiState);
-    }
 
     // Retrieves Matrix transforms of visual and collider components
     getTransforms = () => {
@@ -78,8 +50,8 @@ export default class ModalConstructor extends ThreeSceneObjectComponent {
     }
 
     dispose() {
-        if (this.owner.scene) {
-            this.onModalClose();
-        }
+        // if (this.owner.scene) {
+        //     this.onModalClose();
+        // }
     }
 }

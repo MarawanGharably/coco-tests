@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useThree } from '../three-editor/ThreeEditor';
-import { useCollisionManager, CollisionManagerActionEnums } from '../_contextDataManagers/CollisionManager';
+import { useCollisionManager, CollisionManagerActionEnums } from '../_DataManagers/CollisionManager';
 import ThreeColliderSphere from './ThreeColliderSphere';
 
 const ColliderSphere = () => {

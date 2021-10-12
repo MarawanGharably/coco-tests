@@ -16,6 +16,7 @@ export const threeEditorMouseEvents = (
     colliderRef,
     canvasContainer,
     mode,
+    allowEventsForMarkerTypeOnly,
     onMouseDownCallback,
     onMouseUpCallback,
     onMouseMoveCallback
@@ -53,13 +54,28 @@ export const threeEditorMouseEvents = (
         return mouseRef;
     }
 
-
+    /**
+     * onMouseDown Scene Event
+     * @param e
+     * Note: currently returns marker object that selected based on provided parameters.
+     * In future, we may need/want to access intersection objects [] from provided callback function,
+     * But I would recommend to avoid it if possible and keep computation of selected marker as part of the code.
+     */
     const onMouseDown = (e) => {
         const mousePos = setMousePosition(mouseStartRef, e);
         raycaster.setFromCamera(mouseStartRef, cameraRef.current);
         const intersects = raycaster.intersectObjects(colliderRef.current);
-        const marker = intersects.find((intersect) => intersect.object.name === 'marker');
 
+        //
+        const marker = intersects.find((intersect) => {
+            const markerType = intersect?.object?.owner?.hotspot_type;
+            //apply extra filter
+            if(allowEventsForMarkerTypeOnly && markerType) return markerType === allowEventsForMarkerTypeOnly;
+            //or return any type of marker
+            return intersect.object.name === 'marker';
+        });
+
+        console.log('-onMouseDown', {allowEventsForMarkerTypeOnly,   marker, markerType: marker?.object?.owner?.hotspot_type});
 
         if (marker) {
             isMarkerClicked = true;
@@ -83,11 +99,21 @@ export const threeEditorMouseEvents = (
         const dragDistance = mouseRef.distanceTo(mouseStartRef);
         raycaster.setFromCamera(mouseRef, cameraRef.current);
         const intersects = raycaster.intersectObjects(colliderRef.current);
-        const isDragEvent = (dragDistance > DESKTOP_THRESHOLD) && isMarkerClicked;
+        const isDragEvent = (dragDistance > DESKTOP_THRESHOLD);
 
+
+
+        const markerIntersection = intersects.find((intersect) => {
+            const markerType = intersect?.object?.owner?.hotspot_type;
+            //apply extra filter
+            if(allowEventsForMarkerTypeOnly && markerType) return markerType === allowEventsForMarkerTypeOnly && intersect.object.name === 'marker';
+
+            return intersect.object.name === 'marker';
+        });
+        const marker = markerIntersection?.object;
 
         // public method/callback
-        if(onMouseUpCallback) onMouseUpCallback(e, intersects, {DESKTOP_THRESHOLD, dragDistance, isDragEvent });
+        if(onMouseUpCallback) onMouseUpCallback(e, marker, intersects, {DESKTOP_THRESHOLD, dragDistance, isDragEvent, isMarkerClicked });
 
         //reset data
         if (dragDistance > DESKTOP_THRESHOLD) {
@@ -108,7 +134,7 @@ export const threeEditorMouseEvents = (
         // const mousePosition = getMousePosition(mouseRef, e);
         // console.log('%c __onMouseMove__', 'color:red', {focusedObject, isMarkerClicked});
         //public callback/interface
-        if(onMouseMoveCallback) onMouseMoveCallback(e, focusedObject, {isMarkerClicked    });
+        if(onMouseMoveCallback) onMouseMoveCallback(e, focusedObject, isMarkerClicked);
 
         if (focusedObject && isMarkerClicked) {
             moveFocusedObject(e);
@@ -119,8 +145,7 @@ export const threeEditorMouseEvents = (
 
     //TODO: move hotspot_type specific computation on the upper user level
     const moveFocusedObject = (e) => {
-        // console.log('--moveFocusedObject', focusedObject.owner );
-        const { hotspot_type } = focusedObject.owner.data.props;
+        const { hotspot_type } = focusedObject.owner.userData.props;
         const isProductMarker = mode === PRODUCT_TAGGING && hotspot_type === 'product';
         const isProductImage = mode === PRODUCT_PLACEMENT && hotspot_type === 'product_image';
 

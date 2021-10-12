@@ -6,12 +6,13 @@ import { CollisionManagerActionEnums } from '../../_DataManagers/CollisionManage
 
 
 export default class HotspotMarker extends InteractionObject {
-    constructor({data, UIConfig}) {
+    constructor({userData, UIConfig}) {
         super();
         // this.attachComponent(modalComponent);
 
+        this.sceneObject.name = 'marker';
         this.hotspot_type = 'hotspot_marker'; //type of marker
-        this.data = data; //stores custom user data
+        this.userData = userData; //stores custom user data
         this.UIConfig = UIConfig; //could be used for modals
 
         const svgUrl = 'https://cdn.obsess-vr.com/product-hotspot-icon-circle.svg';
@@ -39,7 +40,6 @@ export default class HotspotMarker extends InteractionObject {
         this.scene = scene;
         scene.add(this.sceneObject);
 
-        this.sceneObject.name = 'marker';
         this.isFlatBackground = this.scene.children.some((child) => child.name === 'flatBackground');
         this.svgSpriteComponent = new SVGSpriteComponent(this.visualTransform);
         this.attachComponent(this.svgSpriteComponent);

@@ -12,7 +12,8 @@ export default class InteractionObject extends ThreeSceneObject {
         this.sceneObject = new BoxCollider(1, 1, 1, this.onHover, this.onUnhover, this.onClick);
         this.sceneObject.setOwner(this);
 
-        this.data=null; //custom user data
+        this.userData = null; //custom data provided by users
+
 
         // this.visualObject = null;
     }
@@ -41,8 +42,8 @@ export default class InteractionObject extends ThreeSceneObject {
     }
 
 
-    setMarkerData=(data)=>{
-        this.data = data;
+    setUserData=(data)=>{
+        this.userData = data;
     }
 
 
@@ -54,8 +55,7 @@ export default class InteractionObject extends ThreeSceneObject {
      * Call when the collider attached to this InteractableObject is clicked.
      */
     onClick = (e) => {
-        const {data, scene} = this;
-        console.log('__onClick', {this:this, data, scene  });
+        const {userData, scene} = this;
 
         //Display UI
         this.openUI(e);
@@ -76,10 +76,10 @@ export default class InteractionObject extends ThreeSceneObject {
                 },
                 Marker:{
                     uuid:this.uuid,
-                    data:this.data, //custom user data
+                    userData:this.userData, //custom user data
                     scale:this.sceneObject.scale, //currently sceneObject & visualObject keep same scale value
                     renderOrder:this.sceneObject.renderOrder,
-                    setMarkerData:this.setMarkerData,
+                    setUserData:this.setUserData,
                     getTransforms:this.getTransforms,
                     removeFromScene:this.dispose,
                     setScale:this.setScale,

@@ -7,7 +7,7 @@ import {CollisionManagerActionEnums} from "../../../../three-js/_DataManagers/Co
 
 const _createMarker=(userData={} )=>{
     return new HotspotMarker({
-        data:userData,
+        userData:userData,
         UIConfig:{
             Component:HotspotMarkerUIForm,
             positionNextToTheElement:true,
@@ -32,7 +32,7 @@ export const dragReleaseProductHotspotAutoSave = async (object, currentSceneId, 
     console.log('__dragReleaseProductHotspotAutoSave',{marker});
 
     const { colliderTransform, visualTransform } = marker.getTransforms();
-    const {_id, props:{hotspot_type, product_sku, scale, renderOrder } } = marker.data;
+    const {_id, props:{hotspot_type, product_sku, scale, renderOrder } } = marker.userData;
 
     const postData = {
         type: 'HotspotMarker',

@@ -21,7 +21,7 @@ const ImageMarkerUIForm = (props) => {
     const dispatch = useDispatch();
     const router = useRouter();
     const storeId = router.query?.id;
-    const record = Marker.data;
+    const record = Marker.userData;
     const id = record?._id;
 
     //Initialize Form Values in Redux State
@@ -86,7 +86,7 @@ const ImageMarkerUIForm = (props) => {
 
         dispatch(updateHotspotAPI(record._id, storeId, currentSceneId, postData))
             .then(res=>{
-                Marker.setMarkerData(res);
+                Marker.setUserData(res);
             }).catch((err) => {
                 console.error(err);
             });

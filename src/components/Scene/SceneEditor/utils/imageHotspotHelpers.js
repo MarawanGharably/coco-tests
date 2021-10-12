@@ -10,7 +10,7 @@ export const renderProductImageMarker = (dbRecord, sceneRef, colliderDispatch, s
         image: dbRecord?.props?.image,
         renderOrder: dbRecord.props.renderOrder,
         scale: dbRecord.props?.scale,
-        data: dbRecord,
+        userData: dbRecord,
         UIConfig:{
             Component:ImageMarkerUIForm,
             style:{left:'0', top:'3em', background:'none'}
@@ -35,7 +35,8 @@ export const addProductImageOnDrop = async (e, storeId, currentSceneId, cameraRe
     const scale = 1;
 
     //1. Create Image Marker
-    const marker = new ImageMarker({ image, renderOrder, scale, data: {},
+    const marker = new ImageMarker({ image, renderOrder, scale,
+        userData: {},
         UIConfig:{
             Component:ImageMarkerUIForm,
             style:{left:0, top:'3em', background:'none'}
@@ -62,8 +63,8 @@ export const addProductImageOnDrop = async (e, storeId, currentSceneId, cameraRe
         },
     });
 
-    //4. Update marker.data value
-    marker.setMarkerData(record);
+    //4. Update marker.userData value
+    marker.setUserData(record);
 
     //5. Set Position to in front of camera
     const pos = new THREE.Vector3(0, 0, -10);

@@ -10,14 +10,15 @@ import { formURL } from "../../../utils/urlHelper";
 
 
 export default class ImageMarker extends InteractionObject {
-    constructor({image, renderOrder, scale, data, UIConfig}) {
+    constructor({image, renderOrder, scale, userData, UIConfig}) {
         super();
 
+        this.sceneObject.name = 'marker';
         this.hotspot_type = 'image_marker'; //type of marker
         this.isFlatBackground = false;
         this.scale = scale;
         this.renderOrder = renderOrder;
-        this.data = data; //data keep any custom data provided by users
+        this.userData = userData; //data keep any custom data provided by users
         this.UIConfig = UIConfig; //could be used for modals
 
 
@@ -52,7 +53,6 @@ export default class ImageMarker extends InteractionObject {
     addToScene = (scene) => {
         this.scene = scene;
         this.camera = scene.children.find((child) => child.type === 'PerspectiveCamera');
-        this.sceneObject.name = 'marker';
         this.isFlatBackground = this.scene.children.some((child) => child.name === 'flatBackground');
         scene.add(this.sceneObject);
         scene.add(this.visualObject);

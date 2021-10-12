@@ -27,7 +27,7 @@ const ThreeState = createContext(initialState);
 
 
 export const ThreeEditor = (props) => {
-    const { sceneRef, sceneObjects, children  } = props;
+    const { sceneRef, sceneObjects, allowEventsForMarkerTypeOnly, children  } = props;
     const { products, mode, deleteProductId } = useSelector(state => state['productLibrary']);
     const { currentSceneId } = useSelector(state => state['SceneEditor']);
     const reduxDispatch = useDispatch();
@@ -120,6 +120,7 @@ export const ThreeEditor = (props) => {
             colliderRef,
             canvasContainer,
             mode,
+            allowEventsForMarkerTypeOnly,
             props.onMouseDown,
             props.onMouseUp,
             props.onMouseMove

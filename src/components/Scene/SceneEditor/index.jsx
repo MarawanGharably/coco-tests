@@ -38,7 +38,11 @@ const SceneEditor = ({ storeId }) => {
     const reduxDispatch = useDispatch();
 
 
-
+    const HOTSPOT_TYPES_BY_MODE={
+        'product_tagging':'hotspot_marker',
+        'product_placement':'image_marker',
+    }
+    const selectedHotspotType = HOTSPOT_TYPES_BY_MODE[mode_slug];
 
     // console.log('>SceneEditor--', {sceneRef});
 
@@ -78,17 +82,8 @@ const SceneEditor = ({ storeId }) => {
 
 
 
-    const onMouseUp=(e, intersects, options)=>{
+    const onMouseUp=(e, marker, intersects, options)=>{
         const {isDragEvent} = options;
-        const HOTSPOT_TYPES_BY_MODE={
-            'product_tagging':'hotspot_marker',
-            'product_placement':'image_marker',
-        }
-        const selectedHotspotType = HOTSPOT_TYPES_BY_MODE[mode_slug];
-        const markerIntersection = intersects.find((intersect) => intersect.object.name === 'marker' && intersect.object?.owner?.hotspot_type === selectedHotspotType );
-        const marker = markerIntersection?.object;
-
-
         console.log('%c >onMouseUp custom', 'color:blue', {marker, intersects, options });
 
 
@@ -112,7 +107,7 @@ const SceneEditor = ({ storeId }) => {
 
 
 
-    const onMouseMove=(e, marker)=>{
+    const onMouseMove=(e, marker, isMarkerClicked)=>{
         // console.log('%c >onMouseMove custom', 'color:blue', {e, marker, options});
     }
 
@@ -131,6 +126,7 @@ const SceneEditor = ({ storeId }) => {
                     onMouseUp={onMouseUp}
                     onMouseMove={onMouseMove}
                     onDrop={onDrop}
+                    allowEventsForMarkerTypeOnly={selectedHotspotType}
                 />
         // </CollisionManager>
     );

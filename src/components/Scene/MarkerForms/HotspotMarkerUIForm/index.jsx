@@ -15,7 +15,7 @@ const HotspotMarkerUIForm = (props) => {
     const dispatch = useDispatch();
     const router = useRouter();
 
-    const record = Marker.data;
+    const record = Marker.userData;
     const id = record?._id;
     const selectedStoreId = router?.query?.id;
     const hotspotType = 'product';
@@ -73,7 +73,7 @@ const HotspotMarkerUIForm = (props) => {
             // ATTENTION: validation is force disabled for product hotspots to bypass SKU validation. In future, please make this a frontend toggle
             dispatch(updateHotspotAPI(id, selectedStoreId, currentSceneId, postData, false))
                 .then((res) => {
-                    Marker.setMarkerData(res);
+                    Marker.setUserData(res);
                     Modal.closeModal();
                 })
                 .catch((err) => {
@@ -84,7 +84,7 @@ const HotspotMarkerUIForm = (props) => {
             apiCreateHotspotByType(hotspotType, selectedStoreId, currentSceneId, postData, false)
                 .then((res) => {
                     record._id = res._id; //save value to prevent new record being removed from the scene
-                    Marker.setMarkerData(res); //store new record {} in marker.data prop
+                    Marker.setUserData(res); //store new record {} in marker.userData prop
                     Modal.closeModal();
                 })
                 .catch((err) => {

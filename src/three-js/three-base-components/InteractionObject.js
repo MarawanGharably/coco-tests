@@ -2,16 +2,24 @@ import * as THREE from 'three';
 import ThreeSceneObject from './ThreeSceneObject';
 import ThreeSceneObjectComponent from './ThreeSceneObjectComponent';
 import BoxCollider from './BoxCollider';
+import { v1 as uuid } from 'uuid';
+
 
 export default class InteractionObject extends ThreeSceneObject {
     constructor() {
         super();
-
+        this.uuid = uuid();
         this.sceneObject = new BoxCollider(1, 1, 1, this.onHover, this.onUnhover, this.onClick);
         this.sceneObject.setOwner(this);
-        this.UIDispatcher = null;
+
+        this.userData = null; //custom data provided by users
+
+
         // this.visualObject = null;
     }
+
+
+
 
     /**
      * Call all the onHover function on the components attached to this InteractableObject.
@@ -33,15 +41,78 @@ export default class InteractionObject extends ThreeSceneObject {
         });
     }
 
+
+    setUserData=(data)=>{
+        this.userData = data;
+    }
+
+
+
+
+
     /**
      * Call all the onClick function on the components attached to this InteractableObject.
      * Call when the collider attached to this InteractableObject is clicked.
      */
-    onClick = () => {
-        this.components.forEach((component) => {
-            if (component.onClick) component.onClick();
-        });
+    onClick = (e) => {
+        const {userData, scene} = this;
+
+        //Display UI
+        this.openUI(e);
     }
+
+    openUI=(e)=>{
+        //Display UI only if UI component associated with the marker
+        if(!this.UIConfig?.Component) return;
+
+        this.scene.setUI({
+            Component:this.UIConfig.Component,
+            style:this.UIConfig.style,
+            props:{
+                Modal:{
+                    closeModal: ()=>{
+                        this.scene.setUI(false);
+                    }
+                },
+                Marker:{
+                    uuid:this.uuid,
+                    userData:this.userData, //custom user data
+                    scale:this.sceneObject.scale, //currently sceneObject & visualObject keep same scale value
+                    renderOrder:this.sceneObject.renderOrder,
+                    setUserData:this.setUserData,
+                    getTransforms:this.getTransforms,
+                    removeFromScene:this.dispose,
+                    setScale:this.setScale,
+                    setRenderOrder:this.setRenderOrder,
+                }
+            }});
+
+
+        //Compute modal positioning
+        if(this.UIConfig.positionNextToTheElement){
+            const UIel = document.getElementById('canvasUI');
+            const UIBoundingBox =UIel.getBoundingClientRect();
+            const canvas = document.querySelector('#canvas-wrapper canvas');
+            const canvasBoundingBox = canvas.getBoundingClientRect();
+
+            let left = e.offsetX;
+            let top = e.offsetY;
+
+
+            if(left + UIBoundingBox.width > canvasBoundingBox.width){
+                left -= UIBoundingBox.width;
+            }
+
+            if(top + UIBoundingBox.height > canvasBoundingBox.height){
+                top -= UIBoundingBox.height;
+            }
+
+            UIel.style.left = `${left}px`;
+            UIel.style.top = `${top}px`;
+        }
+    }
+
+
 
     /**
      * Set the visiualObject attached to this InteractableObject.
@@ -67,11 +138,8 @@ export default class InteractionObject extends ThreeSceneObject {
     setPosition = (x, y, z) => {
         this.sceneObject.position.set(x, y, z);
 
-        if (this.isFlatBackground) {
-            this.sceneObject.position.x = -10;
-        } else {
-            this.sceneObject.position.clampLength(10, 10);
-        }
+        if (this.isFlatBackground) this.sceneObject.position.x = -10;
+        else this.sceneObject.position.clampLength(10, 10);
 
         this.visualObject.position.copy(this.sceneObject.position);
     }
@@ -96,6 +164,18 @@ export default class InteractionObject extends ThreeSceneObject {
             visualObject.quaternion,
             visualObject.scale,
         );
+    }
+
+    getTransforms = () => {
+        console.log('--getTransforms', this);
+        if(!this.sceneObject) {
+            console.error('sceneObject not assigned', this.sceneObject );
+            return false;
+        }
+
+        const colliderTransform = this.sceneObject.matrix;
+        const visualTransform = this.visualObject.matrix;
+        return { colliderTransform, visualTransform };
     }
 
     /**
@@ -123,49 +203,10 @@ export default class InteractionObject extends ThreeSceneObject {
     }
 
 
-    renderComponentImmediately = () => {
-        this.components.forEach((component) => {
-            component.onClick();
-        });
-    }
 
-    getTransforms = () => {
-        const colliderTransform = this.sceneObject.matrix;
-        const visualTransform = this.visualObject.matrix;
-        return { colliderTransform, visualTransform };
-    }
 
-    /**
-     * Remove this ThreeSceneObjectComponent from this InteractableObject
-     * @param {ThreeSceneObjectComponent} component - an ThreeSceneObjectComponent
-     */
-    removeComponent = (component) => {
-        if (!(component instanceof ThreeSceneObjectComponent)) {
-            console.error('Can\'t remove object of non ThreeSceneObjectComponent type from an InteractableObject!'); // eslint-disable-line no-console
-            return;
-        }
-        const index = this.components.indexOf(component);
-        if (index === -1) {
-            console.error(`Interactable Object has no ThreeSceneObjectComponent ${component}`); // eslint-disable-line no-console
-            return;
-        }
 
-        component.removeOwner();
-        this.components.splice(index, 1);
-        component.onDestroy();
-    }
 
-    setUIDispatcher = (dispatch) => {
-        this.UIDispatcher = dispatch;
-    }
-
-    getUIDispatcher = () => {
-        if (!this.UIDispatcher) {
-            console.error('UIDispatcher doesn\'t exist on this InteractableObject!'); // eslint-disable-line no-console
-            return null;
-        }
-        return this.UIDispatcher;
-    }
 
     setColliderDispatcher = (dispatch) => {
         this.colliderDispatcher = dispatch;

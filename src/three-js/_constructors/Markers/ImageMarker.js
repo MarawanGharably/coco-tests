@@ -1,37 +1,28 @@
 import * as THREE from 'three';
 import InteractionObject from '../../three-base-components/InteractionObject';
 import ModalConstructor from '../ModalConstructor';
-import { CollisionManagerActionEnums } from '../../_contextDataManagers/CollisionManager';
-import ThreeLoadingManager from '../../three-loading-manager/three-loading-manager';
+import { CollisionManagerActionEnums } from '../../_DataManagers/CollisionManager';
+import ThreeLoadingManager from '../../_DataManagers/three-loading-manager';
 import { formURL } from "../../../utils/urlHelper";
 
 
-//TODO: Marker constructor should not have any computation related the Scene!!!
-// this.scene - is a scene only constructor prop
 
 
-export default class ThreeProductImage extends InteractionObject {
-    constructor(componentToRender, renderProps) {
+
+export default class ImageMarker extends InteractionObject {
+    constructor({image, renderOrder, scale, userData, UIConfig}) {
         super();
 
-        // Parent Props
-        // this.sceneObject - parent prop;
-
-        //Local prop
-        // this.scene=null; //reference to the scene.  this.addToScene(sceneRef.current)
-        const modalComponent = new ModalConstructor(componentToRender, {
-            ...renderProps,
-            setScale: this.setScale,
-            setRenderOrder: this.setRenderOrder.bind(this),
-        }, this.dispose);
-        this.modalComponentRenderProps = renderProps;
+        this.sceneObject.name = 'marker';
+        this.hotspot_type = 'image_marker'; //type of marker
         this.isFlatBackground = false;
-        this.attachComponent(modalComponent);
-        this.initVisualObject();
-    }
+        this.scale = scale;
+        this.renderOrder = renderOrder;
+        this.userData = userData; //data keep any custom data provided by users
+        this.UIConfig = UIConfig; //could be used for modals
 
-    initVisualObject() {
-        const { image, renderOrder } = this.modalComponentRenderProps;
+
+        // init VisualObject
         this.setVisualObject(new THREE.Mesh(
             new THREE.PlaneGeometry(1, 1),
             new THREE.MeshBasicMaterial(),
@@ -40,10 +31,28 @@ export default class ThreeProductImage extends InteractionObject {
         this.setRenderOrder(renderOrder);
     }
 
+    setRenderOrder = (renderOrder)=> {
+        this.visualObject.renderOrder = renderOrder;
+        this.sceneObject.renderOrder = renderOrder;
+    }
+
+    setImage(image) {
+        const loader = new THREE.TextureLoader(ThreeLoadingManager);
+        const url = formURL(image.image)
+        loader.load(url, (texture) => {
+            const { image } = texture;
+            const width = image.width / image.height;
+            const height = 1;
+
+            if (this.visualObject) {
+                this.setNewGeometry(width, height, texture);
+            }
+        });
+    }
+
     addToScene = (scene) => {
         this.scene = scene;
         this.camera = scene.children.find((child) => child.type === 'PerspectiveCamera');
-        this.sceneObject.name = 'marker';
         this.isFlatBackground = this.scene.children.some((child) => child.name === 'flatBackground');
         scene.add(this.sceneObject);
         scene.add(this.visualObject);
@@ -88,16 +97,16 @@ export default class ThreeProductImage extends InteractionObject {
     removeFromManager() {
         const colliderDispatch = this.getColliderDispatcher();
 
-        //TODO: sceneObject often undefined
+        //TODO: sceneObject often undefined. Multiple state update calls produce broken scene
 
-        this.sceneObject?.uuid && colliderDispatch({
-            type: CollisionManagerActionEnums.REMOVE_COLLIDERS,
-            payload: this.sceneObject.uuid,
-        });
+        // this.sceneObject?.uuid && colliderDispatch({
+        //     type: CollisionManagerActionEnums.REMOVE_COLLIDERS,
+        //     payload: this.sceneObject.uuid,
+        // });
     }
 
     setNewGeometry(width, height, texture) {
-        const { scale } = this.modalComponentRenderProps;
+
         const geometry = new THREE.PlaneGeometry(width, height);
         const material = new THREE.MeshBasicMaterial({
             map: texture, transparent: true, depthTest: false,
@@ -107,27 +116,12 @@ export default class ThreeProductImage extends InteractionObject {
         this.visualObject.material = material;
 
         this.sceneObject.geometry = new THREE.BoxGeometry(width, height, 0.001);
-        this.setScale(scale);
+        this.setScale(this.scale);
     }
 
-    setImage(image) {
-        const loader = new THREE.TextureLoader(ThreeLoadingManager);
-        const url = formURL(image.image)
-        loader.load(url, (texture) => {
-            const { image } = texture;
-            const width = image.width / image.height;
-            const height = 1;
 
-            if (this.visualObject) {
-                this.setNewGeometry(width, height, texture);
-            }
-        });
-    }
 
-    setRenderOrder(renderOrder) {
-        this.visualObject.renderOrder = renderOrder;
-        this.sceneObject.renderOrder = renderOrder;
-    }
+
 
     dispose() {
         this.scene.remove(this.visualObject);

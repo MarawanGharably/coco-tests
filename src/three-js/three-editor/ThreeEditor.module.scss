@@ -9,4 +9,17 @@
     canvas{
         border-radius: 10px;
     }
+
+
+    //UI
+    .canvasUI{
+        display:none;
+        position: absolute;
+        background:#fff;
+        min-width: 5em;
+
+        &.active{ display: block; }
+    }
+
+
 }

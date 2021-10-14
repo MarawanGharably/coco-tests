@@ -1,11 +1,8 @@
 // import * as THREE from 'three';
 
-export const setupRenderer = (
-    renderer, canvasContainer, widthMultiplier = 1, heightMultiplier = 1,
-) => {
+export const setupRenderer = ( renderer, canvasContainer) => {
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(canvasContainer.offsetWidth * widthMultiplier,
-        canvasContainer.offsetHeight * heightMultiplier);
+    renderer.setSize(canvasContainer.offsetWidth,  canvasContainer.offsetHeight );
     renderer.setClearColor('black');
     canvasContainer.appendChild(renderer.domElement);
 };

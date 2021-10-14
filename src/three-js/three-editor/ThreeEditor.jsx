@@ -4,21 +4,17 @@ import * as THREE from 'three';
 import ThreeController from '../three-controls/ThreeController';
 import { setupRenderer, setupCamera } from './setupThreeEditor';
 import { threeEditorMouseEvents } from './threeEditorMouseEvents';
-import TaggingModal from '../../components/tagging-modal/TaggingModal';
 import LoadingScreen from '../../components/LoadingScreen';
-
-import { useCollisionManager, CollisionManagerActionEnums } from '../_contextDataManagers/CollisionManager';
-import { useUIManager, UIManagerEnums } from '../_contextDataManagers/UIManager';
-import ThreeLoadingManager from '../three-loading-manager/three-loading-manager';
-
+import { useCollisionManager, CollisionManagerActionEnums } from '../_DataManagers/CollisionManager';
+import ThreeLoadingManager from '../_DataManagers/three-loading-manager';
 import ThreeEditorReducer from '../../store/reducers/ThreeEditorReducer';
 import { setMaxRenderOrderAction, setSceneAction} from "../../store/actions/ThreeEditorActions";
-
-import {HotspotMarker} from '../_constructors/Markers';
-import {ProductObject, addProductImageOnDrop, renderProductImageMarker } from '../SceneEditor/utils/imageHotspotHelpers';
+import { renderProductImageMarker, renderProductMarker } from '../../components/Scene/SceneEditor/utils';
 
 import {RESET_DELETE_PRODUCT_ID} from "../../store/types/productLibrary";
 import styles from './ThreeEditor.module.scss';
+import {Background, ColliderSphere} from "../three-background";
+
 
 const initialState = {
     isLoading: false,
@@ -31,18 +27,20 @@ const ThreeState = createContext(initialState);
 
 
 export const ThreeEditor = (props) => {
-    const { sceneRef, sceneObjects, children } = props;
-    const { selectedFolder, products, mode, deleteProductId } = useSelector(state => state['productLibrary']);
+    const { sceneRef, sceneObjects, allowEventsForMarkerTypeOnly, children  } = props;
+    const { products, mode, deleteProductId } = useSelector(state => state['productLibrary']);
     const { currentSceneId } = useSelector(state => state['SceneEditor']);
     const reduxDispatch = useDispatch();
 
     const [threeReady, setThreeReady] = useState(false);
     const [state, dispatch] = useReducer(ThreeEditorReducer, initialState);
-
     const [colliderState, colliderDispatch] = useCollisionManager();
-    const [UIState, UIDispatch] = useUIManager();
+    const [UI, setUI] = useState();
 
 
+    sceneRef.current.setUI=setUI;
+
+    console.log('-sceneRef', sceneRef);
 
     // useRef used to prevent ThreeEditor from losing variable references.
     const canvasContainerRef = useRef();
@@ -52,15 +50,11 @@ export const ThreeEditor = (props) => {
     // const sceneRef = useRef(new THREE.Scene());
     const clock = new THREE.Clock();
 
-    const raycasterRef = useRef(new THREE.Raycaster());
-    const colliderRef = useRef(colliderState.colliders);
-
-    const mouseRef = useRef(new THREE.Vector2());
-    const mouseStartRef = useRef(new THREE.Vector2());
-
+     const colliderRef = useRef(colliderState.colliders);
     const renderer = rendererRef.current;
     const scene = sceneRef.current;
     ThreeLoadingManager.setOnLoad(dispatch);
+
 
 
 
@@ -70,27 +64,6 @@ export const ThreeEditor = (props) => {
 
         if (controllerUpdate) controllerUpdate();
     };
-
-
-    const renderProductMarker = (object={}) => {
-        const {collider_transform , transform } = object;
-        const renderProps={
-            type: object?.props?.hotspot_type,
-            id: object?.['_id'],
-            productSKU: object?.props?.product_sku,
-        }
-        const componentToRender = (props) => <TaggingModal {...props} />; // eslint-disable-line
-        const marker = new HotspotMarker(componentToRender, renderProps, collider_transform, transform);
-        marker.addToScene(sceneRef.current);
-        marker.setScale();
-        marker.setUIDispatcher(UIDispatch);
-        marker.setColliderDispatcher(colliderDispatch);
-
-        return marker;
-    };
-
-
-
 
 
     const setMaxRenderOrder = (renderOrder) => {
@@ -104,45 +77,38 @@ export const ThreeEditor = (props) => {
         dispatch(setSceneAction(scene));
 
         const canvasContainer = canvasContainerRef.current;
-        const widthMultiplier = 1;
-        const heightMultiplier = 1;
-        const width = canvasContainer.offsetWidth * widthMultiplier;
-        const height = canvasContainer.offsetHeight * heightMultiplier;
-
+        const width = canvasContainer.offsetWidth ;
+        const height = canvasContainer.offsetHeight;
         const aspectRatio = width / height;
+
         // set new reference for cameraRef.current here
         cameraRef.current = new THREE.PerspectiveCamera(70, aspectRatio, 0.1, 1000);
         controlsRef.current = ThreeController.setupControls(cameraRef.current, renderer);
 
-        const windowResizeHandler = () => {
-            const width = canvasContainer.offsetWidth * widthMultiplier;
-            const height = canvasContainer.offsetHeight * heightMultiplier;
-
-            cameraRef.current.aspect = width / height;
-            cameraRef.current.updateProjectionMatrix();
-            renderer.setSize(width, height);
-        };
-
-        setupRenderer(rendererRef.current, canvasContainer, widthMultiplier, heightMultiplier);
+        setupRenderer(rendererRef.current, canvasContainer);
         setupCamera(aspectRatio, cameraRef.current);
-
-        window.addEventListener('resize', windowResizeHandler);
 
         scene.add(cameraRef.current);
         clock.start();
         animate(controlsRef.current.update);
         setThreeReady(true);
-        return () => {
-            window.removeEventListener('resize', windowResizeHandler);
 
+
+
+        return () => {
             controlsRef.current.dispose();
             scene.dispose();
             renderer.dispose();
+            // renderer.forceContextLoss();//test
+            // forceContextLoss()
+            setUI(false); //Hide UI Modal
         };
     }, [currentSceneId]); // eslint-disable-line
 
 
     useEffect(() => {
+        const canvasContainer = canvasContainerRef.current;
+
         // mouse event listeners
         const {
             addThreeEditorMouseEventListeners,
@@ -150,23 +116,24 @@ export const ThreeEditor = (props) => {
         } = threeEditorMouseEvents(
             renderer,
             controlsRef,
-            mouseStartRef,
-            mouseRef,
             cameraRef,
-            raycasterRef,
             colliderRef,
+            canvasContainer,
             mode,
+            allowEventsForMarkerTypeOnly,
             props.onMouseDown,
             props.onMouseUp,
             props.onMouseMove
         );
 
+        if(UI?.Component) setUI(false); //Hide UI Modal
+
         addThreeEditorMouseEventListeners();
 
-        // Removes existing UIs
-        UIDispatch({type: UIManagerEnums.RESET_UIS });
 
-        return removeThreeEditorMouseEventListeners;
+        return ()=>{
+            removeThreeEditorMouseEventListeners();
+        };
     }, [currentSceneId, mode]); // eslint-disable-line
 
 
@@ -187,29 +154,15 @@ export const ThreeEditor = (props) => {
                     collider.owner.dispose();
                 }
             });
-
-            // Removes existing UIs
-            UIDispatch({ type: UIManagerEnums.RESET_UIS });
         };
 
+
         const renderMarker = (object) => {
-            // console.log('>renderMarker', <object data="" type=""></object>);
-
             if (object.props.hotspot_type === 'product_image') {
-
-                const productObj = new ProductObject({
-                    id:object._id,
-                    image:object?.props?.image,
-                    renderOrder:object.props.renderOrder,
-                    scale:object.props.scale,
-                    transform:object.transform,
-                    collider_transform:object.collider_transform,
-                });
-                // console.log('>render product image  ', productObj);
-                return renderProductImageMarker(productObj, sceneRef, UIDispatch, colliderDispatch, setMaxRenderOrder);
+                return renderProductImageMarker(object, sceneRef,  colliderDispatch, setMaxRenderOrder);
             }
 
-            return renderProductMarker( object );
+            return renderProductMarker( object, sceneRef,  colliderDispatch );
         };
 
         const setNewRoomObjectData = () => {
@@ -218,6 +171,7 @@ export const ThreeEditor = (props) => {
                     const marker = renderMarker(object);
 
                     if (!marker) return;
+                    //TODO: transform props should be set on marker init
                     marker.setTransform(object.collider_transform, object.transform);
                     colliderDispatch({
                         type: CollisionManagerActionEnums.SET_COLLIDERS,
@@ -230,6 +184,7 @@ export const ThreeEditor = (props) => {
         resetRoomObjects();
         setNewRoomObjectData();
     }, [currentSceneId, sceneObjects]); // eslint-disable-line
+    // }, [currentSceneId]); // eslint-disable-line
 
 
 
@@ -253,17 +208,30 @@ export const ThreeEditor = (props) => {
     }, [deleteProductId]);
 
 
+    // console.log('--ThreeEditor', {UI, scene});
+
     return (
         <div
             id="canvas-wrapper"
             className={styles['canvas-wrapper']}
             ref={canvasContainerRef}
             onDragOver={(e) => e.preventDefault()}
-            onDrop={e=>addProductImageOnDrop(e, cameraRef, selectedFolder.value, products, state.maxRenderOrder, colliderDispatch, UIDispatch, sceneRef, setMaxRenderOrder)}
+            onDrop={e=>props.onDrop(e, cameraRef, state.maxRenderOrder, colliderDispatch,   sceneRef, setMaxRenderOrder)}
         >
             <ThreeState.Provider value={{state, dispatch}}>
-                    {threeReady && children}
-                    {state.isLoading && <LoadingScreen />}
+
+                {threeReady && (<>
+                    <ColliderSphere />
+                    <Background />
+                </>)}
+
+                {state.isLoading && <LoadingScreen />}
+
+
+                <div id='canvasUI' className={`${styles['canvasUI']} ${UI ? styles['active']: ''}`} style={UI?.style} >
+                    {UI && <UI.Component {...UI?.props} sceneRef={sceneRef} />}
+                </div>
+
             </ThreeState.Provider>
         </div>
     );

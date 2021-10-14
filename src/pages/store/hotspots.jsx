@@ -4,16 +4,13 @@ import { useRouter } from 'next/router';
 import { Col, Row } from 'react-bootstrap';
 import StoreLayout from '../../components/layouts/StoreLayout';
 import LoadingScreen from '../../components/LoadingScreen';
-import HotspotEditor from '../../three-js/SceneEditor';
+import SceneEditor from '../../components/Scene/SceneEditor';
 import { ModeSelector, SceneNavigator } from '../../components/Scene';
 import ProductPlacementSidebar from '../../components/Scene/ProductPlacementSidebar';
 import { destroyProductLibraryData } from '../../store/actions/productLibraryActions';
 import {destroySceneData} from "../../store/actions/SceneEditorActions";
 import { getStoreFlags, getStoreScenes, getProductLibrary} from "../../APImethods";
-import {
-    UIManager,
-    CollisionManager
-} from "../../three-js/_contextDataManagers";
+import { CollisionManager} from "../../three-js/_DataManagers";
 import styles from '../../assets/scss/hotspotsPage.module.scss';
 
 
@@ -24,7 +21,7 @@ export default function HotspotsPage(props){
     }));
 
     const { isEnabled, mode_slug } = store.productLibrary;
-    const [isLoading, setLoading] = useState(false);
+    // const [isLoading, setLoading] = useState(false);
     const router = useRouter();
     const dispatch = useDispatch();
     const { id:storeId } = router.query;
@@ -45,6 +42,7 @@ export default function HotspotsPage(props){
 
 
     const fetchData = async () => {
+        // setLoading(true);
         try{
             const flagsReq = await dispatch(getStoreFlags(storeId, {updateStore:'productLibrary'}));
             const isEnabled = !!flagsReq['product_library_enabled'];
@@ -54,6 +52,8 @@ export default function HotspotsPage(props){
             dispatch(getStoreScenes(storeId, {updateStore:'productLibrary'}));
         }catch(err){
             console.error({err})
+        }finally {
+            // setLoading(false);
         }
     };
 
@@ -75,9 +75,7 @@ export default function HotspotsPage(props){
             <Row className={styles['sceneEditor']}>
                 <SceneNavigator sceneEditor={store.sceneEditorData} className={`${styles.sceneNavigator} ${showSideBar ? styles.withSideBar : ''}`} />
                 <CollisionManager>
-                    <UIManager>
-                        <HotspotEditor storeId={storeId} />
-                    </UIManager>
+                        <SceneEditor storeId={storeId} />
                 </CollisionManager>
 
                     {isEnabled && (<ProductPlacementSidebar
@@ -86,7 +84,7 @@ export default function HotspotsPage(props){
                     />)}
             </Row>
 
-            {isLoading && <LoadingScreen />}
+            {/*{isLoading && <LoadingScreen />}*/}
 
 
         </StoreLayout>

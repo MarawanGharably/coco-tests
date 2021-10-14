@@ -49,6 +49,10 @@ export const updateHotspotAPI =( hotspotId, storeId, sceneId, data, validate=tru
     //do not send image in request
     delete data.props.image;
 
+    //Format in correct data types
+    if(data.props.scale) data.props.scale = Number(data.props.scale);
+    if(data.props.renderOrder) data.props.renderOrder = Number(data.props.renderOrder);
+
     return axiosApi
         .put(`/stores/${storeId}/scenes/${sceneId}/hotspots/${hotspotId}?validate=${validate}`, data)
         .then((res) => res.data)

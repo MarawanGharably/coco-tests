@@ -8,10 +8,6 @@ import SVGSprite from './SVGSprite';
 export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
     constructor() {
         super();
-        this.setSVGString = this.setSVGString.bind(this);
-        this.setPrimaryColor = this.setPrimaryColor.bind(this);
-        this.setSecondaryColor = this.setSecondaryColor.bind(this);
-        this.setColor = this.setColor.bind(this);
 
         this.svgString = '';
         this.primaryColor = 'black';
@@ -26,7 +22,7 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
         this.svgSprite = new SVGSprite();
     }
 
-    setSVGString(svgString) {
+    setSVGString = (svgString) =>{
         this.svgString = svgString;
         this.svgSprite.setSVGString(svgString);
         this.setColor(this.primaryColor);
@@ -36,15 +32,15 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
         this.svgSprite.scale.set(scale, scale, scale);
     }
 
-    setPrimaryColor(color) {
+    setPrimaryColor = (color) => {
         this.primaryColor = color;
     }
 
-    setSecondaryColor(color) {
+    setSecondaryColor =(color) => {
         this.secondaryColor = color;
     }
 
-    setColor(color) {
+    setColor =(color) =>{
         if (!this.svgString) {
             console.error(`SVG string not set on SVGSpriteComponent: ${this}`); // eslint-disable-line no-console
             return;
@@ -68,16 +64,12 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
     }
 
     onHover() {
-        if (this.color === this.secondaryColor) {
-            return;
-        }
+        if (this.color === this.secondaryColor) return;
         this.setColor(this.secondaryColor);
     }
 
     onUnhover() {
-        if (this.color === this.primaryColor) {
-            return;
-        }
+        if (this.color === this.primaryColor) return;
         this.setColor(this.primaryColor);
     }
 
@@ -101,9 +93,8 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
             console.error('Can\'t remove a SVGSpriteComponent that is not attached to an Interactable Object'); // eslint-disable-line no-console
             return;
         }
-        if (this.owner.scene) {
-            this.owner.scene.remove(this.owner.visualObject);
-        }
+        if (this.owner.scene) this.owner.scene.remove(this.owner.visualObject);
+
         this.owner.setVisualObject(null);
         super.removeOwner();
     }

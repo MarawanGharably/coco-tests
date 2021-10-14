@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ThreeFlatBackground from './ThreeFlatBackground';
 import { useThree } from '../three-editor/ThreeEditor';
 import { useCollisionManager, CollisionManagerActionEnums } from '../_DataManagers/CollisionManager';
+import  {formatDate} from "../../utils";
 
 const FlatBackground = ({ backgroundUrl }) => {
     const [state] = useThree();
@@ -33,7 +34,7 @@ const FlatBackground = ({ backgroundUrl }) => {
 
     useEffect(() => {
         if (backgroundUrl) {
-            flatBackground.current.loadTexture(backgroundUrl);
+            flatBackground.current.loadTexture(`${backgroundUrl}?v=${formatDate(new Date(), "mmddyyyyhh")}`);
         }
     }, [backgroundUrl]);
 

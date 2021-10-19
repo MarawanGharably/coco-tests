@@ -135,7 +135,7 @@ export default class InteractionObject extends ThreeSceneObject {
     //     this.visualObject.position = positionVector;
     //     this.BoxCollider.position = positionVector;
     // }
-    setPosition = (x, y, z) => {
+    setPosition(x, y, z){
         this.sceneObject.position.set(x, y, z);
 
         if (this.isFlatBackground) this.sceneObject.position.x = -10;
@@ -149,20 +149,35 @@ export default class InteractionObject extends ThreeSceneObject {
      * Set the transform of the visualObject attached to this InteractableObject.
      * @param {Array} transformArray - 4x4 matrix transform of the visualObject
      */
-    setTransform = (transformArray) => {
-        if (!this.visualObject) {
-            console.error('Can\'t set transform on an interactable object without a visual object!'); // eslint-disable-line no-console
-            return;
-        }
+    // setTransform = (transformArray) => {
+    //     if (!this.visualObject) {
+    //         console.error('Can\'t set transform on an interactable object without a visual object!'); // eslint-disable-line no-console
+    //         return;
+    //     }
+    //
+    //     const { visualObject } = this;
+    //     const matrix4x4 = new THREE.Matrix4();
+    //     matrix4x4.fromArray(transformArray);
+    //     visualObject.matrix = matrix4x4;
+    //     visualObject.matrix.decompose(
+    //         visualObject.position,
+    //         visualObject.quaternion,
+    //         visualObject.scale,
+    //     );
+    // }
 
-        const { visualObject } = this;
-        const matrix4x4 = new THREE.Matrix4();
-        matrix4x4.fromArray(transformArray);
-        visualObject.matrix = matrix4x4;
-        visualObject.matrix.decompose(
-            visualObject.position,
-            visualObject.quaternion,
-            visualObject.scale,
+    setTransform (colliderTransform, visualTransform) {
+        const colliderMatrix = new THREE.Matrix4();
+        colliderMatrix.fromArray(colliderTransform);
+
+        const visualMatrix = new THREE.Matrix4();
+        visualMatrix.fromArray(visualTransform);
+
+        this.sceneObject.setTransform(colliderMatrix);
+
+        this.visualObject.matrix = visualMatrix;
+        this.visualObject.matrix.decompose(
+            this.visualObject.position, this.visualObject.quaternion, this.visualObject.scale,
         );
     }
 

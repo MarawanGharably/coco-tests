@@ -4,13 +4,8 @@ import dynamic from 'next/dynamic';
 import { useSelector, useDispatch } from 'react-redux';
 import { useCollisionManager} from '../../../three-js/_DataManagers';
 import { apiGetHotspotsByType } from '../../../APImethods';
+import {dragReleaseProductHotspotAutoSave, createProductMarkerOnEvent, addImageHotspotOnDrop} from "./utils";
 
-import {
-    dragReleaseProductHotspotAutoSave,
-    createProductMarker,
-    addProductImageOnDrop, addNewProductMarker
-} from "./utils";
-import {PRODUCT_PLACEMENT, PRODUCT_TAGGING} from "../ModeSelector/modeOptions";
 
 
 
@@ -28,8 +23,8 @@ const ThreeEditor = dynamic(
  * @returns {JSX.Element}
  */
 const SceneEditor = ({ storeId }) => {
-    const { currentSceneId } = useSelector((state) => state['SceneEditor']);
-    const { mode, mode_slug, products, selectedFolder } = useSelector(state => state['productLibrary']);
+    const { currentSceneId, sceneData:sceneEditorRecords } = useSelector((state) => state['SceneEditor']);
+    const { mode_slug, products, selectedFolder } = useSelector(state => state['productLibrary']);
 
     //updating sceneObjects will force the whole Scene rerender with flickering
     const [sceneObjects, setSceneObjects] = useState([]);
@@ -94,11 +89,16 @@ const SceneEditor = ({ storeId }) => {
         }
         else if(!isDragEvent ){
             //Open UI
-            if(marker) marker.onClick(e);
+            //TODO: in some cases when marker was removed from the scene, the scene still has the object!!!
+            //TODO: check for marker?.owner?.sceneObject presence
+            if(marker && !marker?.owner?.sceneObject) console.error('Prop sceneObject not found', marker );
+
+
+            if(marker && marker?.owner?.sceneObject) marker.onClick(e);
 
             //Create marker & record, then Open UI
             else{
-                if (mode === PRODUCT_TAGGING) addNewProductMarker(e, intersects, sceneRef, colliderDispatch);
+                if (mode_slug === 'product_tagging') createProductMarkerOnEvent(e, intersects, sceneRef, colliderDispatch);
             }
         }
     }
@@ -113,21 +113,26 @@ const SceneEditor = ({ storeId }) => {
 
 
     const onDrop=(e, cameraRef, maxRenderOrder, colliderDispatch,   sceneRef, setMaxRenderOrder)=>{
-        addProductImageOnDrop(e, storeId, currentSceneId, cameraRef, selectedFolder.value, products, maxRenderOrder, colliderDispatch,   sceneRef, setMaxRenderOrder);
+        addImageHotspotOnDrop(e, storeId, currentSceneId, cameraRef, selectedFolder.value, products, maxRenderOrder, colliderDispatch,   sceneRef, setMaxRenderOrder);
     }
 
     return (
         // <CollisionManager>
-                <ThreeEditor
-                    storeId={storeId}
-                    sceneRef={sceneRef}
-                    sceneObjects={sceneObjects}
-                    onMouseDown={onMouseDown}
-                    onMouseUp={onMouseUp}
-                    onMouseMove={onMouseMove}
-                    onDrop={onDrop}
-                    allowEventsForMarkerTypeOnly={selectedHotspotType}
-                />
+        <>
+        {/*{currentSceneId && sceneObjects?.length>0 && (<ThreeEditor*/}
+         <ThreeEditor
+            currentSceneId={currentSceneId}
+            sceneEditorRecords={sceneEditorRecords}
+            storeId={storeId}
+            sceneRef={sceneRef}
+            sceneObjects={sceneObjects}
+            onMouseDown={onMouseDown}
+            onMouseUp={onMouseUp}
+            onMouseMove={onMouseMove}
+            onDrop={onDrop}
+            allowEventsForMarkerTypeOnly={selectedHotspotType}
+        />
+        </>
         // </CollisionManager>
     );
 };

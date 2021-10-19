@@ -9,7 +9,7 @@ import { useCollisionManager, CollisionManagerActionEnums } from '../_DataManage
 import ThreeLoadingManager from '../_DataManagers/three-loading-manager';
 import ThreeEditorReducer from '../../store/reducers/ThreeEditorReducer';
 import { setMaxRenderOrderAction, setSceneAction} from "../../store/actions/ThreeEditorActions";
-import { renderProductImageMarker, renderProductMarker } from '../../components/Scene/SceneEditor/utils';
+import { renderImageHotspotRecord, renderProductHotspotRecord } from '../../components/Scene/SceneEditor/utils';
 
 import {RESET_DELETE_PRODUCT_ID} from "../../store/types/productLibrary";
 import styles from './ThreeEditor.module.scss';
@@ -27,9 +27,9 @@ const ThreeState = createContext(initialState);
 
 
 export const ThreeEditor = (props) => {
-    const { sceneRef, sceneObjects, allowEventsForMarkerTypeOnly, children  } = props;
+    const { currentSceneId, sceneRef, sceneObjects, sceneEditorRecords, allowEventsForMarkerTypeOnly, children  } = props;
     const { products, mode, deleteProductId } = useSelector(state => state['productLibrary']);
-    const { currentSceneId } = useSelector(state => state['SceneEditor']);
+
     const reduxDispatch = useDispatch();
 
     const [threeReady, setThreeReady] = useState(false);
@@ -40,7 +40,6 @@ export const ThreeEditor = (props) => {
 
     sceneRef.current.setUI=setUI;
 
-    console.log('-sceneRef', sceneRef);
 
     // useRef used to prevent ThreeEditor from losing variable references.
     const canvasContainerRef = useRef();
@@ -50,9 +49,12 @@ export const ThreeEditor = (props) => {
     // const sceneRef = useRef(new THREE.Scene());
     const clock = new THREE.Clock();
 
-     const colliderRef = useRef(colliderState.colliders);
+    const colliderRef = useRef(colliderState.colliders);
     const renderer = rendererRef.current;
     const scene = sceneRef.current;
+
+
+
     ThreeLoadingManager.setOnLoad(dispatch);
 
 
@@ -121,20 +123,23 @@ export const ThreeEditor = (props) => {
             canvasContainer,
             mode,
             allowEventsForMarkerTypeOnly,
+            UI,
+            setUI,
             props.onMouseDown,
             props.onMouseUp,
             props.onMouseMove
         );
 
-        if(UI?.Component) setUI(false); //Hide UI Modal
+
 
         addThreeEditorMouseEventListeners();
 
 
         return ()=>{
             removeThreeEditorMouseEventListeners();
+            if(UI?.Component) setUI(false); //Hide UI Modal
         };
-    }, [currentSceneId, mode]); // eslint-disable-line
+    }, [currentSceneId, mode, UI]); // eslint-disable-line
 
 
 
@@ -159,10 +164,10 @@ export const ThreeEditor = (props) => {
 
         const renderMarker = (object) => {
             if (object.props.hotspot_type === 'product_image') {
-                return renderProductImageMarker(object, sceneRef,  colliderDispatch, setMaxRenderOrder);
+                return renderImageHotspotRecord(object, sceneRef,  colliderDispatch, setMaxRenderOrder);
             }
 
-            return renderProductMarker( object, sceneRef,  colliderDispatch );
+            return renderProductHotspotRecord( object, sceneRef,  colliderDispatch );
         };
 
         const setNewRoomObjectData = () => {
@@ -171,8 +176,7 @@ export const ThreeEditor = (props) => {
                     const marker = renderMarker(object);
 
                     if (!marker) return;
-                    //TODO: transform props should be set on marker init
-                    marker.setTransform(object.collider_transform, object.transform);
+
                     colliderDispatch({
                         type: CollisionManagerActionEnums.SET_COLLIDERS,
                         payload: marker.sceneObject,
@@ -221,8 +225,8 @@ export const ThreeEditor = (props) => {
             <ThreeState.Provider value={{state, dispatch}}>
 
                 {threeReady && (<>
-                    <ColliderSphere />
-                    <Background />
+                    <ColliderSphere/>
+                    <Background sceneRef={sceneRef} currentSceneId={currentSceneId} sceneEditorRecords={sceneEditorRecords}/>
                 </>)}
 
                 {state.isLoading && <LoadingScreen />}

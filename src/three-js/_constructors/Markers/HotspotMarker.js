@@ -18,20 +18,24 @@ export default class HotspotMarker extends InteractionObject {
         const svgUrl = 'https://cdn.obsess-vr.com/product-hotspot-icon-circle.svg';
         this.fetchSVGStringAsync(svgUrl);
 
+        
+
         this.svgSpriteComponent = null;
         this.isFlatBackground = false;
     }
 
 
 
+
      fetchSVGStringAsync= (url) =>{
-         fetch(url)
+        return fetch(url)
             .then((response) => {
                 if (response.status === 200) return response.text();
                 throw new Error('svg load error!');
             })
             .then((svgString) => {
                 this.svgSpriteComponent.setSVGString(svgString);
+                return svgString;
             })
             .catch((error) => Promise.reject(error));
     }
@@ -47,22 +51,16 @@ export default class HotspotMarker extends InteractionObject {
 
 
     setTransform = (colliderTransform, visualTransform) => {
-        const colliderMatrix = new THREE.Matrix4();
-        colliderMatrix.fromArray(colliderTransform);
-
-        const visualMatrix = new THREE.Matrix4();
-        visualMatrix.fromArray(visualTransform);
-
-        this.sceneObject.setTransform(colliderMatrix);
-
-        this.visualObject.matrix = visualMatrix;
-        this.visualObject.matrix.decompose(
-            this.visualObject.position, this.visualObject.quaternion, this.visualObject.scale,
-        );
+        // console.log('--setTransform', {this:this});
+        super.setTransform(colliderTransform, visualTransform);
 
         const { x, y, z } = this.sceneObject.position;
         this.setPosition(x, y, z);
     }
+
+    // setPosition=(x, y, z)=>{
+    //     super.setPosition(x, y, z);
+    // }
 
     setScale = (scale = 0.45) => {
         this.sceneObject.scale.x = scale;

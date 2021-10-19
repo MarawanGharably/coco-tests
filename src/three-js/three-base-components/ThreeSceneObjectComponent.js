@@ -6,10 +6,6 @@
  */
 export default class ThreeSceneObjectComponent {
     constructor() {
-        this.start = this.start.bind(this);
-        this.onHover = this.onHover.bind(this);
-        this.onUnhover = this.onUnhover.bind(this);
-        this.onClick = this.onClick.bind(this);
         this.setOwner = this.setOwner.bind(this);
         this.removeOwner = this.removeOwner.bind(this);
         this.onDestroy = this.onDestroy.bind(this);
@@ -18,7 +14,7 @@ export default class ThreeSceneObjectComponent {
     }
 
     /** Called when the owner interactable object is added to scene. */
-    start() {} // eslint-disable-line
+    start = () => {}; // eslint-disable-line
 
     /** Called when the owner component before component is destroyed
      * (removed from scene, owner destroyed)
@@ -26,13 +22,13 @@ export default class ThreeSceneObjectComponent {
     onDestroy() {} // eslint-disable-line
 
     /** Called when the owner InteractableObject is hovered */
-    onHover() {} // eslint-disable-line
+    onHover = () => {}; // eslint-disable-line
 
     /** Called when the owner InteractableObject is unhovered */
-    onUnhover() {} // eslint-disable-line
+    onUnhover = () => {}; // eslint-disable-line
 
     /** Called when the owner InteractableObject is clicked */
-    onClick() {} // eslint-disable-line
+    onClick = () => {}; // eslint-disable-line
 
     /**
      * Set the owner InteractableObject of this ThreeSceneObjectComponent

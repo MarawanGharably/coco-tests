@@ -10,7 +10,7 @@ import { formURL } from "../../../utils/urlHelper";
 
 
 export default class ImageMarker extends InteractionObject {
-    constructor({image, renderOrder, scale, userData, UIConfig}) {
+    constructor({image, renderOrder, scale, collider_transform, transform, userData, UIConfig}) {
         super();
 
         this.sceneObject.name = 'marker';
@@ -29,6 +29,10 @@ export default class ImageMarker extends InteractionObject {
         ));
         this.setImage(image);
         this.setRenderOrder(renderOrder);
+
+        //Set transforms
+        if(collider_transform && transform) this.setTransform(collider_transform, transform);
+
     }
 
     setRenderOrder = (renderOrder)=> {
@@ -36,6 +40,7 @@ export default class ImageMarker extends InteractionObject {
         this.sceneObject.renderOrder = renderOrder;
     }
 
+    //TODO: Should accept url {string}
     setImage(image) {
         const loader = new THREE.TextureLoader(ThreeLoadingManager);
         const url = formURL(image.image)
@@ -59,18 +64,7 @@ export default class ImageMarker extends InteractionObject {
     }
 
     setTransform = (colliderTransform, visualTransform) => {
-        const colliderMatrix = new THREE.Matrix4();
-        colliderMatrix.fromArray(colliderTransform);
-
-        const visualMatrix = new THREE.Matrix4();
-        visualMatrix.fromArray(visualTransform);
-
-        this.sceneObject.setTransform(colliderMatrix);
-
-        this.visualObject.matrix = visualMatrix;
-        this.visualObject.matrix.decompose(
-            this.visualObject.position, this.visualObject.quaternion, this.visualObject.scale,
-        );
+        super.setTransform(colliderTransform, visualTransform);
     }
 
     setScale = (scale = 1) => {
@@ -84,6 +78,7 @@ export default class ImageMarker extends InteractionObject {
     }
 
     setPosition = (x, y, z) => {
+        //super.setPosition(x, y, z);
         this.sceneObject.position.set(x, y, z);
 
         if (!this.isFlatBackground) {
@@ -99,14 +94,13 @@ export default class ImageMarker extends InteractionObject {
 
         //TODO: sceneObject often undefined. Multiple state update calls produce broken scene
 
-        // this.sceneObject?.uuid && colliderDispatch({
-        //     type: CollisionManagerActionEnums.REMOVE_COLLIDERS,
-        //     payload: this.sceneObject.uuid,
-        // });
+        this.sceneObject?.uuid && colliderDispatch({
+            type: CollisionManagerActionEnums.REMOVE_COLLIDERS,
+            payload: this.sceneObject.uuid,
+        });
     }
 
     setNewGeometry(width, height, texture) {
-
         const geometry = new THREE.PlaneGeometry(width, height);
         const material = new THREE.MeshBasicMaterial({
             map: texture, transparent: true, depthTest: false,
@@ -125,6 +119,7 @@ export default class ImageMarker extends InteractionObject {
 
     dispose() {
         this.scene.remove(this.visualObject);
+        this.scene.remove(this.sceneObject);
         super.dispose();
 
         this.setVisualObject(null);

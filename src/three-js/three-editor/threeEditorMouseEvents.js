@@ -17,6 +17,8 @@ export const threeEditorMouseEvents = (
     canvasContainer,
     mode,
     allowEventsForMarkerTypeOnly,
+    UI,
+    setUI,
     onMouseDownCallback,
     onMouseUpCallback,
     onMouseMoveCallback
@@ -82,7 +84,9 @@ export const threeEditorMouseEvents = (
             controlsRef.current.enabled = false; //eslint-disable-line
             focusedObject = marker.object;
             const { point } = marker;
-            inverseMatrix.copy(focusedObject.parent.matrixWorld).getInverse(inverseMatrix);
+            //TODO: what it does?
+            if(!focusedObject?.parent) console.error('Prop Not Found');
+            if(focusedObject?.parent) inverseMatrix.copy(focusedObject.parent.matrixWorld).getInverse(inverseMatrix);
             offset.copy(point).sub(worldPosition.setFromMatrixPosition(focusedObject.matrixWorld));
         }
 
@@ -187,9 +191,7 @@ export const threeEditorMouseEvents = (
         cameraRef.current.updateProjectionMatrix();
         renderer.setSize(width, height);
 
-        const elem = document.getElementById('canvasUI');
-        elem.style.top =0;
-        elem.style.display ='none';
+        if(UI) setUI(false); //destroy UI
     };
 
 

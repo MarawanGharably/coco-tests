@@ -82,7 +82,7 @@ export const getStoreScenes = (storeId, options) =>dispatch=> {
     return axiosApi
         .get(`/stores/${storeId}/scenes`, conf)
         .then((res) => {
-            if(options?.updateStore === 'productLibrary'){
+            if(options?.updateStore === 'productLibrary' && res.data[0]){
                 dispatch(setSceneData(res.data));
                 dispatch(setCurrentSceneID(res.data[0]._id.$oid));
             }

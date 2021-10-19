@@ -3,8 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { useRouter } from 'next/router';
 import { Button } from 'react-bootstrap';
-import PropTypes from 'prop-types';
-
 import { deleteHotspotAPI, updateHotspotAPI } from '../../../../APImethods';
 import { RangeInputSet, NumberSelector } from '../../../ReduxForms/_formFields';
 import styles from './ImageMarkerUIForm.module.scss';
@@ -12,16 +10,16 @@ import styles from './ImageMarkerUIForm.module.scss';
 const HOTSPOT_TYPE = 'product_image';
 
 const ImageMarkerUIForm = (props) => {
-    const { Marker, Modal, handleSubmit, initialize, image } = props;
+    const { Marker, Modal, handleSubmit, initialize } = props;
     const formData = useSelector((state) => state['form']['ImageMarkerUIForm']) || {};
     const { currentSceneId } = useSelector((state) => state['SceneEditor']);
     const formValues = formData['values'] || {};
-    console.log('--ImageMarkerUIForm', { props });
 
     const dispatch = useDispatch();
     const router = useRouter();
     const storeId = router.query?.id;
-    const record = Marker.userData;
+    const { userData } = Marker;
+    const record = userData?._id ? userData : false;
     const id = record?._id;
 
     //Initialize Form Values in Redux State
@@ -30,13 +28,14 @@ const ImageMarkerUIForm = (props) => {
             scale: Marker?.scale.x || 3,
             renderOrder: Marker?.renderOrder || 1,
         });
-    }, [id]);
+    }, [Marker.uuid]);
 
     //Update Scale
     useEffect(() => {
         const isChanged = formData.initial?.scale !== formValues.scale;
         //prevent execution on init
-        if (isChanged) {
+        //do not allow empty val to be submitted
+        if (isChanged && formValues.scale >= 0.5) {
             console.log('%c __ Scale UPDATE run', 'color:blue', { formData, formValues });
             Marker.setScale(formValues.scale);
             onSubmit();
@@ -67,9 +66,8 @@ const ImageMarkerUIForm = (props) => {
 
     const onSubmit = (values = formValues) => {
         if (!record?._id || !props.initialized) return;
-        console.log('%c__onSubmit__', 'color:red', { values, record, Marker });
-
         const { colliderTransform, visualTransform } = Marker.getTransforms();
+
         const postData = {
             type: 'HotspotMarker',
             scene: currentSceneId,
@@ -85,9 +83,10 @@ const ImageMarkerUIForm = (props) => {
         };
 
         dispatch(updateHotspotAPI(record._id, storeId, currentSceneId, postData))
-            .then(res=>{
+            .then((res) => {
                 Marker.setUserData(res);
-            }).catch((err) => {
+            })
+            .catch((err) => {
                 console.error(err);
             });
     };
@@ -98,14 +97,24 @@ const ImageMarkerUIForm = (props) => {
             <Field name="scale" label="Size:" min={0.5} max={10} step={0.01} component={RangeInputSet} />
 
             <div className={styles['actions']}>
-                <Button variant="primary" onClick={(e) => Modal.closeModal()}>Close</Button>
-                <Button variant="danger" onClick={handleDelete}>Delete</Button>
+                <Button variant="primary" onClick={(e) => Modal.closeModal()}>
+                    Close
+                </Button>
+                <Button variant="danger" onClick={handleDelete}>
+                    Delete
+                </Button>
             </div>
         </form>
     );
 };
 
 // ImageMarkerUIForm.propTypes = {};
+// const validate=(values)=>{
+//     console.log('--validate', values);
+//     const errors = {};
+//     if (!values.scale || values.scale ==='' ) errors.scale = 'scale cannot be empty';
+//     return errors;
+// }
 
 export default reduxForm({
     form: 'ImageMarkerUIForm',

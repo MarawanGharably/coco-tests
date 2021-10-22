@@ -3,34 +3,39 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { Col, Row } from 'react-bootstrap';
 import StoreLayout from '../../components/layouts/StoreLayout';
-import LoadingScreen from '../../components/LoadingScreen';
 import SceneEditor from '../../components/Scene/SceneEditor';
 import { ModeSelector, SceneNavigator } from '../../components/Scene';
 import ProductPlacementSidebar from '../../components/Scene/ProductPlacementSidebar';
 import { destroyProductLibraryData } from '../../store/actions/productLibraryActions';
 import {destroySceneData} from "../../store/actions/SceneEditorActions";
-import { getStoreFlags, getStoreScenes, getProductLibrary} from "../../APImethods";
-import { CollisionManager} from "../../three-js/_DataManagers";
+import {getStoreFlags, getStoreScenes, getProductLibrary, apiGetHotspotsByType} from "../../APImethods";
 import styles from '../../assets/scss/hotspotsPage.module.scss';
 
 
-export default function HotspotsPage(props){
-    const store = useSelector(state =>({
-        sceneEditorData: state['SceneEditor'],
-        productLibrary:state['productLibrary']
-    }));
+export default function HotspotsPage(){
+    const sceneEditor = useSelector(state =>state['SceneEditor']);
+    const { currentSceneId } = sceneEditor;
 
-    const { isEnabled, mode_slug } = store.productLibrary;
-    // const [isLoading, setLoading] = useState(false);
+    const productLibrary = useSelector(state =>state['productLibrary']);
+    const { isEnabled, mode_slug, deleteProductId } = productLibrary;
+
+    const [sceneObjects, setSceneObjects] = useState([]);
     const router = useRouter();
     const dispatch = useDispatch();
     const { id:storeId } = router.query;
 
     const showSideBar = isEnabled && mode_slug === 'product_placement';
 
+    //Image Removed, delete associated colliders (scene objects)
+    useEffect(() => {
+        const newData = sceneObjects.filter(item=>item.props?.image?._id !== deleteProductId);
+        setSceneObjects(newData);
+    }, [deleteProductId]);
+
 
     useEffect(() => {
-        if (storeId) fetchData();
+        if(!storeId) return;
+        else fetchData();
 
         return function cleanup(){
             //remove all data loaded for the current store when exiting
@@ -39,7 +44,30 @@ export default function HotspotsPage(props){
         }
     }, [storeId]);
 
+    useEffect(() => {
+        const fetchSceneHotspots = async (hotspotTypes = []) => {
+            if (!currentSceneId || currentSceneId.length < 5) return;
+            setSceneObjects([]);
 
+            const getRoomObjectData = async () => {
+                if (Array.isArray(hotspotTypes)) {
+                    const promises = hotspotTypes.map((hotspotType) => apiGetHotspotsByType(hotspotType, storeId, currentSceneId));
+                    return Promise.all(promises);
+                }
+
+                return apiGetHotspotsByType(hotspotTypes, storeId, currentSceneId);
+            };
+
+            const response = await getRoomObjectData();
+
+            const formatted = response.flat().filter((object) => typeof object !== 'string');
+            console.log('%c> records', 'color:blue', formatted);
+            setSceneObjects(formatted);
+        };
+
+        //#1. Fetch Scene Hotspots
+        fetchSceneHotspots(['product', 'product_image']);
+    }, [currentSceneId]);
 
     const fetchData = async () => {
         // setLoading(true);
@@ -73,19 +101,23 @@ export default function HotspotsPage(props){
             </Row>
 
             <Row className={styles['sceneEditor']}>
-                <SceneNavigator sceneEditor={store.sceneEditorData} className={`${styles.sceneNavigator} ${showSideBar ? styles.withSideBar : ''}`} />
-                <CollisionManager>
-                        <SceneEditor storeId={storeId} />
-                </CollisionManager>
+                <SceneNavigator
+                    sceneEditor={sceneEditor}
+                    className={`${styles.sceneNavigator} ${showSideBar ? styles.withSideBar : ''}`}
+                />
+
+                {storeId && (<SceneEditor
+                    storeId={storeId}
+                    sceneObjects={sceneObjects}
+                    sceneEditorData={sceneEditor}
+                    productLibrary={productLibrary}
+                />)}
 
                     {isEnabled && (<ProductPlacementSidebar
                         visible={showSideBar}
-                        productLibrary={store.productLibrary}
+                        productLibrary={productLibrary}
                     />)}
             </Row>
-
-            {/*{isLoading && <LoadingScreen />}*/}
-
 
         </StoreLayout>
     );

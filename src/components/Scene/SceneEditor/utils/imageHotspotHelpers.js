@@ -1,19 +1,22 @@
+import React from 'react';
 import * as THREE from 'three';
-import { CollisionManagerActionEnums } from '../../../../three-js/_DataManagers/CollisionManager';
 import ImageMarkerUIForm from '../../MarkerForms/ImageMarkerUIForm';
 import { ImageMarker } from '../../../../three-js/_constructors/Markers';
-import React from 'react';
 import { apiCreateHotspotByType } from '../../../../APImethods';
 
-//renderImageMarkerRecord
-export const renderImageHotspotRecord = (dbRecord, sceneRef, colliderDispatch, setMaxRenderOrder) => {
+
+const sleep =(ms)=> new Promise((res, rej)=>setTimeout(()=>res(), ms));
+
+
+export const renderImageHotspotRecord = (object, sceneRef, setMaxRenderOrder) => {
+    // console.log('-render: image HP', object);
     const marker = new ImageMarker({
-        image: dbRecord?.props?.image,
-        renderOrder: dbRecord.props.renderOrder,
-        scale: dbRecord.props?.scale,
-        collider_transform:dbRecord.collider_transform,
-        transform:dbRecord.transform,
-        userData: dbRecord,
+        image: object.image,
+        renderOrder: object.renderOrder,
+        scale: object.scale,
+        collider_transform: object.collider_transform,
+        transform: object.transform,
+        userData: object.userData,
         UIConfig:{
             Component:ImageMarkerUIForm,
             style:{left:'0', top:'3em', background:'none'}
@@ -21,18 +24,17 @@ export const renderImageHotspotRecord = (dbRecord, sceneRef, colliderDispatch, s
     });
 
     marker.addToScene(sceneRef.current);
-    marker.setColliderDispatcher(colliderDispatch);
-    if (dbRecord.props.renderOrder) setMaxRenderOrder(dbRecord.props.renderOrder);
+
+    if (object.renderOrder) setMaxRenderOrder(object.renderOrder);
 
     return marker;
 };
 
 
-const sleep =(ms)=> new Promise((res, rej)=>setTimeout(()=>res(), ms));
 
 
-export const addImageHotspotOnDrop = async (e, storeId, currentSceneId, cameraRef, folderId, products, maxRenderOrder, colliderDispatch, sceneRef, setMaxRenderOrder) => {
 
+export const addImageHotspotOnDrop = async (e, storeId, currentSceneId, cameraRef, folderId, products, maxRenderOrder, scene, setMaxRenderOrder) => {
     e.preventDefault();
     const imageId = e.dataTransfer.getData('id');
     const image = products[folderId].find((item) => item._id === imageId);
@@ -54,7 +56,7 @@ export const addImageHotspotOnDrop = async (e, storeId, currentSceneId, cameraRe
     });
 
     //2. Render Marker
-    marker.addToScene(sceneRef.current);
+    marker.addToScene(scene);
 
     //3. Set Position to in front of camera
     const pos = new THREE.Vector3(0, 0, -10);
@@ -62,18 +64,10 @@ export const addImageHotspotOnDrop = async (e, storeId, currentSceneId, cameraRe
     marker.setPosition(pos.x, pos.y, pos.z);
     marker.lookAt();
     marker.setUserData({imageId});
-    marker.setColliderDispatcher(colliderDispatch);
 
     //4. Get Transform data
     const transforms = marker.getTransforms();
     await sleep(1000); //Important!!! Do not delete sleep method from here!!!!!
-
-
-    //5. Add Colliders
-    colliderDispatch({
-        type: CollisionManagerActionEnums.SET_COLLIDERS,
-        payload: marker.sceneObject,
-    });
 
 
     //6. Create Hotspot record

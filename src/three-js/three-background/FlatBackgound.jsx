@@ -1,32 +1,17 @@
 import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import ThreeFlatBackground from './ThreeFlatBackground';
-import { useThree } from '../three-editor/ThreeEditor';
-import { useCollisionManager, CollisionManagerActionEnums } from '../_DataManagers/CollisionManager';
 import  {formatDate} from "../../utils";
 
-const FlatBackground = ({ backgroundUrl }) => {
-    const [state] = useThree();
-    const [, colliderDispatch] = useCollisionManager();
+const FlatBackground = ({ scene, backgroundUrl }) => {
     const flatBackground = useRef();
 
     useEffect(() => {
         flatBackground.current = new ThreeFlatBackground();
-
-        colliderDispatch({
-            type: CollisionManagerActionEnums.SET_COLLIDERS,
-            payload: flatBackground.current.sceneObject,
-        });
-
-        flatBackground.current.addToScene(state.scene);
+        if(scene) flatBackground.current.addToScene(scene);
         window.addEventListener('resize', flatBackground.current.setPanArea);
 
         return () => {
-            colliderDispatch({
-                type: CollisionManagerActionEnums.REMOVE_COLLIDERS,
-                payload: flatBackground.current.sceneObject.uuid,
-            });
-
             flatBackground.current.dispose();
             window.removeEventListener('resize', flatBackground.current.setPanArea);
         };

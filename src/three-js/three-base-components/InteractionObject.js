@@ -11,11 +11,9 @@ export default class InteractionObject extends ThreeSceneObject {
         this.uuid = uuid();
         this.sceneObject = new BoxCollider(1, 1, 1, this.onHover, this.onUnhover, this.onClick);
         this.sceneObject.setOwner(this);
-
+        this.visualObject = null;
         this.userData = null; //custom data provided by users
 
-
-        // this.visualObject = null;
     }
 
 
@@ -129,6 +127,7 @@ export default class InteractionObject extends ThreeSceneObject {
             return;
         }
         this.visualObject = visualObject;
+        this.visualObject.name = 'visualObject';
     }
 
     // setPosition = (positionVector) => {
@@ -182,7 +181,6 @@ export default class InteractionObject extends ThreeSceneObject {
     }
 
     getTransforms = () => {
-        console.log('--getTransforms', this);
         if(!this.sceneObject) {
             console.error('sceneObject not assigned', this.sceneObject );
             return false;
@@ -220,18 +218,4 @@ export default class InteractionObject extends ThreeSceneObject {
 
 
 
-
-
-
-    setColliderDispatcher = (dispatch) => {
-        this.colliderDispatcher = dispatch;
-    }
-
-    getColliderDispatcher = () => {
-        if (!this.colliderDispatcher) {
-            console.error('colliderDispatcher doesn\'t exist on this InteractableObject!'); // eslint-disable-line no-console
-            return null;
-        }
-        return this.colliderDispatcher;
-    }
 }

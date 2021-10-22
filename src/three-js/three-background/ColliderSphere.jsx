@@ -1,23 +1,12 @@
 import { useEffect, useRef } from 'react';
-import { useThree } from '../three-editor/ThreeEditor';
-import { useCollisionManager, CollisionManagerActionEnums } from '../_DataManagers/CollisionManager';
 import ThreeColliderSphere from './ThreeColliderSphere';
 
-const ColliderSphere = () => {
-    const [state] = useThree();
-    const [, colliderDispatch] = useCollisionManager();
-
+const ColliderSphere = ({scene}) => {
     const sphere = useRef();
 
     useEffect(() => {
         sphere.current = new ThreeColliderSphere();
-
-        colliderDispatch({
-            type: CollisionManagerActionEnums.SET_COLLIDERS,
-            payload: sphere.current.sceneObject,
-        });
-
-        sphere.current.addToScene(state.scene);
+        sphere.current.addToScene(scene);
 
         return () => {
             sphere.current.removeFromScene();

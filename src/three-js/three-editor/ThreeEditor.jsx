@@ -1,85 +1,62 @@
-import React, { useState, useEffect, useRef, createContext, useReducer, useContext} from 'react';
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import * as THREE from 'three';
 import ThreeController from '../three-controls/ThreeController';
 import { setupRenderer, setupCamera } from './setupThreeEditor';
 import { threeEditorMouseEvents } from './threeEditorMouseEvents';
-import LoadingScreen from '../../components/LoadingScreen';
-import { useCollisionManager, CollisionManagerActionEnums } from '../_DataManagers/CollisionManager';
-import ThreeLoadingManager from '../_DataManagers/three-loading-manager';
-import ThreeEditorReducer from '../../store/reducers/ThreeEditorReducer';
-import { setMaxRenderOrderAction, setSceneAction} from "../../store/actions/ThreeEditorActions";
 import { renderImageHotspotRecord, renderProductHotspotRecord } from '../../components/Scene/SceneEditor/utils';
-
-import {RESET_DELETE_PRODUCT_ID} from "../../store/types/productLibrary";
 import styles from './ThreeEditor.module.scss';
-import {Background, ColliderSphere} from "../three-background";
+import { Background, ColliderSphere } from '../three-background';
 
 
-const initialState = {
-    isLoading: false,
-    scene: null,
-    maxRenderOrder: 1,
-};
-
-const ThreeState = createContext(initialState);
+//TODO: remove mode
 
 
-
-export const ThreeEditor = (props) => {
-    const { currentSceneId, sceneRef, sceneObjects, sceneEditorRecords, allowEventsForMarkerTypeOnly, children  } = props;
-    const { products, mode, deleteProductId } = useSelector(state => state['productLibrary']);
-
-    const reduxDispatch = useDispatch();
-
+  const ThreeEditor = (props) => {
+    const { sceneId, sceneData, mode, allowEventsForMarkerTypeOnly, children } = props;
     const [threeReady, setThreeReady] = useState(false);
-    const [state, dispatch] = useReducer(ThreeEditorReducer, initialState);
-    const [colliderState, colliderDispatch] = useCollisionManager();
+    const [maxRenderOrder, setMaxRenderOrderAction] = useState(1);
     const [UI, setUI] = useState();
 
+    //Scene
+    const sceneRef = useRef(new THREE.Scene());
+    const scene = sceneRef.current;
 
-    sceneRef.current.setUI=setUI;
+    //Renderer
+    const rendererRef = useRef(new THREE.WebGLRenderer());
+    let renderer = rendererRef.current;
+
+    // Stringify children keys to prevent re-rendering
+    const childrenIds = children.map( child => child.key).filter(v => v !== null).join("__");
+
+
+
 
 
     // useRef used to prevent ThreeEditor from losing variable references.
     const canvasContainerRef = useRef();
-    const rendererRef = useRef(new THREE.WebGLRenderer());
     const cameraRef = useRef();
     const controlsRef = useRef();
-    // const sceneRef = useRef(new THREE.Scene());
     const clock = new THREE.Clock();
-
-    const colliderRef = useRef(colliderState.colliders);
-    const renderer = rendererRef.current;
-    const scene = sceneRef.current;
-
-
-
-    ThreeLoadingManager.setOnLoad(dispatch);
-
-
-
-
-    const animate = (controllerUpdate) => {
-        requestAnimationFrame(() => animate(controllerUpdate));
-        renderer.render(scene, cameraRef.current);
-
-        if (controllerUpdate) controllerUpdate();
-    };
-
+    sceneRef.current.setUI = setUI;
 
     const setMaxRenderOrder = (renderOrder) => {
-        if (renderOrder >= state.maxRenderOrder) {
-            dispatch(setMaxRenderOrderAction(renderOrder + 1));
-        }
+        if (renderOrder >= maxRenderOrder) setMaxRenderOrderAction(renderOrder + 1);
     };
 
 
-    useEffect(() => {
-        dispatch(setSceneAction(scene));
+      const animate = (controllerUpdate) => {
+          requestAnimationFrame(() => animate(controllerUpdate));
+          renderer.render(scene, cameraRef.current);
 
+          if (controllerUpdate) controllerUpdate();
+      };
+
+
+
+    //Scene INIT
+    useEffect(() => {
         const canvasContainer = canvasContainerRef.current;
-        const width = canvasContainer.offsetWidth ;
+        const width = canvasContainer.offsetWidth;
         const height = canvasContainer.offsetHeight;
         const aspectRatio = width / height;
 
@@ -95,124 +72,128 @@ export const ThreeEditor = (props) => {
         animate(controlsRef.current.update);
         setThreeReady(true);
 
-
-
         return () => {
             controlsRef.current.dispose();
             scene.dispose();
             renderer.dispose();
             // renderer.forceContextLoss();//test
             // forceContextLoss()
-            setUI(false); //Hide UI Modal
+            //cameraRef.current.dispose();
+
+            setUI(false); //Hide UI Modal when scene changed
         };
-    }, [currentSceneId]); // eslint-disable-line
+    }, [sceneId]);
 
 
+    //Events
     useEffect(() => {
         const canvasContainer = canvasContainerRef.current;
 
         // mouse event listeners
-        const {
-            addThreeEditorMouseEventListeners,
-            removeThreeEditorMouseEventListeners,
-        } = threeEditorMouseEvents(
+        const { addThreeEditorMouseEventListeners, removeThreeEditorMouseEventListeners } = threeEditorMouseEvents(
+            sceneRef,
             renderer,
             controlsRef,
             cameraRef,
-            colliderRef,
             canvasContainer,
             mode,
             allowEventsForMarkerTypeOnly,
-            UI,
-            setUI,
             props.onMouseDown,
             props.onMouseUp,
             props.onMouseMove
         );
 
-
-
         addThreeEditorMouseEventListeners();
 
-
-        return ()=>{
+        return () => {
             removeThreeEditorMouseEventListeners();
-            if(UI?.Component) setUI(false); //Hide UI Modal
+
         };
-    }, [currentSceneId, mode, UI]); // eslint-disable-line
+    // }, [sceneId, mode, scene, renderer, controlsRef]); // eslint-disable-line
+    }, [sceneRef, cameraRef, mode]); // eslint-disable-line
+   
 
 
+      //windowResizer placed separately because it requires to track and call UI & setUI
+      //while at same time we DO NOT WANT to remount all events each time when UI changed
+      //reminder: UI changed on each on scene click
+      useEffect(()=>{
+          const canvasContainer = canvasContainerRef.current;
 
+          const windowResizeHandler = () => {
+              const width = canvasContainer.offsetWidth;
+              const height = canvasContainer.offsetHeight;
+
+              cameraRef.current.aspect = width / height;
+              cameraRef.current.updateProjectionMatrix();
+              renderer.setSize(width, height);
+
+              if(UI) setUI(false); //destroy UI
+          };
+          window.addEventListener('resize', windowResizeHandler);
+
+          return()=>{
+              window.removeEventListener('resize', windowResizeHandler);
+          }
+      },[sceneId, UI])
+
+    //Scene Children
     useEffect(() => {
-        colliderRef.current = colliderState.colliders;
-    }, [colliderState]);
+        console.log('%c- INIT Scene children', 'color:green', { children, sChildren:scene.children, sceneRef });
+        const removeSceneHotspots=()=>{
+            let total = 0;
+            let idx = 0;
+            while (scene.children.some((item) => ['visualObject', 'marker'].includes(item.name))) {
+                // console.log('-loop start',  );
+                const collider = scene.children[idx];
+                if (['visualObject', 'marker'].includes(collider.name)) {
+                    if (collider.dispose) collider.dispose();
+                    // collider.owner.dispose();
+                    sceneRef.current.remove(scene.children[idx]);
+                    total ++;
+                } else {
+                    // console.log('-loop continue', {sChildren:scene.children});
+                    idx++;
+                }
+            }
+            console.log(`__TOTAL removed:${total}`, {sCHildr: JSON.parse(JSON.stringify(scene.children))});
+        }
 
-    //Render Scene objects
-    useEffect(() => {
-        const resetRoomObjects = () => {
-            colliderRef.current.forEach((collider) => {
-                if (collider.name === 'marker') {
-                    colliderDispatch({
-                        type: CollisionManagerActionEnums.REMOVE_COLLIDERS,
-                        payload: collider.uuid,
-                    });
-                    collider.owner.dispose();
+        const loadSceneObjects =()=>{
+            let total = 0;
+            children?.forEach((item) => {
+                // console.log('-item', item.props);
+                const { type, hotspot_type } = item.props;
+
+                if (type == 'hotspot' && hotspot_type == 'hotspot') {
+                    const object = item.props;
+                    renderProductHotspotRecord(object, sceneRef);
+                    total++;
+                } else if (type == 'hotspot' && hotspot_type == 'image_hotspot') {
+                    const object = item.props;
+                    renderImageHotspotRecord(object, sceneRef, setMaxRenderOrder);
+                    total++;
                 }
             });
-        };
-
-
-        const renderMarker = (object) => {
-            if (object.props.hotspot_type === 'product_image') {
-                return renderImageHotspotRecord(object, sceneRef,  colliderDispatch, setMaxRenderOrder);
-            }
-
-            return renderProductHotspotRecord( object, sceneRef,  colliderDispatch );
-        };
-
-        const setNewRoomObjectData = () => {
-            if (sceneObjects && products) {
-                sceneObjects.forEach((object) => {
-                    const marker = renderMarker(object);
-
-                    if (!marker) return;
-
-                    colliderDispatch({
-                        type: CollisionManagerActionEnums.SET_COLLIDERS,
-                        payload: marker.sceneObject,
-                    });
-                });
-            }
-        };
-
-        resetRoomObjects();
-        setNewRoomObjectData();
-    }, [currentSceneId, sceneObjects]); // eslint-disable-line
-    // }, [currentSceneId]); // eslint-disable-line
-
-
-
-    // Product Image removed? Delete associated hotspots
-    useEffect(() => {
-        if(deleteProductId && deleteProductId.length>5 && typeof deleteProductId === 'string' ){
-            const imageHotspots = colliderRef.current.filter(collider=> (collider.name =='marker' && collider.owner.modalComponentRenderProps.type ==='product_image'));
-            const hotspotsToDelete = imageHotspots.filter(collider=>collider.owner.modalComponentRenderProps.image._id == deleteProductId );
-
-            hotspotsToDelete.forEach((collider) => {
-                colliderDispatch({
-                    type: CollisionManagerActionEnums.REMOVE_COLLIDERS,
-                    payload: collider.uuid,
-                });
-                collider.owner.dispose();
-            });
-
-            //Dont forget to cleanup deleteProductId value
-            reduxDispatch({type:RESET_DELETE_PRODUCT_ID});
+            console.log('__TOTAL loaded:', total);
         }
-    }, [deleteProductId]);
 
 
-    // console.log('--ThreeEditor', {UI, scene});
+        removeSceneHotspots();//Remove Scene colliders/objects ( markers elements)
+        loadSceneObjects(); //Load New Scene Objects
+
+
+        return () => {
+            console.log('%c- INIT Children __cleanup', 'color:red', { children, scene:sceneRef.current });
+        };
+    // }, [ sceneId, children]);
+    }, [ childrenIds]);
+      //string of children keys used to prevent re-rendering,
+      // Dont forget to always use unique component key
+
+
+
+
 
     return (
         <div
@@ -220,28 +201,25 @@ export const ThreeEditor = (props) => {
             className={styles['canvas-wrapper']}
             ref={canvasContainerRef}
             onDragOver={(e) => e.preventDefault()}
-            onDrop={e=>props.onDrop(e, cameraRef, state.maxRenderOrder, colliderDispatch,   sceneRef, setMaxRenderOrder)}
+            onDrop={(e) => props.onDrop(e, cameraRef, maxRenderOrder, scene, setMaxRenderOrder)}
         >
-            <ThreeState.Provider value={{state, dispatch}}>
-
-                {threeReady && (<>
-                    <ColliderSphere/>
-                    <Background sceneRef={sceneRef} currentSceneId={currentSceneId} sceneEditorRecords={sceneEditorRecords}/>
+            {threeReady && (<>
+                    <ColliderSphere scene={scene} />
+                    <Background sceneData={sceneData} scene={scene} />
                 </>)}
 
-                {state.isLoading && <LoadingScreen />}
-
-
-                <div id='canvasUI' className={`${styles['canvasUI']} ${UI ? styles['active']: ''}`} style={UI?.style} >
-                    {UI && <UI.Component {...UI?.props} sceneRef={sceneRef} />}
-                </div>
-
-            </ThreeState.Provider>
+            <div id="canvasUI" className={`${styles['canvasUI']} ${UI ? styles['active'] : ''}`} style={UI?.style}>
+                {UI && <UI.Component {...UI?.props} sceneRef={sceneRef} />}
+            </div>
         </div>
     );
 };
 
-export const useThree = () => {
-    const {state, dispatch} = useContext(ThreeState);
-    return [state, dispatch];
-};
+
+
+export default ThreeEditor;
+
+// export default React.memo(ThreeEditor, (prev, next) => {
+//     if(prev.mode === next.mode) return true;
+//     return prev.children.length === next.children.length;
+// });

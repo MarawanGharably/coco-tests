@@ -15,5 +15,6 @@ export default class ThreeColliderSphere extends ThreeSceneObject {
             geometry,
             material,
         );
+        this.sceneObject.name='colliderSphere';
     }
 }

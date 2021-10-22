@@ -1,7 +1,5 @@
 import * as THREE from 'three';
 import InteractionObject from '../../three-base-components/InteractionObject';
-import ModalConstructor from '../ModalConstructor';
-import { CollisionManagerActionEnums } from '../../_DataManagers/CollisionManager';
 import ThreeLoadingManager from '../../_DataManagers/three-loading-manager';
 import { formURL } from "../../../utils/urlHelper";
 
@@ -42,6 +40,9 @@ export default class ImageMarker extends InteractionObject {
 
     //TODO: Should accept url {string}
     setImage(image) {
+        // console.log('-setImage', image);
+        if(!image) return;
+        //TODO: remove ThreeLoadingManager
         const loader = new THREE.TextureLoader(ThreeLoadingManager);
         const url = formURL(image.image)
         loader.load(url, (texture) => {
@@ -89,16 +90,7 @@ export default class ImageMarker extends InteractionObject {
         this.visualObject.position.copy(this.sceneObject.position);
     };
 
-    removeFromManager() {
-        const colliderDispatch = this.getColliderDispatcher();
 
-        //TODO: sceneObject often undefined. Multiple state update calls produce broken scene
-
-        this.sceneObject?.uuid && colliderDispatch({
-            type: CollisionManagerActionEnums.REMOVE_COLLIDERS,
-            payload: this.sceneObject.uuid,
-        });
-    }
 
     setNewGeometry(width, height, texture) {
         const geometry = new THREE.PlaneGeometry(width, height);

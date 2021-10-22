@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import debounce from 'lodash.debounce';
@@ -15,33 +15,41 @@ const HotspotMarkerUIForm = (props) => {
     const dispatch = useDispatch();
     const router = useRouter();
 
-    const record = Marker.userData;
-    const id = record?._id;
     const selectedStoreId = router?.query?.id;
     const hotspotType = 'product';
 
-    //Init values
+    //Hotspot record
+    let record = Marker.userData;
+    const _ID = useRef(); //reference for record id
+
+    //Init Marker values
     useEffect(() => {
+        _ID.current = record?._id; //Important! set value here
         initialize({
             product_sku: record?.props?.product_sku || '',
         });
-
-        return () => {
-            removeMarkerIfNotSaved();
-        };
     }, [Marker.uuid]);
 
+    //Unmount. Unsaved marker/record cleanup
+    useEffect(() => () => removeMarkerIfNotSaved(), [_ID, Marker.uuid]);
+
     const removeMarkerIfNotSaved = () => {
-        if (!record._id) Marker.removeFromScene();
+        const id = _ID.current;
+        if (!id) {
+            console.log('%c -remove ', 'color:orange', { id });
+            Marker.removeFromScene();
+        }
     };
 
     const handleDelete = debounce(async () => {
-        if (!id) {
+        const recordID = record?._id;
+
+        if (!recordID) {
             Modal.closeModal();
             return;
         }
 
-        deleteHotspotAPI(id, selectedStoreId, currentSceneId)
+        deleteHotspotAPI(recordID, selectedStoreId, currentSceneId)
             .then((res) => {
                 Marker.removeFromScene(); // old dispose(); //delete marker
                 Modal.closeModal();
@@ -52,6 +60,8 @@ const HotspotMarkerUIForm = (props) => {
     }, 200);
 
     const onSubmit = async (values) => {
+        const recordID = record?._id;
+        // console.log('TM:onSubmit', recordID );
         const transforms = Marker.getTransforms();
         const { colliderTransform, visualTransform } = transforms;
 
@@ -67,11 +77,10 @@ const HotspotMarkerUIForm = (props) => {
             },
         };
 
-        if (id) {
-            console.log('TM:updateHotspotAPI');
-
+        //Update
+        if (recordID) {
             // ATTENTION: validation is force disabled for product hotspots to bypass SKU validation. In future, please make this a frontend toggle
-            dispatch(updateHotspotAPI(id, selectedStoreId, currentSceneId, postData, false))
+            dispatch(updateHotspotAPI(recordID, selectedStoreId, currentSceneId, postData, false))
                 .then((res) => {
                     Marker.setUserData(res);
                     Modal.closeModal();
@@ -79,11 +88,15 @@ const HotspotMarkerUIForm = (props) => {
                 .catch((err) => {
                     console.error(err);
                 });
-        } else {
+        }
+
+        //Create
+        else {
             // ATTENTION! validation is disabled, when extending should be instead made a frontend toggle only for product hotspots
             apiCreateHotspotByType(hotspotType, selectedStoreId, currentSceneId, postData, false)
-                .then((res) => {
-                    record._id = res._id; //save value to prevent new record being removed from the scene
+                .then(async (res) => {
+                    _ID.current = res._id; //save value to prevent new record being removed from the scene
+
                     Marker.setUserData(res); //store new record {} in marker.userData prop
                     Modal.closeModal();
                 })

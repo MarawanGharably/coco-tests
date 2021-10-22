@@ -1,19 +1,10 @@
-import React, {useEffect, useRef, useState} from 'react';
-import * as THREE from "three";
-import dynamic from 'next/dynamic';
-import { useSelector, useDispatch } from 'react-redux';
-import { useCollisionManager} from '../../../three-js/_DataManagers';
-import { apiGetHotspotsByType } from '../../../APImethods';
-import {dragReleaseProductHotspotAutoSave, createProductMarkerOnEvent, addImageHotspotOnDrop} from "./utils";
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import {dragReleaseHotspotAutoSave, createProductMarkerOnEvent, addImageHotspotOnDrop} from "./utils";
+import ThreeEditor, { Hotspot } from '../../../three-js';
 
 
 
-
-
-const ThreeEditor = dynamic(
-    () => import('../../../three-js/three-editor/ThreeEditor').then((mod) => mod.ThreeEditor),
-    { ssr: false }
-);
 
 /**
  * SceneEditor - is a wrapper for ThreeJS Scene
@@ -22,14 +13,9 @@ const ThreeEditor = dynamic(
  * @param storeId
  * @returns {JSX.Element}
  */
-const SceneEditor = ({ storeId }) => {
-    const { currentSceneId, sceneData:sceneEditorRecords } = useSelector((state) => state['SceneEditor']);
-    const { mode_slug, products, selectedFolder } = useSelector(state => state['productLibrary']);
-
-    //updating sceneObjects will force the whole Scene rerender with flickering
-    const [sceneObjects, setSceneObjects] = useState([]);
-    const [colliderState, colliderDispatch] = useCollisionManager();
-    const sceneRef = useRef(new THREE.Scene());
+const SceneEditor =  ({ storeId, sceneObjects, sceneEditorData, productLibrary }) => {
+    const { currentSceneId, sceneData:sceneEditorRecords } = sceneEditorData;
+    const { mode, mode_slug, products, selectedFolder } = productLibrary;
     const reduxDispatch = useDispatch();
 
 
@@ -39,36 +25,6 @@ const SceneEditor = ({ storeId }) => {
     }
     const selectedHotspotType = HOTSPOT_TYPES_BY_MODE[mode_slug];
 
-    // console.log('>SceneEditor--', {sceneRef});
-
-    const fetchSceneHotspots = async (hotspotTypes = []) => {
-        if (!currentSceneId || currentSceneId.length < 5) return;
-
-        setSceneObjects([]);
-
-        const getRoomObjectData = async () => {
-            if (Array.isArray(hotspotTypes)) {
-                const promises = hotspotTypes.map((hotspotType) => apiGetHotspotsByType(hotspotType, storeId, currentSceneId));
-
-                return Promise.all(promises);
-            }
-
-            return apiGetHotspotsByType(hotspotTypes, storeId, currentSceneId);
-        };
-
-        const response = await getRoomObjectData();
-
-        const formatted = response.flat().filter((object) => typeof object !== 'string');
-        console.log('%c> records', 'color:blue', formatted);
-        setSceneObjects(formatted);
-    };
-
-    useEffect(() => {
-        //#1. Fetch Scene Hotspots
-        fetchSceneHotspots(['product', 'product_image']);
-    }, [currentSceneId]);
-
-
 
     const onMouseDown=(e, marker)=>{
         console.log('%c >onMouseDown custom', 'color:blue', {e, marker});
@@ -77,28 +33,26 @@ const SceneEditor = ({ storeId }) => {
 
 
 
-    const onMouseUp=(e, marker, intersects, options)=>{
+    const onMouseUp=(e, marker, scene, intersects, options)=>{
         const {isDragEvent} = options;
         console.log('%c >onMouseUp custom', 'color:blue', {marker, intersects, options });
 
 
 
-
         if (isDragEvent && marker ) {
-            dragReleaseProductHotspotAutoSave(marker, currentSceneId, storeId, reduxDispatch);
+            dragReleaseHotspotAutoSave(marker, currentSceneId, storeId, reduxDispatch);
         }
         else if(!isDragEvent ){
             //Open UI
-            //TODO: in some cases when marker was removed from the scene, the scene still has the object!!!
             //TODO: check for marker?.owner?.sceneObject presence
-            if(marker && !marker?.owner?.sceneObject) console.error('Prop sceneObject not found', marker );
+            if(marker && !marker?.owner?.sceneObject) console.error('Prop sceneObject not found - marker.owner.sceneObject', marker );
 
 
             if(marker && marker?.owner?.sceneObject) marker.onClick(e);
 
             //Create marker & record, then Open UI
             else{
-                if (mode_slug === 'product_tagging') createProductMarkerOnEvent(e, intersects, sceneRef, colliderDispatch);
+                if (mode_slug === 'product_tagging') createProductMarkerOnEvent(e, intersects, scene);
             }
         }
     }
@@ -112,29 +66,53 @@ const SceneEditor = ({ storeId }) => {
     }
 
 
-    const onDrop=(e, cameraRef, maxRenderOrder, colliderDispatch,   sceneRef, setMaxRenderOrder)=>{
-        addImageHotspotOnDrop(e, storeId, currentSceneId, cameraRef, selectedFolder.value, products, maxRenderOrder, colliderDispatch,   sceneRef, setMaxRenderOrder);
+    const onDrop=(e, cameraRef, maxRenderOrder,  scene, setMaxRenderOrder)=>{
+        addImageHotspotOnDrop(e, storeId, currentSceneId, cameraRef, selectedFolder.value, products, maxRenderOrder,  scene, setMaxRenderOrder);
     }
 
-    return (
-        // <CollisionManager>
-        <>
-        {/*{currentSceneId && sceneObjects?.length>0 && (<ThreeEditor*/}
-         <ThreeEditor
-            currentSceneId={currentSceneId}
-            sceneEditorRecords={sceneEditorRecords}
-            storeId={storeId}
-            sceneRef={sceneRef}
-            sceneObjects={sceneObjects}
-            onMouseDown={onMouseDown}
-            onMouseUp={onMouseUp}
-            onMouseMove={onMouseMove}
-            onDrop={onDrop}
-            allowEventsForMarkerTypeOnly={selectedHotspotType}
-        />
-        </>
-        // </CollisionManager>
-    );
-};
+    const sceneData = sceneEditorRecords.find(scene=>scene._id.$oid === currentSceneId);
+
+
+    return (<>
+            {currentSceneId && (<ThreeEditor
+                sceneId={currentSceneId}
+                storeId={storeId}
+                sceneData={sceneData}
+                mode={mode}
+                allowEventsForMarkerTypeOnly={selectedHotspotType}
+                onMouseDown={onMouseDown}
+                onMouseUp={onMouseUp}
+                onMouseMove={onMouseMove}
+                onDrop={onDrop}
+            >
+                {sceneObjects.map((item)=>{
+                    const hotspot_type = item.props.hotspot_type;
+
+                    // Always use unique keys!!!
+                    if(hotspot_type === 'product_image') {
+                        return <Hotspot
+                            key={item._id}
+                            hotspot_type='image_hotspot'
+                            collider_transform={item.collider_transform}
+                            transform={item.transform}
+                            scale={item.props.scale}
+                            renderOrder={item.props.renderOrder}
+                            image={item.props?.image}
+                            userData={item}
+                        />
+                    }
+                    else{
+                        return (<Hotspot
+                             key={item._id}
+                             hotspot_type='hotspot'
+                             collider_transform={item.collider_transform}
+                             transform={item.transform}
+                             userData={item} />)
+                    }
+                })}
+            </ThreeEditor>)}
+        </>);
+}
+
 
 export default SceneEditor;

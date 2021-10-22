@@ -20,6 +20,7 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
         this.rotationX = 0;
 
         this.svgSprite = new SVGSprite();
+        this.dispose = this.dispose.bind(this);
     }
 
     setSVGString = (svgString) =>{

@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import InteractionObject from '../../three-base-components/InteractionObject';
 import SVGSpriteComponent from '../../three-svg/SVGSpriteComponent';
-// import ModalConstructor from '../ModalConstructor';
-import { CollisionManagerActionEnums } from '../../_DataManagers/CollisionManager';
+
+
 
 
 export default class HotspotMarker extends InteractionObject {
@@ -46,6 +46,7 @@ export default class HotspotMarker extends InteractionObject {
 
         this.isFlatBackground = this.scene.children.some((child) => child.name === 'flatBackground');
         this.svgSpriteComponent = new SVGSpriteComponent(this.visualTransform);
+        this.svgSpriteComponent.name='sprite';
         this.attachComponent(this.svgSpriteComponent);
     }
 
@@ -68,12 +69,15 @@ export default class HotspotMarker extends InteractionObject {
         this.sceneObject.scale.z = scale;
     }
 
-    removeFromManager() {
-        const colliderDispatch = this.getColliderDispatcher();
 
-        colliderDispatch({
-            type: CollisionManagerActionEnums.REMOVE_COLLIDERS,
-            payload: this.sceneObject.uuid,
-        });
-    }
+
+    // dispose() {
+    //     this.scene.remove(this.visualObject);
+    //     this.scene.remove(this.sceneObject);
+    //     this.scene.remove(this.svgSpriteComponent);
+    //     super.dispose();
+    //
+    //     this.setVisualObject(null);
+    //     this.sceneObject = null;
+    // }
 }

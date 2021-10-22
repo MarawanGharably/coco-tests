@@ -2,11 +2,11 @@ import React from "react";
 import {updateHotspotAPI} from "../../../../APImethods";
 import HotspotMarkerUIForm from "../../MarkerForms/HotspotMarkerUIForm";
 import {HotspotMarker} from "../../../../three-js/_constructors/Markers";
-import {CollisionManagerActionEnums} from "../../../../three-js/_DataManagers/CollisionManager";
 
 
-const _createMarker=(userData={} )=>{
-   // console.log('--_createMarker', {userData} );
+
+const _createMarker=(opt={})=>{
+    const {userData} = opt;
     return new HotspotMarker({
         userData:userData,
         // collider_transform,
@@ -19,40 +19,40 @@ const _createMarker=(userData={} )=>{
     });
 }
 
-const _renderMarker=(marker, scene, colliderDispatch)=>{
+const _renderMarker=(marker, scene)=>{
     marker.addToScene(scene);
     marker.setScale();
-    marker.setColliderDispatcher(colliderDispatch);
 
     return marker;
 }
 
 
-export const dragReleaseProductHotspotAutoSave = async (object, currentSceneId, storeId, reduxDispatch) => {
+export const dragReleaseHotspotAutoSave = async (object, currentSceneId, storeId, reduxDispatch) => {
     if (!object) return;
 
     const marker = object.owner;
-    console.log('__dragReleaseProductHotspotAutoSave',{marker});
-
     const { colliderTransform, visualTransform } = marker.getTransforms();
-    const {_id, props:{hotspot_type, product_sku, scale, renderOrder } } = marker.userData;
-
-    const postData = {
-        type: 'HotspotMarker',
-        scene: currentSceneId,
-        collider_transform: colliderTransform.elements,
-        transform: visualTransform.elements,
-        props: {
-            hotspot_type,
-            ...(product_sku ? {product_sku} : {}),
-            ...(scale ? {scale} : {}),
-            ...(renderOrder ? { renderOrder} : {}),
-        },
-    };
-
+    const {_id} = marker.userData;
+    const markerType = marker.hotspot_type; //image_marker, hotspot_marker
+    const hotspot_type= markerType =='image_marker' ? 'product_image':'product';
+    const { renderOrder, scale, product_sku } = marker?.userData?.props || {};
 
     if (_id) {
         console.log('>check id here', _id);
+
+        const postData = {
+            type: 'HotspotMarker',
+            scene: currentSceneId,
+            collider_transform: colliderTransform.elements,
+            transform: visualTransform.elements,
+            props: {
+                hotspot_type,
+                ...(product_sku ? {product_sku} : {}),
+                ...(scale ? {scale} : {}),
+                ...(renderOrder ? { renderOrder} : {}),
+            },
+        };
+
         try {
             const validate = hotspot_type !== "product";
             console.log('SE:updateHotspotAPI');
@@ -70,21 +70,14 @@ export const dragReleaseProductHotspotAutoSave = async (object, currentSceneId, 
  * @param e
  * @param intersects
  * @param sceneRef
- * @param colliderDispatch
  */
-export const createProductMarkerOnEvent = (e, intersects, sceneRef, colliderDispatch) => {
-    //TODO: what kind of scene object can we use to properly detect position? intersects[0] is not correct solution
-    const sceneObject = intersects.find(item=>item.object.name !=='marker');
+export const createProductMarkerOnEvent = (e, intersects, scene) => {
+    //Find underlying scene background object 
+    const sceneObject = intersects.find(item=> ['BackgroundCube', 'flatBackground'].includes(item.object.name));
     const point = sceneObject.point;
     const newMarker = _createMarker();
 
-    _renderMarker(newMarker, sceneRef.current, colliderDispatch);
-
-
-    colliderDispatch({
-        type: CollisionManagerActionEnums.SET_COLLIDERS,
-        payload: newMarker.sceneObject,
-    });
+    _renderMarker(newMarker, scene);
 
     newMarker.setPosition(point.x, point.y, point.z);
     newMarker.onClick(e);
@@ -93,19 +86,16 @@ export const createProductMarkerOnEvent = (e, intersects, sceneRef, colliderDisp
 
 /**
  * Renders marker from stored hotspot record {}
- * @param userData - DB record
+ * @param object - scene object
  * @param sceneRef
- * @param colliderDispatch
  * @returns {HotspotMarker}
  */
-export const renderProductHotspotRecord = (dbRecord={}, sceneRef, colliderDispatch) => {
-    // console.log('_render:ProdM', object);
-    const marker = _createMarker(dbRecord);
+export const renderProductHotspotRecord = (object={}, sceneRef) => {
+    const marker = _createMarker({userData:object.userData});
 
     marker.addToScene(sceneRef.current);
-    marker.setTransform(dbRecord.collider_transform, dbRecord.transform);
+    marker.setTransform(object.collider_transform, object.transform);
     marker.setScale();
-    marker.setColliderDispatcher(colliderDispatch);
 
     return marker;
 };

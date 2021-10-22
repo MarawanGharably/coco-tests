@@ -1,24 +1,16 @@
 import { Vector3, Matrix4 } from 'three';
 import * as THREE from 'three';
 
-import {
-    PRODUCT_TAGGING,
-    PRODUCT_PLACEMENT,
-} from '../../components/Scene/ModeSelector/modeOptions';
-
-
 
 
 export const threeEditorMouseEvents = (
+    sceneRef,
     renderer,
     controlsRef,
     cameraRef,
-    colliderRef,
     canvasContainer,
     mode,
     allowEventsForMarkerTypeOnly,
-    UI,
-    setUI,
     onMouseDownCallback,
     onMouseUpCallback,
     onMouseMoveCallback
@@ -66,7 +58,7 @@ export const threeEditorMouseEvents = (
     const onMouseDown = (e) => {
         const mousePos = setMousePosition(mouseStartRef, e);
         raycaster.setFromCamera(mouseStartRef, cameraRef.current);
-        const intersects = raycaster.intersectObjects(colliderRef.current);
+        const intersects = raycaster.intersectObjects(sceneRef.current.children);
 
         //
         const marker = intersects.find((intersect) => {
@@ -77,7 +69,7 @@ export const threeEditorMouseEvents = (
             return intersect.object.name === 'marker';
         });
 
-        console.log('-onMouseDown', {allowEventsForMarkerTypeOnly,   marker, markerType: marker?.object?.owner?.hotspot_type});
+        // console.log('-onMouseDown', {allowEventsForMarkerTypeOnly,   marker, markerType: marker?.object?.owner?.hotspot_type});
 
         if (marker) {
             isMarkerClicked = true;
@@ -91,7 +83,7 @@ export const threeEditorMouseEvents = (
         }
 
         //Public interface
-        if(onMouseDownCallback) onMouseDownCallback(e, marker, {mousePos});
+        if(onMouseDownCallback)  onMouseDownCallback(e, marker, {mousePos});
     };
 
 
@@ -102,7 +94,7 @@ export const threeEditorMouseEvents = (
 
         const dragDistance = mouseRef.distanceTo(mouseStartRef);
         raycaster.setFromCamera(mouseRef, cameraRef.current);
-        const intersects = raycaster.intersectObjects(colliderRef.current);
+        const intersects = raycaster.intersectObjects(sceneRef.current.children);
         const isDragEvent = (dragDistance > DESKTOP_THRESHOLD);
 
 
@@ -116,15 +108,15 @@ export const threeEditorMouseEvents = (
         });
         const marker = markerIntersection?.object;
 
-        // public method/callback
-        if(onMouseUpCallback) onMouseUpCallback(e, marker, intersects, {DESKTOP_THRESHOLD, dragDistance, isDragEvent, isMarkerClicked });
-
         //reset data
         if (dragDistance > DESKTOP_THRESHOLD) {
             if (isMarkerClicked) isMarkerClicked = false;
         }else{
             isMarkerClicked = false;
         }
+
+        // public method/callback
+        if(onMouseUpCallback)  return onMouseUpCallback(e, marker, sceneRef.current, intersects, {DESKTOP_THRESHOLD, dragDistance, isDragEvent });
     };
 
 
@@ -149,15 +141,11 @@ export const threeEditorMouseEvents = (
 
     //TODO: move hotspot_type specific computation on the upper user level
     const moveFocusedObject = (e) => {
-        const { hotspot_type } = focusedObject.owner.userData.props;
-        const isProductMarker = mode === PRODUCT_TAGGING && hotspot_type === 'product';
-        const isProductImage = mode === PRODUCT_PLACEMENT && hotspot_type === 'product_image';
 
-        //move only objects related to selected mode
-        if (isProductMarker || isProductImage) {
+        if (focusedObject) {
             setMousePosition(mouseRef, e);
             raycaster.setFromCamera(mouseRef, cameraRef.current);
-            const intersects = raycaster.intersectObjects(colliderRef.current);
+            const intersects = raycaster.intersectObjects(sceneRef.current.children);
             const { point } = intersects[0];
             const { x, y, z } = point.sub(offset).applyMatrix4(inverseMatrix);
             focusedObject.owner.setPosition(x, y, z);
@@ -183,24 +171,13 @@ export const threeEditorMouseEvents = (
         }
     };
 
-    const windowResizeHandler = () => {
-        const width = canvasContainer.offsetWidth;
-        const height = canvasContainer.offsetHeight;
 
-        cameraRef.current.aspect = width / height;
-        cameraRef.current.updateProjectionMatrix();
-        renderer.setSize(width, height);
-
-        if(UI) setUI(false); //destroy UI
-    };
 
 
 
 
     // 2 main functions of event listeners
     const addThreeEditorMouseEventListeners = () => {
-        window.addEventListener('resize', windowResizeHandler);
-
         renderer.domElement.addEventListener('mousedown', onMouseDown);
         renderer.domElement.addEventListener('mouseup', onMouseUp,  { passive: true });
         renderer.domElement.addEventListener('contextmenu', preventContextMenu);
@@ -209,8 +186,6 @@ export const threeEditorMouseEvents = (
     };
 
     const removeThreeEditorMouseEventListeners = () => {
-        window.removeEventListener('resize', windowResizeHandler);
-
         renderer.domElement.removeEventListener('mousedown', onMouseDown);
         renderer.domElement.removeEventListener('mouseup', onMouseUp);
         renderer.domElement.removeEventListener('contextmenu', preventContextMenu);

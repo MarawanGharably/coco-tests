@@ -56,6 +56,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
         const material = new THREE.MeshBasicMaterial({ color: 0x000000 })
 
         this.sceneObject = new THREE.Mesh(geometry, material)
+        this.sceneObject.name ='BackgroundCube';
         this.objectWireframe = new WireframeHelper(geometry)
         this.objectWireframe.sceneObject.visible = false
 

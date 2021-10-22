@@ -3,15 +3,16 @@ import { useDispatch } from 'react-redux';
 import SceneThumbnail from '../SceneThumbnail';
 import Slideshow from '../../Slideshow';
 import { setCurrentSceneID } from '../../../store/actions/SceneEditorActions';
+import { debounce } from '../../../utils';
 import styles from './SceneNavigator.module.scss';
 
 export default function SceneNavigator ({ sceneEditor, className='' }){
     const dispatch = useDispatch();
     const { sceneData, currentSceneId } = sceneEditor;
 
-    const sceneClickHandler = (sceneId) => {
+    const sceneClickHandler = debounce((sceneId) => {
         if (sceneId !== currentSceneId) dispatch(setCurrentSceneID(sceneId));
-    };
+    }, 500);
 
     return (
         <Slideshow className={`${styles['scene-navigator']} ${className}`}>

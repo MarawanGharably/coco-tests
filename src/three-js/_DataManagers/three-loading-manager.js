@@ -1,13 +1,9 @@
 import { LoadingManager } from 'three';
-import { SET_LOADING } from '../../store/types/ThreeEditorActionTypes';
 
 class ThreeLoadingManager extends LoadingManager {
-    setOnLoad(dispatch) {
+    setOnLoad() {
         this.onLoad = () => {
-            dispatch({
-                type: SET_LOADING,
-                payload: false,
-            });
+           console.log('---REMOVE IT!!!!!!!!!')
         };
     }
 }

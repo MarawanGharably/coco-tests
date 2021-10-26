@@ -1,14 +1,10 @@
 import * as THREE from 'three';
 import InteractionObject from '../../three-base-components/InteractionObject';
-import ThreeLoadingManager from '../../_DataManagers/three-loading-manager';
-import { formURL } from "../../../utils/urlHelper";
-
-
 
 
 
 export default class ImageMarker extends InteractionObject {
-    constructor({image, renderOrder, scale, collider_transform, transform, userData, UIConfig}) {
+    constructor({imageURL, renderOrder, scale, collider_transform, transform, userData, UIConfig}) {
         super();
 
         this.sceneObject.name = 'marker';
@@ -25,7 +21,8 @@ export default class ImageMarker extends InteractionObject {
             new THREE.PlaneGeometry(1, 1),
             new THREE.MeshBasicMaterial(),
         ));
-        this.setImage(image);
+
+        this.setImage(imageURL);
         this.setRenderOrder(renderOrder);
 
         //Set transforms
@@ -38,14 +35,12 @@ export default class ImageMarker extends InteractionObject {
         this.sceneObject.renderOrder = renderOrder;
     }
 
-    //TODO: Should accept url {string}
-    setImage(image) {
-        // console.log('-setImage', image);
-        if(!image) return;
-        //TODO: remove ThreeLoadingManager
-        const loader = new THREE.TextureLoader(ThreeLoadingManager);
-        const url = formURL(image.image)
-        loader.load(url, (texture) => {
+
+    setImage(imageURL) {
+        if(!imageURL) return;
+
+        const loader = new THREE.TextureLoader();
+        loader.load(imageURL, (texture) => {
             const { image } = texture;
             const width = image.width / image.height;
             const height = 1;

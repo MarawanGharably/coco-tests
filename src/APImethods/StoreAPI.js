@@ -1,9 +1,7 @@
-import { formURL } from '../utils/urlHelper';
 import axiosApi from '../utils/axiosApi';
-
 import {setEnabledAction} from "../store/actions/productLibraryActions";
-import {setCurrentSceneID, setSceneData} from "../store/actions/SceneEditorActions";
-
+import * as types from '../store/types/SceneEditorTypes';
+import {getProductLibrary} from "./ProductLibraryAPI";
 
 /**
  * get all stores
@@ -72,7 +70,7 @@ export const getStoreFlags=(storeId, options)=>dispatch=>{
 }
 
 
-export const getStoreScenes = (storeId, options) =>dispatch=> {
+export const getStoreScenes = (storeId, options) => dispatch => {
     if (!storeId) return Promise.reject('Missed required param');
 
     const conf = {
@@ -82,9 +80,13 @@ export const getStoreScenes = (storeId, options) =>dispatch=> {
     return axiosApi
         .get(`/stores/${storeId}/scenes`, conf)
         .then((res) => {
-            if(options?.updateStore === 'productLibrary' && res.data[0]){
-                dispatch(setSceneData(res.data));
-                dispatch(setCurrentSceneID(res.data[0]._id.$oid));
+            if(options?.updateStore === 'SceneEditor' && res.data[0]){
+                const sceneObject = res.data.reduce((acc, curr)=>({ ...acc, [curr._id.$oid]: curr}), {});
+
+                dispatch({type:types.SET_SCENE_EDITOR_DATA, payload:{
+                        currentSceneId:res.data[0]._id.$oid,
+                        storeScenes:sceneObject
+                    }});
             }
             return res.data;
         })
@@ -92,32 +94,16 @@ export const getStoreScenes = (storeId, options) =>dispatch=> {
 };
 
 
-const getFirstSceneImageUrl = (storeId) => {
-    const OBSESS_GREY_LOGO = 'https://cdn.obsess-vr.com/obsess-logo-636466.png';
+export const getStoreSceneEditorData=(storeID)=>dispatch=>{
+    if (!storeID) return Promise.reject('Missed required param');
 
-    return getStoreScenes(storeId)
-        .then((res) => {
-            const firstObj = res[0] || false;
-            const firstSceneImageUrl = firstObj?.cube_map_dir ? `${formURL(firstObj.cube_map_dir)}1k_front.jpg` : OBSESS_GREY_LOGO;
+    //1. Fetch Store configs
+    dispatch(getStoreFlags(storeID, {updateStore:'productLibrary'}))
+        .then(res=>{
+            const isEnabled = !!res['product_library_enabled'];
+            if (isEnabled) dispatch(getProductLibrary(storeID));
+        }).catch(err=>{});
 
-            return {
-                storeId,
-                thumbnailUrl: firstSceneImageUrl,
-            };
-        })
-        .catch((err) => Promise.reject(err));
-};
-
-
-export const apiPublishSceneData = async (storeId) => {
-    if (!storeId) return Promise.reject('Missed required parameter');
-
-    const conf = {
-        headers: { 'ovr-str-id': storeId },
-    };
-
-    return axiosApi
-        .post(`/stores/${storeId}/push_objects`, {},  conf)
-        .then((res) => res.data)
-        .catch((err) => Promise.reject(err));
-};
+    //2. Fetch Store Scenes
+    dispatch(getStoreScenes(storeID, {updateStore:'SceneEditor'}));
+}

@@ -9,7 +9,6 @@ export const threeEditorMouseEvents = (
     controlsRef,
     cameraRef,
     canvasContainer,
-    mode,
     allowEventsForMarkerTypeOnly,
     onMouseDownCallback,
     onMouseUpCallback,
@@ -145,8 +144,10 @@ export const threeEditorMouseEvents = (
         if (focusedObject) {
             setMousePosition(mouseRef, e);
             raycaster.setFromCamera(mouseRef, cameraRef.current);
+
             const intersects = raycaster.intersectObjects(sceneRef.current.children);
-            const { point } = intersects[0];
+            const sceneObject = intersects.find(item=> ['BackgroundCube', 'flatBackground'].includes(item.object.name));
+            const { point } = sceneObject;
             const { x, y, z } = point.sub(offset).applyMatrix4(inverseMatrix);
             focusedObject.owner.setPosition(x, y, z);
         }

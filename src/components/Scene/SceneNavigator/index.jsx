@@ -8,7 +8,8 @@ import styles from './SceneNavigator.module.scss';
 
 export default function SceneNavigator ({ sceneEditor, className='' }){
     const dispatch = useDispatch();
-    const { sceneData, currentSceneId } = sceneEditor;
+    const { storeScenes, currentSceneId } = sceneEditor;
+    const scenesArr = Object.values(storeScenes);
 
     const sceneClickHandler = debounce((sceneId) => {
         if (sceneId !== currentSceneId) dispatch(setCurrentSceneID(sceneId));
@@ -16,7 +17,7 @@ export default function SceneNavigator ({ sceneEditor, className='' }){
 
     return (
         <Slideshow className={`${styles['scene-navigator']} ${className}`}>
-            { sceneData?.map((scene) => (
+            { scenesArr?.map((scene) => (
                 <SceneThumbnail
                     key={scene._id.$oid} // eslint-disable-line
                     scene={scene}

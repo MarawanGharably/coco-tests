@@ -78,9 +78,9 @@ const ImageMarkerUIForm = (props) => {
                 renderOrder: values.renderOrder,
                 scale: values.scale,
                 hotspot_type: HOTSPOT_TYPE,
-                // image: image._id
             },
         };
+
 
         dispatch(updateHotspotAPI(record._id, storeId, currentSceneId, postData))
             .then((res) => {

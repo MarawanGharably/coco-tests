@@ -7,14 +7,14 @@ import SceneEditor from '../../components/Scene/SceneEditor';
 import { ModeSelector, SceneNavigator } from '../../components/Scene';
 import ProductPlacementSidebar from '../../components/Scene/ProductPlacementSidebar';
 import { destroyProductLibraryData } from '../../store/actions/productLibraryActions';
-import {destroySceneData} from "../../store/actions/SceneEditorActions";
-import {getStoreFlags, getStoreScenes, getProductLibrary, apiGetHotspotsByType} from "../../APImethods";
+import {setSceneHotspotsAction, destroySceneData} from "../../store/actions/SceneEditorActions";
+import {getStoreSceneEditorData,  apiGetHotspotsByType} from "../../APImethods";
 import styles from '../../assets/scss/hotspotsPage.module.scss';
 
 
 export default function HotspotsPage(){
     const sceneEditor = useSelector(state =>state['SceneEditor']);
-    const { currentSceneId } = sceneEditor;
+    const { currentSceneId, sceneHotspots } = sceneEditor;
 
     const productLibrary = useSelector(state =>state['productLibrary']);
     const { isEnabled, mode_slug, deleteProductId } = productLibrary;
@@ -35,7 +35,7 @@ export default function HotspotsPage(){
 
     useEffect(() => {
         if(!storeId) return;
-        else fetchData();
+        else dispatch(getStoreSceneEditorData(storeId))
 
         return function cleanup(){
             //remove all data loaded for the current store when exiting
@@ -44,9 +44,10 @@ export default function HotspotsPage(){
         }
     }, [storeId]);
 
-    useEffect(() => {
-        const fetchSceneHotspots = async (hotspotTypes = []) => {
-            if (!currentSceneId || currentSceneId.length < 5) return;
+    useEffect(() => fetchSceneHotspots(['product', 'product_image']), [currentSceneId]);
+
+    const fetchSceneHotspots = async (hotspotTypes = []) => {
+        if (!currentSceneId || currentSceneId.length < 5) return;
             setSceneObjects([]);
 
             const getRoomObjectData = async () => {
@@ -61,29 +62,11 @@ export default function HotspotsPage(){
             const response = await getRoomObjectData();
 
             const formatted = response.flat().filter((object) => typeof object !== 'string');
-            console.log('%c> records', 'color:blue', formatted);
+            dispatch(setSceneHotspotsAction(currentSceneId, formatted));
             setSceneObjects(formatted);
-        };
-
-        //#1. Fetch Scene Hotspots
-        fetchSceneHotspots(['product', 'product_image']);
-    }, [currentSceneId]);
-
-    const fetchData = async () => {
-        // setLoading(true);
-        try{
-            const flagsReq = await dispatch(getStoreFlags(storeId, {updateStore:'productLibrary'}));
-            const isEnabled = !!flagsReq['product_library_enabled'];
-
-            if (isEnabled) dispatch(getProductLibrary(storeId));
-
-            dispatch(getStoreScenes(storeId, {updateStore:'productLibrary'}));
-        }catch(err){
-            console.error({err})
-        }finally {
-            // setLoading(false);
-        }
     };
+
+
 
 
 

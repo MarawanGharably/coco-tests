@@ -3,9 +3,10 @@ import * as THREE from 'three';
 import ThreeController from '../three-controls/ThreeController';
 import { setupRenderer, setupCamera } from './setupThreeEditor';
 import { threeEditorMouseEvents } from './threeEditorMouseEvents';
-import { renderImageHotspotRecord, renderProductHotspotRecord } from '../../utils/sceneHelpers';
-import styles from './ThreeEditor.module.scss';
 import { Background, ColliderSphere } from '../three-background';
+import {renderHotspotRecord, renderImageHotspotRecord} from '../utils';
+import styles from './ThreeEditor.module.scss';
+
 
 
 
@@ -24,7 +25,7 @@ const ThreeEditor = (props) => {
     let renderer = rendererRef.current;
 
     // Stringify children keys to prevent re-rendering
-    const childrenIds = children.map((child) => child.key).filter((v) => v !== null).join('__');
+    const childrenIds = React.Children.map(children, child =>child.key).filter((v) => v !== null).join('__');
 
     // useRef used to prevent ThreeEditor from losing variable references.
     const canvasRef = useRef();
@@ -164,21 +165,18 @@ const ThreeEditor = (props) => {
 
         const loadSceneObjects = () => {
             let total = 0;
-            children?.forEach((item) => {
-                // console.log('-item', item.props);
+            React.Children.map(children, item =>{
                 const { type, hotspot_type } = item.props;
 
                 if (type == 'hotspot' && hotspot_type == 'hotspot') {
-                    const object = item.props;
-                    renderProductHotspotRecord(object, sceneRef);
+                    renderHotspotRecord(item.props, sceneRef);
                     total++;
                 } else if (type == 'hotspot' && hotspot_type == 'image_hotspot') {
-                    const object = item.props;
-                    renderImageHotspotRecord(object, sceneRef, setMaxRenderOrder);
+                    renderImageHotspotRecord(item.props, sceneRef, setMaxRenderOrder);
                     total++;
                 }
-            });
-            console.log('__TOTAL loaded:', total);
+            })
+            // console.log('__TOTAL loaded:', total);
         };
 
         removeSceneHotspots(); //Remove Scene colliders/objects ( markers elements)
@@ -187,7 +185,7 @@ const ThreeEditor = (props) => {
         return () => {
             console.log('%c- INIT Children __cleanup', 'color:red', { children, scene: sceneRef.current });
         };
-        //string of children keys used to prevent re-rendering,
+        // string of children keys used to prevent re-rendering,
         // Dont forget to always use unique component key
     }, [childrenIds]);
 

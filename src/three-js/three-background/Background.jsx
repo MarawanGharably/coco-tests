@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import BackgroundCube from './BackgroundCube';
-import FlatBackground from './FlatBackgound';
+import FlatBackground from './FlatBackground';
 
 const Background = ({ scene, bgConf }) => {
     const [backgroundUrl, setBackgroundUrl] = useState('');

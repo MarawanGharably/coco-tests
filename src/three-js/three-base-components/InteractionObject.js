@@ -13,7 +13,6 @@ export default class InteractionObject extends ThreeSceneObject {
         this.sceneObject.setOwner(this);
         this.visualObject = null;
         this.userData = null; //custom data provided by users
-
     }
 
 

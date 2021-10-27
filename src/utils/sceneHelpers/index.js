@@ -10,14 +10,13 @@ export const dragReleaseHotspotAutoSave = async (object, currentSceneId, storeId
 
     const marker = object.owner;
     const { colliderTransform, visualTransform } = marker.getTransforms();
-    const {_id} = marker.userData;
+    const {_id} = marker.userData || {};
     const markerType = marker.hotspot_type; //image_marker, hotspot_marker
     const hotspot_type= markerType =='image_marker' ? 'product_image':'product';
     const { renderOrder, scale, product_sku } = marker?.userData?.props || {};
-    console.log('-DRAG EVENT', marker);
-    if (_id) {
-        console.log('>check id here', _id);
+    // console.log('-DRAG EVENT', marker);
 
+    if (_id) {
         const postData = {
             type: 'HotspotMarker',
             scene: currentSceneId,

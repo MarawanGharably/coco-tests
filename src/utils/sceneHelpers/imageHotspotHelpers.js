@@ -1,7 +1,7 @@
 import React from 'react';
 import * as THREE from 'three';
-import ImageMarkerUIForm from '../../components/Scene/MarkerForms/ImageMarkerUIForm';
-import { ImageMarker } from '../../three-js/_constructors/Markers';
+import ImageMarkerUIForm from '../../components/SceneEditor/MarkerForms/ImageMarkerUIForm';
+import { ImageMarker } from '../../three-js/three-base-components/Markers';
 import { apiCreateHotspotByType } from '../../APImethods';
 import {formURL} from "../index";
 
@@ -9,27 +9,7 @@ import {formURL} from "../index";
 const sleep =(ms)=> new Promise((res, rej)=>setTimeout(()=>res(), ms));
 
 
-export const renderImageHotspotRecord = (object, sceneRef, setMaxRenderOrder) => {
-    // console.log('-render: image HP', {object, imageURL:formURL(object.image.image)});
-    const marker = new ImageMarker({
-        imageURL:formURL(object.image.image),
-        renderOrder: object.renderOrder,
-        scale: object.scale,
-        collider_transform: object.collider_transform,
-        transform: object.transform,
-        userData: object.userData,
-        UIConfig:{
-            Component:ImageMarkerUIForm,
-            style:{left:'0', top:'3em', background:'none'}
-        },
-    });
 
-    marker.addToScene(sceneRef.current);
-
-    if (object.renderOrder) setMaxRenderOrder(object.renderOrder);
-
-    return marker;
-};
 
 
 
@@ -73,10 +53,6 @@ export const addImageHotspotOnDrop = async (e, storeId, currentSceneId, cameraRe
 
     //6. Create Hotspot record
     const HOTSPOT_TYPE = 'product_image';
-    const options={
-        updateStore:'SceneEditor',
-        tmpImgStructure: image
-    };
     const record = await  apiCreateHotspotByType(HOTSPOT_TYPE, storeId, currentSceneId, {
         type: 'HotspotMarker',
         scene: currentSceneId,

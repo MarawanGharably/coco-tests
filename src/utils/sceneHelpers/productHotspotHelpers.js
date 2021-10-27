@@ -1,5 +1,5 @@
-import HotspotMarkerUIForm from "../../components/Scene/MarkerForms/HotspotMarkerUIForm";
-import {HotspotMarker} from "../../three-js/_constructors/Markers";
+import HotspotMarkerUIForm from "../../components/SceneEditor/MarkerForms/HotspotMarkerUIForm";
+import {HotspotMarker} from "../../three-js/three-base-components/Markers";
 
 
 
@@ -47,18 +47,4 @@ export const createProductMarkerOnEvent = (e, intersects, scene) => {
 }
 
 
-/**
- * Renders marker from stored hotspot record {}
- * @param object - scene object
- * @param sceneRef
- * @returns {HotspotMarker}
- */
-export const renderProductHotspotRecord = (object={}, sceneRef) => {
-    const marker = _createMarker({userData:object.userData});
 
-    marker.addToScene(sceneRef.current);
-    marker.setTransform(object.collider_transform, object.transform);
-    marker.setScale();
-
-    return marker;
-};

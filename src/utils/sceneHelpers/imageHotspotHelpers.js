@@ -3,19 +3,12 @@ import * as THREE from 'three';
 import ImageMarkerUIForm from '../../components/SceneEditor/MarkerForms/ImageMarkerUIForm';
 import { ImageMarker } from '../../three-js/three-base-components/Markers';
 import { apiCreateHotspotByType } from '../../APImethods';
-import {formURL} from "../index";
-
-
-const sleep =(ms)=> new Promise((res, rej)=>setTimeout(()=>res(), ms));
+import {formURL, sleep} from "../index";
 
 
 
 
-
-
-
-
-export const addImageHotspotOnDrop = async (e, storeId, currentSceneId, cameraRef, folderId, products, maxRenderOrder, scene, setMaxRenderOrder, reduxDispatch) => {
+export const addImageHotspotOnDrop = async (e, position, storeId, currentSceneId, cameraRef, folderId, products, maxRenderOrder, scene, setMaxRenderOrder, reduxDispatch) => {
     e.preventDefault();
     const imageId = e.dataTransfer.getData('id');
     const image = products[folderId].find((item) => item._id === imageId);
@@ -39,10 +32,8 @@ export const addImageHotspotOnDrop = async (e, storeId, currentSceneId, cameraRe
     //2. Render Marker
     marker.addToScene(scene);
 
-    //3. Set Position to in front of camera
-    const pos = new THREE.Vector3(0, 0, -10);
-    pos.applyQuaternion(cameraRef.current.quaternion);
-    marker.setPosition(pos.x, pos.y, pos.z);
+    //3. Set Position
+    marker.setPosition(position.x, position.y, position.z);
     marker.lookAt();
     marker.setUserData({imageId});
 

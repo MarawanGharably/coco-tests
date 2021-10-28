@@ -47,6 +47,16 @@ export const threeEditorMouseEvents = (
         return mouseRef;
     }
 
+    const getIntersectedMarkerObject=(intersects)=>{
+        return intersects.find((intersect) => {
+            const markerType = intersect?.object?.owner?.hotspot_type;
+            //apply extra filter
+            if(allowEventsForMarkerTypeOnly && markerType) return markerType === allowEventsForMarkerTypeOnly && intersect.object.name === 'marker';
+
+            return intersect.object.name === 'marker';
+        });
+    }
+
     /**
      * onMouseDown Scene Event
      * @param e
@@ -59,17 +69,8 @@ export const threeEditorMouseEvents = (
         raycaster.setFromCamera(mouseStartRef, cameraRef.current);
         const intersects = raycaster.intersectObjects(sceneRef.current.children);
 
-        //
-        const marker = intersects.find((intersect) => {
-            const markerType = intersect?.object?.owner?.hotspot_type;
-            //apply extra filter
-            if(allowEventsForMarkerTypeOnly && markerType) return markerType === allowEventsForMarkerTypeOnly;
-            //or return any type of marker
-            return intersect.object.name === 'marker';
-        });
-
-        // console.log('-onMouseDown', {allowEventsForMarkerTypeOnly,   marker, markerType: marker?.object?.owner?.hotspot_type});
-
+        const marker = getIntersectedMarkerObject(intersects);
+     
         if (marker) {
             isMarkerClicked = true;
             controlsRef.current.enabled = false; //eslint-disable-line
@@ -96,15 +97,7 @@ export const threeEditorMouseEvents = (
         const intersects = raycaster.intersectObjects(sceneRef.current.children);
         const isDragEvent = (dragDistance > DESKTOP_THRESHOLD);
 
-
-
-        const markerIntersection = intersects.find((intersect) => {
-            const markerType = intersect?.object?.owner?.hotspot_type;
-            //apply extra filter
-            if(allowEventsForMarkerTypeOnly && markerType) return markerType === allowEventsForMarkerTypeOnly && intersect.object.name === 'marker';
-
-            return intersect.object.name === 'marker';
-        });
+        const markerIntersection = getIntersectedMarkerObject(intersects);
         const marker = markerIntersection?.object;
 
         //reset data
@@ -114,8 +107,12 @@ export const threeEditorMouseEvents = (
             isMarkerClicked = false;
         }
 
+        //Find underlying scene background object
+        const bgObject = intersects.find(item=> ['cubeBackground', 'flatBackground'].includes(item.object.name));
+        const point = bgObject.point;
+
         // public method/callback
-        if(onMouseUpCallback)  return onMouseUpCallback(e, marker, sceneRef.current, intersects, {DESKTOP_THRESHOLD, dragDistance, isDragEvent });
+        if(onMouseUpCallback)  return onMouseUpCallback(e, marker, point, sceneRef.current, intersects, {DESKTOP_THRESHOLD, dragDistance, isDragEvent });
     };
 
 
@@ -146,7 +143,7 @@ export const threeEditorMouseEvents = (
             raycaster.setFromCamera(mouseRef, cameraRef.current);
 
             const intersects = raycaster.intersectObjects(sceneRef.current.children);
-            const sceneObject = intersects.find(item=> ['BackgroundCube', 'flatBackground'].includes(item.object.name));
+            const sceneObject = intersects.find(item=> ['cubeBackground', 'flatBackground'].includes(item.object.name));
             const { point } = sceneObject;
             const { x, y, z } = point.sub(offset).applyMatrix4(inverseMatrix);
             focusedObject.owner.setPosition(x, y, z);

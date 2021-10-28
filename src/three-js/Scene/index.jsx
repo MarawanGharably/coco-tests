@@ -23,6 +23,7 @@ const ThreeEditor = (props) => {
     //Renderer
     const rendererRef = useRef(new THREE.WebGLRenderer());
     let renderer = rendererRef.current;
+    const glContext = renderer?.domElement.getContext('webgl');
 
     // Stringify children keys to prevent re-rendering
     const childrenIds = React.Children.map(children, child =>child.key).filter((v) => v !== null).join('__');
@@ -189,13 +190,23 @@ const ThreeEditor = (props) => {
         // Dont forget to always use unique component key
     }, [childrenIds]);
 
+
+    const onDropEvent=(e)=>{
+
+        //3. Set Position to in front of camera
+        const position = new THREE.Vector3(0, 0, -10);
+        position.applyQuaternion(cameraRef.current.quaternion);
+
+        if(props.onDrop) props.onDrop(e, position, cameraRef, maxRenderOrder, scene, setMaxRenderOrder);
+    }
+
     return (
         <div
             id="canvas-wrapper"
             className={styles['canvas-wrapper']}
             ref={canvasRef}
             onDragOver={(e) => e.preventDefault()}
-            onDrop={(e) => props.onDrop(e, cameraRef, maxRenderOrder, scene, setMaxRenderOrder)}
+            onDrop={onDropEvent}
         >
             {/*{threeReady && children}*/}
             {threeReady && (

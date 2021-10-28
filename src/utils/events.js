@@ -8,3 +8,5 @@ export const debounce =(callback, time=1000) => {
         }, time);
     };
 };
+
+export const sleep =(ms)=> new Promise((res, reject)=>setTimeout(()=>res(), ms));

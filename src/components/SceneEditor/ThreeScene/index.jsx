@@ -115,7 +115,7 @@ const placeSceneHotspots=(sceneObjects)=>{
         return (
             <Hotspot
                 key={item._id}
-                hotspot_type={hotspot_type === 'product_image' ? 'image_hotspot' : 'hotspot'}
+                type={hotspot_type === 'product_image' ? 'image_hotspot' : 'hotspot'}
                 collider_transform={item.collider_transform}
                 transform={item.transform}
                 userData={item}

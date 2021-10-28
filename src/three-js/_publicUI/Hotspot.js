@@ -1,17 +1,18 @@
 import PropTypes from 'prop-types';
 
-function Hotspot(props) {
+
+function Hotspot() {
     // console.log('-Hotspot', props);
 
     return false;
 }
 
 Hotspot.defaultProps = {
-    type: 'hotspot',
+    type: 'hotspot', //hotspot/image_hotspot
 };
 
 Hotspot.propTypes = {
-    hotspot_type: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
     collider_transform: PropTypes.array.isRequired,
     transform: PropTypes.array.isRequired,
     userData: PropTypes.object,

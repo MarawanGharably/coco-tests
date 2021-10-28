@@ -2,6 +2,8 @@ import axiosApi from '../utils/axiosApi';
 import {setEnabledAction} from "../store/actions/productLibraryActions";
 import * as types from '../store/types/SceneEditorTypes';
 import {getProductLibrary} from "./ProductLibraryAPI";
+import {apiGetHotspotsByType} from "./HotspotsAPI";
+import {setSceneHotspotsAction} from "../store/actions/SceneEditorActions";
 
 /**
  * get all stores
@@ -106,4 +108,22 @@ export const getStoreSceneEditorData=(storeID)=>dispatch=>{
 
     //2. Fetch Store Scenes
     dispatch(getStoreScenes(storeID, {updateStore:'SceneEditor'}));
+}
+
+export const getStoreSceneHotspots = async(storeId, currentSceneId, hotspotTypes=[])=>{
+    if (!storeId || !currentSceneId) return Promise.reject('Missed required param');
+
+    const getRoomObjectData = async () => {
+        if (Array.isArray(hotspotTypes)) {
+            const promises = hotspotTypes.map((hotspotType) => apiGetHotspotsByType(hotspotType, storeId, currentSceneId));
+            return Promise.all(promises);
+        }
+
+        return apiGetHotspotsByType(hotspotTypes, storeId, currentSceneId);
+    };
+
+    return getRoomObjectData()
+        .then(res=>{
+            return res.flat().filter((object) => typeof object !== 'string');
+        }).catch(err=>Promise.reject(err));
 }

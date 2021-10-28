@@ -1,7 +1,39 @@
 import {updateHotspotAPI} from "../../APImethods";
+import {HotspotMarker} from "../../three-js/three-base-components/Markers";
+import HotspotMarkerUIForm from "../../components/SceneEditor/MarkerForms/HotspotMarkerUIForm";
 
-export * from './productHotspotHelpers';
+
 export * from './imageHotspotHelpers';
+
+/**
+ * on Scene Click event
+ * @param e
+ * @param point
+ * @param scene
+ */
+export const createProductMarkerOnEvent = (e, point, scene) => {
+    //#1. Create new marker
+    const newMarker = new HotspotMarker({
+        userData:{},
+        UIConfig:{
+            Component:HotspotMarkerUIForm,
+            positionNextToTheElement:true,
+            style:{background:'none'}
+        }
+    });
+
+    //#2. Add to the scene
+    // _renderMarker(newMarker, scene);
+    newMarker.addToScene(scene);
+    newMarker.setScale();
+
+
+
+    //#3. Set position and open UI
+    newMarker.setPosition(point.x, point.y, point.z);
+    newMarker.onClick(e);
+}
+
 
 
 //AutoSave fn for all hotspot types

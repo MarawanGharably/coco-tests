@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { createProductMarkerOnEvent, addImageHotspotOnDrop, dragReleaseHotspotAutoSave } from '../../../utils/sceneHelpers';
 import Scene, { Hotspot } from '../../../three-js';
@@ -15,6 +15,10 @@ const ThreeScene = ({ storeId, sceneObjects, sceneEditorData, productLibrary }) 
     const { currentSceneId, storeScenes } = sceneEditorData;
     const { mode_slug, products, selectedFolder } = productLibrary;
     const reduxDispatch = useDispatch();
+    const [hotspots, setHotspots] = useState(sceneObjects);
+
+
+    useEffect(()=>setHotspots(sceneObjects),[sceneObjects]);
 
     //Calc Background config
     const sceneData = Object.values(storeScenes).find((scene) => scene._id.$oid === currentSceneId);
@@ -38,7 +42,7 @@ const ThreeScene = ({ storeId, sceneObjects, sceneEditorData, productLibrary }) 
         console.log('%c >onMouseDown custom', 'color:blue', { e, marker });
     };
 
-    const onMouseUp = (e, marker, scene, intersects, options) => {
+    const onMouseUp = (e, marker, point, scene, intersects, options) => {
         const { isDragEvent } = options;
 
         if (isDragEvent && marker) {
@@ -51,7 +55,7 @@ const ThreeScene = ({ storeId, sceneObjects, sceneEditorData, productLibrary }) 
             if (marker && marker?.owner?.sceneObject) marker.onClick(e);
             //Create marker & record, then Open UI
             else {
-                if (mode_slug === 'product_tagging') createProductMarkerOnEvent(e, intersects, scene);
+                if (mode_slug === 'product_tagging') createProductMarkerOnEvent(e, point, scene);
             }
         }
     };
@@ -62,8 +66,8 @@ const ThreeScene = ({ storeId, sceneObjects, sceneEditorData, productLibrary }) 
         // console.log('%c >onMouseMove custom', 'color:blue', {e, marker, options});
     };
 
-    const onDrop = (e, cameraRef, maxRenderOrder, scene, setMaxRenderOrder) => {
-        addImageHotspotOnDrop(e, storeId, currentSceneId, cameraRef, selectedFolder.value, products, maxRenderOrder, scene, setMaxRenderOrder, reduxDispatch);
+    const onDrop = (e, position, cameraRef, maxRenderOrder, scene, setMaxRenderOrder) => {
+        addImageHotspotOnDrop(e, position, storeId, currentSceneId, cameraRef, selectedFolder.value, products, maxRenderOrder, scene, setMaxRenderOrder, reduxDispatch);
     };
 
 
@@ -79,7 +83,7 @@ const ThreeScene = ({ storeId, sceneObjects, sceneEditorData, productLibrary }) 
                     onMouseMove={onMouseMove}
                     onDrop={onDrop}
                 >
-                    {placeSceneHotspots(sceneObjects)}
+                    {placeSceneHotspots(hotspots)}
                 </Scene>
             )}
         </>

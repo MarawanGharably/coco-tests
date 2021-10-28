@@ -166,12 +166,12 @@ const ThreeEditor = (props) => {
         const loadSceneObjects = () => {
             let total = 0;
             React.Children.map(children, item =>{
-                const { type, hotspot_type } = item.props;
+                const { type } = item.props;
 
-                if (type == 'hotspot' && hotspot_type == 'hotspot') {
+                if (type == 'hotspot') {
                     renderHotspotRecord(item.props, sceneRef);
                     total++;
-                } else if (type == 'hotspot' && hotspot_type == 'image_hotspot') {
+                } else if (type == 'image_hotspot') {
                     renderImageHotspotRecord(item.props, sceneRef, setMaxRenderOrder);
                     total++;
                 }

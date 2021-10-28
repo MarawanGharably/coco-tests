@@ -4,8 +4,8 @@ import {Row} from "react-bootstrap";
 import SceneNavigator from "./SceneNavigator";
 import ThreeScene from "./ThreeScene";
 import ProductPlacementSidebar from "./ProductPlacementSidebar";
-import {apiGetHotspotsByType, getStoreSceneEditorData} from "../../APImethods";
-import {destroySceneData, setSceneHotspotsAction} from "../../store/actions/SceneEditorActions";
+import { getStoreSceneEditorData, getStoreSceneHotspots} from "../../APImethods";
+import {destroySceneData} from "../../store/actions/SceneEditorActions";
 import {destroyProductLibraryData} from "../../store/actions/productLibraryActions";
 import styles from './sceneEditor.module.scss';
 
@@ -20,6 +20,7 @@ export default function SceneEditor({storeId}){
 
     const [sceneObjects, setSceneObjects] = useState([]);
 
+    //Fetch store scenes
     useEffect(() => {
         if(!storeId) return;
         else dispatch(getStoreSceneEditorData(storeId))
@@ -31,33 +32,28 @@ export default function SceneEditor({storeId}){
         }
     }, [storeId]);
 
+    //Fetch Hotspots
+    useEffect(() => {
+        if (!currentSceneId || currentSceneId.length < 5) return;
+        setSceneObjects([]);
+        getStoreSceneHotspots(storeId, currentSceneId, ['product', 'product_image'])
+            .then(res=>{
+                setSceneObjects(res);
+            }).catch(err=>{
+            console.error('API Error', err);
+        });
+    }, [currentSceneId]);
+
     //Image Removed, delete associated colliders (scene objects)
     useEffect(() => {
         const newData = sceneObjects.filter(item=>item.props?.image?._id !== deleteProductId);
         setSceneObjects(newData);
     }, [deleteProductId]);
 
-    useEffect(() => fetchSceneHotspots(['product', 'product_image']), [currentSceneId]);
 
-    const fetchSceneHotspots = async (hotspotTypes = []) => {
-        if (!currentSceneId || currentSceneId.length < 5) return;
-        setSceneObjects([]);
 
-        const getRoomObjectData = async () => {
-            if (Array.isArray(hotspotTypes)) {
-                const promises = hotspotTypes.map((hotspotType) => apiGetHotspotsByType(hotspotType, storeId, currentSceneId));
-                return Promise.all(promises);
-            }
 
-            return apiGetHotspotsByType(hotspotTypes, storeId, currentSceneId);
-        };
 
-        const response = await getRoomObjectData();
-
-        const formatted = response.flat().filter((object) => typeof object !== 'string');
-        dispatch(setSceneHotspotsAction(currentSceneId, formatted));
-        setSceneObjects(formatted);
-    };
 
     return(<Row className={styles['sceneEditor']}>
             <SceneNavigator

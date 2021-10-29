@@ -4,7 +4,6 @@ import ThreeController from '../three-controls/ThreeController';
 import { setupRenderer, setupCamera } from './setupThreeEditor';
 import { threeEditorMouseEvents } from './threeEditorMouseEvents';
 import { Background, ColliderSphere } from '../three-background';
-import {renderHotspotRecord, renderImageHotspotRecord} from '../utils';
 import styles from './ThreeEditor.module.scss';
 
 
@@ -24,9 +23,6 @@ const ThreeEditor = (props) => {
     const rendererRef = useRef(new THREE.WebGLRenderer());
     let renderer = rendererRef.current;
     const glContext = renderer?.domElement.getContext('webgl');
-
-    // Stringify children keys to prevent re-rendering
-    const childrenIds = React.Children.map(children, child =>child.key).filter((v) => v !== null).join('__');
 
     // useRef used to prevent ThreeEditor from losing variable references.
     const canvasRef = useRef();
@@ -142,85 +138,94 @@ const ThreeEditor = (props) => {
     },[UI]);
 
 
-    //Scene Children
-    useEffect(() => {
-        console.log('%c- INIT Scene children', 'color:green', { children, sChildren: scene.children, sceneRef });
-        const removeSceneHotspots = () => {
-            let total = 0;
-            let idx = 0;
-            while (scene.children.some((item) => ['visualObject', 'marker'].includes(item.name))) {
-                // console.log('-loop start',  );
-                const collider = scene.children[idx];
-                if (['visualObject', 'marker'].includes(collider.name)) {
-                    if (collider.dispose) collider.dispose();
-                    // collider.owner.dispose();
-                    sceneRef.current.remove(scene.children[idx]);
-                    total++;
-                } else {
-                    // console.log('-loop continue', {sChildren:scene.children});
-                    idx++;
-                }
-            }
-            console.log(`__TOTAL removed:${total}`, { sCHildr: JSON.parse(JSON.stringify(scene.children)) });
-        };
 
-        const loadSceneObjects = () => {
-            let total = 0;
-            React.Children.map(children, item =>{
-                const { type } = item.props;
-
-                if (type == 'hotspot') {
-                    renderHotspotRecord(item.props, sceneRef);
-                    total++;
-                } else if (type == 'image_hotspot') {
-                    renderImageHotspotRecord(item.props, sceneRef, setMaxRenderOrder);
-                    total++;
-                }
-            })
-            // console.log('__TOTAL loaded:', total);
-        };
-
-        removeSceneHotspots(); //Remove Scene colliders/objects ( markers elements)
-        loadSceneObjects(); //Load New Scene Objects
-
-        return () => {
-            console.log('%c- INIT Children __cleanup', 'color:red', { children, scene: sceneRef.current });
-        };
-        // string of children keys used to prevent re-rendering,
-        // Dont forget to always use unique component key
-    }, [childrenIds]);
 
 
     const onDropEvent=(e)=>{
-
-        //3. Set Position to in front of camera
+        // Set Position to in front of camera
         const position = new THREE.Vector3(0, 0, -10);
         position.applyQuaternion(cameraRef.current.quaternion);
-
+        sceneRef.current.userData.clickData={e, point:position};
         if(props.onDrop) props.onDrop(e, position, cameraRef, maxRenderOrder, scene, setMaxRenderOrder);
     }
 
-    return (
-        <div
-            id="canvas-wrapper"
-            className={styles['canvas-wrapper']}
-            ref={canvasRef}
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={onDropEvent}
-        >
-            {/*{threeReady && children}*/}
-            {threeReady && (
-                <>
-                    <ColliderSphere scene={scene} />
-                    <Background bgConf={bgConf} scene={scene} />
-                </>
-            )}
 
-            <div id="canvasUI" className={`${styles['canvasUI']} ${UI ? styles['active'] : ''}`} style={UI?.style}>
-                {UI && <UI.Component {...UI?.props} sceneRef={sceneRef} />}
+
+
+    return (<>
+        {true && <DebugUI renderer={rendererRef.current} scene={sceneRef.current} glContext={glContext}/>}
+            <div
+                id="canvas-wrapper"
+                className={styles['canvas-wrapper']}
+                ref={canvasRef}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={onDropEvent}
+            >
+                {/*{threeReady && children}*/}
+                {threeReady && React.Children.map(children, child => React.cloneElement(child, {sceneRef, setMaxRenderOrder}))}
+
+                {threeReady && (
+                    <>
+                        <ColliderSphere scene={scene} />
+                        <Background bgConf={bgConf} scene={scene} />
+                    </>
+                )}
+
+                <div id="canvasUI" className={`${styles['canvasUI']} ${UI ? styles['active'] : ''}`} style={UI?.style}>
+                    {UI && <UI.Component {...UI?.props} sceneRef={sceneRef} />}
+                </div>
             </div>
-        </div>
-    );
+    </>);
 };
+
+
+/**
+ * DebugUI - could be used to see memory usage and other interesting things :)
+ */
+const DebugUI=({renderer, glContext, scene})=>{
+    //Never use it on prod
+    if(window.location.hostname !== "127.0.0.1") return false;
+
+    // Note: WebGLRenderer.forceContextLoss() and WebGLRenderer.forceContextRestore()
+    // are used to simulate a context loss and restore based on the WebGL extension WEBGL_lose_context.
+    // If you have a real context loss, the mentioned events should be triggered automatically.
+    const ext = glContext.getExtension('WEBGL_lose_context');
+
+    // console.log('%c ------- DEBUG ------- ', 'color:green', {
+    //     renderer,
+    //     glContext,
+    //     debug: renderer.debug,
+    //     info: renderer.info,
+    //     ext
+    // });
+
+    const restore=(e)=>{
+        ext.restoreContext();
+        renderer.forceContextRestore()
+    }
+
+    const {info} = renderer;
+    const cap = Object.entries(renderer.capabilities).reduce((acc, [k,v])=>{
+        return ['isWebGL2', 'maxCubemapSize','maxTextures','maxTextureSize'].includes(k) ?  {...acc, [k]: v} : acc;
+    },{});
+
+    const Tr=({label, data, style={}})=>(<tr style={style}>
+        <td>{label}:</td>
+        <td>{ data }</td>
+    </tr>);
+
+    return(<div style={{display:'block', width:'100%', margin: '3em 0 0em', fontSize:'12px', border:'1px dashed', padding:'1em', wordBreak: 'break-word'}}>
+        <table >
+            <tbody>
+                <Tr label='Scene' data={JSON.stringify({children: scene.children.length}) } style={{minWidth:'10em'}}/>
+                <Tr label='Memory' data={JSON.stringify(info.memory)}/>
+                <Tr label='Render' data={JSON.stringify(info.render)}/>
+                <Tr label='Capabilities' data={JSON.stringify(cap)}/>
+                <Tr label='force Context Loss' data={(<button style={{backgroundColor: '#CB203FBC', color:'#fff', border: 'none' }}  onClick={e=>renderer.forceContextLoss()}>Call</button>)}/>
+                <Tr label='force Context Restore' data={(<button style={{backgroundColor: '#85f141bd', color:'#fff', border: 'none' }} onClick={restore}>Call</button>)}/>
+            </tbody>
+        </table>
+    </div>)
+}
 
 export default ThreeEditor;

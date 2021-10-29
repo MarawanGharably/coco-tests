@@ -1,10 +1,20 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { createProductMarkerOnEvent, addImageHotspotOnDrop, dragReleaseHotspotAutoSave } from '../../../utils/sceneHelpers';
+import { dragReleaseHotspotAutoSave } from '../../../utils/sceneHelpers';
 import Scene, { Hotspot } from '../../../three-js';
 import { formURL } from '../../../utils';
 import HotspotMarkerUIForm from "../MarkerForms/HotspotMarkerUIForm";
 import ImageMarkerUIForm from "../MarkerForms/ImageMarkerUIForm";
+
+
+
+//key - mode values
+//val - scene object type
+const HOTSPOT_TYPES_BY_MODE = {
+    product_tagging: 'hotspot_marker',
+    product_placement: 'image_marker',
+};
+
 
 /**
  * ThreeScene - is a wrapper for ThreeJS Scene
@@ -15,10 +25,16 @@ const ThreeScene = ({ storeId, sceneObjects, sceneEditorData, productLibrary }) 
     const { currentSceneId, storeScenes } = sceneEditorData;
     const { mode_slug, products, selectedFolder } = productLibrary;
     const reduxDispatch = useDispatch();
-    const [hotspots, setHotspots] = useState(sceneObjects);
+
+    const [mount, setMount] = useState(0);//used to force re-render
+    const hotspots = useRef(sceneObjects);
 
 
-    useEffect(()=>setHotspots(sceneObjects),[sceneObjects]);
+    useEffect(()=>{
+        hotspots.current = sceneObjects;
+        setMount((prevState)=>prevState + 1 );
+        },[sceneObjects, currentSceneId]);
+
 
     //Calc Background config
     const sceneData = Object.values(storeScenes).find((scene) => scene._id.$oid === currentSceneId);
@@ -32,30 +48,38 @@ const ThreeScene = ({ storeId, sceneObjects, sceneEditorData, productLibrary }) 
         }
     }, [sceneData]);
 
-    const HOTSPOT_TYPES_BY_MODE = {
-        product_tagging: 'hotspot_marker',
-        product_placement: 'image_marker',
-    };
+
     const selectedHotspotType = HOTSPOT_TYPES_BY_MODE[mode_slug];
 
     const onMouseDown = (e, marker) => {
         console.log('%c >onMouseDown custom', 'color:blue', { e, marker });
     };
 
-    const onMouseUp = (e, marker, point, scene, intersects, options) => {
+    const onMouseUp = (e, sceneObject, marker, point, scene, intersects, options) => {
+        // const marker = sceneObject;
         const { isDragEvent } = options;
 
         if (isDragEvent && marker) {
-            dragReleaseHotspotAutoSave(marker, currentSceneId, storeId, reduxDispatch);
+            dragReleaseHotspotAutoSave(sceneObject, marker, currentSceneId, storeId, reduxDispatch);
         } else if (!isDragEvent) {
             //Open UI
             //TODO: check for marker?.owner?.sceneObject presence
-            if (marker && !marker?.owner?.sceneObject) console.error('Prop sceneObject not found - marker.owner.sceneObject', marker);
+            if (marker && !marker?.sceneObject) console.error('Prop sceneObject not found - marker.owner.sceneObject', marker);
 
-            if (marker && marker?.owner?.sceneObject) marker.onClick(e);
+            //Open marker UI
+            if (marker && marker?.sceneObject) marker.onClick(e);
+
             //Create marker & record, then Open UI
             else {
-                if (mode_slug === 'product_tagging') createProductMarkerOnEvent(e, point, scene);
+                if (mode_slug === 'product_tagging') {
+
+                    hotspots.current = [...hotspots.current, {
+                        type:'product',
+                        hotspot_type:'product',
+                        userData:{},
+                    }];
+                    setMount(new Date().getTime());
+                }
             }
         }
     };
@@ -67,9 +91,31 @@ const ThreeScene = ({ storeId, sceneObjects, sceneEditorData, productLibrary }) 
     };
 
     const onDrop = (e, position, cameraRef, maxRenderOrder, scene, setMaxRenderOrder) => {
-        addImageHotspotOnDrop(e, position, storeId, currentSceneId, cameraRef, selectedFolder.value, products, maxRenderOrder, scene, setMaxRenderOrder, reduxDispatch);
-    };
+        console.log('-onDrop', {  } );
+        const folderId = selectedFolder.value;
+        e.preventDefault();
+        const imageId = e.dataTransfer.getData('id');
+        const image = products[folderId].find((item) => item._id === imageId);
+        const renderOrder = maxRenderOrder;
+        const scale = 1;
+        setMaxRenderOrder(renderOrder);
 
+
+        hotspots.current = [...hotspots.current, {
+            type:'product',
+            hotspot_type:'product_image',
+            scale:1,
+            renderOrder:renderOrder,
+            imageURL:image.image,
+            userData:{
+                scale:1,
+                renderOrder:renderOrder,
+                imageURL:image.image,
+                imageId,
+            },
+        }];
+        setMount(new Date().getTime());
+    };
 
     return (
         <>
@@ -83,7 +129,7 @@ const ThreeScene = ({ storeId, sceneObjects, sceneEditorData, productLibrary }) 
                     onMouseMove={onMouseMove}
                     onDrop={onDrop}
                 >
-                    {placeSceneHotspots(hotspots)}
+                    {placeSceneHotspots(hotspots.current)}
                 </Scene>
             )}
         </>
@@ -105,24 +151,24 @@ const placeSceneHotspots=(sceneObjects)=>{
         }
     }
 
-   return sceneObjects.map((item) => {
-        const hotspot_type = item.props.hotspot_type;
+   return sceneObjects.map((item,idx) => {
+        const hotspot_type = item?.props?.hotspot_type || item.hotspot_type;
 
         let imageHotspotProps = {};
         if (hotspot_type === 'product_image') {
-            imageHotspotProps.scale = item.props.scale;
-            imageHotspotProps.renderOrder = item.props.renderOrder;
-            imageHotspotProps.imageURL= formURL(item.props?.image.image)
+            imageHotspotProps.scale = item?.props?.scale || item.scale;
+            imageHotspotProps.renderOrder = item?.props?.renderOrder || item.renderOrder;
+            imageHotspotProps.imageURL= formURL(item.props?.image?.image || item.imageURL)
         }
 
         // Always use unique keys!!!
         return (
             <Hotspot
-                key={item._id}
+                key={item?._id || idx}
                 type={hotspot_type === 'product_image' ? 'image_hotspot' : 'hotspot'}
                 collider_transform={item.collider_transform}
                 transform={item.transform}
-                userData={item}
+                userData={item?.userData || item}
                 UIConfig={UIConf[hotspot_type]}
                 {...imageHotspotProps}
             />

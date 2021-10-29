@@ -56,7 +56,7 @@ const Slideshow = ({ step=5, className='', children }) => {
 
     useEffect(() => {
         const handleResize = debounce(() => {
-            const { scrollLeft, offsetWidth, scrollWidth } = scrollableElRef.current;
+            const { scrollLeft, offsetWidth, scrollWidth } = scrollableElRef.current || {};
             // console.log('handleResize', scrollableElRef );
             setScrollData({
                 scrollLeft,

@@ -1,12 +1,12 @@
-import React, {useEffect, useRef} from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Field, reduxForm, Form } from 'redux-form';
 import { useRouter } from 'next/router';
 import { Button } from 'react-bootstrap';
-import {apiCreateHotspotByType, deleteHotspotAPI, updateHotspotAPI} from '../../../../APImethods';
+import { apiCreateHotspotByType, deleteHotspotAPI, updateHotspotAPI } from '../../../../APImethods';
 import { RangeInputSet, NumberSelector } from '../../../ReduxForms/_formFields';
 import styles from './ImageMarkerUIForm.module.scss';
-
+import { sleep } from '../../../../utils';
 const HOTSPOT_TYPE = 'product_image';
 
 const ImageMarkerUIForm = (props) => {
@@ -21,41 +21,41 @@ const ImageMarkerUIForm = (props) => {
     const { userData } = Marker;
     const record = userData?._id ? userData : false;
 
-
-
     //Initialize Form Values in Redux State
     useEffect(() => {
-
         initialize({
             _id: record?._id,
             scale: Marker?.scale.x || 3,
             renderOrder: Marker?.renderOrder || 1,
         });
 
-        if(!record?._id){
-
-            const HOTSPOT_TYPE = 'product_image';
-            apiCreateHotspotByType(HOTSPOT_TYPE, storeId, currentSceneId, {
-                type: 'HotspotMarker',
-                scene: currentSceneId,
-                collider_transform: Marker.transforms.colliderTransform.elements,
-                transform: Marker.transforms.visualTransform.elements,
-                // collider_transform: transforms.colliderTransform.elements,
-                // transform: transforms.visualTransform.elements,
-                props: {
-                    show_icon: true, //Where it used?
-                    renderOrder: userData.renderOrder,
-                    scale: userData.scale,
-                    hotspot_type: HOTSPOT_TYPE,
-                    image: userData.imageId,
-                },
-            }).then(res=>{
-                props.change('_id', res._id);
-                Marker.setUserData(res);//Update Marker
-            }).catch(err=>{});
-        }
+        if (!record?._id) createRecord();
     }, [Marker.uuid]);
 
+    const createRecord = async () => {
+        await sleep(500);
+        const HOTSPOT_TYPE = 'product_image';
+        apiCreateHotspotByType(HOTSPOT_TYPE, storeId, currentSceneId, {
+            type: 'HotspotMarker',
+            scene: currentSceneId,
+            collider_transform: Marker.transforms.colliderTransform.elements,
+            transform: Marker.transforms.visualTransform.elements,
+            props: {
+                show_icon: true, //Where it used?
+                renderOrder: userData.renderOrder,
+                scale: userData.scale,
+                hotspot_type: HOTSPOT_TYPE,
+                image: userData.imageId,
+            },
+        })
+            .then((res) => {
+                props.change('_id', res._id);
+                Marker.setUserData(res); //Update Marker
+            })
+            .catch((err) => {
+                console.error('-Error', err);
+            });
+    };
 
     //Update Scale
     useEffect(() => {
@@ -110,7 +110,6 @@ const ImageMarkerUIForm = (props) => {
                 hotspot_type: HOTSPOT_TYPE,
             },
         };
-
 
         dispatch(updateHotspotAPI(_id, storeId, currentSceneId, postData))
             .then((res) => {

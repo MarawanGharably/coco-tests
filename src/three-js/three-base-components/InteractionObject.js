@@ -187,6 +187,7 @@ export default class InteractionObject extends ThreeSceneObject {
 
         const colliderTransform = this.sceneObject.matrix;
         const visualTransform = this.visualObject.matrix;
+
         return { colliderTransform, visualTransform };
     }
 

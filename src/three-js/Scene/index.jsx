@@ -142,11 +142,15 @@ const ThreeEditor = (props) => {
 
 
     const onDropEvent=(e)=>{
+        e.preventDefault();
+
         // Set Position to in front of camera
         const position = new THREE.Vector3(0, 0, -10);
         position.applyQuaternion(cameraRef.current.quaternion);
         sceneRef.current.userData.clickData={e, point:position};
-        if(props.onDrop) props.onDrop(e, position, cameraRef, maxRenderOrder, scene, setMaxRenderOrder);
+        setMaxRenderOrder(maxRenderOrder);
+
+        if(props.onDrop) props.onDrop(e, position, maxRenderOrder);
     }
 
 

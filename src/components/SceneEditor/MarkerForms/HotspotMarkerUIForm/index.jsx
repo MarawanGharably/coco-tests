@@ -21,6 +21,9 @@ const HotspotMarkerUIForm = (props) => {
     //Hotspot record
     let record = Marker.userData;
     const _ID = useRef(); //reference for record id
+    //TODO: use props.change('_id', res._id);
+
+
 
     //Init Marker values
     useEffect(() => {

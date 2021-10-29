@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useRef} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, Form } from 'redux-form';
 import { useRouter } from 'next/router';
 import { Button } from 'react-bootstrap';
-import { deleteHotspotAPI, updateHotspotAPI } from '../../../../APImethods';
+import {apiCreateHotspotByType, deleteHotspotAPI, updateHotspotAPI} from '../../../../APImethods';
 import { RangeInputSet, NumberSelector } from '../../../ReduxForms/_formFields';
 import styles from './ImageMarkerUIForm.module.scss';
 
@@ -20,15 +20,42 @@ const ImageMarkerUIForm = (props) => {
     const storeId = router.query?.id;
     const { userData } = Marker;
     const record = userData?._id ? userData : false;
-    const id = record?._id;
+
+
 
     //Initialize Form Values in Redux State
     useEffect(() => {
+
         initialize({
+            _id: record?._id,
             scale: Marker?.scale.x || 3,
             renderOrder: Marker?.renderOrder || 1,
         });
+
+        if(!record?._id){
+
+            const HOTSPOT_TYPE = 'product_image';
+            apiCreateHotspotByType(HOTSPOT_TYPE, storeId, currentSceneId, {
+                type: 'HotspotMarker',
+                scene: currentSceneId,
+                collider_transform: Marker.transforms.colliderTransform.elements,
+                transform: Marker.transforms.visualTransform.elements,
+                // collider_transform: transforms.colliderTransform.elements,
+                // transform: transforms.visualTransform.elements,
+                props: {
+                    show_icon: true, //Where it used?
+                    renderOrder: userData.renderOrder,
+                    scale: userData.scale,
+                    hotspot_type: HOTSPOT_TYPE,
+                    image: userData.imageId,
+                },
+            }).then(res=>{
+                props.change('_id', res._id);
+                Marker.setUserData(res);//Update Marker
+            }).catch(err=>{});
+        }
     }, [Marker.uuid]);
+
 
     //Update Scale
     useEffect(() => {
@@ -38,7 +65,7 @@ const ImageMarkerUIForm = (props) => {
         if (isChanged && formValues.scale >= 0.5) {
             console.log('%c __ Scale UPDATE run', 'color:blue', { formData, formValues });
             Marker.setScale(formValues.scale);
-            onSubmit();
+            props.submit();
         }
     }, [formValues.scale]);
 
@@ -49,11 +76,13 @@ const ImageMarkerUIForm = (props) => {
         if (isChanged) {
             console.log('%c __ update RenderOrder', 'color:blue', { props });
             Marker.setRenderOrder(formValues.renderOrder);
-            onSubmit();
+            props.submit();
         }
     }, [formValues.renderOrder]);
 
     const handleDelete = () => {
+        const id = formValues._id;
+
         id && deleteHotspotAPI(id, storeId, currentSceneId)
                 .then((res) => {
                     Marker.removeFromScene();
@@ -65,7 +94,8 @@ const ImageMarkerUIForm = (props) => {
     };
 
     const onSubmit = (values = formValues) => {
-        if (!record?._id || !props.initialized) return;
+        const _id = values._id;
+        if (!_id || !props.initialized) return;
         const { colliderTransform, visualTransform } = Marker.getTransforms();
 
         const postData = {
@@ -82,7 +112,7 @@ const ImageMarkerUIForm = (props) => {
         };
 
 
-        dispatch(updateHotspotAPI(record._id, storeId, currentSceneId, postData))
+        dispatch(updateHotspotAPI(_id, storeId, currentSceneId, postData))
             .then((res) => {
                 Marker.setUserData(res);
             })
@@ -92,7 +122,7 @@ const ImageMarkerUIForm = (props) => {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className={styles['cmp']}>
+        <Form onSubmit={handleSubmit(onSubmit)} className={styles['cmp']}>
             <Field name="renderOrder" label="Order:" component={NumberSelector} />
             <Field name="scale" label="Size:" min={0.5} max={10} step={0.01} component={RangeInputSet} />
 
@@ -104,7 +134,7 @@ const ImageMarkerUIForm = (props) => {
                     Delete
                 </Button>
             </div>
-        </form>
+        </Form>
     );
 };
 

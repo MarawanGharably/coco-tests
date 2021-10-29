@@ -98,7 +98,7 @@ export const threeEditorMouseEvents = (
         const isDragEvent = (dragDistance > DESKTOP_THRESHOLD);
 
         const markerIntersection = getIntersectedMarkerObject(intersects);
-        const marker = markerIntersection?.object;
+        const sceneObject = markerIntersection?.object;
 
         //reset data
         if (dragDistance > DESKTOP_THRESHOLD) {
@@ -111,8 +111,15 @@ export const threeEditorMouseEvents = (
         const bgObject = intersects.find(item=> ['cubeBackground', 'flatBackground'].includes(item.object.name));
         const point = bgObject.point;
 
+        //save clickData
+        sceneRef.current.userData.clickData = {e, point};
+
+        //Get transforms
+        const marker = sceneObject?.owner;
+        if(marker) marker.transforms = marker.getTransforms();
+
         // public method/callback
-        if(onMouseUpCallback)  return onMouseUpCallback(e, marker, point, sceneRef.current, intersects, {DESKTOP_THRESHOLD, dragDistance, isDragEvent });
+        if(onMouseUpCallback)  return onMouseUpCallback(e, sceneObject, marker, point, sceneRef.current, intersects, {DESKTOP_THRESHOLD, dragDistance, isDragEvent });
     };
 
 

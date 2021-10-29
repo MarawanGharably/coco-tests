@@ -1,4 +1,4 @@
-import {HotspotMarker} from "../three-base-components/Markers";
+import {HotspotMarker} from "../Hotspot/_constructors";
 
 
 const createHotspotMarker=({userData={}, UIConfig})=>{
@@ -40,7 +40,6 @@ export const createAndRenderHotspotMarkerOnEvent = (e, data, point, scene) => {
  * @returns {HotspotMarker}
  */
 export const renderHotspotRecord = (object={}, sceneRef) => {
-    console.log('-renderHotspotRecord', {object});
     //1. Create
     const marker = createHotspotMarker({
         userData: object.userData,
@@ -53,6 +52,5 @@ export const renderHotspotRecord = (object={}, sceneRef) => {
     //3. config
     marker.setTransform(object.collider_transform, object.transform);
     marker.setScale();
-    // console.log('-renderHotspotRecord', {object,marker});
     return marker;
 };

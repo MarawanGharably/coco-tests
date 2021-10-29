@@ -51,13 +51,9 @@ const ThreeScene = ({ storeId, sceneObjects, sceneEditorData, productLibrary }) 
 
     const selectedHotspotType = HOTSPOT_TYPES_BY_MODE[mode_slug];
 
-    const onMouseDown = (e, marker) => {
-        console.log('%c >onMouseDown custom', 'color:blue', { e, marker });
-    };
 
-    const onMouseUp = (e, sceneObject, marker, point, scene, intersects, options) => {
-        // const marker = sceneObject;
-        const { isDragEvent } = options;
+
+    const onMouseUp = (e, sceneObject, marker, isDragEvent) => {
 
         if (isDragEvent && marker) {
             dragReleaseHotspotAutoSave(sceneObject, marker, currentSceneId, storeId, reduxDispatch);
@@ -86,29 +82,25 @@ const ThreeScene = ({ storeId, sceneObjects, sceneEditorData, productLibrary }) 
 
 
 
-    const onMouseMove = (e, marker) => {
-        // console.log('%c >onMouseMove custom', 'color:blue', {e, marker, options});
-    };
 
-    const onDrop = (e, position, cameraRef, maxRenderOrder, scene, setMaxRenderOrder) => {
-        console.log('-onDrop', {  } );
+
+    const onDrop = (e, position, maxRenderOrder ) => {
         const folderId = selectedFolder.value;
-        e.preventDefault();
         const imageId = e.dataTransfer.getData('id');
         const image = products[folderId].find((item) => item._id === imageId);
         const renderOrder = maxRenderOrder;
         const scale = 1;
-        setMaxRenderOrder(renderOrder);
+
 
 
         hotspots.current = [...hotspots.current, {
             type:'product',
             hotspot_type:'product_image',
-            scale:1,
+            scale,
             renderOrder:renderOrder,
             imageURL:image.image,
             userData:{
-                scale:1,
+                scale,
                 renderOrder:renderOrder,
                 imageURL:image.image,
                 imageId,
@@ -124,9 +116,7 @@ const ThreeScene = ({ storeId, sceneObjects, sceneEditorData, productLibrary }) 
                     sceneId={currentSceneId}
                     allowEventsForMarkerTypeOnly={selectedHotspotType}
                     bgConf={bgConf}
-                    onMouseDown={onMouseDown}
                     onMouseUp={onMouseUp}
-                    onMouseMove={onMouseMove}
                     onDrop={onDrop}
                 >
                     {placeSceneHotspots(hotspots.current)}

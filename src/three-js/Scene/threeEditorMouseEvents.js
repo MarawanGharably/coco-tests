@@ -83,7 +83,7 @@ export const threeEditorMouseEvents = (
         }
 
         //Public interface
-        if(onMouseDownCallback)  onMouseDownCallback(e, marker, {mousePos});
+        if(onMouseDownCallback)  onMouseDownCallback(e, marker, mousePos);
     };
 
 
@@ -119,7 +119,7 @@ export const threeEditorMouseEvents = (
         if(marker) marker.transforms = marker.getTransforms();
 
         // public method/callback
-        if(onMouseUpCallback)  return onMouseUpCallback(e, sceneObject, marker, point, sceneRef.current, intersects, {DESKTOP_THRESHOLD, dragDistance, isDragEvent });
+        if(onMouseUpCallback)  return onMouseUpCallback(e, sceneObject, marker,  isDragEvent);
     };
 
 

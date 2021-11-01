@@ -23,6 +23,7 @@ const Scene = (props) => {
     const rendererRef = useRef(new THREE.WebGLRenderer());
     let renderer = rendererRef.current;
     const glContext = renderer?.domElement.getContext('webgl');
+    const loseExtension = glContext.getExtension("WEBGL_lose_context");
 
     // useRef used to prevent Scene from losing variable references.
     const canvasRef = useRef();
@@ -47,7 +48,28 @@ const Scene = (props) => {
 
         setupRenderer(rendererRef.current, canvas);
         scene.add(cameraRef.current);
+
+        const handleContextLoss=(e)=>{
+            e.preventDefault();
+            setTimeout((e) => {
+                console.log('restoring context...');
+                loseExtension?.restoreContext();
+                renderer.clear();
+            }, 50);
+        }
+
+        const handleContextRestore=()=>{
+            console.log('Context restored');
+            setupRenderer(rendererRef.current, canvas);
+            scene.add(cameraRef.current);
+        }
+
+        renderer.domElement.addEventListener('webglcontextlost', handleContextLoss );
+        renderer.domElement.addEventListener('webglcontextrestored', handleContextRestore);
+
         return ()=>{
+            renderer.domElement.removeEventListener('webglcontextlost', handleContextLoss);
+            renderer.domElement.removeEventListener('webglcontextrestored', handleContextRestore);
             renderer.dispose();
             // renderer.forceContextLoss();//test
             //cameraRef.current.dispose();

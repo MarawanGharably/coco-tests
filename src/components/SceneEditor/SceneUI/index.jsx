@@ -17,11 +17,11 @@ const HOTSPOT_TYPES_BY_MODE = {
 
 
 /**
- * ThreeScene - is a wrapper for ThreeJS Scene
+ * SceneUI - is a wrapper for ThreeJS Scene
  * @param storeId
  * @returns {JSX.Element}
  */
-const ThreeScene = ({ storeId, sceneObjects, sceneEditorData, productLibrary }) => {
+const SceneUI = ({ storeId, sceneObjects, sceneEditorData, productLibrary }) => {
     const { currentSceneId, storeScenes } = sceneEditorData;
     const { mode_slug, products, selectedFolder } = productLibrary;
     const reduxDispatch = useDispatch();
@@ -166,4 +166,4 @@ const placeSceneHotspots=(sceneObjects)=>{
     });
 }
 
-export default ThreeScene;
+export default SceneUI;

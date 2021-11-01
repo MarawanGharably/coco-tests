@@ -42,9 +42,9 @@ Layout.LeftSidebar=({xs=4, sm=3, lg=3, xl=2, children})=>{
     </Col>)
 }
 
-Layout.ContentArea=({xs=8, sm=9, lg=9, xl=10, children})=>{
-    return(<Col xs={xs} sm={sm} lg={lg} xl={xl} className={styles.contentArea}>
-        <div>{children}</div>
+Layout.ContentArea=({xs=8, sm=9, lg=9, xl=10, style={}, children})=>{
+    return(<Col xs={xs} sm={sm} lg={lg} xl={xl} className={styles.contentArea} style={style}>
+        {children}
     </Col>)
 }
 

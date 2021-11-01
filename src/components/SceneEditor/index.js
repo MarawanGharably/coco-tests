@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {Row} from "react-bootstrap";
 import SceneNavigator from "./SceneNavigator";
-import ThreeScene from "./ThreeScene";
+import SceneUI from "./SceneUI";
 import ProductPlacementSidebar from "./ProductPlacementSidebar";
 import { getStoreSceneEditorData, getStoreSceneHotspots} from "../../APImethods";
 import {destroySceneData} from "../../store/actions/SceneEditorActions";
@@ -55,13 +54,13 @@ export default function SceneEditor({storeId}){
 
 
 
-    return(<Row className={styles['sceneEditor']}>
+    return(<div className={styles['sceneEditor']} >
             <SceneNavigator
                 sceneEditor={sceneEditorData}
                 className={`${styles.sceneNavigator} ${showSideBar ? styles.withSideBar : ''}`}
             />
 
-            {storeId && (<ThreeScene
+            {storeId && (<SceneUI
                 storeId={storeId}
                 sceneObjects={sceneObjects}
                 sceneEditorData={sceneEditorData}
@@ -73,5 +72,5 @@ export default function SceneEditor({storeId}){
                 productLibrary={productLibrary}
             />)}
 
-    </Row>)
+    </div>)
 }

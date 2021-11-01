@@ -32,7 +32,7 @@ export default function StoreLayout({ title, subTitle, meta={}, className = '', 
                 </Layout.LeftSidebar>
 
 
-                <Layout.ContentArea>
+                <Layout.ContentArea style={{minHeight:'100vh', display:'flex', flexFlow:'column'}}>
                         <HeaderMenu />
                         {title && (<h1 className={styles.title}>{title}</h1>)}
                         {subTitle && <h6 className={styles.subTitle}>{subTitle}</h6>}

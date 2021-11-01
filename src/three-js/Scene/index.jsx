@@ -4,12 +4,12 @@ import ThreeController from '../three-controls/ThreeController';
 import { setupRenderer, setupCamera } from './setupThreeEditor';
 import { threeEditorMouseEvents } from './threeEditorMouseEvents';
 import { Background, ColliderSphere } from '../three-background';
-import styles from './ThreeEditor.module.scss';
+import styles from './main.module.scss';
 
 
 
 
-const ThreeEditor = (props) => {
+const Scene = (props) => {
     const { sceneId, allowEventsForMarkerTypeOnly, bgConf, children } = props;
     const [threeReady, setThreeReady] = useState(false);
     const [maxRenderOrder, setMaxRenderOrderAction] = useState(1);
@@ -24,7 +24,7 @@ const ThreeEditor = (props) => {
     let renderer = rendererRef.current;
     const glContext = renderer?.domElement.getContext('webgl');
 
-    // useRef used to prevent ThreeEditor from losing variable references.
+    // useRef used to prevent Scene from losing variable references.
     const canvasRef = useRef();
     const cameraRef = useRef();
     const controlsRef = useRef();
@@ -58,7 +58,6 @@ const ThreeEditor = (props) => {
 
     //New Scene INIT
     useEffect(() => {
-        // console.log('%c- New Scene INIT 2', 'color:green', { cameraRef, controlsRef, rendererRef });
         const aspectRatio = canvasRef.current.offsetWidth / canvasRef.current.offsetHeight;
 
         // set new reference for cameraRef.current here
@@ -157,7 +156,7 @@ const ThreeEditor = (props) => {
 
 
     return (<>
-        {true && <DebugUI renderer={rendererRef.current} scene={sceneRef.current} glContext={glContext}/>}
+        {/*{true && <DebugUI renderer={rendererRef.current} scene={sceneRef.current} glContext={glContext}/>}*/}
             <div
                 id="canvas-wrapper"
                 className={styles['canvas-wrapper']}
@@ -232,4 +231,4 @@ const DebugUI=({renderer, glContext, scene})=>{
     </div>)
 }
 
-export default ThreeEditor;
+export default Scene;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { dragReleaseHotspotAutoSave } from '../../../utils/sceneHelpers';
-import Scene, { Hotspot } from '../../../three-js';
+import Scene, { Hotspot } from 'threejs-scene';
 import { formURL } from '../../../utils';
 import HotspotMarkerUIForm from "../MarkerForms/HotspotMarkerUIForm";
 import ImageMarkerUIForm from "../MarkerForms/ImageMarkerUIForm";

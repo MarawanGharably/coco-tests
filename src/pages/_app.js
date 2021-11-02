@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { useRouter } from 'next/router';
 import Cookies from 'universal-cookie';
 
-import { getLoginRedirectPath, rollbarInit } from '../utils';
+import { getLoginRedirectPath } from '../utils';
 import AppAlerts from '../components/AppAlerts';
 import { getCurrentUserData } from '../APImethods';
 import reduxStore, { wrapper } from '../store';
@@ -14,6 +14,7 @@ const store = reduxStore();
 //Global Styles
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/main.css';
+import 'threejs-scene/dist/main.css';
 
 const MyApp = ({ Component, pageProps }) => {
     const router = useRouter();

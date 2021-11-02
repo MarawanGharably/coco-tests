@@ -60,7 +60,7 @@ export default function SceneEditor({storeId}){
                 className={`${styles.sceneNavigator} ${showSideBar ? styles.withSideBar : ''}`}
             />
 
-            {storeId && (<SceneUI
+            {storeId  && (<SceneUI
                 storeId={storeId}
                 sceneObjects={sceneObjects}
                 sceneEditorData={sceneEditorData}

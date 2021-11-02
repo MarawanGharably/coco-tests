@@ -3,6 +3,14 @@ FROM node:15 AS build-env
 
 LABEL version="0.2.0"
 
+ARG SSH_PRIVATE_KEY_GITLAB
+
+# set up gitlab ssh credentials so npm can install from our private gitlab repos
+RUN mkdir /root/.ssh/
+RUN echo "${SSH_PRIVATE_KEY_GITLAB}" > /root/.ssh/id_rsa
+# make sure your domain is accepted
+RUN chmod 400 /root/.ssh/id_rsa && touch /root/.ssh/known_hosts && ssh-keyscan gitlab.com >> /root/.ssh/known_hosts
+
 # variable passed in with build command
 ARG APP_ENV=develop
 ENV APP_ENV $APP_ENV

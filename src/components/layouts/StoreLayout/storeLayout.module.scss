@@ -1,9 +1,10 @@
 .cmp {
 
-    .logo {
-      padding: 1em;
-
-      img{ margin-top: 1em;}
+    :global {
+        #logo{
+            padding:1em 1em 1em 2em;
+            min-height: 5em;
+        }
     }
 
 

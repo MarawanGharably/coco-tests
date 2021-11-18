@@ -1,0 +1,29 @@
+.cmp {
+  .colorSelector {
+    background-color: #232323;
+    border-color: #232323;
+    color: white;
+  }
+
+  .cp_wrapper {
+    position: relative;
+    height: 100%;
+    width: 100%;
+
+    //Hidden input
+    input[type='color'] {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      z-index: 999;
+      opacity: 0;
+    }
+
+    //Visible UI
+    .colorSelectorPreview {
+      height: 2.4em;
+      width: 2.4em;
+      border-radius: 4px;
+    }
+  }
+}

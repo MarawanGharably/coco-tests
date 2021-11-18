@@ -127,3 +127,38 @@ export const getStoreSceneHotspots = async(storeId, currentSceneId, hotspotTypes
             return res.flat().filter((object) => typeof object !== 'string');
         }).catch(err=>Promise.reject(err));
 }
+
+
+
+/**
+ * Get store General data
+ */
+export const getStoreGeneralData=(storeId)=>{
+    if(!storeId) return Promise.reject(Error('storeId is required parameter'));
+    return axiosApi
+        .get(`/stores/${storeId}/general`)
+        .then((res) => {
+            const data = res.data.general;
+            data._id = res.data._id;
+            return data;
+        })
+        .catch((err) => Promise.reject(err));
+}
+
+/**
+ *
+ */
+export const getStoreStylingData=(storeId)=>{
+    console.log('> getStoreStylingData', storeId);
+    if(!storeId) return Promise.reject(Error('storeId is required parameter'));
+    return axiosApi
+        .get(`/stores/${storeId}/styling`)
+        .then((res) => {
+            const data = res.data;
+            data._id = res.data._id;
+
+            return data;
+        })
+        .catch((err) => Promise.reject(err));
+}
+

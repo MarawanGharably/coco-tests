@@ -12,18 +12,28 @@ export default function StoreLayout({ title, subTitle, meta={}, className = '', 
     const storeBasePath = `/store`;
 
     const links = [
-        // { label: 'General', url: `${storeBasePath}/?id=${storeId}` },
-        // {label:'Welcome Screen', url:`${storeBasePath}/welcome`  },
+        {   label: 'General',
+            url: ``,
+            children: [
+                {label: 'Store Info', url: `${storeBasePath}/storeinfo/?id=${storeId}`},
+                // {label:'Icons', url:`${storeBasePath}/icons/?id=${storeId}`},
+                // {label:'Locale', url:`${storeBasePath}/locale/?id=${storeId}`}
+            ]
+        },
+        
+
+        //{label:'Welcome Screen', url:`${storeBasePath}/welcome`  },
         // {label:'Product Pop Up', url:`${storeBasePath}/popup` },
         // {label:'Section Selector', url: `${storeBasePath}/selectors` },
-        // {label:'Icons', url:'/icons'},
-        { label: 'Hotspots', url: `${storeBasePath}/hotspots/?id=${storeId}` },
+        
+        { label: 'Hotspots',
+            url:`${storeBasePath}/hotspots/?id=${storeId}`,
+        },
         // {label:'Navigation Arrows', url:'/'},
         // {label:'Product Data', url:'/'},
     ];
 
     if(!meta?.title) meta.title = 'COCO: Store Editing';
-
     return (
         <Layout meta={meta} fluid={true} showNavBar={false} className={`${styles.cmp} ${className}`}>
             <Row>
@@ -36,6 +46,7 @@ export default function StoreLayout({ title, subTitle, meta={}, className = '', 
                         <HeaderMenu />
                         {title && (<h1 className={styles.title}>{title}</h1>)}
                         {subTitle && <h6 className={styles.subTitle}>{subTitle}</h6>}
+
                         {children}
                 </Layout.ContentArea>
             </Row>

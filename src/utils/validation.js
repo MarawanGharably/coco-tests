@@ -15,3 +15,10 @@ export const isValidEmail = (email) => {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email) !== false;
 };
+
+
+export const colorValidation = (color) => {
+    if(!color) return false;
+    const re = /^#[0-9A-F]{6}$/i;
+    return re.test(color) !== false;
+}

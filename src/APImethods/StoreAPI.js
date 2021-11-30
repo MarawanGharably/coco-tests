@@ -20,19 +20,10 @@ export const getStores=(fields=[])=>{
 }
 
 
-/**
- * get stores in a user access group
- */
-export const getUserStores=()=>{
-    return axiosApi
-        .get(`/stores/users-stores`)
-        .then((res) => res.data)
-        .catch((err) => Promise.reject(err));
-}
 
 
 /**
- * get single store data
+ * GET Store Data
  */
 export const getStore=(storeId)=>{
     if(!storeId) return Promise.reject(Error('storeId is required parameter'));
@@ -42,8 +33,9 @@ export const getStore=(storeId)=>{
         .catch((err) => Promise.reject(err));
 }
 
+
 /**
- * Update store data
+ * Update Store Data
  */
 export const updateStore=(storeId, data)=>{
     if(!storeId) return Promise.reject(Error('storeId is required parameter'));
@@ -55,10 +47,33 @@ export const updateStore=(storeId, data)=>{
 }
 
 
+/**
+ * GET Store Info
+ */
+export const getStoreInfo=(storeId)=>{
+    if(!storeId) return Promise.reject(Error('storeId is required parameter'));
+    return axiosApi
+        .get(`/stores/${storeId}/storeinfo`)
+        .then((res) => res.data)
+        .catch((err) => Promise.reject(err));
+}
+
+/**
+ * Update Store Info
+ */
+export const updateStoreInfo=(storeId, data)=>{
+    if(!storeId) return Promise.reject(Error('storeId is required parameter'));
+
+    return axiosApi
+        .put(`/stores/${storeId}/storeinfo`, data)
+        .then((res) => res.data)
+        .catch((err) => Promise.reject(err));
+}
+
 
 
 export const getStoreFlags=(storeId, options)=>dispatch=>{
-    console.log('>getStoreFlags', { storeId });
+    // console.log('>getStoreFlags', { storeId });
     if(!storeId) return Promise.reject('Missed required parameter');
     return axiosApi
         .get(`/stores/${storeId}/features`)

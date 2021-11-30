@@ -1,0 +1,51 @@
+@import '../../../assets/scss/variables';
+
+.cmp {
+    border-top: 1px solid #232323;
+    margin: 0 -2em;
+    height: 81px;
+    justify-content: end;
+    align-items: center;
+
+    .buttonSet {
+        padding: 0 2em;
+
+        button {
+            width: 8.3em;
+            border-radius: 0;
+            border: none;
+            font-size: 18px;
+            box-shadow: none;
+        }
+
+        .saveButton {
+            @extend %buttonWithGradient;
+            border-radius: 0;
+
+            &:hover {
+                background-color: $obsess-grey;
+            }
+        }
+
+        .cancelButton {
+            background: none;
+
+            &:hover {
+                background-color: $black-2;
+            }
+        }
+
+        .spinner {
+            margin-left:1em;
+
+            &.active {
+                display: inline-block;
+            }
+
+            &.hidden {
+                animation: bubbledown 2s linear 0.5s 1 normal forwards;
+                display: none;
+            }
+        }
+    }
+}

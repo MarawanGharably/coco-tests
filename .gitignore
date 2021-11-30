@@ -4,8 +4,5 @@ build/
 out/
 .vscode/
 .next/
-run/
 .idea/
-certs/
-var/
 package-lock.json

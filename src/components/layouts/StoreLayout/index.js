@@ -26,9 +26,7 @@ export default function StoreLayout({ title, subTitle, meta={}, className = '', 
         // {label:'Product Pop Up', url:`${storeBasePath}/popup` },
         // {label:'Section Selector', url: `${storeBasePath}/selectors` },
         
-        { label: 'Hotspots',
-            url:`${storeBasePath}/hotspots/?id=${storeId}`,
-        },
+        { label: 'Hotspots', url:`${storeBasePath}/hotspots/?id=${storeId}`},
         // {label:'Navigation Arrows', url:'/'},
         // {label:'Product Data', url:'/'},
     ];

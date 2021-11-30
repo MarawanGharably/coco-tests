@@ -8,7 +8,7 @@ import styles from './SceneNavigator.module.scss';
 
 export default function SceneNavigator ({ sceneEditor, className='' }){
     const dispatch = useDispatch();
-    const { storeScenes, currentSceneId } = sceneEditor;
+    const { storeScenes={}, currentSceneId } = sceneEditor;
     const scenesArr = Object.values(storeScenes);
 
     const sceneClickHandler = debounce((sceneId) => {

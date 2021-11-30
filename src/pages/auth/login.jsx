@@ -44,7 +44,7 @@ let LoginPage =(props) =>{
         <Layout title="Login" subTitle="Welcome back">
             <Row className="justify-content-center mt-3">
                 <Col xs={12} sm={10} md={7}>
-
+            
 
                     <form onSubmit={handleSubmit(onSubmit)} className='authFormStyling'>
                         <Field name="email" type="email" label="Email" component={Input} placeholder="email" />

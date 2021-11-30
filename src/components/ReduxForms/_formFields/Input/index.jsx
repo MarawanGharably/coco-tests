@@ -1,13 +1,21 @@
-import React from 'react';
+import React from 'react';  
 import { Form } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import styles from './Input.module.scss';
 
-const Input = ({ input = {}, type = 'text', label = '', placeholder = '', disabled, meta: { touched, error, warning } }) => {
+const Input = ({ input = {}, mode, type = 'text', label = '', placeholder = '', disabled, meta: { touched, error, warning } }) => {
     return (
-        <Form.Group className={`mb-3 ${styles['input-field']} input-field`} controlId={input.name}>
+        <Form.Group className={`input-field mb-3 ${styles['input-field']} ${mode ? styles[`${mode}-mode`]:''}`} controlId={input.name}>
             {label && <Form.Label>{label}</Form.Label>}
-            <Form.Control {...input} type={type} placeholder={placeholder} readOnly={!!disabled} autoComplete="off" />
+            <Form.Control
+                {...input}
+                type={type}
+                placeholder={placeholder}
+                readOnly={!!disabled}
+                autoComplete="off"
+                onFocus={(e) => e.target.placeholder = ''}
+                onBlur={(e) => e.target.placeholder = placeholder}
+            />
 
             {touched && (error || warning) && (
                 <ul className="form-field-error">

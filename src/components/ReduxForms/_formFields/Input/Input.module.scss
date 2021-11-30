@@ -1,28 +1,44 @@
-.input-field{
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
+@import '../../../../assets/scss/variables';
 
+.input-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
 
-  .inputField{}
-
-
-  .form-field-error{
-    margin: 5px 0 5px 20px;
-    padding: 0;
-
-    .field-error{
-      color: red;
-      font-size: 11px;
-      margin: 1px 0 0 5px;
+    label, input {
+        font-size: 14px;
     }
 
-    .field-warn{
-      color: #ff8400;
-      font-size: 11px;
-      width: 24em;
-      margin: 1px 0 0 5px;
-    }
-  }
+    //Dark Mode Styling
+    &.dark-mode {
+        input {
+            background-color: $black-2;
+            color: $grey-light-2;
+            border: none;
+            border-radius: 0;
+            font-weight: 300;
 
+            &::placeholder {
+                color: $grey-light-2;
+            }
+        }
+    }
+
+    .form-field-error {
+        margin: 5px 0 5px 20px;
+        padding: 0;
+
+        .field-error {
+            color: red;
+            font-size: 11px;
+            margin: 1px 0 0 5px;
+        }
+
+        .field-warn {
+            color: #ff8400;
+            font-size: 11px;
+            width: 24em;
+            margin: 1px 0 0 5px;
+        }
+    }
 }

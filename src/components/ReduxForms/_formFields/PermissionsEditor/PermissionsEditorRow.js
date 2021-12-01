@@ -88,7 +88,6 @@ const PermissionsEditorRow = ({input, index, fields, userPermissions, scopes, st
     <div className={className}>
       <Field
         name={`${input.name}.scope`}
-        label='Scope'
         className={styles.field}
         placeholder={"Scope"}
         options={scopes}

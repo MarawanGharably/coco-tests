@@ -79,3 +79,18 @@ export const getUserDataWithId = (userId) => {
         .then((res) => res.data)
         .catch((err) => Promise.reject(err));
 };
+
+
+/**
+ * Delete User
+ * @param userId
+ * @returns {Promise}
+ */
+ export const deleteUser = (userId) => {
+    if (!userId) return Promise.reject('Missed required parameter');
+
+    return axiosApi
+         .delete(`/users/${userId}`)
+         .then((res) => res.data)
+         .catch((err) => Promise.reject(err));
+};

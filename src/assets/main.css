@@ -84,3 +84,6 @@ ul.form-field-error .field-warn{ color: coral;}
     margin-bottom: 2.2rem!important;
 }
 
+.delete-button{
+    float:right; 
+}

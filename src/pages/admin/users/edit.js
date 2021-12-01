@@ -1,30 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import { Field, reduxForm, FieldArray } from "redux-form";
-import { connect } from "react-redux";
 import { useRouter} from "next/router";
-import { Card } from 'react-bootstrap';
+import { useSelector} from "react-redux";
+import { Card, Button } from 'react-bootstrap';
 import { Input} from '../../../components/ReduxForms/_formFields';
 import AdminPageLayout from "../../../components/layouts/AdminPageLayout";
 import {SubmitButton} from "../../../components/FormComponents";
 import SubmitStatusMessage from "../../../components/ReduxForms/SubmitStatusMessage";
-import {getStores, getUserDataWithId, updateUser} from "../../../APImethods";
-import {  getLabelValuePair } from "../../../utils/helpers";
+import {getStores, getUserDataWithId, updateUser, deleteUser} from "../../../APImethods";
+import { getLabelValuePair } from "../../../utils/helpers";
 import { getClients } from "../../../APImethods/ClientsAPI";
 import PermissionsEditor from "../../../components/ReduxForms/_formFields/PermissionsEditor";
+import ConfirmationDialog from '../../../components/ConfirmationDialog';
 
 
 let UserForm = (props) => {
+    const formData = useSelector(state => state.form.UserForm.values);
     const router = useRouter();
     const { id:userId } = router.query;
+    const userName = formData?.given_name;
 
     const [submitting, setSubmitting] = useState(false);
-    const [status, setStatus] = useState();
-
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [clients, setClients] = useState([]);
     const [stores, setStores] = useState();
 
+    const [status, setStatus] = useState();
+    const [deleteUserStatus, setDeleteUserStatus] = useState('initial');
+
+
+
+
     useEffect(() => {
-        getClients(["id", "name"]).then(res => {
+        getClients(["id", "name"])
+            .then(res => {
             setClients(res.map(item => getLabelValuePair(item.name, item["_id"]["$oid"])));
         });
 
@@ -39,52 +48,64 @@ let UserForm = (props) => {
         });
     }, []);
 
+
     const initializeStateFromResponse = (response) => {
-        response.permissions = response.permissions.map(item => {
-            return {
-                id:item._id,
-                role: item.role,
-                reference: item.reference,
-                scope: item.scope
-            };
-        });
+        response.permissions = response.permissions.map(item => ({
+            id:item._id,
+            role: item.role,
+            reference: item.reference,
+            scope: item.scope
+        }));
         const { given_name, permissions, UserStatus, client, email } = response;
 
         props.initialize({ given_name, permissions, UserStatus, client, email }); //Initialize form Data
     }
 
+
     useEffect(() => {
-        if(userId){
             //1. Fetch User Data
-            getUserDataWithId(userId).then((res) => {
-                initializeStateFromResponse(res);
-            });
-        }
+            userId && getUserDataWithId(userId)
+                .then((res) => {
+                    initializeStateFromResponse(res);
+                });
     }, [userId]);
+
 
     const onSubmit = (values) => {
         setSubmitting(true);
 
         updateUser(userId, values)
             .then(res=>{
+                //TODO: Use props.change('id', res._id); instead of initialize() method to update/create form id value
                 initializeStateFromResponse(res);
                 setStatus({ success: true, message: 'Updated Successfully' });
             }).catch(err=>{
-            setStatus({ error: true, message: err?.message || 'Error' });
-        }).finally(()=>{
-            setSubmitting(false);
-            setTimeout(() => {
-                setStatus(false);
-            }, 5000);
-        });
+                setStatus({ error: true, message: err?.message || 'Error' });
+            }).finally(()=>{
+                setSubmitting(false);
+                setTimeout(() => {
+                    setStatus(false);
+                }, 5000);
+            });
+    };
+
+    const onDelete = async () => {
+         deleteUser(userId)
+            .then(()=>{
+                setDeleteUserStatus('deleted');
+            }).catch(()=>{
+                setDeleteUserStatus('error');
+        })
     };
 
 
+
+
+
     return (<AdminPageLayout title='User'>
+            <SubmitStatusMessage status={status} />
+
             <form onSubmit={props.handleSubmit(onSubmit)}>
-
-                <SubmitStatusMessage status={status} />
-
                 <Card className="my-4">
                     <Card.Header>General</Card.Header>
                     <Card.Body>
@@ -101,7 +122,6 @@ let UserForm = (props) => {
                         <FieldArray
                           name="permissions"
                           component={PermissionsEditor}
-                          userPermissions={props.user?.permissions}
                           clients={clients}
                           stores={stores}
                         />
@@ -109,10 +129,44 @@ let UserForm = (props) => {
                 </Card>
 
                 <SubmitButton buttonText="Update" submitting={submitting} className="float-right" />
+                <Button 
+                    className="delete-button"
+                    variant="danger"
+                    onClick={() => setShowDeleteModal(true)}>
+                        <span className="text">Delete User</span>
+                </Button>
             </form>
+
+            <ConfirmationDialog
+                show={showDeleteModal}
+                title="Are you sure?"
+                closeLabel="No"
+                showCloseIcon={deleteUserStatus=='deleted' ? false : true}
+                showFooter={deleteUserStatus=='deleted' ? false : true}
+                onHide={e=>setShowDeleteModal(false)}
+                onConfirm={onDelete}
+            >
+                <DialogContent mode={deleteUserStatus} userName={userName} router={router}/>
+            </ConfirmationDialog>
         </AdminPageLayout>
     );
 };
+
+
+const DialogContent=({mode, userName, router})=>{
+    const goToUsersList=()=>{
+        router.push("/admin/users");
+    }
+
+    if(mode == 'error') return (<p>There has been an error deleting user ${userName}</p>);
+    else if(mode == 'initial') return (<p>You want to delete user '{userName}'?</p>);
+    else if(mode == 'deleted') return (<>
+        <p>You have successfully deleted user '{userName}'?</p>
+        <Button className="text-center" variant="primary" onClick={goToUsersList}>OK</Button>
+    </>);
+    else return false;
+}
+
 
 const validate = (values) => {
     const errors = {};
@@ -122,13 +176,8 @@ const validate = (values) => {
 };
 
 
-UserForm = reduxForm({
+export default reduxForm({
     form: "UserForm",
     validate
 })(UserForm);
 
-const mapStateToProps = (state) => ({
-    user: state.user
-})
-
-export default connect(mapStateToProps, {})(UserForm);

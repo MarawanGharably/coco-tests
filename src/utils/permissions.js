@@ -16,6 +16,8 @@
 *
 * */
 
+import {getLabelValuePair} from "./helpers";
+
 export const Scopes = Object.freeze({
   Obsess: 'obsess',
   Client: 'client',
@@ -98,3 +100,22 @@ export const getUserMaxScope = (userPermissions) => {
   }
   throw Error("Illegal permissions object")
 }
+
+
+export const scopesUserCanAdd = (userScope) => {
+  switch (userScope) {
+    case Scopes.Obsess:
+      return [
+        getLabelValuePair(Scopes.Obsess),
+        getLabelValuePair(Scopes.Client),
+        getLabelValuePair(Scopes.Store)
+      ];
+    case Scopes.Client:
+      return [
+        getLabelValuePair(Scopes.Client),
+        getLabelValuePair(Scopes.Store)
+      ];
+    default:
+      return [];
+  }
+};

@@ -67,9 +67,7 @@ let NewUserForm = (props) => {
                   <Card.Body>
                       <Field name="given_name" label="User Name" component={Input} />
                       <Field name="email" label="Email" type="email" component={Input} />
-                      <Form.Label>Client</Form.Label>
-                      <Field name="client" label={"Client"} component={Select} isSearchable
-                             options={clients} />
+                      <Field name="client" label={"Client"} component={Select} isSearchable options={clients} />
                   </Card.Body>
               </Card>
 

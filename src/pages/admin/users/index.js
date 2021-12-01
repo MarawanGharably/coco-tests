@@ -8,30 +8,26 @@ import { getUsers } from '../../../APImethods';
 export default function UsersPage() {
     return (
         <AdminPageLayout title='Users'>
-            <UsersList/>
+            <Row className="no-margins text-end">
+
+                <Link href={`/admin/users/create`} style={{ fontSize: '1em', fontWeight: '600' }}>
+                    <a className='text-decoration-none'>
+                        Create <i className="fas fa-user"></i>
+                    </a>
+                </Link>
+            </Row>
+
+            <RecordsList
+                useLoadMore={true}
+                fetchRecordsFN={getUsers}
+                className="my-4"
+                headers={['#', 'User Name', 'Email', '']}
+                ItemComponent={UserListItem}
+            />
         </AdminPageLayout>
     );
 }
 
-export const UsersList = ()=>{
-    return(<>
-        <Row className="no-margins text-end">
-
-            <Link href={`/admin/users/create`} style={{ fontSize: '1em', fontWeight: '600' }}>
-                <a className='text-decoration-none'>
-                   Create <i className="fas fa-user"></i>
-                </a>
-            </Link>
-        </Row>
-
-        <RecordsList
-            fetchRecordsFN={getUsers}
-            className="my-4"
-            headers={['#', 'User Name', 'Email', '']}
-            ItemComponent={UserListItem}
-        />
-    </>)
-}
 
 const UserListItem = ({ data, idx }) => {
     return (

@@ -24,9 +24,15 @@ export const updateUser = (userName, data) => {
 /**
  * get list of users
  */
-export const getUsers = () => {
+export const getUsers = (params) => {
+    const {start, limit} = params || {};
+    
+    const query =[];
+    if(start) query.push(`start=${start}`);
+    if(limit) query.push(`count=${limit}`);
+
     return axiosApi
-        .get(`/users`)
+        .get(`/users?${query.join('&')}`)
         .then((res) => {
             return res.data.map((item) => {
                 return {

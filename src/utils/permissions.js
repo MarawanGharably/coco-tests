@@ -119,3 +119,5 @@ export const scopesUserCanAdd = (userScope) => {
       return [];
   }
 };
+
+export const isObsessUser=(user)=>(user?.client=='5b3a605cb197ec77a274b150');

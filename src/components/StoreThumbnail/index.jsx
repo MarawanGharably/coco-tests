@@ -7,9 +7,8 @@ import config from '../../config';
 import styles from './storeThumbnail.module.scss';
 
 const StoreThumbnail = ({ data }) => {
-    const { _id, name, general } = data;
+    const { _id, name, general, baseUrl } = data;
     const storeId = _id.$oid;
-
     const image = formURL(general?.og_image) || `${config['CDN_HOST']}/noImage.png`;
 
     return (
@@ -18,7 +17,7 @@ const StoreThumbnail = ({ data }) => {
             {/* Card Image */}
             <div className={styles.image} style={{ backgroundImage: `url(${image})` }}>
                 <figcaption className={`${styles.figcaption}`}>
-                    <Link href={`/store/storeinfo/?id=${storeId}`}><a>
+                    <Link href={`${baseUrl}/?id=${storeId}`}><a>
                         <Button  variant="primary" >
                             Edit Store
                         </Button>

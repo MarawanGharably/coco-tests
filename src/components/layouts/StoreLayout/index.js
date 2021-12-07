@@ -1,25 +1,22 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { Row } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 import SideBarMenu from '../_common/SideBarMenu';
 import HeaderMenu from '../_common/HeaderMenu';
 import Layout from "../Layout";
 import styles from './storeLayout.module.scss';
+import {isObsessUser} from "../../../utils/permissions";
+
 
 export default function StoreLayout({ title, subTitle, meta={}, className = '', children }) {
+    const user = useSelector(state => state.user);
     const router = useRouter();
     const { id: storeId } = router.query;
     const storeBasePath = `/store`;
 
     const links = [
-        {   label: 'General',
-            url: ``,
-            children: [
-                {label: 'Store Info', url: `${storeBasePath}/storeinfo/?id=${storeId}`},
-                // {label:'Icons', url:`${storeBasePath}/icons/?id=${storeId}`},
-                // {label:'Locale', url:`${storeBasePath}/locale/?id=${storeId}`}
-            ]
-        },
+
         
 
         //{label:'Welcome Screen', url:`${storeBasePath}/welcome`  },
@@ -30,6 +27,20 @@ export default function StoreLayout({ title, subTitle, meta={}, className = '', 
         // {label:'Navigation Arrows', url:'/'},
         // {label:'Product Data', url:'/'},
     ];
+
+    //Only for Obsess users
+    if(isObsessUser(user)){
+        links.unshift( {
+            label: 'General',
+            url: ``,
+            children: [
+                {label: 'Store Info', url: `${storeBasePath}/storeinfo/?id=${storeId}`},
+                // {label:'Icons', url:`${storeBasePath}/icons/?id=${storeId}`},
+                // {label:'Locale', url:`${storeBasePath}/locale/?id=${storeId}`}
+            ]
+        });
+    }
+
 
     if(!meta?.title) meta.title = 'COCO: Store Editing';
     return (

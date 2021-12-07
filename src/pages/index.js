@@ -4,9 +4,11 @@ import Loader from "../components/loader/Loader";
 import Layout from "../components/layouts/Layout";
 import RecordsList from "../components/RecordsList";
 import StoreThumbnail from '../components/StoreThumbnail';
-
+import { useSelector } from 'react-redux';
+import {isObsessUser} from "../utils/permissions";
 
 export default function HomePage(){
+    const user = useSelector(state => state.user);
     const [stores, setStores] = useState();
     const [loading, setLoading] = useState(true);
 
@@ -16,6 +18,11 @@ export default function HomePage(){
 
         getStores()
             .then((clientStoreDataResponse) => {
+                //Show store Info page only for Obsess users
+                const baseUrl = isObsessUser(user)? '/store/storeinfo':'/store/hotspots';
+                clientStoreDataResponse.map(item=>{
+                    item.baseUrl = baseUrl;
+                })
                 setStores(clientStoreDataResponse);
             })
             .catch((err) => console.error(err))
@@ -27,6 +34,7 @@ export default function HomePage(){
 
 
     if (loading) return <Loader />;
+
 
 
     return (

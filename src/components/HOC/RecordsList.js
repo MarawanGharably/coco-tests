@@ -24,7 +24,7 @@ export default function RecordsList({ headers = [], fetchRecordsFN, ItemComponen
         fetchRecordsFN(params)
             .then((res) => {
                 setRecords([...records, ...res]);
-                if(useLoadMore && res?.length === 0) setEndReached(true);
+                if(useLoadMore && (res?.length === 0 || res?.length < limit ) ) setEndReached(true);
             })
             .catch((err) => {})
             .finally(() => {

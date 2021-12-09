@@ -17,21 +17,24 @@ export default function HomePage(){
         let controller = new AbortController();
 
         //Load stores when store.user object fully loaded
-        user && getStores()
-            .then((clientStoreDataResponse) => {
-                //Show store Info page only for Obsess users
-                const baseUrl =  user.isObsessUser? '/store/storeinfo':'/store/hotspots';
-                clientStoreDataResponse.map(item=>{
-                    item.baseUrl = baseUrl;
+        if(user && !stores){
+            getStores()
+                .then((clientStoreDataResponse) => {
+                    //Show store Info page only for Obsess users
+                    const baseUrl =  user.isObsessUser? '/store/storeinfo':'/store/hotspots';
+                    clientStoreDataResponse.map(item=>{
+                        item.baseUrl = baseUrl;
+                    })
+                    setStores(clientStoreDataResponse);
                 })
-                setStores(clientStoreDataResponse);
-            })
-            .catch((err) => console.error(err))
-            .finally(()=>{
-                setLoading(false);
-            });
+                .catch((err) => console.error(err))
+                .finally(()=>{
+                    setLoading(false);
+                });
+        }
+
         return () => controller?.abort();
-    }, []);
+    }, [user]);
 
 
     if (loading) return <Loader />;

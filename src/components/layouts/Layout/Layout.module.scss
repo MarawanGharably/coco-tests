@@ -30,6 +30,13 @@
     padding-right:0;
     padding-left: 0;
     min-height: 100vh;
+
+    :global {
+      #logo{
+        padding:1em 1em 1em 2em;
+        min-height: 5em;
+      }
+    }
   }
 
   .contentArea{

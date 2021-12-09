@@ -5,7 +5,7 @@ import Layout from "../components/layouts/Layout";
 import RecordsList from "../components/RecordsList";
 import StoreThumbnail from '../components/StoreThumbnail';
 import { useSelector } from 'react-redux';
-import {isObsessUser} from "../utils/permissions";
+
 
 export default function HomePage(){
     const user = useSelector(state => state.user);
@@ -16,10 +16,11 @@ export default function HomePage(){
     useEffect(() => {
         let controller = new AbortController();
 
-        getStores()
+        //Load stores when store.user object fully loaded
+        user && getStores()
             .then((clientStoreDataResponse) => {
                 //Show store Info page only for Obsess users
-                const baseUrl = isObsessUser(user)? '/store/storeinfo':'/store/hotspots';
+                const baseUrl =  user.isObsessUser? '/store/storeinfo':'/store/hotspots';
                 clientStoreDataResponse.map(item=>{
                     item.baseUrl = baseUrl;
                 })

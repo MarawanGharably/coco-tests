@@ -6,7 +6,6 @@ import SideBarMenu from '../_common/SideBarMenu';
 import HeaderMenu from '../_common/HeaderMenu';
 import Layout from "../Layout";
 import styles from './storeLayout.module.scss';
-import {isObsessUser} from "../../../utils/permissions";
 
 
 export default function StoreLayout({ title, subTitle, meta={}, className = '', children }) {
@@ -29,7 +28,7 @@ export default function StoreLayout({ title, subTitle, meta={}, className = '', 
     ];
 
     //Only for Obsess users
-    if(isObsessUser(user)){
+    if(user?.isObsessUser){
         links.unshift( {
             label: 'General',
             url: ``,

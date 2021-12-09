@@ -8,16 +8,17 @@ export default function SideBarMenu ({ links }){
     return (
         <ul className={styles.cmp}>
             {links?.map((item, i) => {
-                let isActive = item?.children?.some((item) => router.asPath == item.url);
+                let isParentActive = item.url === router.asPath ;
+                let isChildActive = item?.children?.some((item) => router.asPath == item.url);
 
                 return (
                     <MenuItem
                         key={i}
-                        isActive={isActive}
+                        isActive={isParentActive && !isChildActive}
                         label={item.label}
                         url={item.children?.[0].url || item.url}
                     >
-                        {item.children && <SubMenu isActive={isActive} children={item.children} />}
+                        {item.children && <SubMenu visible={isParentActive || isChildActive }  isParentActive={isParentActive} children={item.children} />}
                     </MenuItem>
                 );
             })}
@@ -26,14 +27,14 @@ export default function SideBarMenu ({ links }){
 };
 
 
-const SubMenu = ({ isActive, children }) => {
+const SubMenu = ({ isParentActive, visible, children }) => {
     let router = useRouter();
     return (
-        <ul className={`${styles.subMenu} ${isActive ? styles.active : ''} `}>
+        <ul className={`${styles.subMenu}  ${visible ? 'd-block':'d-none'}  `}>
             {children?.map((item, idx) => {
                 return <MenuItem
                     key={idx}
-                    isActive={router.asPath == item.url}
+                    isActive={router.asPath == item.url && !isParentActive}
                     label={item.label}
                     url={item.url}
                 />;
@@ -42,14 +43,16 @@ const SubMenu = ({ isActive, children }) => {
     );
 };
 
-const MenuItem = ({ isActive, url='', label='', children }) => (
-    <li className={isActive ? styles.active : ''}>
-        <Link href={url}>
-            <a>{label}</a>
-        </Link>
-        {children}
-    </li>
-);
+const MenuItem = ({ isActive, url='', label='', children }) => {
+    return (
+        <li className={isActive ? styles.active : ''}>
+            <Link href={url}>
+                <a>{label}</a>
+            </Link>
+            {children}
+        </li>
+    )
+};
 
 
 

@@ -1,35 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Spinner } from 'react-bootstrap';
 
-//TODO: limit === 1000 used as a temporary solution. Refactor it later.
 
 export default function RecordsList({ headers = [], fetchRecordsFN, ItemComponent, className = '', useLoadMore = false }) {
     const [loading, setLoading] = useState(false);
+    const [endReached, setEndReached] = useState(false);
     const [records, setRecords] = useState([]);
-    let start = 0;
+    const [page, setPage] = useState(0);
     const limit = 10;
 
     useEffect(() => {
         fetchRecords();
-    }, []);
+    }, [page]);
 
     const fetchRecords = () => {
         setLoading(true);
         let params = {};
         if (useLoadMore) {
-            params.start = records.length > 0 ? limit : start;
-            params.limit = records.length <= 0 ? limit : 1000;
+            params.start = page * limit;
+            params.limit = limit;
         }
 
         fetchRecordsFN(params)
             .then((res) => {
                 setRecords([...records, ...res]);
+                if(useLoadMore && res?.length === 0) setEndReached(true);
             })
             .catch((err) => {})
             .finally(() => {
                 setLoading(false);
             });
     };
+
 
     return (
         <>
@@ -49,23 +51,24 @@ export default function RecordsList({ headers = [], fetchRecordsFN, ItemComponen
                 </tbody>
             </Table>
 
-            {loading && <Loader />}
-            {useLoadMore && <LoadMore loading={loading} records={records} limit={limit} fetchRecords={fetchRecords} />}
+            {loading && <RecordsPreLoader />}
+            {useLoadMore && !endReached && <LoadMore setPage={setPage} loading={loading}    />}
         </>
     );
 }
 
-const LoadMore = ({ records, limit, loading, fetchRecords }) => {
+const LoadMore = ({ setPage,  loading }) => {
     //Show 'Load More' only when first 10 records was fetched
-    if (records.length !== limit || loading) return false;
+    if ( loading) return false;
+
     return (
-        <Button variant="link" onClick={fetchRecords} style={{ color: '#fff', fontWeight: 'lighter' }}>
+        <Button variant="link" onClick={e=>setPage(prevState=>prevState+1)} style={{ color: '#fff', fontWeight: 'lighter' }}>
             Load More
         </Button>
     );
 };
 
-const Loader = () => (
+const RecordsPreLoader = () => (
     <div className="d-flex justify-content-center  align-items-center" style={{ minHeight: '10em' }}>
         <Spinner animation="border" variant="primary" />
     </div>

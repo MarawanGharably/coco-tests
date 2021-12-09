@@ -4,6 +4,7 @@ const cookies = new Cookies();
 const _USER_COOKIE = 'user';
 import {getCookieHost} from '../../utils';
 
+
 let initialState = null;
 
 const sessionCookie = cookies.get('access_token');
@@ -26,8 +27,11 @@ export default function (state = initialState, action) {
             const cookieOpt=getCookieOpt();
             cookieOpt.expires=expires;
 
-            cookies.set(_USER_COOKIE, window.btoa(JSON.stringify(action.payload)), cookieOpt);
-            return action.payload;
+            const userData = action.payload;
+            userData.isObsessUser = userData.client=='5b3a605cb197ec77a274b150';
+
+            cookies.set(_USER_COOKIE, window.btoa(JSON.stringify(userData)), cookieOpt);
+            return userData;
 
         case DESTROY_USER_DATA:
             cookies.remove(_USER_COOKIE, getCookieOpt());

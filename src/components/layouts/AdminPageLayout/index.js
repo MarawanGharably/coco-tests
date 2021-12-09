@@ -3,18 +3,18 @@ import { Row } from 'react-bootstrap';
 import Layout from '../Layout';
 import SideBarMenu from '../_common/SideBarMenu';
 import HeaderMenu from "../_common/HeaderMenu";
-import styles from './adminPageLayout.module.scss';
+
 
 export default function AdminPageLayout({ title, meta={}, children }) {
     const links = [
-        { label: 'Users', url: `/admin/users/` },
+        { label: 'Users', url: `/admin/users/`},
         { label: 'Stores', url: `/admin/stores/` },
     ];
 
     if(!meta?.title) meta.title = 'COCO: Admin';
 
     return (
-        <Layout meta={meta} fluid={true} showNavBar={false} className={styles.adminLayout}>
+        <Layout meta={meta} fluid={true} showNavBar={false}>
             <Row>
                 <Layout.LeftSidebar>
                     <SideBarMenu links={links} />
@@ -22,7 +22,7 @@ export default function AdminPageLayout({ title, meta={}, children }) {
 
                 <Layout.ContentArea>
                     <HeaderMenu/>
-                    <h2 className={styles.title}>{title}</h2>
+                    <h2>{title}</h2>
                     {children}
                 </Layout.ContentArea>
             </Row>

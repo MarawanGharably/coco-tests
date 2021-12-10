@@ -27,18 +27,8 @@ stages:
   before_script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
-    # build the test-env test image
     - TEST_IMAGE_TAG=$CI_REGISTRY_IMAGE/${CI_COMMIT_REF_SLUG}/${APP_ENV}_test:$CI_COMMIT_SHORT_SHA
     - SERVICE_IMAGE_TAG=$CI_REGISTRY_IMAGE/${CI_COMMIT_REF_SLUG}/${APP_ENV}_service:$CI_COMMIT_SHORT_SHA
-#    - docker build
-#      -f Dockerfile
-#      --build-arg BUILD_STAGE=${APP_ENV}
-#      --build-arg DEPLOY_PATH=${DEPLOY_PATH}
-#      --build-arg BASE_PATH=${BASE_PATH}
-#      -t $TEST_IMAGE_TAG
-#      --target build-env .
-#    - docker push $TEST_IMAGE_TAG
-    # build the deploy feature image
     - docker build
       -f Dockerfile
       --no-cache
@@ -71,6 +61,9 @@ stages:
     - docker cp $IMAGE_CONTAINER:/www /
     - aws s3 cp --acl public-read --recursive /www $DEPLOY_PATH
     - aws s3 sync --acl public-read --delete /www $DEPLOY_PATH
+    - aws cloudfront create-invalidation
+      --distribution-id ${CF_DISTRIBUTION_ID}
+      --paths "/${INVALIDATION_PATH}*"
     - docker rm $IMAGE_CONTAINER
 
 
@@ -79,6 +72,8 @@ build:feature:
   variables:
     APP_ENV: ${FEATURE_ENV}
     BASE_PATH: /$CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG
+    CF_DISTRIBUTION_ID: E1KRFAW234G2O0
+    INVALIDATION_PATH: /$CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG
   only:
     - /^feature\/.*$/
 
@@ -98,6 +93,8 @@ deploy:feature:
   variables:
     APP_ENV: ${FEATURE_ENV}
     DEPLOY_PATH: s3://$S3_FB_BUCKET/$CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG
+    CF_DISTRIBUTION_ID: ED1ZIURSF5GNT
+    INVALIDATION_PATH: ""
   environment:
     name: $CI_COMMIT_REF_SLUG
     url: https://features.develop.obsessvr.com/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}/index.html
@@ -130,6 +127,8 @@ deploy:develop:
   variables:
     APP_ENV: ${DEVELOP_ENV}
     DEPLOY_PATH: s3://$COCO_HOSTING_BUCKET/develop/
+    CF_DISTRIBUTION_ID: ED1ZIURSF5GNT
+    INVALIDATION_PATH: ""
   environment:
     name: develop
     url: https://$SERVICE_DOMAIN_DEVELOP/
@@ -162,6 +161,8 @@ deploy:beta:
   variables:
     APP_ENV: ${BETA_ENV}
     DEPLOY_PATH: s3://$COCO_HOSTING_BUCKET/beta/
+    CF_DISTRIBUTION_ID: E1NOR16BD7LQBH
+    INVALIDATION_PATH: ""
   environment:
     name: beta
     url: $SERVICE_DOMAIN_BETA
@@ -195,6 +196,8 @@ deploy:prod:
   variables:
     APP_ENV: ${PROD_ENV}
     DEPLOY_PATH: s3://$COCO_HOSTING_BUCKET/prod/
+    CF_DISTRIBUTION_ID: EQUZ7ZTH155Q1
+    INVALIDATION_PATH: ""
   environment:
     name: prod
     url: $SERVICE_DOMAIN_PROD

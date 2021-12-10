@@ -8,14 +8,14 @@ import {destroySceneData} from "../../store/actions/SceneEditorActions";
 import {destroyProductLibraryData} from "../../store/actions/productLibraryActions";
 import styles from './sceneEditor.module.scss';
 
-export default function SceneEditor({storeId}){
+export default function SceneEditor({storeId, mode}){
     const dispatch = useDispatch();
     const sceneEditorData = useSelector(state =>state['SceneEditor']);
     const { currentSceneId } = sceneEditorData;
 
     const productLibrary = useSelector(state =>state['productLibrary']);
-    const { isEnabled, mode_slug, deleteProductId } = productLibrary;
-    const showSideBar = isEnabled && mode_slug === 'product_placement';
+    const { isEnabled, deleteProductId } = productLibrary;
+    const showSideBar = isEnabled && mode === 'product_placement';
 
     const [sceneObjects, setSceneObjects] = useState([]);
 
@@ -62,6 +62,7 @@ export default function SceneEditor({storeId}){
 
             {storeId  && (<SceneUI
                 storeId={storeId}
+                mode={mode}
                 sceneObjects={sceneObjects}
                 sceneEditorData={sceneEditorData}
                 productLibrary={productLibrary}

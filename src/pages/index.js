@@ -21,7 +21,7 @@ export default function HomePage(){
             getStores()
                 .then((clientStoreDataResponse) => {
                     //Show store Info page only for Obsess users
-                    const baseUrl =  user.isObsessUser? '/store/storeinfo':'/store/hotspots';
+                    const baseUrl =  user.isObsessUser? '/store/storeinfo':'/store/product-tagging';
                     clientStoreDataResponse.map(item=>{
                         item.baseUrl = baseUrl;
                     })

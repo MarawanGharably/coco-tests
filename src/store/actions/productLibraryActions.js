@@ -18,17 +18,6 @@ export const addProductsToFolderAction = (folderId, records=[]) => ({
     payload:{folderId, records},
 });
 
-
-export const setProductsAction = (products) => ({
-    type: types.SET_PRODUCTS,
-    payload: products,
-});
-
-export const setFoldersAction = (folders) => ({
-    type: types.SET_FOLDERS,
-    payload: folders,
-});
-
 export const deleteProductAction = (productId, folderId) => ({
     type: types.DELETE_PRODUCT,
     payload: { productId, folderId },
@@ -38,11 +27,6 @@ export const deleteProductAction = (productId, folderId) => ({
 export const deleteFolderAction = (id) => ({
     type: types.DELETE_FOLDER,
     payload: id,
-});
-
-export const setModeAction = (data) => ({
-    type: types.SET_MODE,
-    payload: data,
 });
 
 

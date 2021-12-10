@@ -2,16 +2,15 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { Col, Row } from 'react-bootstrap';
 import StoreLayout from '../../components/layouts/StoreLayout';
-import ModeSelector  from '../../components/SceneEditor/ModeSelector';
 import SceneEditor from '../../components/SceneEditor';
-import styles from '../../assets/scss/hotspotsPage.module.scss';
 
-export default function HotspotsPage() {
+
+export default function ProductPlacementPage(){
     const router = useRouter();
     const { id: storeId } = router.query;
 
     return (
-        <StoreLayout className={styles.cmp}>
+        <StoreLayout>
             <Row style={{ color: '#fff' }}>
                 <Col sm={12} md={6}>
                     <h1 style={{ lineHeight: '0.7' }}>Hotspots</h1>
@@ -19,13 +18,8 @@ export default function HotspotsPage() {
                         Click anywhere on the scene image to add a hotspot. <br /> Your changes will be saved immediately
                     </h6>
                 </Col>
-
-                <Col sm={12} md={6}>
-                    <ModeSelector />
-                </Col>
             </Row>
-
-            <SceneEditor storeId={storeId} />
+            <SceneEditor storeId={storeId} mode='product_placement'/>
         </StoreLayout>
     );
 }

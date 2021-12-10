@@ -3,13 +3,10 @@ import {
     SET_PRODUCTS,
     ADD_PRODUCTS_TO_FOLDER,
     SET_FOLDERS,
-    SET_SELECTED_FOLDER,
     DELETE_PRODUCT,
     DELETE_FOLDER,
-    SET_MODE,
     SET_ENABLED,
     GENERAL_LABEL,
-    PRODUCT_TAGGING,
     RESET_DELETE_PRODUCT_ID,
     DESTROY_PRODUCT_LIB_DATA,
 } from '../types/productLibrary';
@@ -19,10 +16,13 @@ const initialState = {
     products: [],
     folders: [],
     selectedFolder: null,
-    mode: PRODUCT_TAGGING,
-    mode_slug: 'product_tagging',
     deleteProductId:null //ThreeEditor will track this prop to remove hotspot/s. NULL by default
 };
+
+
+
+//TODO: folder related functionality will be removed from  store.productLibrary
+
 
 export default function (state = initialState, action) {
     const { type, payload } = action;
@@ -43,8 +43,6 @@ export default function (state = initialState, action) {
                 selectedFolder: { label: GENERAL_LABEL },
             };
 
-        // case SET_SELECTED_FOLDER:
-        //     return ({ ...state, selectedFolder: payload });
 
         case SET_PRODUCTS:
             return { ...state, products: payload };
@@ -69,15 +67,6 @@ export default function (state = initialState, action) {
 
         case RESET_DELETE_PRODUCT_ID:
             return {...state, deleteProductId:null};
-
-
-
-        case SET_MODE:
-            return {
-                ...state,
-                mode: payload.label,
-                mode_slug: payload.value,
-            };
 
         case SET_ENABLED:
             return { ...state, isEnabled: payload };

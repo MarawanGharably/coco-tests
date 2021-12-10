@@ -2,17 +2,15 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import ConfirmationDialog from '../../../../ConfirmationDialog';
-import { PRODUCT_PLACEMENT } from '../../../../../store/types/productLibrary';
 import { deleteProductImageFromFolder } from '../../../../../APImethods';
 import { formURL } from '../../../../../utils/urlHelper';
 import styles from './Product.module.scss';
 
-const Product = ({ data, storeId, productLibrary }) => {
+const Product = ({ data, storeId }) => {
     const { _id, image, folder } = data;
     const dispatch = useDispatch();
-    const { mode } = productLibrary;
     const [isDialogOpen, setDialogOpen] = useState(false);
-    const draggable = mode === PRODUCT_PLACEMENT;
+    const draggable = true;
 
 
     const onDragStart = (e) => {

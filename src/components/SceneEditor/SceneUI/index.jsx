@@ -21,9 +21,9 @@ const HOTSPOT_TYPES_BY_MODE = {
  * @param storeId
  * @returns {JSX.Element}
  */
-const SceneUI = ({ storeId, sceneObjects, sceneEditorData, productLibrary }) => {
+const SceneUI = ({ storeId, mode, sceneObjects, sceneEditorData, productLibrary }) => {
     const { currentSceneId, storeScenes } = sceneEditorData;
-    const { mode_slug, products, selectedFolder } = productLibrary;
+    const {  products, selectedFolder } = productLibrary;
     const reduxDispatch = useDispatch();
 
     const [mount, setMount] = useState(0);//used to force re-render
@@ -49,7 +49,7 @@ const SceneUI = ({ storeId, sceneObjects, sceneEditorData, productLibrary }) => 
     }, [sceneData]);
 
 
-    const selectedHotspotType = HOTSPOT_TYPES_BY_MODE[mode_slug];
+    const selectedHotspotType = HOTSPOT_TYPES_BY_MODE[mode];
 
 
 
@@ -67,7 +67,7 @@ const SceneUI = ({ storeId, sceneObjects, sceneEditorData, productLibrary }) => 
 
             //Create marker & record, then Open UI
             else {
-                if (mode_slug === 'product_tagging') {
+                if (mode === 'product_tagging') {
 
                     hotspots.current = [...hotspots.current, {
                         type:'product',

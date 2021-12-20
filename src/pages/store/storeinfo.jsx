@@ -12,6 +12,7 @@ let StoreInfoPage = ({ handleSubmit, initialize }) => {
     const router = useRouter();
     const { id: storeId } = router.query;
 
+    const [storeDataLoaded, setStoreData] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [status, setStatus] = useState({});
 
@@ -19,6 +20,7 @@ let StoreInfoPage = ({ handleSubmit, initialize }) => {
         storeId &&
             getStoreInfo(storeId)
                 .then((res) => {
+                    setStoreData(true);
                     initialize({
                         name: res?.name || '',
                         url_slug: res?.url_slug || '',
@@ -50,11 +52,12 @@ let StoreInfoPage = ({ handleSubmit, initialize }) => {
         location.reload();
     };
 
+
+
     return (
         <StoreLayout title="Store Info">
             <SubmitStatusMessage status={status} />
-
-                <FormWithActionBtns handleSubmit={handleSubmit} onSubmit={onSubmit} onPageRefresh={onPageRefresh} submitting={submitting} fieldsWrapperStyle={{ maxWidth: '40em' }}>
+                <FormWithActionBtns dataLoaded={storeDataLoaded} handleSubmit={handleSubmit} onSubmit={onSubmit} onPageRefresh={onPageRefresh} submitting={submitting} fieldsWrapperStyle={{ maxWidth: '40em' }}>
                     <Field name="name" label="Store Name" mode="dark" component={Input} placeholder="Enter Store Name" />
                     <Field name="url_slug" label="Store Slug" mode="dark" component={Input} placeholder="Enter Store Slug" />
                 </FormWithActionBtns>

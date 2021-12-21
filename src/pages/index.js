@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {getStores} from "../APImethods";
-import Loader from "../components/loader/Loader";
 import Layout from "../components/layouts/Layout";
 import RecordsList from "../components/RecordsList";
 import StoreThumbnail from '../components/StoreThumbnail';
 import { useSelector } from 'react-redux';
+import {Spinner, Row} from "react-bootstrap";
+
 
 
 export default function HomePage(){
@@ -37,7 +38,6 @@ export default function HomePage(){
     }, [user]);
 
 
-    if (loading) return <Loader />;
 
 
 
@@ -47,15 +47,26 @@ export default function HomePage(){
                 <h1 style={{marginBottom: '0rem'}}>Welcome To COCO</h1>
                 <h4 style={{lineHeight: '1.3', fontWeight: '100'}}>Below Are Your Stores</h4>
             </section>
-            {
-                stores
-                    ? (<RecordsList
+
+            {/* Show Loader */}
+            {loading && (<Row className='d-flex align-items-center justify-content-center'>
+                <Spinner
+                    size="lg"
+                    animation="border"
+                    role="status"
+                    variant='info'
+                    style={{ display:'flex', alignSelf:'center', marginTop:'10em'}}
+            /></Row>)}
+
+            {/* Show records */}
+            {!loading && stores && (<RecordsList
                         records={stores}
                         recordComponent={StoreThumbnail}
                         className='storesList mx-2'
-                    />)
-                    : (<h4 className='text-center'>There are no stores for this client</h4>)
-            }
+                    />)}
+
+            {/* No Records */}
+            { !loading && !stores?.[0] && (<h4 className='text-center'>There are no stores for this client</h4>)}
         </Layout>
     );
 };

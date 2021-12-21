@@ -1,13 +1,14 @@
 import React from 'react';
 import { Form } from 'redux-form';
+import {Spinner} from "react-bootstrap";
 import FormActions from '../FormActions';
 import styles from './formWithActionBtns.module.scss';
-import {Spinner} from "react-bootstrap";
 
-export default function FormWithActionBtns({ dataLoaded, handleSubmit, onSubmit, submitting, onPageRefresh, fieldsWrapperStyle = {}, children }) {
+
+export default function FormWithActionBtns({ dataLoaded, onSubmit, submitting, onPageRefresh, fieldsWrapperStyle = {}, children }) {
    if(dataLoaded){
        return (
-           <Form onSubmit={handleSubmit(onSubmit)} className={styles.cmp}>
+           <Form onSubmit={onSubmit} className={styles.cmp}>
                <div className={styles.fieldsWrapper} style={fieldsWrapperStyle}>
                    {children}
                </div>

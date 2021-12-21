@@ -31,7 +31,6 @@ let StoreInfoPage = ({ handleSubmit, initialize }) => {
 
     const onSubmit = (values) => {
         setSubmitting(true);
-
         updateStoreInfo(storeId, values)
             .then((res) => {
                 setStatus({ success: true, message: 'Store Info Updated Successfully' });
@@ -53,11 +52,10 @@ let StoreInfoPage = ({ handleSubmit, initialize }) => {
     };
 
 
-
     return (
         <StoreLayout title="Store Info">
             <SubmitStatusMessage status={status} />
-                <FormWithActionBtns dataLoaded={storeDataLoaded} handleSubmit={handleSubmit} onSubmit={onSubmit} onPageRefresh={onPageRefresh} submitting={submitting} fieldsWrapperStyle={{ maxWidth: '40em' }}>
+                <FormWithActionBtns dataLoaded={storeDataLoaded} onSubmit={handleSubmit(onSubmit)}  onPageRefresh={onPageRefresh} submitting={submitting} fieldsWrapperStyle={{ maxWidth: '40em' }}>
                     <Field name="name" label="Store Name" mode="dark" component={Input} placeholder="Enter Store Name" />
                     <Field name="url_slug" label="Store Slug" mode="dark" component={Input} placeholder="Enter Store Slug" />
                 </FormWithActionBtns>

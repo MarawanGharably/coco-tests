@@ -1,4 +1,4 @@
-/*@import "assets/scss/library";*/
+/*@import "./scss/form.scss";*/
 
 
 
@@ -92,3 +92,6 @@ ul.form-field-error .field-warn{ color: coral;}
     width: 3rem;
     height: 3rem;
 }
+
+/*********  FORMS  *********************/
+form .formField{ margin-bottom: 1em;}

@@ -30,7 +30,7 @@ export default function SideBarMenu ({ links }){
 const SubMenu = ({ isParentActive, visible, children }) => {
     let router = useRouter();
     return (
-        <ul className={`${styles.subMenu}  ${visible ? 'd-block':'d-none'}  `}>
+        <ul className={`${styles.subMenu} ${visible ? 'd-block' : 'd-done'} `}>
             {children?.map((item, idx) => {
                 return <MenuItem
                     key={idx}
@@ -43,16 +43,14 @@ const SubMenu = ({ isParentActive, visible, children }) => {
     );
 };
 
-const MenuItem = ({ isActive, url='', label='', children }) => {
-    return (
-        <li className={isActive ? styles.active : ''}>
-            <Link href={url}>
-                <a>{label}</a>
-            </Link>
-            {children}
-        </li>
-    )
-};
+const MenuItem = ({ isActive, url='', label='', children }) => (
+    <li className={isActive ? styles.active : ''}>
+        <Link href={url}>
+            <a>{label}</a>
+        </Link>
+        {children}
+    </li>
+);
 
 
 

@@ -1,6 +1,8 @@
-import React from 'react';
-import Select from 'react-select';
-import { Form } from 'react-bootstrap';
+import React, { useRef} from "react";
+import Select from "react-select";
+import CreatableSelect from "react-select/creatable";
+import { Form } from "react-bootstrap";
+import styles from "./Select.module.scss";
 
 /**
  *
@@ -9,10 +11,31 @@ import { Form } from 'react-bootstrap';
  * @returns {JSX.Element}
  * @constructor
  */
-const SelectInput = ({input = {}, searchable = false, className = 'select', label = '', options = [], isMulti = false, placeholder = '', meta}) => {
+const SelectInput = (props) => {
+    const {
+        input = {},
+        mode,
+        searchable = false,
+        className = "select",
+        label = "",
+        options = [],
+        isMulti,
+        allowCustomOptions,
+        placeholder = "",
+        meta,
+    } = props;
+
+    const SelectComponent = allowCustomOptions ? CreatableSelect : Select;
+    const _customOptions = useRef([]);
+
+
     const onChangeEvent = (data) => {
         //Multi-Select
         if (Array.isArray(data)) {
+            const newRecord = data.find((item) => item.__isNew__ === true);
+            if (newRecord) _customOptions.current.push(newRecord);
+
+
             input.onChange(data.map((item) => item.value));
         } else {
             input.onChange(data.value);
@@ -20,26 +43,28 @@ const SelectInput = ({input = {}, searchable = false, className = 'select', labe
     };
 
     const calcValue = () => {
+
         if (isMulti && Array.isArray(input.value)) {
             return input.value.map((item) => {
-                const option = options.find((optItem) => optItem['value'] === item);
+                const option = [...options, ..._customOptions.current].find((optItem) => optItem["value"] === item);
                 return {
-                    label: option?.label || 'Record Not Exist',
+                    //item used for custom options as default value
+                    label: option?.label || item,
                     value: item,
                 };
             });
         } else {
-            return input.value ? options.find((item) => item['value'] === input.value) : '';
+            return input.value ? options.find((item) => item["value"] === input.value) : "";
         }
     };
 
-    // console.log('>Select', {input,calc:calcValue()  });
+
 
 
     return (
-        <Form.Group className={`select-input-field ${className}`}>
-            {label && (<Form.Label>{label}</Form.Label>)}
-            <Select
+        <Form.Group className={`formField ${styles.cmp} ${className} ${mode ? styles[`${mode}-mode`] : ""}`}>
+            {label && <Form.Label>{label}</Form.Label>}
+            <SelectComponent
                 name={input.name}
                 className={className}
                 value={calcValue()}

@@ -7,14 +7,14 @@ import HeaderMenu from "../_common/HeaderMenu";
 
 export default function AdminPageLayout({ title, meta={}, children }) {
     const links = [
-        { label: 'Users', url: `/admin/users/`},
+        { label: 'Users', url: `/admin/users/` },
         { label: 'Stores', url: `/admin/stores/` },
     ];
 
     if(!meta?.title) meta.title = 'COCO: Admin';
 
     return (
-        <Layout meta={meta} fluid={true} showNavBar={false}>
+        <Layout meta={meta} fluid={true} showNavBar={false} >
             <Row>
                 <Layout.LeftSidebar>
                     <SideBarMenu links={links} />

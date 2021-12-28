@@ -43,7 +43,7 @@ export default function StoreLayout({ title, subTitle, meta={}, className = '', 
             children: [
                 {label: 'Store Info', url: `${storeBasePath}/storeinfo/?id=${storeId}`},
                 // {label:'Icons', url:`${storeBasePath}/icons/?id=${storeId}`},
-                // {label:'Locale', url:`${storeBasePath}/locale/?id=${storeId}`}
+                {label:'Locale', url:`${storeBasePath}/locale/?id=${storeId}`}
             ]
         });
     }

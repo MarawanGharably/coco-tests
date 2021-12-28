@@ -36,7 +36,7 @@ let StoreInfoPage = ({ handleSubmit, initialize }) => {
                 setStatus({ success: true, message: 'Store Info Updated Successfully' });
 
                 setTimeout(() => {
-                    router.push(`/store/hotspots/?id=${storeId}`);
+                    router.push(`/store/locale/?id=${storeId}`);
                 }, 2000);
             })
             .catch((err) => {

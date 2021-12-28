@@ -52,7 +52,7 @@ let LocalePage = ({ handleSubmit, change, initialize }) => {
                 }, 2000);
             })
             .catch((err) => {
-                setStatus({ error: true, message: err?.message || "Store Locale Update Failed" });
+                setStatus({ error: true, message: err?.data?.error_message || err?.message || "Store Locale Update Failed" });
             })
             .finally(() => {
                 setSubmitting(false);

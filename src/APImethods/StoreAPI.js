@@ -194,6 +194,6 @@ export const updateStoreLocales = (storeId, data) => {
     return axiosApi
         .put(`/stores/${storeId}/locales`, data)
         .then((res) => res.data)
-        .catch((err) => Promise.reject(err));
+        .catch((err) => Promise.reject(err.response));
 };
 

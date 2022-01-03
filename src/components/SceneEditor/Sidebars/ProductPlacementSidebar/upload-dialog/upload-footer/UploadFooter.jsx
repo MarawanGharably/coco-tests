@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Select from 'react-select';
 import { Button } from 'react-bootstrap';
 import { useRouter } from "next/router";
-import { addProductImageToFolder, setSelectedFolder } from '../../../../../APImethods';
+import { addProductImageToFolder, setSelectedFolder } from '../../../../../../APImethods';
 import styles from './UploadFooter.module.scss';
 
 const UploadFooter = ({ images, closeDialog, setErrors }) => {

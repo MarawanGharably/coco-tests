@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import ConfirmationDialog from '../../../../ConfirmationDialog';
-import { deleteProductImageFromFolder } from '../../../../../APImethods';
-import { formURL } from '../../../../../utils/urlHelper';
+import ConfirmationDialog from '../../../../../ConfirmationDialog';
+import { deleteProductImageFromFolder } from '../../../../../../APImethods';
+import { formURL } from '../../../../../../utils/urlHelper';
 import styles from './Product.module.scss';
 
 const Product = ({ data, storeId }) => {

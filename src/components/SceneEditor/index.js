@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import SceneNavigator from "./SceneNavigator";
 import SceneUI from "./SceneUI";
-import ProductPlacementSidebar from "./ProductPlacementSidebar";
+import ProductPlacementSidebar from "./Sidebars/ProductPlacementSidebar";
 import { getStoreSceneEditorData, getStoreSceneHotspots} from "../../APImethods";
 import {destroySceneData} from "../../store/actions/SceneEditorActions";
 import {destroyProductLibraryData} from "../../store/actions/productLibraryActions";

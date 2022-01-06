@@ -26,7 +26,19 @@ export default function StoreLayout({ title, subTitle, meta={}, className = '', 
         //{label:'Welcome Screen', url:`${storeBasePath}/welcome`  },
         // {label:'Product Pop Up', url:`${storeBasePath}/popup` },
         // {label:'Section Selector', url: `${storeBasePath}/selectors` },
-        
+
+        //General Tab: Only for Obsess users
+        ...(user?.isObsessUser ? [{
+            label: 'General',
+            url: ``,
+            children: [
+                {label: 'Store Info', url: `${storeBasePath}/storeinfo/?id=${storeId}`},
+                // {label:'Icons', url:`${storeBasePath}/icons/?id=${storeId}`},
+                {label:'Locale', url:`${storeBasePath}/locale/?id=${storeId}`}
+            ]
+        }]:[]),
+
+
         { label: 'Hotspots',
           children: [
               {label: 'Product Tagging', url:`${storeBasePath}/product-tagging/?id=${storeId}`},
@@ -39,18 +51,7 @@ export default function StoreLayout({ title, subTitle, meta={}, className = '', 
         // {label:'Product Data', url:'/'},
     ];
 
-    //Only for Obsess users
-    if(user?.isObsessUser){
-        links.unshift( {
-            label: 'General',
-            url: ``,
-            children: [
-                {label: 'Store Info', url: `${storeBasePath}/storeinfo/?id=${storeId}`},
-                // {label:'Icons', url:`${storeBasePath}/icons/?id=${storeId}`},
-                {label:'Locale', url:`${storeBasePath}/locale/?id=${storeId}`}
-            ]
-        });
-    }
+
 
 
     if(!meta?.title) meta.title = 'COCO: Store Editing';

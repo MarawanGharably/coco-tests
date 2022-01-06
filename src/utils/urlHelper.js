@@ -1,6 +1,7 @@
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 
+//TODO: our current bucket - coco
 export const S3Bucket = Object.freeze({
     DEV: 'obsess-cms-dev',
     BETA: 'obsess-cms-beta',

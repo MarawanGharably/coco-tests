@@ -1,25 +1,33 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Col, Row } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 import StoreLayout from '../../components/layouts/StoreLayout';
 import SceneEditor from '../../components/SceneEditor';
+import FormActions from "../../components/FormComponents/FormActions";
 
 
-export default function ContentHotspotsPage(){
+export default function ContentHotspotsPage() {
+    const reduxForm = useSelector(state => state.form);
+    const form = reduxForm['ImageHotspotForm'];
     const router = useRouter();
     const { id: storeId } = router.query;
 
     return (
-        <StoreLayout >
-            <Row style={{ color: '#fff' }}>
-                <Col sm={12} md={6}>
-                    <h1 style={{ lineHeight: '0.7' }}>Hotspots</h1>
-                    <h6 style={{ fontSize: '14px', fontWeight: '300', color: '#efefef' }}>
-                        Click anywhere on the scene image to add a hotspot. <br /> Your changes will be saved immediately
-                    </h6>
-                </Col>
-            </Row>
+        <StoreLayout title="Content Hotspots" subTitle="Click anywhere on the store to add a hotspot.">
             <SceneEditor storeId={storeId} mode='content_hotspots'/>
+            <FormActionsContainer form={form}/>
         </StoreLayout>
-    );
+    )
+}
+
+
+//TODO: complete this part
+const FormActionsContainer=({form})=>{
+    return(<div style={{minHeight:'4em'}}>
+        {form && (
+            <FormActions
+                // onPageRefresh={onPageRefresh} submitting={submitting}
+            />
+        )}
+    </div>)
 }

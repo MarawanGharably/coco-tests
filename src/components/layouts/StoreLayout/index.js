@@ -7,6 +7,7 @@ import HeaderMenu from '../_common/HeaderMenu';
 import Layout from "../Layout";
 import styles from './storeLayout.module.scss';
 
+//TODO: remove dev env validation for 'Content Hotspots' when development is finished
 
 export default function StoreLayout({ title, subTitle, meta={}, className = '', children }) {
     const user = useSelector(state => state.user);
@@ -14,10 +15,12 @@ export default function StoreLayout({ title, subTitle, meta={}, className = '', 
     const router = useRouter();
     const { id: storeId } = router.query;
     const storeBasePath = `/store`;
+    const isDevEnv = process.browser && ['127.0.0.1:3000','features.develop.obsessvr.com'].includes(window?.location?.host);
 
     useEffect(() => {
         setMounted(true);
     }, [])
+
 
     const links = [
         //{label:'Welcome Screen', url:`${storeBasePath}/welcome`  },
@@ -27,7 +30,8 @@ export default function StoreLayout({ title, subTitle, meta={}, className = '', 
         { label: 'Hotspots',
           children: [
               {label: 'Product Tagging', url:`${storeBasePath}/product-tagging/?id=${storeId}`},
-              // {label: 'Content Hotspots', url:`${storeBasePath}/content-hotspots/?id=${storeId}`},
+              //Temporary keep it visible only on dev and FB env
+              ...(isDevEnv ? [{label: 'Content Hotspots', url:`${storeBasePath}/content-hotspots/?id=${storeId}`}] :[] ),
               {label: 'Product Placement', url:`${storeBasePath}/product-placement/?id=${storeId}`},
           ]
         },

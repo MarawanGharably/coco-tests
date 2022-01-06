@@ -5,11 +5,12 @@ import Scene, { Hotspot } from 'threejs-scene';
 import { formURL } from '../../../utils';
 import HotspotMarkerUIForm from "../MarkerForms/HotspotMarkerUIForm";
 import ImageMarkerUIForm from "../MarkerForms/ImageMarkerUIForm";
-
-
+import HotspotsSidebar from '../Sidebars/HotspotsSidebar';
+import { v1 as uuid } from 'uuid';
+import config from '../../../config';
 
 //key - mode values
-//val - scene object type
+//val - scene marker type
 const HOTSPOT_TYPES_BY_MODE = {
     product_tagging: 'hotspot_marker',
     product_placement: 'image_marker',
@@ -23,12 +24,12 @@ const HOTSPOT_TYPES_BY_MODE = {
  */
 const SceneUI = ({ storeId, mode, sceneObjects, sceneEditorData, productLibrary }) => {
     const { currentSceneId, storeScenes } = sceneEditorData;
-    const {  products, selectedFolder } = productLibrary;
+    const { products, selectedFolder } = productLibrary;
     const reduxDispatch = useDispatch();
 
     const [mount, setMount] = useState(0);//used to force re-render
     const hotspots = useRef(sceneObjects);
-
+    const allowEventsForMarkerTypeOnly = HOTSPOT_TYPES_BY_MODE[mode];
 
     useEffect(()=>{
         hotspots.current = sceneObjects;
@@ -49,12 +50,11 @@ const SceneUI = ({ storeId, mode, sceneObjects, sceneEditorData, productLibrary 
     }, [sceneData]);
 
 
-    const selectedHotspotType = HOTSPOT_TYPES_BY_MODE[mode];
+
 
 
 
     const onMouseUp = (e, sceneObject, marker, isDragEvent) => {
-
         if (isDragEvent && marker) {
             dragReleaseHotspotAutoSave(sceneObject, marker, currentSceneId, storeId, reduxDispatch);
         } else if (!isDragEvent) {
@@ -68,13 +68,17 @@ const SceneUI = ({ storeId, mode, sceneObjects, sceneEditorData, productLibrary 
             //Create marker & record, then Open UI
             else {
                 if (mode === 'product_tagging') {
-
-                    hotspots.current = [...hotspots.current, {
-                        type:'product',
+                    createAndPlaceNewMarker({
                         hotspot_type:'product',
-                        userData:{},
-                    }];
-                    setMount(new Date().getTime());
+                    });
+                }
+                else if (mode === 'content_hotspots') {
+                   createAndPlaceNewMarker({
+                       hotspot_type:'hotspotPlaceholder',
+                       boxColliderConfig:{color:0x3C7AFA, opacity:0.5 },
+                       isNew:true,
+                       needToSetHotspotType:true,
+                    });
                 }
             }
         }
@@ -90,8 +94,6 @@ const SceneUI = ({ storeId, mode, sceneObjects, sceneEditorData, productLibrary 
         const image = products[folderId].find((item) => item._id === imageId);
         const renderOrder = maxRenderOrder;
         const scale = 1;
-
-
 
         hotspots.current = [...hotspots.current, {
             type:'product',
@@ -109,36 +111,86 @@ const SceneUI = ({ storeId, mode, sceneObjects, sceneEditorData, productLibrary 
         setMount(new Date().getTime());
     };
 
+    //temporary placed markers has hotspot_type == 'hotspotPlaceholder'
+    //Users can use additional UI to choose what type of hotspot they want to create
+    const onHotspotTypeChange=(Marker, newHotspotType)=>{
+        //remove old marker
+        Marker.removeFromScene();
+        hotspots.current = hotspots.current.filter(item=>item.isNew != true);
+
+
+        const scale=1;
+        const renderOrder=10;
+        const imageURL=`${config.CDN_HOST}/image_hotspot_icon.png`;
+
+
+       createAndPlaceNewMarker({
+            hotspot_type:"product_image",
+            scale,
+            renderOrder,
+            imageURL,
+            userData:{},
+            boxColliderConfig:{color:0x3C7AFA, opacity:0.5 },
+        });
+
+    }
+
+    const createAndPlaceNewMarker=({ hotspot_type, scale, imageURL, userData = {}, image, boxColliderConfig, ...rest })=>{
+        const newMarker= {
+            uuid:uuid(),
+
+            boxColliderConfig,
+            ...(imageURL ? {imageURL}:{}),
+            ...(rest ? rest:{}),
+            props:{
+                hotspot_type,
+                userData,
+                ...(scale ? {scale}:{}),
+                ...(image ? {image}:{}),
+            }
+        }
+
+        hotspots.current = [...hotspots.current, newMarker];
+        setMount(new Date().getTime());
+
+        return newMarker;
+    }
+
     return (
         <>
             {currentSceneId && (
                 <Scene
                     sceneId={currentSceneId}
-                    allowEventsForMarkerTypeOnly={selectedHotspotType}
+                    allowEventsForMarkerTypeOnly={allowEventsForMarkerTypeOnly}
                     bgConf={bgConf}
                     onMouseUp={onMouseUp}
                     onDrop={onDrop}
                 >
-                    {placeSceneHotspots(hotspots.current)}
+                    {placeSceneHotspots(hotspots.current, mode, onHotspotTypeChange)}
                 </Scene>
             )}
         </>
     );
 };
 
-const placeSceneHotspots=(sceneObjects)=>{
+const placeSceneHotspots=(sceneObjects, mode, onHotspotTypeChange)=>{
     if(!sceneObjects) return false;
 
     const UIConf={
         'product_image':{
-            Component:ImageMarkerUIForm,
-            style:{left:'0', top:'3em', background:'none'},
+            Component: mode === 'content_hotspots' ? (props)=><HotspotsSidebar mode='content_hotspot' {...props} />: ImageMarkerUIForm,
+            style:mode === 'content_hotspots' ? {right:'0', top:'0' , height:'100%' , width:'29%' , background:'none'} :{left:'0', top:'3em', background:'none'},
         },
         'product':{
-            Component:HotspotMarkerUIForm,
-            positionNextToTheElement:true,
-            style:{background:'none'},
-        }
+            Component: mode === 'content_hotspots' ? (props)=><HotspotsSidebar mode='content_hotspot' {...props} />: HotspotMarkerUIForm,
+            positionNextToTheElement:mode === 'content_hotspots' ? false : true,
+            style:mode === 'content_hotspots' ? {right:'0', top:'0' , height:'100%' , width:'29%' , background:'none'} :{background:'none'},
+        },
+        //hotspotPlaceholder used to display a scene marker of unknown yet type
+        'hotspotPlaceholder':{
+            Component:(props)=><HotspotsSidebar mode='content_hotspot' onHotspotTypeChange={onHotspotTypeChange} {...props} />,
+            style:{right:'0', top:'0' , height:'100%' , width:'29%' , background:'none'},
+        },
     }
 
    return sceneObjects.map((item,idx) => {
@@ -146,21 +198,22 @@ const placeSceneHotspots=(sceneObjects)=>{
 
         let imageHotspotProps = {};
         if (hotspot_type === 'product_image') {
+            const imageData = item.imageURL || item.props?.image?.image;
             imageHotspotProps.scale = item?.props?.scale || item.scale;
             imageHotspotProps.renderOrder = item?.props?.renderOrder || item.renderOrder;
-            imageHotspotProps.imageURL= formURL(item.props?.image?.image || item.imageURL)
+            imageHotspotProps.imageURL= typeof imageData === 'object' ? formURL(imageData) : imageData
         }
-
         // Always use unique keys!!!
         return (
             <Hotspot
-                key={item?._id || idx}
+                key={item?._id || item.uuid || idx}
                 type={hotspot_type === 'product_image' ? 'image_hotspot' : 'hotspot'}
                 collider_transform={item.collider_transform}
                 transform={item.transform}
                 userData={item?.userData || item}
                 UIConfig={UIConf[hotspot_type]}
                 {...imageHotspotProps}
+                boxColliderConfig={item?.boxColliderConfig || null}
             />
         );
     });

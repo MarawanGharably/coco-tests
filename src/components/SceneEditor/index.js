@@ -4,8 +4,7 @@ import SceneNavigator from "./SceneNavigator";
 import SceneUI from "./SceneUI";
 import ProductPlacementSidebar from "./Sidebars/ProductPlacementSidebar";
 import { getStoreSceneEditorData, getStoreSceneHotspots} from "../../APImethods";
-import {destroySceneData} from "../../store/actions/SceneEditorActions";
-import {destroyProductLibraryData} from "../../store/actions/productLibraryActions";
+import {destroySceneData, destroyProductLibraryData} from "../../store/actions";
 import styles from './sceneEditor.module.scss';
 
 export default function SceneEditor({storeId, mode}){

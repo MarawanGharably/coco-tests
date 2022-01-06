@@ -10,15 +10,7 @@ export default function ProductTaggingPage(){
     const { id: storeId } = router.query;
 
     return (
-        <StoreLayout >
-            <Row style={{ color: '#fff' }}>
-                <Col sm={12} md={6}>
-                    <h1 style={{ lineHeight: '0.7' }}>Hotspots</h1>
-                    <h6 style={{ fontSize: '14px', fontWeight: '300', color: '#efefef' }}>
-                        Click anywhere on the scene image to add a hotspot. <br /> Your changes will be saved immediately
-                    </h6>
-                </Col>
-            </Row>
+        <StoreLayout title="Product Tagging" subTitle="Click anywhere on the store to add a hotspot.">
             <SceneEditor storeId={storeId} mode='product_tagging'/>
         </StoreLayout>
     );

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import styles from './sideBarMenu.module.scss';
 
-export default function SideBarMenu ({ links }){
+export default function SideBarMenu ({ links=[] }){
     const router = useRouter();
     return (
         <ul className={styles.cmp}>
@@ -29,8 +29,9 @@ export default function SideBarMenu ({ links }){
 
 const SubMenu = ({ isParentActive, visible, children }) => {
     let router = useRouter();
+
     return (
-        <ul className={`${styles.subMenu} ${visible ? 'd-block' : 'd-done'} `}>
+        <ul className={`${styles.subMenu} ${visible ? 'd-block' : 'd-none'} `}>
             {children?.map((item, idx) => {
                 return <MenuItem
                     key={idx}

@@ -24,10 +24,10 @@ export const deleteProductAction = (productId, folderId) => ({
 });
 
 
-export const deleteFolderAction = (id) => ({
-    type: types.DELETE_FOLDER,
-    payload: id,
-});
+// export const deleteFolderAction = (id) => ({
+//     type: types.DELETE_FOLDER,
+//     payload: id,
+// });
 
 
 export const setEnabledAction = (payload) => ({

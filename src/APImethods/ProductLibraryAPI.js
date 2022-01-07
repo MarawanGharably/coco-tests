@@ -1,6 +1,5 @@
 import axiosApi from "../utils/axiosApi";
 import {
-  deleteFolderAction,
   deleteProductAction,
   setProductLibDataAction,
   addProductsToFolderAction
@@ -130,17 +129,17 @@ export const deleteProductImageFromFolder = (storeId, productId, folderId) => (d
 };
 
 
-export const deleteHotspotProductFolder = (storeId, folderId) => (dispatch) => {
-  if (!storeId || !folderId) return Promise.reject('Missed required parameter');
-
-  return axiosApi
-  .delete(`/stores/${storeId}/product_library/folders/${folderId}`)
-  .then((res) => {
-    dispatch(deleteFolderAction(folderId));
-    return res.data;
-  })
-  .catch((err) => Promise.reject(err));
-};
+// export const deleteHotspotProductFolder = (storeId, folderId) => (dispatch) => {
+//   if (!storeId || !folderId) return Promise.reject('Missed required parameter');
+//
+//   return axiosApi
+//   .delete(`/stores/${storeId}/product_library/folders/${folderId}`)
+//   .then((res) => {
+//     dispatch(deleteFolderAction(folderId));
+//     return res.data;
+//   })
+//   .catch((err) => Promise.reject(err));
+// };
 
 
 /**************** Utils **********************/

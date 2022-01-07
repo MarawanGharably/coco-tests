@@ -74,7 +74,7 @@ export const getStoreFlags = (storeId, options) => (dispatch) => {
         .get(`/stores/${storeId}/features`)
         .then((res) => {
             if (options?.updateStore === "productLibrary") {
-                dispatch(setEnabledAction(res.data["product_library_enabled"]));
+                dispatch(setEnabledAction({storeId, isEnabled:res.data["product_library_enabled"]}));
             }
             return res.data;
         })

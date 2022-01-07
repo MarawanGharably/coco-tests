@@ -16,9 +16,9 @@ export default function SideBarMenu ({ links=[] }){
                         key={i}
                         isActive={isParentActive && !isChildActive}
                         label={item.label}
-                        url={item.children?.[0].url || item.url}
+                        url={item.children?.[0]?.url || item.url}
                     >
-                        {item.children && <SubMenu visible={isParentActive || isChildActive }  isParentActive={isParentActive} children={item.children} />}
+                        { item.children && <SubMenu visible={isParentActive || isChildActive }  isParentActive={isParentActive} children={item.children} />}
                     </MenuItem>
                 );
             })}

@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react';
+import { useSelector } from 'react-redux';
 import { Form, Field, reduxForm } from 'redux-form';
 import { Input, Select, RangeInputSet } from '../../../ReduxForms/_formFields';
 import FileUploadTabs from '../../../FileUploadTabs'
@@ -6,7 +7,31 @@ import styles from './ImageHotspot.module.scss';
 
 
 let ImageHotspotForm = (props) => {
-    const {initialize} = props;
+
+    const { Marker, initialize } = props;
+    const formData = useSelector((state) => state['form']['ImageHotspotForm']) || {};
+    const formValues = formData['values'] || {};
+
+    let record = Marker.userData;
+
+    useEffect(() => {
+        initialize({
+
+            hotspotSize: record?.props?.scale,
+
+        });
+    }, [Marker.uuid]);
+
+    useEffect(() => {
+        const isChanged = formData.initial?.hotspotSize !== formValues.hotspotSize;
+
+        if (isChanged) {
+
+            Marker.setScale(formValues.hotspotSize);
+        }
+    }, [formValues.hotspotSize]);
+
+
     const localeOptions = [
         { label: "en_US", value: "en_US" },
         { label: "en_UK", value: "en_UK" },

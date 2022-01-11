@@ -2,14 +2,14 @@ import React from 'react';
 import { Button, Spinner } from 'react-bootstrap';
 import styles from './FormActions.module.scss';
 
-const FormActions = ({ onPageRefresh, submitting }) => {
+const FormActions = ({ onPageRefresh, submitting, onSubmit }) => {
     return (
         <div className={`${styles.cmp} d-flex`}>
             <div className={styles.buttonSet}>
-                <Button type='button' onClick={onPageRefresh} className={styles.cancelButton}>
+                <Button onClick={onPageRefresh} className={styles.cancelButton}>
                     Cancel
                 </Button>
-                <Button type="submit" className={styles.saveButton}>
+                <Button type="submit" onClick={onSubmit} className={styles.saveButton}>
                     Save
                     <Spinner
                         as="span"

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { reset } from 'redux-form';
+import { reset, submit } from 'redux-form';
 import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
 import { apiCreateHotspotByType } from '../../APImethods';
@@ -20,13 +20,9 @@ export default function ContentHotspotsPage(props) {
 
     const onSubmit = () => {
         setSubmitting(true);
-        apiCreateHotspotByType(type, storeId, currentSceneId, form.values)
-            .then(() => {
-                setStatus({ success: true, message: 'Submitted Successfully' });
-            })
-            .catch((err) => {
-                setStatus({ error: true, message: err?.message || 'Submitting failed' });
-            })
+        dispatch(submit('ImageHotspotForm'));
+        alert('HOLA');
+        apiCreateHotspotByType('type', storeId, currentSceneId, form.values)
             .finally(() => {
                 setSubmitting(false);
             });

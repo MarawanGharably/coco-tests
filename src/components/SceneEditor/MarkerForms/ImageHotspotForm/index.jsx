@@ -5,10 +5,14 @@ import { Input, Select, RangeInputSet } from '../../../ReduxForms/_formFields';
 import FileUploadTabs from '../../../FileUploadTabs'
 import styles from './ImageHotspot.module.scss';
 
+const onSubmit = (values) => {
+    console.log(values);
+}
+
 
 let ImageHotspotForm = (props) => {
 
-    const { Marker, initialize } = props;
+    const { Marker, initialize, handleSubmit } = props;
     const formData = useSelector((state) => state['form']['ImageHotspotForm']) || {};
     const formValues = formData['values'] || {};
 
@@ -31,7 +35,6 @@ let ImageHotspotForm = (props) => {
         }
     }, [formValues.hotspotSize]);
 
-
     const localeOptions = [
         { label: "en_US", value: "en_US" },
         { label: "en_UK", value: "en_UK" },
@@ -43,7 +46,7 @@ let ImageHotspotForm = (props) => {
     ]
 
     return (
-        <Form className={styles['form']}>
+        <Form onSubmit={handleSubmit} className={styles['form']}>
             <Field name='hotspotSize' label="Hotspot Size" component={RangeInputSet} step = {0.1}/>
             <Field name='horizontalArea' label="Hotspot Clickable Area (Horizontally)" component={RangeInputSet} step = {0.1}/>
             <Field name='verticalArea' label="Hotspot Clickable Area (Vertically)" component={RangeInputSet} step = {0.1}/>
@@ -67,5 +70,7 @@ export default reduxForm({
     form: 'ImageHotspotForm',
     destroyOnUnmount: true,
     enableReinitialize: false,
+    onSubmit: onSubmit,
     validate,
 })(ImageHotspotForm);
+

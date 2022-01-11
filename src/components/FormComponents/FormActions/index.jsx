@@ -6,7 +6,7 @@ const FormActions = ({ onPageRefresh, submitting }) => {
     return (
         <div className={`${styles.cmp} d-flex`}>
             <div className={styles.buttonSet}>
-                <Button onClick={onPageRefresh} className={styles.cancelButton}>
+                <Button type='button' onClick={onPageRefresh} className={styles.cancelButton}>
                     Cancel
                 </Button>
                 <Button type="submit" className={styles.saveButton}>

@@ -29,7 +29,7 @@ let ImageHotspotForm = (props) => {
             props: {
                 show_icon: true, //Where it used?
                 scale: values.hotspotSize,
-                image: 'values.imageURL',
+                image: '61707384e412887766152f5a',
                 renderOrder: 50,
                 hotspot_type: 'product_image',
             },
@@ -38,6 +38,7 @@ let ImageHotspotForm = (props) => {
     }
 
     useEffect(() => {
+        console.log(Marker)
         initialize({
 
             hotspotSize: record?.props?.scale,

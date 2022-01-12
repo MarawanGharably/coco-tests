@@ -2,15 +2,12 @@ import React, { useState } from 'react';
 import { reset, submit } from 'redux-form';
 import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
-import { apiCreateHotspotByType } from '../../APImethods';
 import StoreLayout from '../../components/layouts/StoreLayout';
 import SceneEditor from '../../components/SceneEditor';
 import FormActions from "../../components/FormComponents/FormActions";
 
+export default function ContentHotspotsPage() {
 
-export default function ContentHotspotsPage(props) {
-
-    const { currentSceneId } = useSelector((state) => state['SceneEditor']);
     const dispatch = useDispatch();
     const [submitting, setSubmitting] = useState(false);
     const form = useSelector((state) => state['form']['ImageHotspotForm']);
@@ -20,12 +17,8 @@ export default function ContentHotspotsPage(props) {
 
     const onSubmit = () => {
         setSubmitting(true);
-        dispatch(submit('ImageHotspotForm'));
-        alert('HOLA');
-        apiCreateHotspotByType('type', storeId, currentSceneId, form.values)
-            .finally(() => {
-                setSubmitting(false);
-            });
+        dispatch(submit('ImageHotspotForm'))
+        setSubmitting(false);
     };
 
     const onCancel = () => {

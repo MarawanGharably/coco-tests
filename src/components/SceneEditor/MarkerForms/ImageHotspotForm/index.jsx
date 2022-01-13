@@ -89,7 +89,7 @@ let ImageHotspotForm = (props) => {
             <Field name='localeSelection' label="Select Locale" component={Select} options={localeOptions} className={styles["selector"]}/>
             <Field name='imageTitle' label="Image Title" component={Input}/>
             <Field name='imageSubtitle' label="Image Subtitle" component={Input}/>
-            <Field label="Image Upload" component={FileUploadTabs} type='image' />
+            <Field name='ImageUpload' label="Image Upload" component={FileUploadTabs} type='image' />
             <Field name='buttonCopy' label="Button Copy" component={Input}/>
             <Field name='buttonURL' label="Button URL" component={Input}/>
             <div style={{height:'200px'}}></div>

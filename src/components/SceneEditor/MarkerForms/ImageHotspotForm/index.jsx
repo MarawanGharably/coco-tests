@@ -29,9 +29,12 @@ let ImageHotspotForm = (props) => {
             props: {
                 show_icon: true, //Where it used?
                 scale: values.hotspotSize,
+                horizontalArea: values.horizontalArea,
+                verticalArea: values.verticalArea,
                 locale: values.localeSelection,
                 imageTitle: values.imageTitle,
                 imageSubtitle: values.imageSubtitle,
+                imageURL: values.imageURL,
                 buttonCopy: values.buttonCopy,
                 buttonURL: values.buttonURL,
                 image: '61707384e412887766152f5a',
@@ -46,12 +49,15 @@ let ImageHotspotForm = (props) => {
         initialize({
 
             hotspotSize: record?.props?.scale,
+            horizontalArea: record?.props?.horizontalArea,
+            verticalArea: record?.props?.verticalArea,
             localeSelection: record?.props?.locale,
             imageTitle: record?.props?.imageTitle,
             imageSubtitle: record?.props?.imageSubtitle,
+            imageURL: record?.props?.image?.image?.path,
             buttonCopy: record?.props?.buttonCopy,
             buttonURL: record?.props?.buttonURL,
-            imageURL: record?.props?.image?.image?.path,
+            
 
         });
     }, [Marker.uuid]);

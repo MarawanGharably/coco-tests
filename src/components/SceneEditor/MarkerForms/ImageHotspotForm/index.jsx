@@ -29,6 +29,11 @@ let ImageHotspotForm = (props) => {
             props: {
                 show_icon: true, //Where it used?
                 scale: values.hotspotSize,
+                locale: values.localeSelection,
+                imageTitle: values.imageTitle,
+                imageSubtitle: values.imageSubtitle,
+                buttonCopy: values.buttonCopy,
+                buttonURL: values.buttonURL,
                 image: '61707384e412887766152f5a',
                 renderOrder: 50,
                 hotspot_type: 'product_image',
@@ -38,10 +43,14 @@ let ImageHotspotForm = (props) => {
     }
 
     useEffect(() => {
-        console.log(Marker)
         initialize({
 
             hotspotSize: record?.props?.scale,
+            localeSelection: record?.props?.locale,
+            imageTitle: record?.props?.imageTitle,
+            imageSubtitle: record?.props?.imageSubtitle,
+            buttonCopy: record?.props?.buttonCopy,
+            buttonURL: record?.props?.buttonURL,
             imageURL: record?.props?.image?.image?.path,
 
         });

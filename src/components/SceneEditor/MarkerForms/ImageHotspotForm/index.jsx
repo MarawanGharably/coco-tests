@@ -75,7 +75,7 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
     ]
 
     return (
-        <Form onSubmit={handleSubmit(onSubmit)} className={styles['form']}>
+        <Form onSubmit={handleSubmit(onSubmit)} className={styles['form']} style={{marginBottom:'4em'}} >
             <Field name='hotspotSize' label="Hotspot Size" component={RangeInputSet} step = {0.1}/>
             <Field name='horizontalArea' label="Hotspot Clickable Area (Horizontally)" component={RangeInputSet} step = {0.1}/>
             <Field name='verticalArea' label="Hotspot Clickable Area (Vertically)" component={RangeInputSet} step = {0.1}/>
@@ -85,7 +85,6 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
             <Field name='imageUpload' label="Image Upload" component={FileUploadTabs} type='image' />
             <Field name='buttonCopy' label="Button Copy" component={Input}/>
             <Field name='buttonURL' label="Button URL" component={Input}/>
-            <div style={{height:'200px'}}></div>
         </Form>
     );
 };

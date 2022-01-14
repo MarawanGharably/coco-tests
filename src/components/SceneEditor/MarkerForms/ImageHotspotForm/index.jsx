@@ -8,15 +8,12 @@ import FileUploadTabs from '../../../FileUploadTabs'
 import styles from './ImageHotspot.module.scss';
 
 
-let ImageHotspotForm = (props) => {
-
-    const { Marker, initialize, handleSubmit } = props;
-    const { currentSceneId } = useSelector((state) => state['SceneEditor']);
+let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
     const router = useRouter();
-    const storeId = router.query?.id;
+    const { currentSceneId } = useSelector((state) => state['SceneEditor']);
     const formData = useSelector((state) => state['form']['ImageHotspotForm']) || {};
     const formValues = formData['values'] || {};
-
+    const storeId = router.query?.id;
     let record = Marker.userData;
 
     const onSubmit = (values) => {
@@ -41,13 +38,15 @@ let ImageHotspotForm = (props) => {
                 renderOrder: 50,
                 hotspot_type: 'product_image',
             },
-        })
-    
+        }).then(res=>{
+
+        }).catch(err=>{
+
+        });
     }
 
     useEffect(() => {
         initialize({
-
             hotspotSize: record?.props?.scale,
             horizontalArea: record?.props?.horizontalArea,
             verticalArea: record?.props?.verticalArea,
@@ -57,18 +56,12 @@ let ImageHotspotForm = (props) => {
             imageURL: record?.props?.image?.image?.path,
             buttonCopy: record?.props?.buttonCopy,
             buttonURL: record?.props?.buttonURL,
-            
-
         });
     }, [Marker.uuid]);
 
     useEffect(() => {
         const isChanged = formData.initial?.hotspotSize !== formValues.hotspotSize;
-
-        if (isChanged) {
-
-            Marker.setScale(formValues.hotspotSize);
-        }
+        if (isChanged) Marker.setScale(formValues.hotspotSize);
     }, [formValues.hotspotSize]);
 
     const localeOptions = [

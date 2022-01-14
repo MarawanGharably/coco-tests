@@ -8,16 +8,17 @@ import styles from './RangeInputSet.module.scss';
 /**
  * @param input
  * @param label
- * @param mode {string}  [inline|rows]
+ * @param dMode {string} - Display type [inline|rows]
+ * @param mode {string}  - Display style [dark]
  * @param min
  * @param max
  * @param step
  * @param meta
  * @returns {JSX.Element}
  */
-const RangeInputSet = ({ input, label, mode = 'inline', min = 0, max = 10, step = 1, meta }) => {
+const RangeInputSet = ({ input, label, dMode = 'inline', mode, min = 0, max = 10, step = 1, meta }) => {
 	return (
-		<Form.Group controlId='rangeInput' className={`${styles.cmp} ${styles[`mode-${mode}`]} `}>
+		<Form.Group controlId='rangeInput' className={`${styles.cmp} ${styles[`dMode-${dMode}`]} `}>
 			{label && <Form.Label>{label}</Form.Label>}
 
 			<Row className={`${styles.wrapper}`}>

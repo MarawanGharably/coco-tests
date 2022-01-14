@@ -7,7 +7,7 @@
 
 
   //All fields in line
-  &.mode-inline {
+  &.dMode-inline {
     .wrapper {
       flex-flow: row;
 
@@ -17,7 +17,7 @@
   }
 
   //Each field in separate row
-  &.mode-rows {
+  &.dMode-rows {
     & > div:nth-child(2) {max-width: 5em;}
   }
 }

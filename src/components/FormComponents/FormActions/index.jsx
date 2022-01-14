@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Spinner } from 'react-bootstrap';
 import styles from './FormActions.module.scss';
 
-const FormActions = ({ onPageRefresh, submitting, onSubmit }) => {
+const FormActions = ({ submitting, onPageRefresh, onSubmit }) => {
     return (
         <div className={`${styles.cmp} d-flex`}>
             <div className={styles.buttonSet}>

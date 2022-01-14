@@ -24,7 +24,7 @@ export default function Range({ input, label, min = 0, max = 10, step = 1, meta:
                 onChange={(e) => setValue(e.target.value)}
                 onMouseUp={handleScaleChange}
                 className="input-field form-control"
-                style={{ backgroundColor: '#fefefe', padding: '0.9em 0.6em' }}
+                style={{ backgroundColor: '#fefefe', padding: '1.04em 0.6em' }}
             />
         </Form.Group>
     );

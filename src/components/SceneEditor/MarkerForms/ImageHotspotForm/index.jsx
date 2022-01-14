@@ -7,6 +7,16 @@ import { Input, Select, RangeInputSet } from '../../../ReduxForms/_formFields';
 import FileUploadTabs from '../../../FileUploadTabs'
 import styles from './ImageHotspot.module.scss';
 
+const localeOptions = [
+    { label: "en_US", value: "en_US" },
+    { label: "en_UK", value: "en_UK" },
+    { label: "en_INT", value: "en_INT" },
+    { label: "en_IN", value: "en_IN" },
+    { label: "es_ES", value: "es_ES" },
+    { label: "de_DE", value: "de_DE" },
+    { label: "ja_JP", value: "ja_JP" },
+]
+
 
 let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
     const router = useRouter();
@@ -64,21 +74,13 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
         if (isChanged) Marker.setScale(formValues.hotspotSize);
     }, [formValues.hotspotSize]);
 
-    const localeOptions = [
-        { label: "en_US", value: "en_US" },
-        { label: "en_UK", value: "en_UK" },
-        { label: "en_INT", value: "en_INT" },
-        { label: "en_IN", value: "en_IN" },
-        { label: "es_ES", value: "es_ES" },
-        { label: "de_DE", value: "de_DE" },
-        { label: "ja_JP", value: "ja_JP" },
-    ]
+
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)} className={styles['form']} style={{marginBottom:'4em'}} >
-            <Field name='hotspotSize' label="Hotspot Size" component={RangeInputSet} step = {0.1}/>
-            <Field name='horizontalArea' label="Hotspot Clickable Area (Horizontally)" component={RangeInputSet} step = {0.1}/>
-            <Field name='verticalArea' label="Hotspot Clickable Area (Vertically)" component={RangeInputSet} step = {0.1}/>
+            <Field name='hotspotSize' label="Hotspot Size" component={RangeInputSet} mode='rows' step={0.1}/>
+            <Field name='horizontalArea' label="Hotspot Clickable Area (Horizontally)" component={RangeInputSet} mode='rows'  step={0.1}/>
+            <Field name='verticalArea' label="Hotspot Clickable Area (Vertically)" component={RangeInputSet} mode='rows'  step={0.1}/>
             <Field name='localeSelection' label="Select Locale" component={Select} options={localeOptions} className={styles["selector"]}/>
             <Field name='imageTitle' label="Image Title" component={Input}/>
             <Field name='imageSubtitle' label="Image Subtitle" component={Input}/>

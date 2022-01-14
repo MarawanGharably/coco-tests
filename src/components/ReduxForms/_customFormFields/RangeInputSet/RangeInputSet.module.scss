@@ -5,14 +5,19 @@
     display: flex;
   }
 
-  &.mode-inline {
 
+  //All fields in line
+  &.mode-inline {
     .wrapper {
       flex-flow: row;
 
       & > div:nth-child(1) {width: 70%;}
       & > div:nth-child(2) {width: 30%;}
     }
+  }
 
+  //Each field in separate row
+  &.mode-rows {
+    & > div:nth-child(2) {max-width: 5em;}
   }
 }

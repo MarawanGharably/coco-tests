@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Form, Field, reduxForm } from 'redux-form';
 import { useRouter } from 'next/router';
-import { apiCreateHotspotByType } from '../../../../APImethods';
+import { apiCreateHotspotByType, updateHotspotAPI } from '../../../../APImethods';
 import { Input, Select, RangeInputSet } from '../../../ReduxForms/_formFields';
 import FileUploadTabs from '../../../ReduxForms/_customFormFields/FileUploadTabs'
 import styles from './ImageHotspot.module.scss';
@@ -20,15 +20,14 @@ const localeOptions = [
 
 let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
     const router = useRouter();
+    const dispatch = useDispatch();
     const { currentSceneId } = useSelector((state) => state['SceneEditor']);
     const formData = useSelector((state) => state['form']['ImageHotspotForm']) || {};
     const formValues = formData['values'] || {};
     const storeId = router.query?.id;
     let record = Marker.userData;
-
     const onSubmit = (values) => {
-        
-        apiCreateHotspotByType('product_image', storeId, currentSceneId, {
+        const postData={
             type: 'HotspotMarker',
             scene: currentSceneId,
             collider_transform: Marker.transforms.colliderTransform.elements,
@@ -48,11 +47,21 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
                 renderOrder: 50,
                 hotspot_type: 'product_image',
             },
-        }).then(res=>{
+        }
+        if(record._id){
+           //create
+            dispatch(updateHotspotAPI(record._id, storeId, currentSceneId, postData, false ))
+                .then(res=>{
+            }).catch(err=>{
+            });
+        }else{
+            apiCreateHotspotByType('product_image', storeId, currentSceneId, postData)
+                .then(res=>{
 
-        }).catch(err=>{
+            }).catch(err=>{
 
-        });
+            });
+        }
     }
 
     useEffect(() => {

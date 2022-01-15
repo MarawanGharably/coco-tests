@@ -49,7 +49,7 @@ export const updateHotspotAPI = (hotspotId, storeId, sceneId, data, validate = t
     if (!hotspotId || !storeId || !sceneId || !data) return Promise.reject('Missed required parameter');
 
     //do not send image in request
-    delete data.props.image;
+    delete data.props?.image;
 
     //Format in correct data types
     if (data?.props?.scale) data.props.scale = Number(data.props.scale);

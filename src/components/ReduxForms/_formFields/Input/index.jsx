@@ -3,6 +3,19 @@ import { Form } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import styles from './Input.module.scss';
 
+/**
+ * @param input
+ * @param mode {string}  - Display style [dark]
+ * @param type
+ * @param label
+ * @param placeholder
+ * @param disabled
+ * @param touched
+ * @param error
+ * @param warning
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const Input = ({ input = {}, mode, type = 'text', label = '', placeholder = '', disabled, meta: { touched, error, warning } }) => {
     return (
         <Form.Group className={`input-field mb-3 ${styles['input-field']} ${mode ? styles[`${mode}-mode`]:''}`} controlId={input.name}>

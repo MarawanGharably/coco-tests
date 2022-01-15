@@ -1,5 +1,5 @@
 import React from 'react';
-import ContentHotspotFormWrapper from '../../ContentHotspotFormWrapper'
+import ContentHotspotFormWrapper from '../../ContentHotspotFormWrapper';
 import styles from './HotspotsSidebar.module.scss';
 
 export default function HotspotsSidebar (props) {

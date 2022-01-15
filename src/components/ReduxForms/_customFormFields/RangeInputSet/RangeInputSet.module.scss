@@ -6,6 +6,8 @@
   }
 
 
+
+
   //All fields in line
   &.dMode-inline {
     .wrapper {
@@ -16,8 +18,13 @@
     }
   }
 
+
+
   //Each field in separate row
   &.dMode-rows {
-    & > div:nth-child(2) {max-width: 5em;}
+    .wrapper {
+       & > div:nth-child(1) {padding:0 0 0 3px;}
+       & > div:nth-child(2) {max-width: 5em;}
+    }
   }
 }

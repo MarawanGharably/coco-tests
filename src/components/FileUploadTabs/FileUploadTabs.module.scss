@@ -3,7 +3,6 @@
 .tabs {
     display: flex;
     flex-direction: column;
-    margin: 0 32px 15px 24px;
     width: 85%;
     height: 120px;
     background: transparent;
@@ -42,7 +41,6 @@
     }
 
     input[id='imageURL']{
-    
         margin-top: 20px;
         width: 90%;
         align-self: center;
@@ -53,7 +51,6 @@
         box-shadow: none;
         border: none;
         text-align: start;
-    
     }
     
 }

@@ -4,13 +4,11 @@
 .form{  
 
     label{
-        margin: 0 0 8px 24px;
         font-size: 14px;
         font-weight: 400;
     }
 
     input {
-        margin: 0 32px 0 24px;
         width: 85%;
         height: 40px;
         border-radius: 0;
@@ -22,7 +20,6 @@
     }
 
     input[type="range"] {
-        margin: 0 0 0 15px;
         -webkit-appearance: 'none';
         width: 310px;
         box-shadow: none;
@@ -89,7 +86,6 @@
         
         //input field or "control"
         div[class*="-control"] {
-            margin: 0 32px 15px 24px;
             height: 40px;
             width: 85%;
             border-radius: 0;
@@ -107,7 +103,6 @@
             span[class*="-indicatorSeparator"] {display: none;}
         }
         div[class*="-menu"] {
-            margin: 0 32px 15px 24px;
             width: 85%;
             background: #2E2E2E;
             font-weight: 400;
@@ -117,7 +112,6 @@
             background: #2E2E2E;
         }
         .list{
-
             display: flex;
             flex-direction: column;
             background: #2E2E2E;

@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
 import { Field } from 'redux-form';
 import { Form } from 'react-bootstrap';
-import Input from '../ReduxForms/_formFields/Input';
-import FieldFileInput from '../ReduxForms/_formFields/FileInput';
+import Input from '../../_formFields/Input';
+import FieldFileInput from '../../_formFields/FileInput';
 import styles from './FileUploadTabs.module.scss'; 
 
 
 export default function FileUploadTabs ({ label = '', type = '' }) {
-    
     const [selectedIndex, setSelectedIndex] = useState(0);
     
     const onClick = (e) => {
-
         setSelectedIndex(e.target.id);
-
     }
 
     return (

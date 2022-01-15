@@ -4,7 +4,7 @@ import { Form, Field, reduxForm } from 'redux-form';
 import { useRouter } from 'next/router';
 import { apiCreateHotspotByType } from '../../../../APImethods';
 import { Input, Select, RangeInputSet } from '../../../ReduxForms/_formFields';
-import FileUploadTabs from '../../../FileUploadTabs'
+import FileUploadTabs from '../../../ReduxForms/_customFormFields/FileUploadTabs'
 import styles from './ImageHotspot.module.scss';
 
 const localeOptions = [
@@ -75,8 +75,8 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
     }, [formValues.hotspotSize]);
 
 
-//TODO: horizontalArea not exist in record
-//TODO: verticalArea not exist in record
+//TODO: horizontalArea, verticalArea, imageTitle, imageSubtitle does not exist in record
+
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)} className={styles['form']} style={{marginBottom:'4em'}} >

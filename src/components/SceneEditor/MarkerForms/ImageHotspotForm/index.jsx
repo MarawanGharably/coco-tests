@@ -35,7 +35,7 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
             transform: Marker.transforms.visualTransform.elements,
             props: {
                 show_icon: true, //Where it used?
-                scale: values.hotspotSize,
+                scale: values.scale,
                 horizontalArea: values.horizontalArea,
                 verticalArea: values.verticalArea,
                 locale: values.localeSelection,
@@ -57,7 +57,7 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
 
     useEffect(() => {
         initialize({
-            hotspotSize: record?.props?.scale,
+            scale: record?.props?.scale,
             horizontalArea: record?.props?.horizontalArea,
             verticalArea: record?.props?.verticalArea,
             localeSelection: record?.props?.locale,
@@ -70,17 +70,17 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
     }, [Marker.uuid]);
 
     useEffect(() => {
-        const isChanged = formData.initial?.hotspotSize !== formValues.hotspotSize;
-        if (isChanged) Marker.setScale(formValues.hotspotSize);
-    }, [formValues.hotspotSize]);
+        const isChanged = formData.initial?.scale !== formValues.scale;
+        if (isChanged) Marker.setScale(formValues.scale);
+    }, [formValues.scale]);
 
 
-//TODO: horizontalArea, verticalArea, imageTitle, imageSubtitle does not exist in record
+//TODO: horizontalArea, verticalArea, imageTitle, imageSubtitle, buttonCopy, buttonURL  does not exist in record
 
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)} className={styles['form']} style={{marginBottom:'4em'}} >
-            <Field name='hotspotSize' label="Hotspot Size" component={RangeInputSet} dMode='rows' min={0.5} step={0.1}/>
+            <Field name='scale' label="Hotspot Size" component={RangeInputSet} dMode='rows' min={0.5} step={0.1}/>
             <Field name='horizontalArea' label="Hotspot Clickable Area (Horizontally)" component={RangeInputSet} dMode='rows' min={0.5} step={0.1}/>
             <Field name='verticalArea' label="Hotspot Clickable Area (Vertically)" component={RangeInputSet} dMode='rows' min={0.5} step={0.1}/>
             <Field name='localeSelection' label="Select Locale" component={Select} options={localeOptions} className={styles["selector"]}/>

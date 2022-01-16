@@ -2,21 +2,13 @@ import React, {useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Form, Field, reduxForm } from 'redux-form';
 import { useRouter } from 'next/router';
-import { apiCreateHotspotByType, updateHotspotAPI } from '../../../../APImethods';
+import { apiCreateHotspotByType, updateHotspotAPI, getStoreLocale } from '../../../../APImethods';
 import { Input, Select, RangeInputSet } from '../../../ReduxForms/_formFields';
 import FileUploadTabs from '../../../ReduxForms/_customFormFields/FileUploadTabs'
 import styles from './ImageHotspot.module.scss';
 
-const localeOptions = [
-    { label: "en_US", value: "en_US" },
-    { label: "en_UK", value: "en_UK" },
-    { label: "en_INT", value: "en_INT" },
-    { label: "en_IN", value: "en_IN" },
-    { label: "es_ES", value: "es_ES" },
-    { label: "de_DE", value: "de_DE" },
-    { label: "ja_JP", value: "ja_JP" },
-]
 
+let localeOptions = [];
 
 let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
     const router = useRouter();
@@ -26,6 +18,9 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
     const formValues = formData['values'] || {};
     const storeId = router.query?.id;
     let record = Marker.userData;
+
+    console.log(Marker)
+
     const onSubmit = (values) => {
         const postData={
             type: 'HotspotMarker',
@@ -65,6 +60,15 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
     }
 
     useEffect(() => {
+        storeId &&
+            getStoreLocale(storeId)
+                .then((res) => {
+                    localeOptions = res.locales.map((locale) => {return {label:locale, value:locale}})
+                })
+                .catch((err) => console.log(err));
+    }, [storeId]);
+
+    useEffect(() => {
         initialize({
             scale: record?.props?.scale,
             horizontalArea: record?.props?.horizontalArea,
@@ -82,6 +86,7 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
         const isChanged = formData.initial?.scale !== formValues.scale;
         if (isChanged) Marker.setScale(formValues.scale);
     }, [formValues.scale]);
+
 
 
 //TODO: horizontalArea, verticalArea, imageTitle, imageSubtitle, buttonCopy, buttonURL  does not exist in record

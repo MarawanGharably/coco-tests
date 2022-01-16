@@ -9,7 +9,6 @@
     }
 
     input {
-        width: 85%;
         height: 40px;
         border-radius: 0;
         color: white;
@@ -21,7 +20,6 @@
 
     input[type="range"] {
         -webkit-appearance: 'none';
-        width: 310px;
         box-shadow: none;
         border: none;
         background-image: linear-gradient(rgba(0, 0, 0, .9), rgba(0, 0, 0, .9));
@@ -81,13 +79,11 @@
     }
         
     .selector {
-        width: 100%;
         background-color: transparent;
         
         //input field or "control"
         div[class*="-control"] {
             height: 40px;
-            width: 85%;
             border-radius: 0;
             border-style: none;
             background: #2E2E2E;
@@ -103,7 +99,6 @@
             span[class*="-indicatorSeparator"] {display: none;}
         }
         div[class*="-menu"] {
-            width: 85%;
             background: #2E2E2E;
             font-weight: 400;
             font-size: 14px;
@@ -119,5 +114,9 @@
             overflow-y: auto;
             overflow-x: hidden;
         }
+    }
+
+    input[id='buttonURL']{
+        margin-bottom: 100px;
     }
 }

@@ -10,6 +10,7 @@ import styles from './ImageHotspot.module.scss';
 
 let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
     const router = useRouter();
+    const storeId = router.query?.id;
     const dispatch = useDispatch();
     const { currentSceneId } = useSelector((state) => state['SceneEditor']);
     const { folders, selectedFolder } = useSelector((state) => state['productLibrary']);
@@ -17,23 +18,24 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
     const formData = useSelector((state) => state['form']['ImageHotspotForm']) || {};
     const formValues = formData['values'] || {};
     const [localeOptions, setLocaleOptions] = useState([]);
-    const storeId = router.query?.id;
+    const [imageId, setImageId] = useState('');
     let record = Marker.userData;
 
     const reader = new FileReader();
     reader.addEventListener("load", function () {
-        
         let imageData = {
             folder: folderId,
             content: reader.result,
             filename: formValues.imageFile.name,
             remove_background: false,
         };
-
         dispatch(addProductImageToFolder(storeId, folderId, [imageData]))
-        
-      }, false);
-
+            .then((res)=>{
+                setImageId(res[0]._id);
+                alert('Image Loaded');
+            })
+            .catch((err) => console.log(err));       
+    },false);
 
     const onSubmit = (values) => {
         const postData={
@@ -52,24 +54,24 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
                 imageURL: values.imageURL,
                 buttonCopy: values.buttonCopy,
                 buttonURL: values.buttonURL,
-                image: '61707384e412887766152f5a',
+                image: imageId,
                 renderOrder: 50,
                 hotspot_type: 'product_image',
             },
         }
         if(record._id){
-           //create
+           //Update
             dispatch(updateHotspotAPI(record._id, storeId, currentSceneId, postData, false ))
                 .then(res=>{
-            }).catch(err=>{
-            });
-        }else{
+                })
+                .catch((err) => console.log(err));
+        }
+        else{
+            //Create
             apiCreateHotspotByType('product_image', storeId, currentSceneId, postData)
                 .then(res=>{
-
-            }).catch(err=>{
-
-            });
+                })
+                .catch((err) => console.log(err));
         }
     }
 
@@ -100,7 +102,6 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
     useEffect(() => {
         const isChanged = formData.initial?.scale !== formValues.scale;
         if (isChanged) Marker.setScale(formValues.scale);
-        console.log(Marker)
     }, [formValues.scale]);
 
     useEffect(() => {

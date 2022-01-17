@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Form, Field, reduxForm } from 'redux-form';
 import { useRouter } from 'next/router';
@@ -8,18 +8,16 @@ import FileUploadTabs from '../../../ReduxForms/_customFormFields/FileUploadTabs
 import styles from './ImageHotspot.module.scss';
 
 
-let localeOptions = [];
-
 let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
     const router = useRouter();
     const dispatch = useDispatch();
     const { currentSceneId } = useSelector((state) => state['SceneEditor']);
     const formData = useSelector((state) => state['form']['ImageHotspotForm']) || {};
     const formValues = formData['values'] || {};
+    const [localeOptions, setlocaleOptions] = useState([]);
     const storeId = router.query?.id;
     let record = Marker.userData;
 
-    console.log(Marker)
 
     const onSubmit = (values) => {
         const postData={
@@ -63,7 +61,8 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
         storeId &&
             getStoreLocale(storeId)
                 .then((res) => {
-                    localeOptions = res.locales.map((locale) => {return {label:locale, value:locale}})
+                    let locales = res.locales.map((locale) => {return {label:locale, value:locale}})
+                    setlocaleOptions(locales);
                 })
                 .catch((err) => console.log(err));
     }, [storeId]);

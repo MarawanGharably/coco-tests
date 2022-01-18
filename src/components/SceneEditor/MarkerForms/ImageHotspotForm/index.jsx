@@ -26,7 +26,7 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
         setImageData({
             folder: folderId,
             content: reader.result,
-            filename: formValues.imageFile.name,
+            filename: formValues.imageFile?.name || formValues.imageURL,
             remove_background: false,
         });  
     },false);
@@ -108,6 +108,15 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
     useEffect(() => {
         if (formValues.imageFile) reader.readAsDataURL(formValues.imageFile);
     }, [formValues.imageFile]);
+
+    useEffect(() => {
+        if (formValues.imageURL !== formData.initial?.imageURL) {
+            (async function() {
+                let blob = await fetch(formValues.imageURL).then(r => r.blob());
+                reader.readAsDataURL(blob);
+            })();
+        }
+    }, [formValues.imageURL]);
 
 //TODO: horizontalArea, verticalArea, imageTitle, imageSubtitle, buttonCopy, buttonURL  does not exist in record
 

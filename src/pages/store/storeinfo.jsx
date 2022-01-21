@@ -8,17 +8,14 @@ import SubmitStatusMessage from '../../components/ReduxForms/SubmitStatusMessage
 import FormWithActionBtns from "../../components/FormComponents/FormWithActionBtns";
 
 
-let StoreInfoPage = ({ handleSubmit, initialize }) => {
+let StoreInfoPage = ({ initialize, ...props }) => {
     const router = useRouter();
+    const [storeDataLoaded, setStoreData] = useState(false);
+    const [status, setStatus] = useState({});
     const { id: storeId } = router.query;
 
-    const [storeDataLoaded, setStoreData] = useState(false);
-    const [submitting, setSubmitting] = useState(false);
-    const [status, setStatus] = useState({});
-
     useEffect(() => {
-        storeId &&
-            getStoreInfo(storeId)
+        storeId && getStoreInfo(storeId)
                 .then((res) => {
                     setStoreData(true);
                     initialize({
@@ -30,8 +27,7 @@ let StoreInfoPage = ({ handleSubmit, initialize }) => {
     }, [storeId]);
 
     const onSubmit = (values) => {
-        setSubmitting(true);
-        updateStoreInfo(storeId, values)
+       return updateStoreInfo(storeId, values)
             .then((res) => {
                 setStatus({ success: true, message: 'Store Info Updated Successfully' });
 
@@ -41,21 +37,14 @@ let StoreInfoPage = ({ handleSubmit, initialize }) => {
             })
             .catch((err) => {
                 setStatus({ error: true, message: err?.message || 'Store Info update failed' });
-            })
-            .finally(() => {
-                setSubmitting(false);
             });
-    };
-
-    const onPageRefresh = () => {
-        location.reload();
     };
 
 
     return (
         <StoreLayout title="Store Info">
             <SubmitStatusMessage status={status} />
-                <FormWithActionBtns dataLoaded={storeDataLoaded} onSubmit={handleSubmit(onSubmit)}  onPageRefresh={onPageRefresh} submitting={submitting} fieldsWrapperStyle={{ maxWidth: '40em' }}>
+                <FormWithActionBtns dataLoaded={storeDataLoaded} onSubmit={onSubmit} fieldsWrapperStyle={{ maxWidth: '40em' }} {...props}>
                     <Field name="name" label="Store Name" mode="dark" component={Input} placeholder="Enter Store Name" />
                     <Field name="url_slug" label="Store Slug" mode="dark" component={Input} placeholder="Enter Store Slug" />
                 </FormWithActionBtns>

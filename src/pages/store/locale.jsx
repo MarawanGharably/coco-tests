@@ -9,41 +9,28 @@ import SubmitStatusMessage from "../../components/ReduxForms/SubmitStatusMessage
 import { getStoreLocale, updateStoreLocales } from "../../APImethods";
 
 
+//TODO: need validation()
 
-//TODO: onPageRefresh - use initialize maybe?
-//TODO: locales_enabled switcher should be redux Field as well
-//TODO: perform cleanup
-
-let LocalePage = ({ handleSubmit, change, initialize }) => {
+let LocalePage = ({ initialize, ...props }) => {
     const router = useRouter();
+    const formData = useSelector((state) => state.form.LocalePage?.values);
+    const [storeDataLoaded, setStoreData] = useState(false);
+    const [status, setStatus] = useState({});
+    const options = formData?.locales.map((item) => ({ label: item, value: item }));
     const { id: storeId } = router.query;
 
-    const formData = useSelector((state) => state.form.LocalePage?.values);
-    console.log("formData--", { formData });
-
-    const [storeDataLoaded, setStoreData] = useState(false);
-    const [submitting, setSubmitting] = useState(false);
-    const [status, setStatus] = useState({});
-
-    const [initialFormValues, setInitialFormValues] = useState(null);
-
-    const options = formData?.locales.map((item) => ({ label: item, value: item }));
 
     useEffect(() => {
-        storeId &&
-            getStoreLocale(storeId)
+        storeId && getStoreLocale(storeId)
                 .then((res) => {
                     setStoreData(true);
-                    setInitialFormValues(res);
                     initialize(res);
                 })
                 .catch((err) => console.log(err));
     }, [storeId]);
 
     const onSubmit = (values) => {
-        setSubmitting(true);
-
-        updateStoreLocales(storeId, values)
+       return updateStoreLocales(storeId, values)
             .then((res) => {
                 setStatus({ success: true, message: "Store Locale Updated Successfully" });
 
@@ -53,27 +40,14 @@ let LocalePage = ({ handleSubmit, change, initialize }) => {
             })
             .catch((err) => {
                 setStatus({ error: true, message: err?.data?.error_message || err?.message || "Store Locale Update Failed" });
-            })
-            .finally(() => {
-                setSubmitting(false);
             });
-    };
-
-    const onPageRefresh = () => {
-        initialize(initialFormValues);
     };
 
     return (
         <StoreLayout title="Locale">
             <SubmitStatusMessage status={status} />
 
-            <FormWithActionBtns
-                dataLoaded={storeDataLoaded}
-                onSubmit={handleSubmit(onSubmit)}
-                onPageRefresh={onPageRefresh}
-                submitting={submitting}
-                fieldsWrapperStyle={{ maxWidth: "40em" }}
-            >
+            <FormWithActionBtns dataLoaded={storeDataLoaded} onSubmit={onSubmit} fieldsWrapperStyle={{ maxWidth: "40em" }}{...props}>
                 <Field name="locales_enabled" label="Turn locale ON/OFF" component={Switcher} />
 
                 {formData?.locales_enabled && (

@@ -6,14 +6,15 @@ import FormActions from "../FormActions";
 import styles from "./formWithActionBtns.module.scss";
 
 
-const FormWithActionBtns=({ dataLoaded, onSubmit, submitting, onPageRefresh, fieldsWrapperStyle = {}, children })=> {
+const FormWithActionBtns=({ dataLoaded, handleSubmit, onSubmit, submitting, reset, pristine, fieldsWrapperStyle = {}, children })=> {
     if (dataLoaded) {
         return (
-            <Form onSubmit={onSubmit} className={styles.cmp} >
+            <Form onSubmit={handleSubmit(onSubmit)} className={styles.cmp} >
                 <div className={styles.fieldsWrapper} style={fieldsWrapperStyle}>
                     {children}
                 </div>
-                <FormActions onPageRefresh={onPageRefresh} submitting={submitting} />
+
+                <FormActions onPageRefresh={reset} submitting={submitting} pristine={pristine}/>
             </Form>
         );
     } else {
@@ -23,7 +24,9 @@ const FormWithActionBtns=({ dataLoaded, onSubmit, submitting, onPageRefresh, fie
 
 FormWithActionBtns.propTypes={
     onSubmit: PropTypes.func.isRequired,
-    onPageRefresh: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
+    submitting: PropTypes.bool.isRequired,
+    reset: PropTypes.bool.isRequired,
 }
 
 export default FormWithActionBtns;

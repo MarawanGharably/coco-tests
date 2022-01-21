@@ -6,7 +6,7 @@ import { Button } from 'react-bootstrap';
 import { apiCreateHotspotByType, updateHotspotAPI, deleteHotspotAPI } from '../../../../APImethods/HotspotsAPI';
 import { Field, reduxForm } from 'redux-form';
 import { Input } from '../../../ReduxForms/_formFields';
-import SubmitButton from '../../../FormComponents/SubmitButton';
+import SubmitButton from '../../../ReduxForms/commonUI/SubmitButton';
 import styles from './hotspotMarkerUIForm.module.scss';
 
 const HotspotMarkerUIForm = (props) => {

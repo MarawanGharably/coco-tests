@@ -5,7 +5,7 @@ import { Input } from '../../components/ReduxForms/_formFields';
 import StoreLayout from '../../components/layouts/StoreLayout';
 import { getStoreInfo, updateStoreInfo } from '../../APImethods';
 import SubmitStatusMessage from '../../components/ReduxForms/SubmitStatusMessage';
-import FormWithActionBtns from "../../components/FormComponents/FormWithActionBtns";
+import FormWithActionBtns from "../../components/ReduxForms/commonUI/FormWithActionBtns";
 
 
 let StoreInfoPage = ({ initialize, ...props }) => {

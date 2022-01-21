@@ -7,7 +7,7 @@ import {withRouter} from "next/router";
 import Layout from '../../components/layouts/Layout';
 import {Field, reduxForm} from "redux-form";
 import {Input} from "../../components/ReduxForms/_formFields";
-import SubmitButton from "../../components/FormComponents/SubmitButton";
+import SubmitButton from "../../components/ReduxForms/commonUI/SubmitButton";
 import {isValidEmail} from "../../utils/validation";
 import {logIn} from "../../APImethods/AuthAPI";
 import styles from "../../assets/scss/LogInForm.module.scss";

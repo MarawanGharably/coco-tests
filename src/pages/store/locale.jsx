@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { Field, reduxForm } from "redux-form";
 import { Select, Switcher } from "../../components/ReduxForms/_formFields";
 import StoreLayout from "../../components/layouts/StoreLayout";
-import FormWithActionBtns from "../../components/FormComponents/FormWithActionBtns";
+import FormWithActionBtns from "../../components/ReduxForms/commonUI/FormWithActionBtns";
 import SubmitStatusMessage from "../../components/ReduxForms/SubmitStatusMessage";
 import { getStoreLocale, updateStoreLocales } from "../../APImethods";
 

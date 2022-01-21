@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { Field, reduxForm, getFormValues, FieldArray } from "redux-form";
 import { Card, Alert, Form } from "react-bootstrap";
 import { Input, Select } from '../../../components/ReduxForms/_formFields';
-import { SubmitButton } from '../../../components/FormComponents';
+import SubmitButton  from '../../../components/ReduxForms/commonUI/SubmitButton';
 import AdminPageLayout from '../../../components/layouts/AdminPageLayout';
 
 //API Methods

@@ -3,7 +3,7 @@ import { Field, reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
 import { Row } from 'react-bootstrap';
 import { Input } from '../../_formFields';
-import SubmitButton from '../../../FormComponents/SubmitButton';
+import SubmitButton from '../../commonUI/SubmitButton';
 
 
 // Actions

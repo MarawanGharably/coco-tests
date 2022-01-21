@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { useRouter } from 'next/router';
 import { Row, Col } from 'react-bootstrap';
-import SubmitButton from '../components/FormComponents/SubmitButton';
+import SubmitButton from '../components/ReduxForms/commonUI/SubmitButton';
 import Layout from '../components/layouts/Layout';
 import { Input } from '../components/ReduxForms/_formFields';
 

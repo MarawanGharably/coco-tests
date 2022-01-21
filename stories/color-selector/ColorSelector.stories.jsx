@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { withKnobs, text } from '@storybook/addon-knobs';
 import { SketchPicker } from 'react-color'
-import Input from '../../src/components/FormComponents/Input';
+
 
 
 const ColorSelector = ({ labelId, labelTitle }) => {
@@ -38,13 +38,13 @@ const ColorSelector = ({ labelId, labelTitle }) => {
 
 return (
     <div>
-        <Input
-            labelTitle={labelTitle}
-            labelId={labelId}
-            value={selectedColor}
-            handleChange={handleChange}
-            decoratorComponent={decorator}
-        />
+        {/*<Input*/}
+        {/*    labelTitle={labelTitle}*/}
+        {/*    labelId={labelId}*/}
+        {/*    value={selectedColor}*/}
+        {/*    handleChange={handleChange}*/}
+        {/*    decoratorComponent={decorator}*/}
+        {/*/>*/}
         {showingSelector && (
             <div className="color-picker-container" ref={colorSelectorRef}>
                 <SketchPicker

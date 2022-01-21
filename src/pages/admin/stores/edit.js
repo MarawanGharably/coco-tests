@@ -3,7 +3,7 @@ import { withRouter } from 'next/router';
 import { Field, reduxForm } from 'redux-form';
 import { Card } from 'react-bootstrap';
 import { Input, Checkbox } from '../../../components/ReduxForms/_formFields';
-import SubmitButton from '../../../components/FormComponents/SubmitButton';
+import SubmitButton from '../../../components/ReduxForms/commonUI/SubmitButton';
 import SubmitStatusMessage from '../../../components/ReduxForms/SubmitStatusMessage';
 import AdminPageLayout from '../../../components/layouts/AdminPageLayout';
 

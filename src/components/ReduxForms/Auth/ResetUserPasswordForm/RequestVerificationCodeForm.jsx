@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import Link from 'next/link';
 import { Input } from '../../_formFields';
-import SubmitButton from '../../../FormComponents/SubmitButton';
 import { isValidEmail } from '../../../../utils/validation';
-
-// Actions
+import SubmitButton from '../../commonUI/SubmitButton';
 import { resetPasswordByEmail } from '../../../../APImethods/AuthAPI';
+
+
 
 class RequestVerificationCodeForm extends Component {
     constructor(props) {
@@ -55,6 +55,7 @@ class RequestVerificationCodeForm extends Component {
         );
     }
 }
+
 
 
 const ErrorMessage =({error})=>{

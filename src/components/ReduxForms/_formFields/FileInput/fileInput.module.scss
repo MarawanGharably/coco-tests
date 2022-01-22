@@ -1,9 +1,10 @@
-.cmp{
+@import '../../../../assets/scss/variables';
+
+.cmp {
   position: relative;
 
-
   //Hidden input type='file'
-  input[type="file"]{
+  input[type='file'] {
     display: block;
     opacity: 0;
     z-index: 10;
@@ -13,26 +14,30 @@
     cursor: pointer;
   }
 
-
-
-  .uploadFileWrapper{
+  .fileUploader {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #232323;
-    border-color:#232323;
-    border-radius: 4px;
+    background-color:$black-2;
+    border-color: $black-2;
     border-style: inherit;
     color: white;
     height: 2.4em;
     width: 100%;
     font-size: medium;
 
-    .uploadImg{
+    .uploadImg {
       height: 1.441em;
       width: 1.441em;
       margin-right: 0.5em;
     }
+  }
 
+  .filePreview {
+    height: 40px;
+    align-items: center;
+    justify-content: space-between;
+    background: $black-2;
+    padding: 0 1em;
   }
 }

@@ -197,3 +197,26 @@ export const updateStoreLocales = (storeId, data) => {
         .catch((err) => Promise.reject(err.response));
 };
 
+
+/**
+ * Get store fonts
+ */
+
+export const getStoreFonts = (storeId) => {
+    if (!storeId) return Promise.reject(Error("storeId is required parameter"));
+    return axiosApi
+        .get(`/stores/${storeId}/fonts`)
+        .then((res) => res.data)
+        .catch((err) => Promise.reject(err));
+}
+
+/**
+ * Update store fonts
+ */
+ export const updateStoreFonts = (storeId, data) => {
+    if (!storeId) return Promise.reject(Error("storeId is required parameter"));
+    return axiosApi
+        .put(`/stores/${storeId}/fonts`, data)
+        .then((res) => res.data)
+        .catch((err) => Promise.reject(err.response));
+};

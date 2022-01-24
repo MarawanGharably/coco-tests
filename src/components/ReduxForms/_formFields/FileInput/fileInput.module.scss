@@ -3,41 +3,55 @@
 .cmp {
   position: relative;
 
-  //Hidden input type='file'
-  input[type='file'] {
+
+  label {
+    @extend %formInputLabel;
+  }
+
+  .inputWrapper {
+    @extend %formInput;
     display: block;
-    opacity: 0;
-    z-index: 10;
-    position: absolute;
-    width: 100%;
-    height: 40px;
-    cursor: pointer;
-  }
-
-  .fileUploader {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color:$black-2;
+    background-color: $black-2;
     border-color: $black-2;
-    border-style: inherit;
+    border-radius: 0;
     color: white;
-    height: 2.4em;
     width: 100%;
-    font-size: medium;
 
-    .uploadImg {
-      height: 1.441em;
-      width: 1.441em;
-      margin-right: 0.5em;
+    .fileUploader {
+      @extend %formInput;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: $black-2;
+      border-color: $black-2;
+
+
+      //Hidden input type='file'
+      input[type='file'] {
+        @extend %formInput;
+        display: block;
+        opacity: 0;
+        z-index: 10;
+        position: absolute;
+        width: 100%;
+        height: 40px;
+        cursor: pointer;
+      }
+
+
+      .uploadImg {
+        height: 1.441em;
+        width: 1.441em;
+        margin-right: 0.5em;
+      }
     }
+
+    .filePreview {
+      align-items: center;
+      justify-content: space-between;
+    }
+
   }
 
-  .filePreview {
-    height: 40px;
-    align-items: center;
-    justify-content: space-between;
-    background: $black-2;
-    padding: 0 1em;
-  }
+
 }

@@ -23,6 +23,23 @@ $obsess-pink: #ff74a6;
 
 $footer-color: #d4d8df;
 
+//FORMS
+$inputSize:14px;
+
+%formInput{
+    font-size: $inputSize;
+    font-weight: 300;
+    color:$grey-light-2;
+}
+
+%formInputLabel{
+    font-size: $inputSize;
+    font-weight: 300;
+    color:$grey-light-2;
+}
+
+
+
 %textWithGradient {
     background-color: $blue-ink-color;
     background-image: linear-gradient(92.35deg, $blue-ink-color 1.28%, $green-bright-color 98.95%);

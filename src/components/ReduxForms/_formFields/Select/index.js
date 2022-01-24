@@ -22,7 +22,7 @@ const SelectInput = (props) => {
         isMulti,
         allowCustomOptions,
         placeholder = "",
-        meta,
+        meta: { touched, error, warning },
     } = props;
 
     const SelectComponent = allowCustomOptions ? CreatableSelect : Select;
@@ -73,7 +73,15 @@ const SelectInput = (props) => {
                 options={options}
                 searchable={searchable}
                 onChange={onChangeEvent}
+                onBlur={() => input.onBlur(input.value)} //onBlur is needed otherwise `touched` doesn't work
             />
+
+            {touched && (error || warning) && (
+                <ul className="form-field-error">
+                    {error && <li className="field-error">{error}</li>}
+                    {warning && <li className="field-warn">{warning}</li>}
+                </ul>
+            )}
         </Form.Group>
     );
 };

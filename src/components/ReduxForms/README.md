@@ -2,20 +2,30 @@
 
 ### The purpose:
 - implement once, use everywhere
-- eliminate the need of onClick/onChange events/callbacks
+- eliminate the need of hundreds of onClick/onChange events/callbacks
+- eliminate the need of hundreds state variables in form component
 
-### The Goal
-- update state directly without events/callbacks
+
 
 
 ### Important:
 - `input` property MUST be present in every Field component
-- use `input` prop to access field data ( value, onChange(), etc)
+- use `input` prop to access field data and some methods ( value, onChange(), etc)
 - DO NOT return any onChange() callbacks from the Field component as we have this logic to avoid using them. 
 
+### Everything you need already exist!!!
+- submitting state of the form
+- validation (field & form level)
+- touched, pristine
+- reset (could be used to reset form values)
 
+<br/><br/><br/>
+
+
+### The Field
 ```javascript
 //#1. simple example of text input field
+// input must be always present in the Field component
 export default function({ input, label=''}){
     return(<input {...input} type='text' />)
 }

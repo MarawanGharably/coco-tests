@@ -95,3 +95,7 @@ ul.form-field-error .field-warn{ color: coral;}
 
 /*********  FORMS  *********************/
 form .formField{ margin-bottom: 1em;}
+form label{
+    font-size: 14px;
+    color:#efefef;
+}

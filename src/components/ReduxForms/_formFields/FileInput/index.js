@@ -21,14 +21,17 @@ export default function FileInput({ input, label, accept, placeholder = 'Upload 
         <Form.Group className={`form-input ${styles['cmp']}`}>
             {label && (<Form.Label>{label}</Form.Label>)}
 
-            {!input.value ?
-                (<FileUploader
-                    input={input}
-                    placeholder={placeholder}
-                    accept={accept}
-                />)
-                : (<FilePreview input={input} />)
-            }
+            <div className={`${styles.inputWrapper} form-control`}>
+                {!input.value ?
+                    (<FileUploader
+                        input={input}
+                        placeholder={placeholder}
+                        accept={accept}
+                    />)
+                    : (<FilePreview input={input} />)
+                }
+            </div>
+
 
 
             {visited && (error || warning) && (
@@ -59,7 +62,7 @@ const FileUploader = ({ input, placeholder, accept }) => {
     };
 
     return (
-        <div className={styles['fileUploader']}>
+        <div className={styles.fileUploader}>
             <input
                 {...inputData}
                 type='file'
@@ -74,15 +77,11 @@ const FileUploader = ({ input, placeholder, accept }) => {
 };
 
 //TODO: can display img/png files and delete icon
-const FilePreview = ({ input }) => {
-    const deleteValue=()=>{
-        input.onChange(null);
-    }
-    return (
-        <div className={`d-flex ${styles.filePreview}`}>
-            <i className='fas fa-file'></i>
-            <div>{input?.value?.[0].filename || 'File'}</div>
-            <i className="fas fa-trash-alt" onClick={deleteValue}></i>
-        </div>
-    );
-};
+const FilePreview = ({ input }) => (
+    <div className={`d-flex ${styles.filePreview}`}>
+        <i className='fas fa-file'></i>
+        <div>{input?.value?.[0].filename || 'File'}</div>
+        <i className="fas fa-trash-alt" onClick={e=>input.onChange(null)}></i>
+    </div>
+);
+

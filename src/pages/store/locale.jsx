@@ -11,6 +11,7 @@ import { getStoreLocale, updateStoreLocales } from "../../APImethods";
 
 //TODO: need validation()
 
+
 let LocalePage = ({ initialize, ...props }) => {
     const router = useRouter();
     const formData = useSelector((state) => state.form.LocalePage?.values);
@@ -35,7 +36,7 @@ let LocalePage = ({ initialize, ...props }) => {
                 setStatus({ success: true, message: "Store Locale Updated Successfully" });
 
                 setTimeout(() => {
-                    router.push(`/store/product-tagging/?id=${storeId}`);
+                    router.push(`/store/fonts/?id=${storeId}`);
                 }, 2000);
             })
             .catch((err) => {

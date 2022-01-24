@@ -1,74 +1,83 @@
-@import "../../../../assets/scss/variables";
+@import '../../../../assets/scss/variables';
 
-.cmp{
-    flex-direction: column;
-    font-size: 14px;
+.cmp {
+	flex-direction: column;
 
-    &.dark-mode {
+	label{
+		@extend %formInputLabel;
+	}
 
-        div[class*="-container"] {
-            font-size: 1em;
-            background: $black-2;
-            border: none;
+	input{
+		@extend %formInput;
+	}
 
-            //input field or "control"
-            div[class*="-control"] {
-                background: $black-2;
-                border-color: $black-2;
-                box-shadow: none;
+	&.dark-mode {
+		div[class*='-container'] {
+			font-size: $inputSize;
+			background: $black-2;
+			border: none;
 
-                div[class*="-ValueContainer"] {
-                    div[class*="-Input"] {
-                        color: $grey-light-2;
-                    }
-                }
+			//input field or "control"
+			div[class*='-control'] {
+				background: $black-2;
+				min-height: 35px;
+				box-shadow: none;
+				border:0;
 
+				div[class*='-ValueContainer'] {
+					div[class*='-Input'] {
+						@extend %formInput;
+					}
+					div[class*='-placeholder'] {
+						color: $grey-light-2;
+					}
+				}
 
-                div[class*="-singleValue"] {
-                    color: $grey-light-2;
-                    font-weight: 400;
-                }
+				div[class*='-singleValue'] {
+					@extend %formInput;
+				}
 
+				//Multi Value elements
+				div[class*='-multiValue'] {
+					background-color: #4e4e4e;
+					border-radius: 2em;
 
-                //Multi Value elements
-                div[class*="-multiValue"] {
-                    background-color: #4e4e4e;
-                    border-radius: 2em;
+					& > div:nth-child(1) {
+						color: $grey-light-2;
+					}
 
-                    &>div:nth-child(1) {
-                        color:$grey-light-2;
-                    }
+					& > div:nth-child(2) {
+						&:hover {
+							background: none;
+							color: $grey-light-2;
+						}
+						svg {
+							background: $red-light-1;
+							border-radius: 8px;
+						}
+					}
+				}
 
-                    &>div:nth-child(2) {
-                        &:hover{
-                            background: none;
-                            color:$grey-light-2;
-                        }
-                        svg{
-                            background: $red-light-1;
-                            border-radius: 8px;
-                        }
-                    }
-                }
+				span[class*='-indicatorSeparator'] {
+					display: none;
+				}
+				div[class*='-indicatorContainer'] {
+					color: $grey-light-2;
+				}
+			}
 
-                span[class*="-indicatorSeparator"] {
-                    display: none;
-                }
-                div[class*="-indicatorContainer"] {
-                    color: $grey-light-2;
-                }
-            }
+			div[class*='-menu'] {
+				background: $black-2;
+				border-radius: 0;
 
-            div[class*="-menu"] {
-                background: $black-2;
-                border-radius: 0;
-
-                div[class*="-option"] {
-                    background:#232323FF;
-                    &:hover { cursor: pointer; background:#4e4e4e }
-                }
-            }
-        }
-    }
+				div[class*='-option'] {
+					background: #232323ff;
+					&:hover {
+						cursor: pointer;
+						background: #4e4e4e;
+					}
+				}
+			}
+		}
+	}
 }
-

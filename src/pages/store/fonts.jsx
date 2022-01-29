@@ -42,15 +42,17 @@ let FontsPage = ({ initialize, ...props }) => {
 
 
 	const onSubmit = (values) => {
-		const { font_files: filesToUpload = [], ...formValues } = values;
+		const { upload, ...formValues } = values;
 
-		const uploadedFiles = filesToUpload.reduce((acc, item) => ({
-			...acc, [item.filename]: { filename: item.filename, content: item.content },
-		}), {});
+		const uploadedFiles= {};
+		if(upload){
+			uploadedFiles[upload.filename] = { name: upload.name, content: upload.content };
+		}
 
-		const font_files = { ...fetchedFontFiles, ...uploadedFiles };
-
-		return updateStoreFonts(storeId, { font_files, fonts: formValues })
+		return updateStoreFonts(storeId, {
+			font_files:uploadedFiles,
+			fonts: formValues
+		})
 			.then((res) => {
 				setStatus({ success: true, message: 'Fonts Updated Successfully' });
 
@@ -76,7 +78,7 @@ let FontsPage = ({ initialize, ...props }) => {
 								fieldsWrapperStyle={{ maxWidth: '40em' }} {...props}>
 				<Row className='mt-3'>
 					<Col sm={6}>
-						<Field name='font_files' label='Upload Font' component={FileInput} placeholder='Upload Font' multiple accept='.TTF, .OTF, .EOT' />
+						<Field name='upload' label='Upload Font' component={FileInput} placeholder='Upload Font' multiple accept='.TTF, .OTF, .EOT' />
 					</Col>
 					<Col sm={6}>
 						<Field name='default_font.name' label='Default Font' placeholder='Select Font' mode='dark' component={Select} options={fontOptions} />

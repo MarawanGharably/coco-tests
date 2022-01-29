@@ -3,13 +3,8 @@
 .cmp {
 	flex-direction: column;
 
-	label{
-		@extend %formInputLabel;
-	}
-
-	input{
-		@extend %formInput;
-	}
+	label{ @extend %formInputLabel;	}
+	input{ @extend %formInput;}
 
 	&.dark-mode {
 		div[class*='-container'] {

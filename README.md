@@ -9,32 +9,22 @@ COCO Content Management System ("COCO CMS") is a platform that allows users to c
 
 ## Getting Started
 ### Available Scripts
-* `npm start` to start a local environment for development
-* `npm test` to run jest
+* `npm run dev` to start a local environment for development
 * `lint` to run linter on all files
 * `npm run storybook` to start Storybook
-* `make local` to deploy to local Kubernetes
+
 
 ### Installation
 * `npm install` to install all dependencies
-* Pre-Commit
-  * `pip install pre-commit` to install via pip, `brew install pre-commit` via homebrew, or `conda install -c conda-forge pre-commit` via conda
-  * run `pre-commit install` to set up git hooks in .pre-commit-config.yaml. This now runs automatically on git commit
-* jq
-  * `brew install jq` to install JSON CLI (required for the check-gitlab-ci pre-commmit hook)
-* `make local` to make a local deployment of COCO CMS in Kubernetes. This deploys a local instance of COCO CMS within a Kubernetes namespace
-  * Kubernetes
-  * Docker
-  * Helm
+
 
 ## Versioning - [Semantic Versioning Standards](https://semver.org/)
 Update versions within:
-  * Chart.yaml
   * package.json
   * gitlab-ci.yml
 
-## CSS
+## SCSS
 SCSS should be used as a base for styling the frontend because of it's scalability and stability.
 
-## Jest
-I'll write this part once I make a few more tests
+## CDN
+https://cdn.obsess-vr.com/coco

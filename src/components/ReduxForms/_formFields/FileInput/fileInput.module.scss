@@ -3,7 +3,6 @@
 .cmp {
   position: relative;
 
-
   label {
     @extend %formInputLabel;
   }
@@ -49,9 +48,15 @@
     .filePreview {
       align-items: center;
       justify-content: space-between;
+
+      .previewImage{
+        height: 1.3em;
+        width: 1.3em;
+        display:flex;
+
+        img{max-height: 100%;}
+      }
+
     }
-
   }
-
-
 }

@@ -12,7 +12,8 @@ const cookies = new Cookies();
 
 //TODO: remove dev env validation for 'Content Hotspots' when development is finished
 
-export default function StoreLayout({ title, subTitle, meta = {},	className = '', children}) {
+
+export default function StoreLayout({ title, subTitle, meta = {}, className = '', children }) {
 	const { isEnabled } = useSelector((state) => state['productLibrary']);
 	const user = useSelector((state) => state.user);
 	const [mounted, setMounted] = useState(false);
@@ -21,8 +22,7 @@ export default function StoreLayout({ title, subTitle, meta = {},	className = ''
 	const storeBasePath = `/store`;
 	const isDevEnv = process.browser && ['127.0.0.1:3000', 'features.develop.obsessvr.com'].includes(window?.location?.host);
 	const pp_access_cookies = cookies.get('PP_ACCESS');
-	const store_pp_access =
-		pp_access_cookies?.find((item) => item == storeId) || isEnabled;
+	const store_pp_access = pp_access_cookies?.find((item) => item == storeId) || isEnabled;
 
 	useEffect(() => {
 		setMounted(true);
@@ -40,25 +40,16 @@ export default function StoreLayout({ title, subTitle, meta = {},	className = ''
 					label: 'General',
 					url: ``,
 					children: [
-						{
-							label: 'Store Info',
-							url: `${storeBasePath}/storeinfo/?id=${storeId}`,
-						},
-						// {label:'Icons', url:`${storeBasePath}/icons/?id=${storeId}`},
-						{
-							label: 'Locale',
-							url: `${storeBasePath}/locale/?id=${storeId}`,
-						},
+						{ label: 'Store Info', url: `${storeBasePath}/storeinfo/?id=${storeId}` },
+						{ label: 'Icons', url: `${storeBasePath}/icons/?id=${storeId}` },
+						{ label: 'Locale', url: `${storeBasePath}/locale/?id=${storeId}` },
 					],
 				},
 				{
 					label: 'Styling',
 					url: ``,
 					children: [
-						{
-							label: 'Fonts',
-							url: `${storeBasePath}/fonts/?id=${storeId}`,
-						},
+						{ label: 'Fonts', url: `${storeBasePath}/fonts/?id=${storeId}` },
 					],
 				},
 			]
@@ -67,26 +58,13 @@ export default function StoreLayout({ title, subTitle, meta = {},	className = ''
 		{
 			label: 'Hotspots',
 			children: [
-				{
-					label: 'Product Tagging',
-					url: `${storeBasePath}/product-tagging/?id=${storeId}`,
-				},
+				{ label: 'Product Tagging', url: `${storeBasePath}/product-tagging/?id=${storeId}`},
 				//Temporary keep it visible only on dev and FB env
 				...(isDevEnv
-					? [
-						{
-							label: 'Content Hotspots',
-							url: `${storeBasePath}/content-hotspots/?id=${storeId}`,
-						},
-					]
+					? [{ label: 'Content Hotspots', url: `${storeBasePath}/content-hotspots/?id=${storeId}`}]
 					: []),
 				...(store_pp_access
-					? [
-						{
-							label: 'Product Placement',
-							url: `${storeBasePath}/product-placement/?id=${storeId}`,
-						},
-					]
+					? [{ label: 'Product Placement', url: `${storeBasePath}/product-placement/?id=${storeId}`}]
 					: []),
 			],
 		},

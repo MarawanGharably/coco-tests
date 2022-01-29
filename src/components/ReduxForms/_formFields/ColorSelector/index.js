@@ -43,7 +43,7 @@ const ColorPicker = ({ input, defaultValue }) => {
 			<Form.Control
 				{...input}
 				type="color"
-				id="exampleColorInput"
+				id="colorInput"
 				className={styles['colorBox']}
 				value={color}
 				title="Choose your color"

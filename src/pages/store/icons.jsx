@@ -119,6 +119,11 @@ let IconsPage = ({ initialize, ...props }) => {
 		return updateStoreIcons(storeId, formValues, filesToUpload)
 			.then((res) => {
 				setStatus({ success: true, message: 'Icons Updated Successfully' });
+
+				setTimeout(() => {
+					router.push(`/store/locale/?id=${storeId}`);
+				}, 2000);
+
 			})
 			.catch((err) => {
 				console.log('err', err);

@@ -10,15 +10,15 @@ import styles from './ImageHotspot.module.scss';
 
 let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
     const router = useRouter();
-    const storeId = router.query?.id;
     const dispatch = useDispatch();
     const { currentSceneId } = useSelector((state) => state['SceneEditor']);
-    const { folders, selectedFolder } = useSelector((state) => state['productLibrary']);
+    const { selectedFolder } = useSelector((state) => state['productLibrary']);
     const folderId = selectedFolder.value;
     const formData = useSelector((state) => state['form']['ImageHotspotForm']) || {};
     const formValues = formData['values'] || {};
     const [localeOptions, setLocaleOptions] = useState([]);
     const [imageData, setImageData] = useState({});
+    const storeId = router.query?.id;
     let record = Marker.userData;
 
     const reader = new FileReader();
@@ -31,49 +31,48 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
         });  
     },false);
 
-    const onSubmit = (values) => {
+    const onSubmit = async (values) => {
 
-       return dispatch(addProductImageToFolder(storeId, folderId, [imageData]))
-            .then((res)=>{
+        const newImageData = Object.keys(imageData).length>0 ?  await dispatch(addProductImageToFolder(storeId, folderId, [imageData])) : null;
 
-                const postData={
-                    type: 'HotspotMarker',
-                    scene: currentSceneId,
-                    collider_transform: Marker.transforms.colliderTransform.elements,
-                    transform: Marker.transforms.visualTransform.elements,
-                    props: {
-                        show_icon: true, //Where it used?
-                        scale: values.scale,
-                        horizontalArea: values.horizontalArea,
-                        verticalArea: values.verticalArea,
-                        locale: values.localeSelection,
-                        imageTitle: values.imageTitle,
-                        imageSubtitle: values.imageSubtitle,
-                        imageURL: values.imageURL,
-                        buttonCopy: values.buttonCopy,
-                        buttonURL: values.buttonURL,
-                        image: res[0]._id,
-                        renderOrder: 50,
-                        hotspot_type: 'product_image',
-                    },
-                }; 
 
-                if(record._id){
-                //Update
-                    dispatch(updateHotspotAPI(record._id, storeId, currentSceneId, postData, false ))
-                        .then(res=>{
-                        })
-                        .catch((err) => console.log(err));
-                }
-                else{
-                    //Create
-                    apiCreateHotspotByType('product_image', storeId, currentSceneId, postData)
-                        .then(res=>{
-                        })
-                        .catch((err) => console.log(err));
-                }
-            })
-            .catch((err) => console.log(err)); 
+
+        const postData={
+            type: 'HotspotMarker',
+            scene: currentSceneId,
+            collider_transform: Marker.transforms.colliderTransform.elements,
+            transform: Marker.transforms.visualTransform.elements,
+            props: {
+                show_icon: true, //Where it used?
+                scale: values.scale,
+                horizontalArea: values.horizontalArea,
+                verticalArea: values.verticalArea,
+                locale: values.localeSelection,
+                imageTitle: values.imageTitle,
+                imageSubtitle: values.imageSubtitle,
+                imageURL: values.imageURL,
+                buttonCopy: values.buttonCopy,
+                buttonURL: values.buttonURL,
+                image:  newImageData?.[0]?._id || null, //TODO: what if no new image
+                renderOrder: 50,
+                hotspot_type: 'product_image',
+            },
+        };
+
+        if(record._id){
+            //Update
+            dispatch(updateHotspotAPI(record._id, storeId, currentSceneId, postData, false ))
+                .then(res=>{
+                })
+                .catch((err) => console.log(err));
+        }
+        else{
+            //Create
+            apiCreateHotspotByType('product_image', storeId, currentSceneId, postData)
+                .then(res=>{
+                })
+                .catch((err) => console.log(err));
+        }
     }
 
     useEffect(() => {
@@ -126,7 +125,7 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
             <Field name='scale' label="Hotspot Size" component={RangeInputSet}  variant='obsessColors' min={0.5} step={0.1}/>
             <Field name='horizontalArea' label="Hotspot Clickable Area (Horizontally)" component={RangeInputSet} dMode='rows' variant='obsessColors' min={0.5} step={0.1}/>
             <Field name='verticalArea' label="Hotspot Clickable Area (Vertically)" component={RangeInputSet} dMode='rows' variant='obsessColors' min={0.5} step={0.1}/>
-            <Field name='localeSelection' label="Select Locale" component={Select} options={localeOptions} className={styles["selector"]}/>
+            <Field name='localeSelection' label="Select Locale" component={Select} options={localeOptions} mode='dark' className={styles["selector"]}/>
             <Field name='imageTitle' label="Image Title" component={Input}/>
             <Field name='imageSubtitle' label="Image Subtitle" component={Input}/>
             <Field name='imageUpload' label="Image Upload" component={FileUploadTabs} type='image' />

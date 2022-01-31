@@ -121,10 +121,10 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
 //TODO: horizontalArea, verticalArea, imageTitle, imageSubtitle, buttonCopy, buttonURL  does not exist in record
 
     return (
-        <Form onSubmit={handleSubmit(onSubmit)} className={styles['form']} style={{marginBottom:'4em'}} >
-            <Field name='scale' label="Hotspot Size" component={RangeInputSet} dMode='rows' min={0.5} step={0.1}/>
-            <Field name='horizontalArea' label="Hotspot Clickable Area (Horizontally)" component={RangeInputSet} dMode='rows' min={0.5} step={0.1}/>
-            <Field name='verticalArea' label="Hotspot Clickable Area (Vertically)" component={RangeInputSet} dMode='rows' min={0.5} step={0.1}/>
+        <Form onSubmit={handleSubmit(onSubmit)} className={styles['form']}  >
+            <Field name='scale' label="Hotspot Size" component={RangeInputSet} dMode='rows' variant='obsessColors' min={0.5} step={0.1}/>
+            <Field name='horizontalArea' label="Hotspot Clickable Area (Horizontally)" component={RangeInputSet} dMode='rows' variant='obsessColors' min={0.5} step={0.1}/>
+            <Field name='verticalArea' label="Hotspot Clickable Area (Vertically)" component={RangeInputSet} dMode='rows' variant='obsessColors' min={0.5} step={0.1}/>
             <Field name='localeSelection' label="Select Locale" component={Select} options={localeOptions} className={styles["selector"]}/>
             <Field name='imageTitle' label="Image Title" component={Input}/>
             <Field name='imageSubtitle' label="Image Subtitle" component={Input}/>

@@ -2,6 +2,7 @@
 
 
 .form{  
+    margin-bottom: 4em;
 
     label{
         font-size: 14px;
@@ -18,65 +19,7 @@
         text-align: center;
     }
 
-    input[type="range"] {
-        -webkit-appearance: 'none';
-        box-shadow: none;
-        border: none;
-        background-image: linear-gradient(rgba(0, 0, 0, .9), rgba(0, 0, 0, .9));
-    }
 
-    input[type="range"]::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        height: 17px;
-        width: 17px;
-        border: 2px solid #FFFFFF;
-        background: linear-gradient(92.35deg, $blue-ink-color 1.28%, $green-bright-color 98.95%);
-        box-shadow: 0 0 2px 0 #ffffff;
-        cursor: pointer;
-    }
-    input[type=range]::-webkit-slider-runnable-track  {
-        -webkit-appearance: none;
-        height: 8px;
-        box-shadow: none;
-        border: none;
-        background-image: linear-gradient(92.35deg, $blue-ink-color 1.28%, $green-bright-color 98.95%);
-        background-size: 0%;
-        background-repeat: no-repeat;
-    }
-
-    input[type="range"]::-moz-range-thumb {
-        height: 17px;
-        width: 17px;
-        border: 2px solid #FFFFFF;
-        background: linear-gradient(92.35deg, $blue-ink-color 1.28%, $green-bright-color 98.95%);
-        box-shadow: 0 0 2px 0 #ffffff;
-        cursor: pointer;
-    }
-    input[type=range]::-moz-range-track  {
-        box-shadow: none;
-        border: none;
-        background-repeat: no-repeat;
-    }
-    input[type="range"]::-moz-range-progress {
-        background-image: linear-gradient(92.35deg, $blue-ink-color 1.28%, $green-bright-color 98.95%);
-        height: .5em;
-    }
-
-    input[type="range"]::-ms-thumb {
-        height: 17px;
-        width: 17px;
-        border: 2px solid #FFFFFF;
-        background: linear-gradient(92.35deg, $blue-ink-color 1.28%, $green-bright-color 98.95%);
-        box-shadow: 0 0 2px 0 #ffffff;
-        cursor: pointer;
-    }
-    input[type=range]::-ms-track  {
-        box-shadow: none;
-        border: none;
-        background-image: linear-gradient(92.35deg, $blue-ink-color 1.28%, $green-bright-color 98.95%);
-        background-size: 50%;
-        background-repeat: no-repeat;
-    }
         
     .selector {
         background-color: transparent;

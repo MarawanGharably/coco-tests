@@ -16,13 +16,13 @@ import styles from './RangeInputSet.module.scss';
  * @param meta
  * @returns {JSX.Element}
  */
-const RangeInputSet = ({ input, label, dMode = 'inline', mode, min = 0, max = 10, step = 1, meta }) => {
+const RangeInputSet = ({ input, label, dMode = 'inline', mode, variant, min = 0, max = 10, step = 1, meta }) => {
 	return (
 		<Form.Group controlId='rangeInput' className={`${styles.cmp} ${styles[`dMode-${dMode}`]} `}>
 			{label && <Form.Label>{label}</Form.Label>}
 
 			<Row className={`${styles.wrapper}`}>
-				<Field name={input.name} component={Range} min={min} max={max} step={step} />
+				<Field name={input.name} component={Range} min={min} max={max} step={step} variant={variant}/>
 				<Field name={input.name} component={Input} />
 			</Row>
 		</Form.Group>

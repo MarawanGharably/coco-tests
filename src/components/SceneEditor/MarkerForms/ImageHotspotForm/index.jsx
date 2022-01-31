@@ -33,7 +33,7 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
 
     const onSubmit = (values) => {
 
-        dispatch(addProductImageToFolder(storeId, folderId, [imageData]))
+       return dispatch(addProductImageToFolder(storeId, folderId, [imageData]))
             .then((res)=>{
 
                 const postData={

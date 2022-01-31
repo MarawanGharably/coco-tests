@@ -1,6 +1,7 @@
 import React from 'react';  
 import { Form } from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import FieldErrorUI from '../../commonUI/FieldErrorUI';
 import styles from './Input.module.scss';
 
 /**
@@ -10,13 +11,11 @@ import styles from './Input.module.scss';
  * @param label
  * @param placeholder
  * @param disabled
- * @param touched
- * @param error
- * @param warning
+ * @param meta {}
  * @returns {JSX.Element}
  * @constructor
  */
-const Input = ({ input = {}, mode, type = 'text', label = '', placeholder = '', disabled, meta: { touched, error, warning } }) => {
+const Input = ({ input = {}, mode, type = 'text', label = '', placeholder = '', disabled, meta }) => {
     return (
         <Form.Group className={`input-field mb-3 ${styles['input-field']} ${mode ? styles[`${mode}-mode`]:''}`} controlId={input.name}>
             {label && <Form.Label>{label}</Form.Label>}
@@ -30,12 +29,7 @@ const Input = ({ input = {}, mode, type = 'text', label = '', placeholder = '', 
                 onBlur={(e) => e.target.placeholder = placeholder}
             />
 
-            {touched && (error || warning) && (
-                <ul className="form-field-error">
-                    {error && <li className="field-error">{error}</li>}
-                    {warning && <li className="field-warn">{warning}</li>}
-                </ul>
-            )}
+            <FieldErrorUI meta={meta}/>
         </Form.Group>
     );
 };

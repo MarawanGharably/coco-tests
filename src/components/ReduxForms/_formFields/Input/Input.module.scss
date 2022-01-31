@@ -5,10 +5,9 @@
 	flex-direction: column;
 	margin-bottom: 1rem;
 
-	label,
-	input {
-		font-size: 14px;
-	}
+
+	input { @extend %formInput; }
+	label{ @extend %formInputLabel; }
 
 	//Dark Mode Styling
 	&.dark-mode {

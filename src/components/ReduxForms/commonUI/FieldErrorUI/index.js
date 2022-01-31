@@ -6,7 +6,7 @@ const FieldErrorUI = ({ meta }) => {
 	const { touched, error, warning } = meta;
 	if(!touched || (!error && !warning)) return false;
 
-	return (<div className={`${styles.cmp} form-field-error`}>
+	return (<div className={styles.cmp}>
 		{error && <div className={styles['error']}>{error}</div>}
 		{warning && <div className={styles['warn']}>{warning}</div>}
 	</div>);

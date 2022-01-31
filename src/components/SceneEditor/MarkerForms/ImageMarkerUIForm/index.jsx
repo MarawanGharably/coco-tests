@@ -123,7 +123,7 @@ const ImageMarkerUIForm = (props) => {
     return (
         <Form onSubmit={handleSubmit(onSubmit)} className={styles['cmp']}>
             <Field name="renderOrder" label="Order:" component={NumberSelector} />
-            <Field name="scale" label="Size:" min={0.5} max={10} step={0.01} component={RangeInputSet} />
+            <Field name="scale" label="Size:" min={0.5} max={10} step={0.01} component={RangeInputSet} dMode='inline'/>
 
             <div className={styles['actions']}>
                 <Button variant="primary" onClick={(e) => Modal.closeModal()}>

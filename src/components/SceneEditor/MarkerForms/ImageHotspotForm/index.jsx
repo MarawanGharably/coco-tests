@@ -89,8 +89,9 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
     useEffect(() => {
         initialize({
             scale: record?.props?.scale,
-            horizontalArea: record?.props?.horizontalArea,
-            verticalArea: record?.props?.verticalArea,
+            //By default, horizontalArea & verticalArea === image scale
+            horizontalArea: record?.props?.horizontalArea || record?.props?.scale,
+            verticalArea: record?.props?.verticalArea || record?.props?.scale,
             localeSelection: record?.props?.locale,
             imageTitle: record?.props?.imageTitle,
             imageSubtitle: record?.props?.imageSubtitle,
@@ -122,7 +123,7 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)} className={styles['form']}  >
-            <Field name='scale' label="Hotspot Size" component={RangeInputSet} dMode='rows' variant='obsessColors' min={0.5} step={0.1}/>
+            <Field name='scale' label="Hotspot Size" component={RangeInputSet}  variant='obsessColors' min={0.5} step={0.1}/>
             <Field name='horizontalArea' label="Hotspot Clickable Area (Horizontally)" component={RangeInputSet} dMode='rows' variant='obsessColors' min={0.5} step={0.1}/>
             <Field name='verticalArea' label="Hotspot Clickable Area (Vertically)" component={RangeInputSet} dMode='rows' variant='obsessColors' min={0.5} step={0.1}/>
             <Field name='localeSelection' label="Select Locale" component={Select} options={localeOptions} className={styles["selector"]}/>

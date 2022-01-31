@@ -6,30 +6,60 @@
 	label{ @extend %formInputLabel;	}
 	input{ @extend %formInput;}
 
+	div[class*='-container'] {
+		border: none;
+
+		div[class*='-control'] {
+			min-height: 35px;
+			box-shadow: none;
+			border:0;
+
+			div[class*='-ValueContainer'] {
+				padding-top: 0;
+				padding-bottom: 0;
+
+				div[class*='-Input'] {
+					@extend %formInput;
+					margin:0;
+					padding-top: 0;
+					padding-bottom: 0;
+				}
+
+			}
+
+			div[class*='-singleValue'] {
+				@extend %formInput;
+			}
+
+			div[class*='-multiValue'] {
+
+			}
+
+			span[class*='-indicatorSeparator'] {
+				display: none;
+			}
+		}
+	}
+
+	//Styling Variants
 	&.dark-mode {
 		div[class*='-container'] {
 			font-size: $inputSize;
 			background: $black-2;
-			border: none;
 
 			//input field or "control"
 			div[class*='-control'] {
 				background: $black-2;
-				min-height: 35px;
-				box-shadow: none;
-				border:0;
 
 				div[class*='-ValueContainer'] {
-					div[class*='-Input'] {
-						@extend %formInput;
-					}
+					div[class*='-Input'] {}
 					div[class*='-placeholder'] {
 						color: $grey-light-2;
 					}
 				}
 
 				div[class*='-singleValue'] {
-					@extend %formInput;
+					color: #FFFFFF;
 				}
 
 				//Multi Value elements
@@ -53,14 +83,14 @@
 					}
 				}
 
-				span[class*='-indicatorSeparator'] {
-					display: none;
-				}
+
 				div[class*='-indicatorContainer'] {
 					color: $grey-light-2;
 				}
 			}
 
+
+			//Menu
 			div[class*='-menu'] {
 				background: $black-2;
 				border-radius: 0;

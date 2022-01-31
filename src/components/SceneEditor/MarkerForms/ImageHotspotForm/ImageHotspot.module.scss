@@ -22,30 +22,11 @@
 
         
     .selector {
-        background-color: transparent;
-        
-        //input field or "control"
         div[class*="-control"] {
-            height: 40px;
-            border-radius: 0;
-            border-style: none;
-            background: #2E2E2E;
+            background: #2E2E2E!important;
             align-content: center;
-            
-            //Label
-            div[class*="-singleValue"] {
-                color: #FFFFFF;
-                font-size: 14px;
-                font-weight: 400;
-            }
+        }
 
-            span[class*="-indicatorSeparator"] {display: none;}
-        }
-        div[class*="-menu"] {
-            background: #2E2E2E;
-            font-weight: 400;
-            font-size: 14px;
-        }
         div[class*="-menu"]:hover {
             background: #2E2E2E;
         }

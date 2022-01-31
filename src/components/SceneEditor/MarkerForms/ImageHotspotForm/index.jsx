@@ -136,8 +136,16 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
     );
 };
 
+
+//TODO:
 const validate = (values) => {
     const errors = {};
+    if(values.scale<0.5) errors.scale = 'Cannot be less than 0.5';
+
+    //By default, horizontalArea & verticalArea === image scale
+    //horizontalArea & verticalArea cannot be less than image scale
+    if(values.horizontalArea < values.scale) errors.horizontalArea = 'Cannot be less than Hotspot Size';
+    if(values.verticalArea < values.scale) errors.verticalArea = 'Cannot be less than  Hotspot Size';
     return errors;
 };
 

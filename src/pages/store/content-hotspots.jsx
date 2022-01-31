@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
 import StoreLayout from '../../components/layouts/StoreLayout';
 import SceneEditor from '../../components/SceneEditor';
-import FormActions from "../../components/FormComponents/FormActions";
+import FormActions from "../../components/ReduxForms/commonUI/FormActions";
 
 export default function ContentHotspotsPage() {
     const dispatch = useDispatch();

@@ -5,7 +5,7 @@ import { useSelector} from "react-redux";
 import { Card, Button } from 'react-bootstrap';
 import { Input} from '../../../components/ReduxForms/_formFields';
 import AdminPageLayout from "../../../components/layouts/AdminPageLayout";
-import {SubmitButton} from "../../../components/FormComponents";
+import SubmitButton  from '../../../components/ReduxForms/commonUI/SubmitButton';
 import SubmitStatusMessage from "../../../components/ReduxForms/SubmitStatusMessage";
 import {getStores, getUserDataWithId, updateUser, deleteUser} from "../../../APImethods";
 import { getLabelValuePair } from "../../../utils/helpers";

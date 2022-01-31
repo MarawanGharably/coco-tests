@@ -93,5 +93,24 @@ ul.form-field-error .field-warn{ color: coral;}
     height: 3rem;
 }
 
+
+.textWithGradient{
+    background-color: #3370fe;
+    background-image: linear-gradient(92.35deg, #3370fe 1.28%, #00e599 98.95%);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+}
 /*********  FORMS  *********************/
 form .formField{ margin-bottom: 1em;}
+form label{
+    font-size: 14px;
+    color:#efefef;
+}
+
+form .selectCustomMenu{
+    border-top:1px solid #505050;
+    padding:0.5em;
+}

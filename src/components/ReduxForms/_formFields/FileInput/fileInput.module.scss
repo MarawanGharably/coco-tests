@@ -1,38 +1,62 @@
-.cmp{
+@import '../../../../assets/scss/variables';
+
+.cmp {
   position: relative;
 
-
-  //Hidden input type='file'
-  input[type="file"]{
-    display: block;
-    opacity: 0;
-    z-index: 10;
-    position: absolute;
-    width: 100%;
-    height: 40px;
-    cursor: pointer;
+  label {
+    @extend %formInputLabel;
   }
 
-
-
-  .uploadFileWrapper{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #232323;
-    border-color:#232323;
-    border-radius: 4px;
-    border-style: inherit;
+  .inputWrapper {
+    @extend %formInput;
+    display: block;
+    background-color: $black-2;
+    border-color: $black-2;
+    border-radius: 0;
     color: white;
-    height: 2.4em;
     width: 100%;
-    font-size: medium;
 
-    .uploadImg{
-      height: 1.441em;
-      width: 1.441em;
-      margin-right: 0.5em;
+    .fileUploader {
+      @extend %formInput;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: $black-2;
+      border-color: $black-2;
+
+
+      //Hidden input type='file'
+      input[type='file'] {
+        @extend %formInput;
+        display: block;
+        opacity: 0;
+        z-index: 10;
+        position: absolute;
+        width: 100%;
+        height: 40px;
+        cursor: pointer;
+      }
+
+
+      .uploadImg {
+        height: 1.441em;
+        width: 1.441em;
+        margin-right: 0.5em;
+      }
     }
 
+    .filePreview {
+      align-items: center;
+      justify-content: space-between;
+
+      .previewImage{
+        height: 1.3em;
+        width: 1.3em;
+        display:flex;
+
+        img{max-height: 100%;}
+      }
+
+    }
   }
 }

@@ -3,7 +3,7 @@ import { connect, useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { v1 as uuid } from 'uuid';
 import { Button } from 'react-bootstrap';
-import FileInput from '../../../../FormComponents/file-input/FileInput';
+import FileInput from '../../../../DO_NOT_USE/file-input/FileInput';
 import UploadDialog from '../upload-dialog/UploadDialog';
 import styles from './Actions.module.scss';
 

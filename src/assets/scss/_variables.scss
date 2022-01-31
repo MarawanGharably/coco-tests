@@ -1,27 +1,51 @@
-$obsess-grey: #979797;
 $border-color: #505050;
 $text-color: #505050;
 
+//Gray
 $grey-light: #d7d7d7;
 $grey-light-2: #efefef;
+$grey-light-svg: '%23efefef'; //Must encode hex color value with '%23' for SVG in place of '#'
 $grey-darken-3: #505050;
 $grey-darken-4: #3c3c3c;
 
+//Blue
 $blue-grey-darken-3: #2e2e2e;
+$blue-ink-color: #3370fe;
 
+//Black
 $black-color: #1a1a1a;
 $black-2: #232323;
 $black-darken-3: #292929;
 
-$blue-ink-color: #3370fe;
-$obsess-blue: #3c76fa;
-
+//Green
 $green-bright-color: #00e599;
 
+//Red
 $red-light-1: #eb5757;
+
+//Obsess
+$obsess-blue: #3c76fa;
 $obsess-pink: #ff74a6;
+$obsess-grey: #979797;
 
 $footer-color: #d4d8df;
+
+//FORMS
+$inputSize:14px;
+
+%formInput{
+    font-size: $inputSize;
+    font-weight: 300;
+    color:$grey-light-2;
+}
+
+%formInputLabel{
+    font-size: $inputSize;
+    font-weight: 300;
+    color:$grey-light-2;
+}
+
+
 
 %textWithGradient {
     background-color: $blue-ink-color;

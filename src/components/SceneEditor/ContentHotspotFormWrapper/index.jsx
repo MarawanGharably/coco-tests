@@ -5,7 +5,6 @@ import styles from './ContentHotspotFormWrapper.module.scss';
 export default function ContentHotspotFormWrapper(props) {
     const { Marker, mode, onHotspotTypeChange } = props;
 
-    
     let record = Marker.userData;
     const { isNew, needToSetHotspotType } = Marker.userData;
     const _ID = useRef();
@@ -21,7 +20,7 @@ export default function ContentHotspotFormWrapper(props) {
 
     return (
         <div className={styles['formWrapper']}>
-            {isNew && needToSetHotspotType ? <HotspotCreationDialog
+            {isNew && needToSetHotspotType ? <HotspotTypeSelector
                 Marker={Marker}
                 onHotspotTypeChange={onHotspotTypeChange}
             /> : (<>
@@ -35,7 +34,7 @@ export default function ContentHotspotFormWrapper(props) {
 
 
 
-const HotspotCreationDialog=({Marker, onHotspotTypeChange})=>{
+const HotspotTypeSelector=({Marker, onHotspotTypeChange})=>{
 
     const selectHotspotTypeEvent=(hotspotType)=>{
         if(!Marker?.userData?._id) onHotspotTypeChange(Marker, hotspotType);

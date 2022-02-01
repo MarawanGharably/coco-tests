@@ -42,16 +42,14 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
             scene: currentSceneId,
             collider_transform: Marker.transforms.colliderTransform.elements,
             transform: Marker.transforms.visualTransform.elements,
+            props_translations:values.props_translations,
             props: {
                 show_icon: true, //Where it used?
                 scale: values.scale,
                 horizontalArea: values.horizontalArea,
                 verticalArea: values.verticalArea,
-                locale: values.localeSelection,
-                imageTitle: values.imageTitle,
-                imageSubtitle: values.imageSubtitle,
+                // locale: values.locale,
                 imageURL: values.imageURL,
-                buttonCopy: values.buttonCopy,
                 buttonURL: values.buttonURL,
                 image:  newImageData?.[0]?._id || null, //TODO: what if no new image
                 renderOrder: 50,
@@ -79,7 +77,7 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
         storeId &&
             getStoreLocale(storeId)
                 .then((res) => {
-                    let locales = res.locales.map((locale) => {return {label:locale, value:locale}})
+                    let locales = res.locales.map((locale) => ({label:locale, value:locale}));
                     setLocaleOptions(locales);
                 })
                 .catch((err) => console.log(err));
@@ -91,12 +89,13 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
             //By default, horizontalArea & verticalArea === image scale
             horizontalArea: record?.props?.horizontalArea || record?.props?.scale,
             verticalArea: record?.props?.verticalArea || record?.props?.scale,
-            localeSelection: record?.props?.locale,
+            locale: record?.props?.locale || 'en_US',
             imageTitle: record?.props?.imageTitle,
             imageSubtitle: record?.props?.imageSubtitle,
             imageURL: record?.props?.image?.image?.path,
             buttonCopy: record?.props?.buttonCopy,
             buttonURL: record?.props?.buttonURL,
+            props_translations: record.props_translations,
         });
     }, [Marker.uuid]);
 
@@ -125,11 +124,14 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
             <Field name='scale' label="Hotspot Size" component={RangeInputSet}  variant='obsessColors' min={0.5} step={0.1}/>
             <Field name='horizontalArea' label="Hotspot Clickable Area (Horizontally)" component={RangeInputSet} dMode='rows' variant='obsessColors' min={0.5} step={0.1}/>
             <Field name='verticalArea' label="Hotspot Clickable Area (Vertically)" component={RangeInputSet} dMode='rows' variant='obsessColors' min={0.5} step={0.1}/>
-            <Field name='localeSelection' label="Select Locale" component={Select} options={localeOptions} mode='dark' className={styles["selector"]}/>
-            <Field name='imageTitle' label="Image Title" component={Input}/>
-            <Field name='imageSubtitle' label="Image Subtitle" component={Input}/>
+
+            {/*Localization*/}
+            <Field name='locale' label="Select Locale" component={Select} options={localeOptions} mode='dark' className={styles["selector"]}/>
+            <Field name={`props_translations.${formValues.locale}.imageTitle`} label="Image Title" component={Input}/>
+            <Field name={`props_translations.${formValues.locale}.imageSubtitle`} label="Image Subtitle" component={Input}/>
+
             <Field name='imageUpload' label="Image Upload" component={FileUploadTabs} type='image' />
-            <Field name='buttonCopy' label="Button Copy" component={Input}/>
+            <Field name={`props_translations.${formValues.locale}.buttonCopy`} label="Button Copy" component={Input}/>
             <Field name='buttonURL' label="Button URL" component={Input}/>
         </Form>
     );

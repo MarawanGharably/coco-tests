@@ -1,6 +1,38 @@
 import axiosApi from '../utils/axiosApi';
 import { showAppErrorAlert } from '../store/actions/appAlertsActions';
 
+
+/**
+ * Fetch Scene Hotspots
+ * @param storeId
+ * @param currentSceneId
+ * @param hotspotTypes
+ * @returns {Promise}
+ */
+export const getSceneHotspots = async (storeId, currentSceneId, hotspotTypes = []) => {
+    if (!storeId || !currentSceneId) return Promise.reject('Missed required param');
+
+    const getRoomObjectData = async () => {
+        if (Array.isArray(hotspotTypes)) {
+            const promises = hotspotTypes.map((hotspotType) =>
+                apiGetHotspotsByType(hotspotType, storeId, currentSceneId),
+            );
+            return Promise.all(promises);
+        }
+
+        return apiGetHotspotsByType(hotspotTypes, storeId, currentSceneId);
+    };
+
+    return getRoomObjectData()
+        .then((res) => {
+            return res.flat().filter((object) => typeof object !== 'string');
+        })
+        .catch((err) => Promise.reject(err));
+};
+
+
+
+
 export const apiGetHotspotsByType = (type, storeId, sceneId) => {
     if (!storeId || !type || !sceneId) return Promise.reject('Missed required parameter');
 
@@ -9,6 +41,10 @@ export const apiGetHotspotsByType = (type, storeId, sceneId) => {
         .then((res) => res.data)
         .catch((err) => Promise.reject(err));
 };
+
+
+
+
 
 /**
  * Create Hotspot

@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import SceneNavigator from "./SceneNavigator";
 import SceneUI from "./SceneUI";
 import ProductPlacementSidebar from "./Sidebars/ProductPlacementSidebar";
-import { getStoreSceneEditorData, getStoreSceneHotspots} from "../../APImethods";
+import { getStoreSceneEditorData, getSceneHotspots} from "../../APImethods";
 import {destroySceneData, destroyProductLibraryData} from "../../store/actions";
 import styles from './sceneEditor.module.scss';
 
@@ -34,7 +34,7 @@ export default function SceneEditor({storeId, mode}){
     useEffect(() => {
         if (!currentSceneId || currentSceneId.length < 5) return;
         setSceneObjects([]);
-        getStoreSceneHotspots(storeId, currentSceneId, ['product', 'product_image'])
+        getSceneHotspots(storeId, currentSceneId, ['product', 'product_image'])
             .then(res=>{
                 setSceneObjects(res);
             }).catch(err=>{

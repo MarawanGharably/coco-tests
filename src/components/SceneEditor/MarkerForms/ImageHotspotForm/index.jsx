@@ -44,29 +44,29 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
             transform: Marker.transforms.visualTransform.elements,
             props_translations:values.props_translations,
             props: {
+                hotspot_type: 'product_image',
                 show_icon: true, //Where it used?
                 scale: values.scale,
                 horizontalArea: values.horizontalArea,
                 verticalArea: values.verticalArea,
-                // locale: values.locale,
+                // locale: '',
                 imageURL: values.imageURL,
                 buttonURL: values.buttonURL,
                 image:  newImageData?.[0]?._id || null, //TODO: what if no new image
                 renderOrder: 50,
-                hotspot_type: 'product_image',
             },
         };
 
+        //Update
         if(record._id){
-            //Update
-            dispatch(updateHotspotAPI(record._id, storeId, currentSceneId, postData, false ))
+            return dispatch(updateHotspotAPI(record._id, storeId, currentSceneId, postData, false ))
                 .then(res=>{
                 })
                 .catch((err) => console.log(err));
         }
+        //Create
         else{
-            //Create
-            apiCreateHotspotByType('product_image', storeId, currentSceneId, postData)
+            return apiCreateHotspotByType('product_image', storeId, currentSceneId, postData)
                 .then(res=>{
                 })
                 .catch((err) => console.log(err));
@@ -115,7 +115,7 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
         }
     }, [formValues.imageURL]);
 
-//TODO: horizontalArea, verticalArea, imageTitle, imageSubtitle, buttonCopy, buttonURL  does not exist in record
+
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)} className={styles['form']}  >
@@ -123,7 +123,7 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
             <Field name='horizontalArea' label="Hotspot Clickable Area (Horizontally)" component={RangeInputSet} dMode='rows' variant='obsessColors' min={0.5} step={0.1}/>
             <Field name='verticalArea' label="Hotspot Clickable Area (Vertically)" component={RangeInputSet} dMode='rows' variant='obsessColors' min={0.5} step={0.1}/>
 
-            {/*Localization*/}
+            {/* Localization */}
             <Field name='locale' label="Select Locale" component={Select} options={localeOptions} mode='dark' className={styles["selector"]}/>
             <Field name={`props_translations.${formValues.locale}.imageTitle`} label="Image Title" component={Input}/>
             <Field name={`props_translations.${formValues.locale}.imageSubtitle`} label="Image Subtitle" component={Input}/>

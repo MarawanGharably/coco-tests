@@ -22,14 +22,14 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
     let record = Marker.userData;
 
     const reader = new FileReader();
-    reader.addEventListener("load", function () {
-        setImageData({
-            folder: folderId,
-            content: reader.result,
-            filename: formValues.imageFile?.name || formValues.imageURL,
-            remove_background: false,
-        });  
-    },false);
+    // reader.addEventListener("load", function () {
+    //     setImageData({
+    //         folder: folderId,
+    //         content: reader.result,
+    //         filename: formValues.imageFile?.name || formValues.imageURL,
+    //         remove_background: false,
+    //     });
+    // },false);
 
     const onSubmit = async (values) => {
 

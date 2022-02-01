@@ -104,9 +104,7 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
         if (isChanged) Marker.setScale(formValues.scale);
     }, [formValues.scale]);
 
-    useEffect(() => {
-        if (formValues.imageFile) reader.readAsDataURL(formValues.imageFile);
-    }, [formValues.imageFile]);
+    
 
     useEffect(() => {
         if (formValues.imageURL !== formData.initial?.imageURL) {

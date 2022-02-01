@@ -61,6 +61,7 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
         if(record._id){
             return dispatch(updateHotspotAPI(record._id, storeId, currentSceneId, postData, false ))
                 .then(res=>{
+                    Marker.setUserData(res);
                 })
                 .catch((err) => console.log(err));
         }
@@ -68,6 +69,7 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
         else{
             return apiCreateHotspotByType('product_image', storeId, currentSceneId, postData)
                 .then(res=>{
+                    Marker.setUserData(res);
                 })
                 .catch((err) => console.log(err));
         }

@@ -118,9 +118,9 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)} className={styles['form']}  >
-            <Field name='props.scale' label="Hotspot Size" component={RangeInputSet}  variant='obsessColors' min={0.5} step={0.1}/>
-            <Field name='props.horizontalArea' label="Hotspot Clickable Area (Horizontally)" component={RangeInputSet} dMode='rows' variant='obsessColors' min={0.5} step={0.1}/>
-            <Field name='props.verticalArea' label="Hotspot Clickable Area (Vertically)" component={RangeInputSet} dMode='rows' variant='obsessColors' min={0.5} step={0.1}/>
+            <Field name='props.scale' label="Hotspot Size" component={RangeInputSet} rangeVariant='obsessColors'  min={0.5} step={0.1}/>
+            <Field name='props.horizontalArea' label="Hotspot Clickable Area (Horizontally)" component={RangeInputSet} dMode='rows' rangeVariant='obsessColors' min={0.5} step={0.1}/>
+            <Field name='props.verticalArea' label="Hotspot Clickable Area (Vertically)" component={RangeInputSet} dMode='rows' rangeVariant='obsessColors'  min={0.5} step={0.1}/>
 
             {/* Localization */}
             <Field name='locale' label="Select Locale" component={Select} options={localeOptions} mode='dark' className={styles["selector"]}/>

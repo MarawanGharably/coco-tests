@@ -1,7 +1,7 @@
 @import '../../../../assets/scss/_variables.scss';
 
-.cmp {
 
+.cmp {
 
   input[type="range"] {
     background-color: rgb(254, 254, 254);
@@ -11,8 +11,9 @@
 
   //Styling variation
   &.obsessColors-variant {
+
     input[type="range"] {
-      padding: 0;
+      padding: 1.1em 0;
       -webkit-appearance: 'none';
       box-shadow: none;
       border: none;

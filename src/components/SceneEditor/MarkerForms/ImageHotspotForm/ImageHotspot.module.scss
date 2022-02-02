@@ -3,24 +3,7 @@
 
 .form{  
     margin-bottom: 4em;
-
-    label{
-        font-size: 14px;
-        font-weight: 400;
-    }
-
-    input {
-        height: 40px;
-        border-radius: 0;
-        color: white;
-        background-color: #2E2E2E;
-        box-shadow: none;
-        border: none;
-        text-align: center;
-    }
-
-
-        
+    
     .selector {
         div[class*="-control"] {
             background: #2E2E2E!important;

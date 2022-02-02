@@ -119,7 +119,7 @@ const HotspotMarkerUIForm = (props) => {
             <i className={`${styles['closeModalIcon']} fas fa-times`} onClick={onModalClose} />
 
             <h5 className={styles['title']}>Product Hotspot</h5>
-            <Field name="product_sku" label="Enter SKU" component={Input} />
+            <Field name="product_sku" label="Enter SKU" component={Input} variant='light' />
 
             <div className={`${styles['actionsWrapper']} justify-content-center`}>
                 <Button variant="link" className={styles['deleteButton']} onClick={handleDelete}>

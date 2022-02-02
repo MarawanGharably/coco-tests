@@ -1,0 +1,81 @@
+@import '../../../../assets/scss/_variables.scss';
+
+.cmp {
+
+
+  input[type="range"] {
+    background-color: rgb(254, 254, 254);
+    padding: 1.04em 0.6em;// keep it for default styling!
+  }
+
+
+  //Styling variation
+  &.obsessColors-variant {
+    input[type="range"] {
+      padding: 0;
+      -webkit-appearance: 'none';
+      box-shadow: none;
+      border: none;
+      background-image: linear-gradient(rgba(0, 0, 0, .9), rgba(0, 0, 0, .9));
+
+      &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 17px;
+        width: 17px;
+        border: 2px solid #FFFFFF;
+        background: linear-gradient(92.35deg, $blue-ink-color 1.28%, $green-bright-color 98.95%);
+        box-shadow: 0 0 2px 0 #ffffff;
+        cursor: pointer;
+      }
+
+      &::-webkit-slider-runnable-track {
+        -webkit-appearance: none;
+        height: 8px;
+        box-shadow: none;
+        border: none;
+        background-image: linear-gradient(92.35deg, $blue-ink-color 1.28%, $green-bright-color 98.95%);
+        background-size: 0%;
+        background-repeat: no-repeat;
+      }
+
+      &::-moz-range-thumb {
+        height: 17px;
+        width: 17px;
+        border: 2px solid #FFFFFF;
+        background: linear-gradient(92.35deg, $blue-ink-color 1.28%, $green-bright-color 98.95%);
+        box-shadow: 0 0 2px 0 #ffffff;
+        cursor: pointer;
+      }
+
+      &::-moz-range-track {
+        box-shadow: none;
+        border: none;
+        background-repeat: no-repeat;
+      }
+
+      &::-moz-range-progress {
+        background-image: linear-gradient(92.35deg, $blue-ink-color 1.28%, $green-bright-color 98.95%);
+        height: .5em;
+      }
+
+      &::-ms-thumb {
+        height: 17px;
+        width: 17px;
+        border: 2px solid #FFFFFF;
+        background: linear-gradient(92.35deg, $blue-ink-color 1.28%, $green-bright-color 98.95%);
+        box-shadow: 0 0 2px 0 #ffffff;
+        cursor: pointer;
+      }
+
+      &::-ms-track {
+        box-shadow: none;
+        border: none;
+        background-image: linear-gradient(92.35deg, $blue-ink-color 1.28%, $green-bright-color 98.95%);
+        background-size: 50%;
+        background-repeat: no-repeat;
+      }
+    }
+
+
+  }
+}

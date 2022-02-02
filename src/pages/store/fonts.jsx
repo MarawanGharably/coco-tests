@@ -81,10 +81,10 @@ let FontsPage = ({ initialize, ...props }) => {
 						<Field name='upload' label='Upload Font' component={FileInput} placeholder='Upload Font' multiple accept='.TTF, .OTF, .EOT' />
 					</Col>
 					<Col sm={6}>
-						<Field name='default_font.name' label='Default Font' placeholder='Select Font' mode='dark' component={Select} options={fontOptions} />
+						<Field name='default_font.name' label='Default Font' placeholder='Select Font' component={Select} options={fontOptions} />
 					</Col>
 					<Col sm={6}>
-						<Field name='default_font.size' label='Font Size' mode='dark' component={NumberSelector} min={5}/>
+						<Field name='default_font.size' label='Font Size' component={NumberSelector} min={5}/>
 					</Col>
 				</Row>
 			</FormWithActionBtns>

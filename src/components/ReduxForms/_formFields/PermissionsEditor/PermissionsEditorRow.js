@@ -92,6 +92,7 @@ const PermissionsEditorRow = ({input, index, fields, userPermissions, scopes, st
         placeholder={"Scope"}
         options={scopes}
         component={Select}
+        variant='light'
         onChange={(val) => input.onChange({scope: val})}
       />
 
@@ -103,6 +104,7 @@ const PermissionsEditorRow = ({input, index, fields, userPermissions, scopes, st
           searchable
           options={getReferences(input?.value?.scope)}
           component={Select}
+          variant='light'
         />
       }
 
@@ -113,6 +115,7 @@ const PermissionsEditorRow = ({input, index, fields, userPermissions, scopes, st
           placeholder={"Select Role"}
           options={getRolesUserCanAddForScope(input?.value.scope, input?.value.reference)}
           component={Select}
+          variant='light'
         />
       }
 

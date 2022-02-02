@@ -8,13 +8,14 @@ import styles from './Select.module.scss';
  *
  * @param input
  * @param options = [{label:'', value:''}]
+ * @param variant = [dark|light]
  * @returns {JSX.Element}
  * @constructor
  */
 const SelectInput = (props) => {
 	const {
 		input = {},
-		mode,
+		variant='dark',
 		searchable = false,
 		className = 'select',
 		label = '',
@@ -69,7 +70,7 @@ const SelectInput = (props) => {
 	}
 
 	return (
-		<Form.Group className={`formField ${styles.cmp} ${className} ${mode ? styles[`${mode}-mode`] : ''}`}>
+		<Form.Group className={`formField ${styles.cmp} ${className} ${variant ? styles[`${variant}-variant`] : ''}`}>
 			{label && <Form.Label>{label}</Form.Label>}
 			<SelectComponent
 				name={input.name}

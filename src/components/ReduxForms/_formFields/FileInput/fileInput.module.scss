@@ -7,13 +7,14 @@
     @extend %formInputLabel;
   }
 
+  input {
+    @extend %formInput;
+  }
+
   .inputWrapper {
     @extend %formInput;
     display: block;
-    background-color: $black-2;
-    border-color: $black-2;
     border-radius: 0;
-    color: white;
     width: 100%;
 
     .fileUploader {
@@ -21,9 +22,6 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: $black-2;
-      border-color: $black-2;
-
 
       //Hidden input type='file'
       input[type='file'] {
@@ -37,7 +35,6 @@
         cursor: pointer;
       }
 
-
       .uploadImg {
         height: 1.441em;
         width: 1.441em;
@@ -49,14 +46,35 @@
       align-items: center;
       justify-content: space-between;
 
-      .previewImage{
+      .previewImage {
         height: 1.3em;
         width: 1.3em;
-        display:flex;
+        display: flex;
 
-        img{max-height: 100%;}
+        img {
+          max-height: 100%;
+        }
       }
-
     }
   }
+
+
+  //DARK Variant
+  &.dark-variant {
+    label{font-weight: 300;}
+
+    .inputWrapper {
+      color: white;
+      background-color: $black-2;
+      border-color: $black-2;
+
+      .fileUploader {
+        background-color: $black-2;
+        border-color: $black-2;
+        color: $grey-light-2;
+      }
+    }
+  }
+
+
 }

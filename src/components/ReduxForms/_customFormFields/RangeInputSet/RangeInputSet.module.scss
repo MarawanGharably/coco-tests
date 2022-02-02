@@ -1,0 +1,32 @@
+.cmp {
+  display: block;
+
+  .wrapper {
+    display: flex;
+    margin: 0;
+
+    & > div:nth-child(1) {padding: 0;}
+    & > div:nth-child(2) {
+      padding-left: 0;
+      input {max-width: 5em;}
+    }
+  }
+
+
+  &.dark-variant{
+    label{font-weight: 300;}
+
+  }
+
+
+  //Both fields in line
+  &.dMode-inline {
+    .wrapper {
+      flex-flow: row;
+
+      & > div:nth-child(1) {width: 70%;}
+      & > div:nth-child(2) {width: 30%;}
+    }
+  }
+
+}

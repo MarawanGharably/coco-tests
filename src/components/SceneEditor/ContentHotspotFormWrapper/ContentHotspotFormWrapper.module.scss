@@ -1,22 +1,26 @@
 @import '../../../assets/scss/variables';
 
-.formWrapper{
+.formWrapper {
 
-    .title{
-        font-weight: 600;
-        font-size: 18px;
-    }
 
-    ul{
-        padding-left: 1em;
-
-        li{
-            margin: 0;
-            height: 23px;
-            font-weight: 300;
+    .typeSelector {
+        .title {
+            //padding-left: 1em;
+            font-weight: 600;
             font-size: 18px;
-            cursor: pointer;
-            list-style-type: none;
+        }
+
+        ul {
+            padding-left: 2em;
+
+            li {
+                margin: 0;
+                height: 23px;
+                font-weight: 300;
+                font-size: 18px;
+                cursor: pointer;
+                list-style-type: none;
+            }
         }
     }
 

@@ -1,0 +1,71 @@
+@import '../../../../assets/scss/variables';
+
+%tabPaneEl {
+    background-color: #000 !important;
+    color: $grey-light-2;
+    font-size: 14px;
+    font-weight: 200;
+}
+
+.cmp {
+    margin: 0 0 1em 0;
+
+
+    .tab-pane {
+
+
+        &.active {
+            min-height: 40px;
+            justify-content: center;
+            align-items: center;
+            display: flex !important;
+        }
+
+
+        //Content
+        > div,
+        > div > div,
+        > div > div > div {
+            @extend %tabPaneEl;
+            margin: 0 !important;
+
+            input,
+            input[type='file'] {
+                @extend %tabPaneEl;
+
+                &::placeholder {
+                    @extend %tabPaneEl;
+                }
+            }
+        }
+    }
+
+
+    :global {
+
+        //Tabs
+        ul {
+            border: none;
+
+            li.nav-item {
+                .nav-link {
+                    text-transform: capitalize;
+                    font-size: 14px;
+                    color: $grey-light-2;
+                    border: none;
+                    border-radius: 0;
+
+                    &.active {
+                        background-color: $blue-grey-darken-3;
+                    }
+                }
+            }
+        }
+
+        .tab-content {
+            padding: 1em;
+            background-color: $blue-grey-darken-3;
+        }
+    }
+}
+

@@ -41,7 +41,7 @@ const HotspotCreationDialog=({Marker, onHotspotTypeChange})=>{
         if(!Marker?.userData?._id) onHotspotTypeChange(Marker, hotspotType);
     }
 
-    return (<div>
+    return (<div className={styles.typeSelector}>
         {<p className={styles['title']}>Select the type of hotspot</p>}
         <ul>
             <li onClick={(e)=>selectHotspotTypeEvent('image_hotspot')}> Image Hotspot </li>

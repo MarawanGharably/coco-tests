@@ -128,26 +128,8 @@ export const getStoreSceneEditorData = (storeID) => (dispatch) => {
 	dispatch(getStoreScenes(storeID, { updateStore: 'SceneEditor' }));
 };
 
-export const getStoreSceneHotspots = async (storeId, currentSceneId, hotspotTypes = []) => {
-	if (!storeId || !currentSceneId) return Promise.reject('Missed required param');
 
-	const getRoomObjectData = async () => {
-		if (Array.isArray(hotspotTypes)) {
-			const promises = hotspotTypes.map((hotspotType) =>
-				apiGetHotspotsByType(hotspotType, storeId, currentSceneId),
-			);
-			return Promise.all(promises);
-		}
 
-		return apiGetHotspotsByType(hotspotTypes, storeId, currentSceneId);
-	};
-
-	return getRoomObjectData()
-		.then((res) => {
-			return res.flat().filter((object) => typeof object !== 'string');
-		})
-		.catch((err) => Promise.reject(err));
-};
 
 /**
  * Get store General data

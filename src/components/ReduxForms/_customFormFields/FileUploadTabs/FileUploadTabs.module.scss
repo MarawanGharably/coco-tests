@@ -34,7 +34,7 @@
       input[type='file'] {
         @extend %tabPaneEl;
         text-align: center;
-        
+
         &::placeholder {
           @extend %tabPaneEl;
         }
@@ -50,9 +50,13 @@
       border: none;
 
       li.nav-item {
+        flex:1;
+
         .nav-link {
+          width:100%;
           text-transform: capitalize;
           font-size: 14px;
+          font-weight: 300;
           color: $grey-light-2;
           border: none;
           border-radius: 0;

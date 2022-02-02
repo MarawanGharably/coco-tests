@@ -5,7 +5,7 @@ import { Input, FileInput } from '../../_formFields';
 import styles from './FileUploadTabs.module.scss';
 
 
-const FileUploadTabs = ({ input, label = '', type = '' }) => {
+const FileUploadTabs = ({ input, label, type = '' }) => {
 	return (<div className={styles.cmp}>
 		{label && (<Form.Label>{label}</Form.Label>)}
 

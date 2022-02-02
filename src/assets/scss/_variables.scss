@@ -35,13 +35,22 @@ $inputSize:14px;
 
 %formInput{
     font-size: $inputSize;
+    color:$black-color;
+}
+
+%formInput-variant-light{
+    font-size: $inputSize;
+    color:$black-color;
+}
+
+%formInput-variant-dark{
+    font-size: $inputSize;
     font-weight: 300;
     color:$grey-light-2;
 }
 
 %formInputLabel{
     font-size: $inputSize;
-    font-weight: 300;
     color:$grey-light-2;
 }
 

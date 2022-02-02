@@ -5,8 +5,8 @@ import { Input, FileInput } from '../../_formFields';
 import styles from './FileUploadTabs.module.scss';
 
 
-const FileUploadTabs = ({ input, label, type = '' }) => {
-	return (<div className={styles.cmp}>
+const FileUploadTabs = ({ input, label, variant='dark', type = '' }) => {
+	return (<div className={`${styles.cmp} ${variant ? styles[`${variant}-variant`]:''}`}>
 		{label && (<Form.Label>{label}</Form.Label>)}
 
 		<Tabs defaultActiveKey='upload' id='imageDataTabs' className={styles.tabs}>

@@ -7,6 +7,13 @@ import styles from './ImageHotspot.module.scss';
 
 let ImageHotspotForm = (props) => {
     const {initialize} = props;
+
+    useEffect(()=>{
+        initialize({
+            hotspotSize:1
+        })
+    },[]);
+
     const localeOptions = [
         { label: "en_US", value: "en_US" },
         { label: "en_UK", value: "en_UK" },
@@ -19,7 +26,7 @@ let ImageHotspotForm = (props) => {
 
     return (
         <Form className={styles['form']}>
-            <Field name='hotspotSize' label="Hotspot Size" component={RangeInputSet} step = {0.1}/>
+            <Field name='hotspotSize' label="Hotspot Size" component={RangeInputSet} step={0.1}/>
             <Field name='horizontalArea' label="Hotspot Clickable Area (Horizontally)" component={RangeInputSet} step = {0.1}/>
             <Field name='verticalArea' label="Hotspot Clickable Area (Vertically)" component={RangeInputSet} step = {0.1}/>
             <Field name='localeSelection' label="Select Locale" component={Select} options={localeOptions} className={styles["selector"]}/>

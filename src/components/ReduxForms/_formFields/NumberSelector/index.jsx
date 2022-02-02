@@ -5,13 +5,13 @@ import styles from './NumberSelector.module.scss';
 export default function NumberSelector({
 	input,
 	label = '',
-	mode,
 	min,
 	max,
+	variant='dark',
 	meta: { touched, error, warning }
 }) {
 	return (
-		<Form.Group controlId="numberSelector" className={`${styles.cmp} ${mode ? styles[`${mode}-mode`] : ''}`}>
+		<Form.Group controlId="numberSelector" className={`${styles.cmp} ${variant ? styles[`${variant}-variant`] : ''}`}>
 			<Form.Label>{label}</Form.Label>
 			<Form.Control {...input} type="number" min={min} max={max}/>
 

@@ -57,7 +57,6 @@ let LocalePage = ({ initialize, ...props }) => {
                         <Field
                             name="locales"
                             label="Add Locale"
-                            mode="dark"
                             component={Select}
                             isMulti={true}
                             allowCustomOptions={true}
@@ -75,7 +74,6 @@ let LocalePage = ({ initialize, ...props }) => {
                         <Field
                             name="default_locale"
                             label="Default Locale"
-                            mode="dark"
                             component={Select}
                             options={options}
                         />

@@ -1,22 +1,35 @@
 import React from 'react';
-import { Form, Row, Col } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
+import { Form, Row } from 'react-bootstrap';
 import { Input, Range } from '../../_formFields';
+import styles from './RangeInputSet.module.scss';
 
-export default function RangeInputSet({ input, label, min = 0, max = 10, step = 1, meta }) {
-    return (
-        <Form.Group controlId="rangeInput">
-            {label && <Form.Label>{label}</Form.Label>}
+/**
+ * @param input
+ * @param label
+ * @param dMode {string} - Display type [inline|rows]
+ * @param variant {string}  - Display style [dark|ObsessColors]
+ * @param min
+ * @param max
+ * @param step
+ * @returns {JSX.Element}
+ */
+const RangeInputSet = ({ input, label, dMode, variant='dark', min = 0, max = 10, step = 1 }) => {
+	return (
+		<Form.Group controlId='rangeInput' className={`${styles.cmp} ${styles[`dMode-${dMode}`]}  ${variant ? styles[variant+`-variant`]:''}`}>
+			{label && <Form.Label>{label}</Form.Label>}
 
-            <Row>
-                <Col>
-                    <Field name={input.name} component={Range} min={min} max={max} step={step} />
-                </Col>
+			<Row className={`${styles.wrapper}`}>
+				<Field name={input.name} component={Range} min={min} max={max} step={step} variant={variant} />
+				<Field name={input.name} component={Input} variant={variant} />
+			</Row>
+		</Form.Group>
+	);
+};
 
-                <Col xs={3}>
-                    <Field name={input.name} component={Input} />
-                </Col>
-            </Row>
-        </Form.Group>
-    );
-}
+RangeInputSet.propTypes = {
+	input: PropTypes.InstanceOf(PropTypes.Object).isRequired,
+};
+
+export default RangeInputSet;

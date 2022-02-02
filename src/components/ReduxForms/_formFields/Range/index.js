@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
+import styles from './range.module.scss';
 
-export default function Range({ input, label, min = 0, max = 10, step = 1, meta: { touched, error, warning } }) {
+export default function Range({ input, label, variant, min = 0, max = 10, step = 1, meta: { touched, error, warning } }) {
     const [value, setValue] = useState(0);
 
     useEffect(() => {
@@ -13,8 +14,9 @@ export default function Range({ input, label, min = 0, max = 10, step = 1, meta:
         input.onChange(value); //Update Redux Field state
     };
 
+
     return (
-        <Form.Group controlId="rangeInput">
+        <Form.Group controlId="rangeInput" className={`${styles.cmp} ${variant ? styles[`${variant}-variant`]:''}`}>
             {label && <Form.Label>{label}</Form.Label>}
             <Form.Range
                 min={min}
@@ -23,8 +25,7 @@ export default function Range({ input, label, min = 0, max = 10, step = 1, meta:
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 onMouseUp={handleScaleChange}
-                className="input-field form-control"
-                style={{ backgroundColor: '#fefefe', padding: '0.9em 0.6em' }}
+                className={`input-field form-control `}
             />
         </Form.Group>
     );

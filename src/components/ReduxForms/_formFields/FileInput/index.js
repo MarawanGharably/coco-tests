@@ -23,10 +23,11 @@ export default function FileInput({
 									  label,
 									  accept,
 									  placeholder = 'Upload File',
+									  variant='dark',
 									  meta: { visited, error, warning },
 								  }) {
 	return (
-		<Form.Group className={`form-input ${styles['cmp']}`}>
+		<Form.Group className={`form-input ${styles['cmp']} ${variant ? styles[`${variant}-variant`]:''}`}>
 			{label && (<Form.Label>{label}</Form.Label>)}
 
 			<div className={`${styles.inputWrapper} form-control`}>
@@ -113,5 +114,5 @@ const PreviewImage = ({ src, ext }) => {
 		{['png', 'jpg', 'jpeg'].includes(ext) ?
 			(<img src={src} />) :
 			(<i className='fas fa-file'></i>)}
-	</div>)
+	</div>);
 };

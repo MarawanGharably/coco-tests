@@ -8,6 +8,7 @@
 
 	div[class*='-container'] {
 		border: none;
+		font-size: $inputSize;
 
 		div[class*='-control'] {
 			min-height: 35px;
@@ -41,17 +42,20 @@
 		}
 	}
 
-	//Styling Variants
-	&.dark-mode {
+	//DARK Styling Variant
+	&.dark-variant {
+		label{font-weight: 300;}
+
 		div[class*='-container'] {
-			font-size: $inputSize;
 			background: $black-2;
+			font-weight: 300;
 
 			//input field or "control"
 			div[class*='-control'] {
 				background: $black-2;
 
 				div[class*='-ValueContainer'] {
+
 					div[class*='-Input'] {}
 					div[class*='-placeholder'] {
 						color: $grey-light-2;
@@ -60,6 +64,7 @@
 
 				div[class*='-singleValue'] {
 					color: #FFFFFF;
+					font-weight: 300;
 				}
 
 				//Multi Value elements

@@ -5,15 +5,27 @@
 	flex-direction: column;
 	margin-bottom: 1rem;
 
+	input {
+		@extend %formInput;
+		font-size: $inputSize;
+		font-weight: normal;
+	}
+	label{
+		@extend %formInputLabel;
+		font-weight: normal;
+	}
 
-	input { @extend %formInput; }
-	label{ @extend %formInputLabel; }
+	//Light Style
+	//&.light-variant {}
 
-	//Dark Mode Styling
-	&.dark-mode {
+
+	//Dark Style
+	&.dark-variant {
+		label{font-weight: 300;}
+
 		input {
+			@extend %formInput-variant-dark;
 			background-color: $black-2;
-			color: $grey-light-2;
 			border: none;
 			border-radius: 0;
 			font-weight: 300;

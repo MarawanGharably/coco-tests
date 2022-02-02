@@ -13,7 +13,7 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
     const dispatch = useDispatch();
     const { currentSceneId } = useSelector((state) => state['SceneEditor']);
     const { selectedFolder } = useSelector((state) => state['productLibrary']);
-    const folderId = selectedFolder.value;
+    const folderId = selectedFolder?.value;
     const formData = useSelector((state) => state['form']['ImageHotspotForm']) || {};
     const formValues = formData['values'] || {};
     const [localeOptions, setLocaleOptions] = useState([]);

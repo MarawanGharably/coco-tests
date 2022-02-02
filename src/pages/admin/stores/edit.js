@@ -48,8 +48,8 @@ let StoreForm = (props) => {
                 <Card className="my-4">
                     <Card.Header>General</Card.Header>
                     <Card.Body>
-                        <Field name="name" label="Name" component={Input} disabled />
-                        <Field name="status" label="status" component={Input} disabled />
+                        <Field name="name" label="Name" component={Input} disabled variant='light' />
+                        <Field name="status" label="status" component={Input} disabled variant='light' />
                     </Card.Body>
                 </Card>
 

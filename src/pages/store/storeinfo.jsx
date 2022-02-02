@@ -45,8 +45,8 @@ let StoreInfoPage = ({ initialize, ...props }) => {
         <StoreLayout title="Store Info">
             <SubmitStatusMessage status={status} />
                 <FormWithActionBtns dataLoaded={storeDataLoaded} onSubmit={onSubmit} fieldsWrapperStyle={{ maxWidth: '40em' }} {...props}>
-                    <Field name="name" label="Store Name" mode="dark" component={Input} placeholder="Enter Store Name" />
-                    <Field name="url_slug" label="Store Slug" mode="dark" component={Input} placeholder="Enter Store Slug" />
+                    <Field name="name" label="Store Name" component={Input} placeholder="Enter Store Name" />
+                    <Field name="url_slug" label="Store Slug" component={Input} placeholder="Enter Store Slug" />
                 </FormWithActionBtns>
         </StoreLayout>
     );

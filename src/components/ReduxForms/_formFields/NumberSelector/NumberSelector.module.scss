@@ -1,32 +1,37 @@
 @import '../../../../assets/scss/variables';
 
 .cmp {
-	label{
-		@extend %formInputLabel;
-	}
-	input{
-		@extend %formInput;
-	}
+  label {
+    @extend %formInputLabel;
+  }
 
-	&.dark-mode {
-		input {
-			background: $black-2;
-			border-color: $black-2;
-			box-shadow: none;
-			border-radius: 0;
-			color: $grey-light-2;
-			
-			&::-webkit-inner-spin-button {
-				opacity: 1;
-				-webkit-appearance: none;
-				background: $black-2 url(https://cdn.obsessvr.com/coco/numberArrow.png) no-repeat center center;
-				width: 1em;
-				position: absolute;
-				top: 0;
-				right: .5em;
-				bottom: 0;
-		}
-		
-}
-	}
+  input {
+    @extend %formInput;
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+
+
+  //DARK variant
+  &.dark-variant {
+    label{font-weight: 300;}
+
+    input {
+      background: $black-2;
+      border-color: $black-2;
+      color: $grey-light-2;
+
+      &::-webkit-inner-spin-button {
+        opacity: 1;
+        -webkit-appearance: none;
+        background: $black-2 url(https://cdn.obsessvr.com/coco/numberArrow.png) no-repeat center center;
+        width: 1em;
+        position: absolute;
+        top: 0;
+        right: .5em;
+        bottom: 0;
+      }
+    }
+  }
 }

@@ -189,7 +189,6 @@ const IconField = ({ name, label, options }) => {
 		<Field
 			name={name}
 			label={label}
-			mode='dark'
 			component={SelectWithUploader}
 			options={options}
 		/>

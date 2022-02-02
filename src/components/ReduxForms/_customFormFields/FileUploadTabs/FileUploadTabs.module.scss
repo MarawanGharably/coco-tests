@@ -67,5 +67,10 @@
       background-color: $blue-grey-darken-3;
     }
   }
+
+  &.dark-variant{
+    label{font-weight: 300;}
+
+  }
 }
 

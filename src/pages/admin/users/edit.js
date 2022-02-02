@@ -109,9 +109,9 @@ let UserForm = (props) => {
                 <Card className="my-4">
                     <Card.Header>General</Card.Header>
                     <Card.Body>
-                        <Field name="given_name" label="User Name" component={Input} disabled />
-                        <Field name="email" label="email" type="email" component={Input} disabled />
-                        <Field name="UserStatus" label="UserStatus" component={Input} disabled />
+                        <Field name="given_name" label="User Name" component={Input} disabled variant='light'/>
+                        <Field name="email" label="email" type="email" component={Input} disabled variant='light'/>
+                        <Field name="UserStatus" label="UserStatus" component={Input} disabled variant='light' />
                     </Card.Body>
                 </Card>
 

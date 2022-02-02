@@ -17,7 +17,7 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
     const formData = useSelector((state) => state['form']['ImageHotspotForm']) || {};
     const formValues = formData['values'] || {};
     const [localeOptions, setLocaleOptions] = useState([]);
-    const [imageData, setImageData] = useState({});
+    const [_, setImageData] = useState({});
     const storeId = router.query?.id;
     let record = Marker.userData;
 
@@ -31,9 +31,11 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
     //     });
     // },false);
 
-    const onSubmit = async (values) => {
 
-        const newImageData = Object.keys(imageData).length>0 ?  await dispatch(addProductImageToFolder(storeId, folderId, [imageData])) : null;
+    //TODO: imageFile, imageURL
+    const onSubmit = async ({ imageData, ...values }) => {
+console.log('--onSubmit',{imageData, values} );
+        const newImageData =  imageData?.imageFile ?  await dispatch(addProductImageToFolder(storeId, folderId, [imageData.imageFile])) : null;
 
 
 

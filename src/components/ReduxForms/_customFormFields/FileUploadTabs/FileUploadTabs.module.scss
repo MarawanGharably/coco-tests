@@ -1,55 +1,71 @@
 @import '../../../../assets/scss/variables';
 
-.tabs {
-    margin-bottom: 1rem;
-    display: flex;
-    flex-direction: column;
-    height: 120px;
-    background: transparent;
+%tabPaneEl {
+  background-color: #000 !important;
+  color: $grey-light-2;
+  font-size: 14px;
+  font-weight: 200;
 }
 
-.tab-list {
-    display: flex;
-    flex-direction: row;
-    background: transparent;
+.cmp {
+  margin: 0 0 1em 0;
 
-    button{
-        height: 40px;
-        width: 50%;
-        border: hidden;
-        color: #FFFFFF;
-    }
-}
 
-.tab-active{
-    background: #2E2E2E;
-}
-.tab-inactive{
-    background-color: transparent;
-}
+  .tab-pane {
 
-.tab-panel {
-    height: 80px;
-    background-color: #2E2E2E;
 
-    div[class*="_uploadFileWrapper"] {
-        width: 70%;
-        margin-left: auto;
-        margin-right: auto;
-        background: #000000;
+    &.active {
+      min-height: 40px;
+      justify-content: center;
+      align-items: center;
+      display: flex !important;
     }
 
-    input[id='imageURL']{
-        margin-top: 20px;
-        width: 90%;
-        align-self: center;
-        height: 40px;
-        border-radius: 0;
-        color: #EFEFEF;
-        background-color: #000000;
-        box-shadow: none;
-        border: none;
-        text-align: start;
+
+    //Content
+    > div,
+    > div > div,
+    > div > div > div {
+      @extend %tabPaneEl;
+      margin: 0 !important;
+
+      input,
+      input[type='file'] {
+        @extend %tabPaneEl;
+
+        &::placeholder {
+          @extend %tabPaneEl;
+        }
+      }
     }
-    
+  }
+
+
+  :global {
+
+    //Tabs
+    ul {
+      border: none;
+
+      li.nav-item {
+        .nav-link {
+          text-transform: capitalize;
+          font-size: 14px;
+          color: $grey-light-2;
+          border: none;
+          border-radius: 0;
+
+          &.active {
+            background-color: $blue-grey-darken-3;
+          }
+        }
+      }
+    }
+
+    .tab-content {
+      padding: 1em;
+      background-color: $blue-grey-darken-3;
+    }
+  }
 }
+

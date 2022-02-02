@@ -6,27 +6,27 @@ import styles from './FileUploadTabs.module.scss';
 
 
 const FileUploadTabs = ({ input, label, type = '' }) => {
-    return (<div className={styles.cmp}>
-        {label && (<Form.Label>{label}</Form.Label>)}
+	return (<div className={styles.cmp}>
+		{label && (<Form.Label>{label}</Form.Label>)}
 
-        <Tabs defaultActiveKey='upload' id='imageDataTabs' className={styles.tabs}>
-            <Tab eventKey='upload' title='upload' className={styles['tab-pane']}>
-                <Field
-                    name={`${input.name}.imageFile`}
-                    component={FileInput}
-                    accept='image/*'
-                    placeholder={'Upload ' + (type == 'image' ? 'Image' : 'Video')}
-                />
-            </Tab>
-            <Tab eventKey='link' title='Link' className={styles['tab-pane']}>
-                <Field
-                    name={`${input.name}.imageURL`}
-                    placeholder='Paste Link'
-                    component={Input}
-                />
-            </Tab>
-        </Tabs>
-    </div>);
+		<Tabs defaultActiveKey='upload' id='imageDataTabs' className={styles.tabs}>
+			<Tab eventKey='upload' title='upload' className={styles['tab-pane']}>
+				<Field
+					name={`${input.name}.imageFile`}
+					component={FileInput}
+					accept='image/*'
+					placeholder={'Upload ' + (type == 'image' ? 'Image' : 'Video')}
+				/>
+			</Tab>
+			<Tab eventKey='link' title='Link' className={styles['tab-pane']}>
+				<Field
+					name={`${input.name}.imageURL`}
+					placeholder='Paste Link'
+					component={Input}
+				/>
+			</Tab>
+		</Tabs>
+	</div>);
 };
 
 export default FileUploadTabs;

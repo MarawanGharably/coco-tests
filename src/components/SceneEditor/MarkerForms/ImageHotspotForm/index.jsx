@@ -44,14 +44,11 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
             transform: Marker.transforms.visualTransform.elements,
             props_translations:values.props_translations,
             props: {
+                ...(values.props),
                 hotspot_type: 'product_image',
                 show_icon: true, //Where it used?
-                scale: values.scale,
-                horizontalArea: values.horizontalArea,
-                verticalArea: values.verticalArea,
                 // locale: '',
-                imageURL: values.imageURL,
-                buttonURL: values.buttonURL,
+                // imageURL: values.imageURL,
                 image:  newImageData?.[0]?._id || null, //TODO: what if no new image
                 renderOrder: 50,
             },
@@ -87,17 +84,17 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
 
     useEffect(() => {
         initialize({
-            scale: record?.props?.scale,
-            //By default, horizontalArea & verticalArea === image scale
-            horizontalArea: record?.props?.horizontalArea || record?.props?.scale,
-            verticalArea: record?.props?.verticalArea || record?.props?.scale,
-            locale: record?.props?.locale || 'en_US',
-            imageTitle: record?.props?.imageTitle,
-            imageSubtitle: record?.props?.imageSubtitle,
-            imageURL: record?.props?.image?.image?.path,
-            buttonCopy: record?.props?.buttonCopy,
-            buttonURL: record?.props?.buttonURL,
+            props:{
+                scale: record?.props?.scale,
+                //By default, horizontalArea & verticalArea === image scale
+                horizontalArea: record?.props?.horizontalArea || record?.props?.scale,
+                verticalArea: record?.props?.verticalArea || record?.props?.scale,
+                buttonCopy: record?.props?.buttonCopy,
+                buttonURL: record?.props?.buttonURL,
+                imageURL: record?.props?.image?.image?.path,
+            },
             props_translations: record.props_translations,
+            locale: 'en_US',
         });
     }, [Marker.uuid]);
 
@@ -121,18 +118,19 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)} className={styles['form']}  >
-            <Field name='scale' label="Hotspot Size" component={RangeInputSet}  variant='obsessColors' min={0.5} step={0.1}/>
-            <Field name='horizontalArea' label="Hotspot Clickable Area (Horizontally)" component={RangeInputSet} dMode='rows' variant='obsessColors' min={0.5} step={0.1}/>
-            <Field name='verticalArea' label="Hotspot Clickable Area (Vertically)" component={RangeInputSet} dMode='rows' variant='obsessColors' min={0.5} step={0.1}/>
+            <Field name='props.scale' label="Hotspot Size" component={RangeInputSet}  variant='obsessColors' min={0.5} step={0.1}/>
+            <Field name='props.horizontalArea' label="Hotspot Clickable Area (Horizontally)" component={RangeInputSet} dMode='rows' variant='obsessColors' min={0.5} step={0.1}/>
+            <Field name='props.verticalArea' label="Hotspot Clickable Area (Vertically)" component={RangeInputSet} dMode='rows' variant='obsessColors' min={0.5} step={0.1}/>
 
             {/* Localization */}
             <Field name='locale' label="Select Locale" component={Select} options={localeOptions} mode='dark' className={styles["selector"]}/>
             <Field name={`props_translations.${formValues.locale}.imageTitle`} label="Image Title" component={Input}/>
             <Field name={`props_translations.${formValues.locale}.imageSubtitle`} label="Image Subtitle" component={Input}/>
 
-            <Field name='imageUpload' label="Image Upload" component={FileUploadTabs} type='image' />
+            {/*<Field name='imageUpload' label="Image Upload" component={FileUploadTabs} type='image' />*/}
+            <Field name='imageData' label="Image" component={FileUploadTabs} type='image' />
             <Field name={`props_translations.${formValues.locale}.buttonCopy`} label="Button Copy" component={Input}/>
-            <Field name='buttonURL' label="Button URL" component={Input}/>
+            <Field name='props.buttonURL' label="Button URL" component={Input}/>
         </Form>
     );
 };

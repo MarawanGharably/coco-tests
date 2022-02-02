@@ -1,0 +1,14 @@
+.cmp {
+  padding: 0.5em 0;
+
+  .error {
+    color: red;
+    font-size: 11px;
+  }
+
+  .warn {
+    color: #ff8400;
+    font-size: 11px;
+    width: 24em;
+  }
+}

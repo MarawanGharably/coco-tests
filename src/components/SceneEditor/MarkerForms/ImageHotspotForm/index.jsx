@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import { Form, Field, reduxForm } from 'redux-form';
 import { Input, Select, RangeInputSet } from '../../../ReduxForms/_formFields';
-import FileUploadTabs from '../../../FileUploadTabs'
+import FileUploadTabs from '../../../ReduxForms/_customFormFields/FileUploadTabs'
 import styles from './ImageHotspot.module.scss';
 
 

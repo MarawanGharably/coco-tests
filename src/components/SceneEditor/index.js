@@ -7,6 +7,12 @@ import { getStoreSceneEditorData, getSceneHotspots} from "../../APImethods";
 import {destroySceneData, destroyProductLibraryData} from "../../store/actions";
 import styles from './sceneEditor.module.scss';
 
+const MODE_TO_TYPE = Object.freeze({
+    'product_tagging' : 'product',
+    'content_hotspots' : ['image', 'video'],
+    'product_placement' : 'product_image',
+})
+
 export default function SceneEditor({storeId, mode}){
     const dispatch = useDispatch();
     const sceneEditorData = useSelector(state =>state['SceneEditor']);
@@ -34,7 +40,7 @@ export default function SceneEditor({storeId, mode}){
     useEffect(() => {
         if (!currentSceneId || currentSceneId.length < 5) return;
         setSceneObjects([]);
-        getSceneHotspots(storeId, currentSceneId, ['product', 'product_image'])
+        getSceneHotspots(storeId, currentSceneId, MODE_TO_TYPE[mode])
             .then(res=>{
                 setSceneObjects(res);
             }).catch(err=>{

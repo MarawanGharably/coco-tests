@@ -35,11 +35,8 @@ let ImageHotspotForm = ({ Marker, initialize, handleSubmit }) => {
     //TODO: imageFile, imageURL
     const onSubmit = async ({ imageData, ...values }) => {
 console.log('--onSubmit',{imageData, values} );
-        const newImageData =  imageData?.imageFile ?  await dispatch(addProductImageToFolder(storeId, folderId, [imageData.imageFile])) : null;
 
-
-
-        const postData={
+        var postData={
             type: 'HotspotMarker',
             scene: currentSceneId,
             collider_transform: Marker.transforms.colliderTransform.elements,
@@ -47,17 +44,17 @@ console.log('--onSubmit',{imageData, values} );
             props_translations:values.props_translations,
             props: {
                 ...(values.props),
-                hotspot_type: 'product_image',
+                hotspot_type: 'image',
                 show_icon: true, //Where it used?
                 // locale: '',
                 // imageURL: values.imageURL,
-                image:  newImageData?.[0]?._id || null, //TODO: what if no new image
                 renderOrder: 50,
             },
         };
 
         //Update
         if(record._id){
+            postData.props.image = Marker.userData.props.image;
             return dispatch(updateHotspotAPI(record._id, storeId, currentSceneId, postData, false ))
                 .then(res=>{
                     Marker.setUserData(res);
@@ -66,7 +63,12 @@ console.log('--onSubmit',{imageData, values} );
         }
         //Create
         else{
-            return apiCreateHotspotByType('product_image', storeId, currentSceneId, postData)
+            if (imageData.imageFile){
+                const newImageData =  await dispatch(addProductImageToFolder(storeId, folderId, [imageData.imageFile]));
+                console.log(newImageData?.[0]?._id)
+                postData.props.image = newImageData?.[0]?._id;
+            }
+            return apiCreateHotspotByType('image', storeId, currentSceneId, postData)
                 .then(res=>{
                     Marker.setUserData(res);
                 })
@@ -93,17 +95,35 @@ console.log('--onSubmit',{imageData, values} );
                 verticalArea: record?.props?.verticalArea || record?.props?.scale,
                 buttonCopy: record?.props?.buttonCopy,
                 buttonURL: record?.props?.buttonURL,
-                imageURL: record?.props?.image?.image?.path,
             },
             props_translations: record.props_translations,
             locale: 'en_US',
+            imageData:{
+                imageURL: ''
+            }
         });
     }, [Marker.uuid]);
 
+     useEffect(() => {
+        const isChanged = formData.initial?.props.scale !== formValues.props?.scale;
+        if (isChanged) Marker.setScale(formValues.props.scale);
+    }, [formValues.props?.scale]);
+
     useEffect(() => {
-        const isChanged = formData.initial?.scale !== formValues.scale;
-        if (isChanged) Marker.setScale(formValues.scale);
-    }, [formValues.scale]);
+        const isChanged = formData.initial?.props.horizontalArea !== formValues.props?.horizontalArea;
+        if (isChanged){
+            // Marker.setColliderHorizontalScale(formValues.props.horizontalArea)
+            console.log(Marker)
+        }
+    }, [formValues.props?.horizontalArea]);
+
+    useEffect(() => {
+        const isChanged = formData.initial?.props.verticalArea !== formValues.props?.verticalArea;
+        if (isChanged){
+            // Marker.setColliderVerticalScale(formValues.props.verticalArea)
+            console.log(Marker)
+        }
+    }, [formValues.props?.verticalArea]);
 
     
 
@@ -141,12 +161,12 @@ console.log('--onSubmit',{imageData, values} );
 //TODO:
 const validate = (values) => {
     const errors = {};
-    if(values.scale<0.5) errors.scale = 'Cannot be less than 0.5';
+    if(values.props?.scale<0.5) errors.scale = 'Cannot be less than 0.5';
 
     //By default, horizontalArea & verticalArea === image scale
     //horizontalArea & verticalArea cannot be less than image scale
-    if(values.horizontalArea < values.scale) errors.horizontalArea = 'Cannot be less than Hotspot Size';
-    if(values.verticalArea < values.scale) errors.verticalArea = 'Cannot be less than  Hotspot Size';
+    if(values.props?.horizontalArea < values.props?.scale) errors.horizontalArea = 'Cannot be less than Hotspot Size';
+    if(values.props?.verticalArea < values.props?.scale) errors.verticalArea = 'Cannot be less than  Hotspot Size';
     return errors;
 };
 

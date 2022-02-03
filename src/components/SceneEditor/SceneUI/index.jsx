@@ -117,18 +117,27 @@ const SceneUI = ({ storeId, mode, sceneObjects, sceneEditorData, productLibrary 
         //remove old marker
         Marker.removeFromScene();
         hotspots.current = hotspots.current.filter(item=>item.isNew != true);
-
-
         const scale=1;
         const renderOrder=10;
-        const imageURL=`${config.CDN_HOST}/image_hotspot_icon.png`;
+        var imageURL = '';
+        var hotspotType = '';
 
+        switch(newHotspotType){
+            
+            case 'image_hotspot':
+                imageURL=`${config.CDN_HOST}/image_hotspot_icon.png`;
+                hotspotType = 'image';
+                break;
+
+            default:
+                break;
+        }
 
        createAndPlaceNewMarker({
-            hotspot_type:"product_image",
+            hotspot_type : hotspotType,
             scale,
             renderOrder,
-            imageURL,
+            imageURL : imageURL,
             userData:{},
             boxColliderConfig:{color:0x3C7AFA, opacity:0.5 },
         });
@@ -186,6 +195,10 @@ const placeSceneHotspots=(sceneObjects, mode, onHotspotTypeChange)=>{
             positionNextToTheElement:mode === 'content_hotspots' ? false : true,
             style:mode === 'content_hotspots' ? {right:'0', top:'0' , height:'100%' , width:'29%' , background:'none'} :{background:'none'},
         },
+        'image':{
+            Component: mode === 'content_hotspots' ? (props)=><HotspotsSidebar mode='content_hotspot' {...props} />: ImageMarkerUIForm,
+            style:mode === 'content_hotspots' ? {right:'0', top:'0' , height:'100%' , width:'29%' , background:'none'} :{left:'0', top:'3em', background:'none'},
+        },
         //hotspotPlaceholder used to display a scene marker of unknown yet type
         'hotspotPlaceholder':{
             Component:(props)=><HotspotsSidebar mode='content_hotspot' onHotspotTypeChange={onHotspotTypeChange} {...props} />,
@@ -197,7 +210,7 @@ const placeSceneHotspots=(sceneObjects, mode, onHotspotTypeChange)=>{
         const hotspot_type = item?.props?.hotspot_type || item.hotspot_type;
 
         let imageHotspotProps = {};
-        if (hotspot_type === 'product_image') {
+        if (['product_image', 'image'].includes(hotspot_type)) {
             const imageData = item.imageURL || item.props?.image?.image;
             imageHotspotProps.scale = item?.props?.scale || item.scale;
             imageHotspotProps.renderOrder = item?.props?.renderOrder || item.renderOrder;
@@ -207,7 +220,7 @@ const placeSceneHotspots=(sceneObjects, mode, onHotspotTypeChange)=>{
         return (
             <Hotspot
                 key={item?._id || item.uuid || idx}
-                type={hotspot_type === 'product_image' ? 'image_hotspot' : 'hotspot'}
+                type={['product_image', 'image'].includes(hotspot_type) ? 'image_hotspot' : 'hotspot'}
                 collider_transform={item.collider_transform}
                 transform={item.transform}
                 userData={item?.userData || item}
